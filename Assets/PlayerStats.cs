@@ -115,30 +115,30 @@ public class PlayerStats {
 
 	// Resetter ------------------//
 	public void ResetHp() {
-		_hp = MaxHp;
+		_hp = maxHp;
 	}
 
 	public void ResetMana() {
-		_mana = MaxMana;
+		_mana = maxMana;
 	}
 
 	public void ResetPhysical() {
-		_physical = MaxPhysical;
+		_physical = maxPhysical;
 	}
 
 	public void ResetSpecial() {
-		_special = MaxSpecial;
+		_special = maxSpecial;
 	}
 
 	public void ResetDefense() {
-		_defense = MaxDefense;
+		_defense = maxDefense;
 	}
 
 	public void ResetResistance() {
-		_resistance = MaxResistance;
+		_resistance = maxResistance;
 	}
 
 	public void ResetSpeed() {
-		_speed = MaxSpeed;
+		_speed = maxSpeed;
 	}
 }
