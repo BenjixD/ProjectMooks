@@ -22,7 +22,7 @@ public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
     }
 
     public void removeListener(TwitchChatListener removeListener) {
-        if (!this.listeners.Contains(newListener)) {
+        if (!this.listeners.Contains(removeListener)) {
             Debug.LogWarning("Warning: Listener does not contain");
             return;
         }
