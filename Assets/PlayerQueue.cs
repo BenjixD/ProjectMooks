@@ -41,14 +41,9 @@ public class PlayerQueue : TwitchChatListenerBase {
 	}
 
 	public override void OnCommandReceived(string username, string message) {
-		Debug.Log(message);
 		switch(message) {
 			case "join":
-				if(Enqueue(username)) {
-					Debug.Log(username + " has joined the queue!");
-				} else {
-					Debug.Log(username + " already exists");
-				}
+				Enqueue(username);
 				break;
 			default:
 				Debug.Log("Unknown command: " + message);
