@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player {
+
+    public Canvas speechCanvas; 
+
 	public string Name;
 
 	// Max Stats

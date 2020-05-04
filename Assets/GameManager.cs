@@ -5,6 +5,11 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager> {
 	public PlayerQueue playerQueue;
 
+    public BattleController battleController{get; set;}
+
+
+    public List<Player> players = new List<Player>();
+
 	List<PlayerCreationData> GetNPlayers(int n) {
 		List<PlayerCreationData> players = new List<PlayerCreationData>();
 		for(int i = 0; i < n; i++) {
