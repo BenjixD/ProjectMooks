@@ -59,6 +59,6 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Secrets
-Resources/secrets.json
+Assets/Resources/secrets.json
 
 .vscode/
