@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager> {
 	IEnumerator TestPlayers() {
 		List<PlayerCreationData> players = GetNPlayers(2);
 		for(int i = 0; i < players.Count; i++) {
-			Debug.Log("Player joined: " + players[i].name);
+			Debug.Log("Deploying Player: " + players[i].name);
 			playerQueue.Remove(players[i].name);
 		}
 		yield return new WaitForSeconds(5f);
