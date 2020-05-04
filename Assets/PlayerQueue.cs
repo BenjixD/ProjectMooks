@@ -19,7 +19,6 @@ public class PlayerQueue : TwitchChatListenerBase {
 	public PlayerCreationData Dequeue() {
 		LinkedListNode<PlayerCreationData> node = _waitingQueue.First;
 		if(node != null) {
-			_inQueue.Remove(node.Value.name);
 			_waitingQueue.RemoveFirst();
 			return node.Value;
 		} else {
@@ -28,6 +27,10 @@ public class PlayerQueue : TwitchChatListenerBase {
 	}
 
 	public void Remove(string username) {
+		_inQueue.Remove(username);
+	}
+
+	public void Dropout(string username) {
 		LinkedListNode<PlayerCreationData> node = _inQueue[username];
 		_waitingQueue.Remove(node);
 		_inQueue.Remove(username);
