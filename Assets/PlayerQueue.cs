@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerQueue : ListenerImpl {
+public class PlayerQueue : TwitchChatListenerBase {
 	LinkedList<Player> _waitingQueue = new LinkedList<Player>();
 	Dictionary<string, LinkedListNode<Player>> _inQueue = new Dictionary<string, LinkedListNode<Player>>(); 
 
@@ -33,7 +33,11 @@ public class PlayerQueue : ListenerImpl {
 		_inQueue.Remove(username);
 	}
 
-	void OnCommandRecieved(string username, string message) {
+	public override void OnMessageReceived(string username, string message) {
+		
+	}
+
+	public override void OnCommandReceived(string username, string message) {
 		switch(message) {
 			case "join":
 				enqueue(username);
