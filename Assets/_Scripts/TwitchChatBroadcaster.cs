@@ -5,11 +5,30 @@ using System.Collections.Generic;
 
 public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
 {
-    public List<TwitchChatListener> listeners = new List<TwitchChatListener>();
+    [SerializeField]
+    public HashSet<TwitchChatListener> listeners = new HashSet<TwitchChatListener>();
 
 	public string _channelToConnectTo = "dvchibot";
 
 	private Client client;
+
+    public void addListener(TwitchChatListener newListener) {
+        if (this.listeners.Contains(newListener)) {
+            Debug.LogWarning("Warning: Already pushed this listener");
+            return;
+        }
+
+        this.listeners.Add(newListener);
+    }
+
+    public void removeListener(TwitchChatListener removeListener) {
+        if (!this.listeners.Contains(newListener)) {
+            Debug.LogWarning("Warning: Listener does not contain");
+            return;
+        }
+
+        this.listeners.Remove(removeListener);
+    }
 
 	private void Awake()
 	{
