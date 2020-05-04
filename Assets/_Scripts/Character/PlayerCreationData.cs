@@ -6,9 +6,10 @@ public class PlayerCreationData {
 	public string name;
 	public PlayerStats stats;
 
-	
-	public PlayerCreationData(string n) {
+	public PlayerCreationData(string n, PlayerStats template) {
 		name = n;
-		stats = new PlayerStats();
+		stats = new PlayerStats(template);
+		stats.RandomizeStats();
+		stats.ResetStats();
 	}
 }

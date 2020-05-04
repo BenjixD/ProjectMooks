@@ -20,14 +20,11 @@ public class GameManager : Singleton<GameManager> {
 		StartCoroutine(TestPlayers());
 	}
 
-	void Update() {
-
-	}
-
 	IEnumerator TestPlayers() {
 		List<PlayerCreationData> players = GetNPlayers(2);
 		for(int i = 0; i < players.Count; i++) {
 			Debug.Log("Deploying Player: " + players[i].name);
+			players[i].stats.LogStats();
 			playerQueue.Remove(players[i].name);
 		}
 		yield return new WaitForSeconds(5f);
