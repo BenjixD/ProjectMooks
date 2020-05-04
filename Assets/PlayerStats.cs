@@ -2,18 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player {
-	public string Name;
-
+public class PlayerStats {
 	// Max Stats
-	public int MaxHp;
-	public int MaxMana;
-	public int MaxPhysical;
-	public int MaxSpecial;
-	public int MaxDefense;
-	public int MaxResistance;
-	public int MaxSpeed;
-	public bool IsRare;
+	public int maxHp;
+	public int maxMana;
+	public int maxPhysical;
+	public int maxSpecial;
+	public int maxDefense;
+	public int maxResistance;
+	public int maxSpeed;
+	public bool isRare;
 
 	// Base Stats
 	[SerializeField]
@@ -36,11 +34,6 @@ public class Player {
 	private int _hpRegen;
 	[SerializeField]
 	private int _manaRegen;
-
-	public Player(string name) {
-		Name = name;
-	}
-
 
 	// Getter / Setter ------------ //
 	public int GetHp() {
@@ -121,31 +114,31 @@ public class Player {
 	}
 
 	// Resetter ------------------//
-	public void resetHp() {
+	public void ResetHp() {
 		_hp = MaxHp;
 	}
 
-	public void resetMana() {
+	public void ResetMana() {
 		_mana = MaxMana;
 	}
 
-	public void resetPhysical() {
+	public void ResetPhysical() {
 		_physical = MaxPhysical;
 	}
 
-	public void resetSpecial() {
+	public void ResetSpecial() {
 		_special = MaxSpecial;
 	}
 
-	public void resetDefense() {
+	public void ResetDefense() {
 		_defense = MaxDefense;
 	}
 
-	public void resetResistance() {
+	public void ResetResistance() {
 		_resistance = MaxResistance;
 	}
 
-	public void resetSpeed() {
+	public void ResetSpeed() {
 		_speed = MaxSpeed;
 	}
 }

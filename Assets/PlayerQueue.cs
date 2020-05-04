@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerQueue : TwitchChatListenerBase {
-	LinkedList<Player> _waitingQueue = new LinkedList<Player>();
-	Dictionary<string, LinkedListNode<Player>> _inQueue = new Dictionary<string, LinkedListNode<Player>>(); 
+	LinkedList<PlayerCreationData> _waitingQueue = new LinkedList<PlayerCreationData>();
+	Dictionary<string, LinkedListNode<PlayerCreationData>> _inQueue = new Dictionary<string, LinkedListNode<PlayerCreationData>>(); 
 
 	public bool Enqueue(string username) {
 		if(_inQueue.Contains(username)) {
 			return false;
 		} else {
-			ListedListNode<Player> node = _waitingQueue.AddLast(new Player(username));
+			ListedListNode<PlayerCreationData> node = _waitingQueue.AddLast(new PlayerCreationData(username));
 			_inQueue.Add(username, node);
 			return true;
 		}
 	}
 
-	public Player Dequeue() {
-		LinkedListNode<Player> node = _waitingQueue.First();
+	public PlayerCreationData Dequeue() {
+		LinkedListNode<PlayerCreationData> node = _waitingQueue.First();
 		if(node != null) {
-			_inQueue.Remove(node.Value.Name);
+			_inQueue.Remove(node.Value.name);
 			_waitingQueue.RemoveFirst();
 			return node.Value;
 		} else {
@@ -28,7 +28,7 @@ public class PlayerQueue : TwitchChatListenerBase {
 	}
 
 	public void Remove(string username) {
-		LinkedListNode<Player> node = _inQueue[username];
+		LinkedListNode<PlayerCreationData> node = _inQueue[username];
 		_waitingQueue.Remove(node);
 		_inQueue.Remove(username);
 	}
