@@ -16,10 +16,29 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	public void Initialize(PlayerCreationData data) {
+		SetName(data.name);
+		SetStats(data.stats);
+		SetJob(data.job);
+	}
+
+	// Getters / Setters 
 	public string GetJobName() {
 		return job.ToString();
 	}
 
+	public void SetName(string name) {
+		this.playerName = name;
+	}
+
+	public void SetStats(PlayerStats stats) {
+		this.stats = stats;
+	}
+
+	public void SetJob(Job job) {
+		this.job = job;
+	}
+	
 	public void TryActionCommand(ActionType actionType, string[] splitCommand) {
 		if (_actions.ContainsKey(actionType)) {
 			if (!_actions[actionType].TryChooseAction(this, splitCommand)) {
