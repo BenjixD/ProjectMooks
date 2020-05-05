@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14fb53d9f9719b1498cd0a900037d9e2, type: 3}
   m_Name: Mage
   m_EditorClassIdentifier: 
-  job: 1
+  job: 2
   _actions:
   - {fileID: 11400000, guid: 45f018787ba0632428d557234669d7f5, type: 2}
   - {fileID: 11400000, guid: 46a449bf53492cb41b829822dd2515ea, type: 2}

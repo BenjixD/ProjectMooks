@@ -15,9 +15,15 @@ public class FightingEntity : MonoBehaviour
 
 	public Job job;
 
-	private List<ActionBase> _actions = new List<ActionBase>();
+	public List<ActionBase> actions = new List<ActionBase>();
 	private QueuedAction _queuedAction;
 
+	public void Initialize(PlayerCreationData data) {
+		Name = data.name;
+		SetStats(data.stats);
+        Debug.Log(data.job);
+		SetJob(data.job);
+	}
 
 	public void SetStats(PlayerStats stats) {
 		this.stats = stats;
@@ -31,13 +37,13 @@ public class FightingEntity : MonoBehaviour
 
 	public void SetJob(Job job) {
 		this.job = job;
-		_actions = GameManager.Instance.GetJobActionsList(job);
+		actions = GameManager.Instance.GetJobActionsList(job);
 	}
 
 
 	public void TryActionCommand(string message) {
 		string[] splitCommand = message.Split(' ');
-		foreach (ActionBase action in _actions) {
+		foreach (ActionBase action in actions) {
 			if (action.TryChooseAction(this, splitCommand)) {
 				return;
 			}
@@ -66,6 +72,10 @@ public class FightingEntity : MonoBehaviour
 
     public bool isEnemy() {
         return this.GetType() == typeof(Enemy);
+    }
+
+    public ActionBase GetRandomAction() {
+        return actions[Random.Range(0, actions.Count)];
     }
     
 }

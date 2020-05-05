@@ -20,7 +20,8 @@ public enum BattleOption {
 
 public class BattleController : MonoBehaviour
 {
-    public List<RectTransform> battleOptionsUI;
+
+    public CommandOptionText commandTextPrefab;
     public RectTransform selectionCursor;
     public Vector2 selectionCursorOffset = new Vector2(0, 0);
 
@@ -28,13 +29,15 @@ public class BattleController : MonoBehaviour
     public float playerActionCounter {get; set;}
 
     public RectTransform ActionMenu;
+
+    public RectTransform ActionMenuTextParent;
+
     public RectTransform CommentaryMenu;
     public Text CommentaryText;
 
-
-    BattleOption heroBattleOption = BattleOption.ATTACK;
     Player _heroPlayer;
-
+    int heroActionIndex = 0;
+    public List<RectTransform> battleOptionsUI {get ; set; }
 
     bool startActions = false;
 
@@ -44,7 +47,17 @@ public class BattleController : MonoBehaviour
 
         // TODO: Waves
         GameManager.Instance.GenerateEnemyList();
+        battleOptionsUI = new List<RectTransform>();
+
+        foreach (ActionBase action in _heroPlayer.actions) {
+            CommandOptionText  commandText = Instantiate(commandTextPrefab) as CommandOptionText;
+            commandText.text.text = action.name;
+            commandText.transform.parent = ActionMenuTextParent.transform;
+            battleOptionsUI.Add(commandText.GetComponent<RectTransform>());
+        }
+
         this.OnPlayerTurnStart();
+        this.UpdateBattleOptionUI();
     }
 
     private List<Player> GetPlayers() {
@@ -58,49 +71,29 @@ public class BattleController : MonoBehaviour
         if (startActions == false) {
             if (_heroPlayer.HasSetCommand() == false) {
                 if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                    BattleOption nextBattleOption = (BattleOption)((int) heroBattleOption + 1);
-                    if (nextBattleOption == BattleOption.LENGTH) {
-                        nextBattleOption = BattleOption.ATTACK;
+                    if (heroActionIndex == 0) {
+                        heroActionIndex = _heroPlayer.actions.Count - 1;
+                    } else {
+                        heroActionIndex--;
                     }
-
-                    heroBattleOption = nextBattleOption;
 
                     this.UpdateBattleOptionUI();
                 }
 
                 if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                    BattleOption nextBattleOption = heroBattleOption;
-                    if ((int) heroBattleOption == 0) {
-                        nextBattleOption = (BattleOption) ((int)BattleOption.LENGTH - 1);
+                    if (heroActionIndex == _heroPlayer.actions.Count - 1) {
+                        heroActionIndex = 0;
                     } else {
-                        nextBattleOption = (BattleOption) ((int)nextBattleOption - 1);
+                        heroActionIndex++;
                     }
 
-                    heroBattleOption = nextBattleOption;
                     this.UpdateBattleOptionUI();
                 }
 
 
                 if (Input.GetKeyDown(KeyCode.Z)) {
 
-                    switch (heroBattleOption) {
-                        case BattleOption.ATTACK:
-                        // TODO: Update this to allow for hero target selection.
-                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, new AttackTest(), new List<int>{0}, TargetType.ENEMY  ));
-                        break;
-
-                        case BattleOption.DEFEND:
-                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, new Defend(), new List<int>{}, TargetType.PLAYER  ));
-
-                        break;
-
-                        case BattleOption.MAGIC:
-                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, new FireOneTest(), new List<int>{0}, TargetType.ENEMY  ));
-
-                        break;
-
-                    }
-                   
+                    _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{0}, TargetType.ENEMY  ));
 
                 }
             } else {
@@ -114,7 +107,7 @@ public class BattleController : MonoBehaviour
 
             playerActionCounter += Time.deltaTime;
 
-            if (playerActionCounter >= this.maxTimeBeforeAction || hasEveryoneEnteredActions()) {
+            if ( (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction) || hasEveryoneEnteredActions()) {
                 playerActionCounter = 0;
                 this.ExecutePlayerTurn();
             }
@@ -133,7 +126,7 @@ public class BattleController : MonoBehaviour
 
 
     public void UpdateBattleOptionUI() {
-        selectionCursor.transform.parent = battleOptionsUI[(int)(heroBattleOption)].transform;
+        selectionCursor.transform.parent = battleOptionsUI[heroActionIndex].transform;
         selectionCursor.anchoredPosition = selectionCursorOffset;
     }
 
@@ -160,7 +153,7 @@ public class BattleController : MonoBehaviour
         
         FightingEntity entity = orderedEntities[curIndex];
         if (entity.GetType() == typeof(Enemy)) {
-            entity.SetQueuedAction(new QueuedAction(entity, new AttackTest(), new List<int>{0}, TargetType.PLAYER  ));
+            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{0}, TargetType.PLAYER  ));
 
         } else {
         }

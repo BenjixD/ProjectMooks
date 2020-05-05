@@ -18,13 +18,16 @@ public class GameManager : Singleton<GameManager> {
     
 
     void Awake() {
-        PlayerStats stats = new PlayerStats();
-        PlayerCreationData heroData = new PlayerCreationData(chatBroadcaster._channelToConnectTo, stats);
-        party.CreatePlayer(heroData, 0);
-
         foreach(JobActionsList jobActionsList in _jobActionsLists) {
             jobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
+
+        PlayerStats stats = new PlayerStats();
+        PlayerCreationData heroData = new PlayerCreationData(chatBroadcaster._channelToConnectTo, stats, Job.HERO);
+        party.CreatePlayer(heroData, 0);
+ 
+
+
     }
 
     public void GenerateEnemyList() {
@@ -38,6 +41,10 @@ public class GameManager : Singleton<GameManager> {
 
             Enemy enemyPrefab = validEnemies[enemyIndex];
             Enemy instantiatedEnemy = Instantiate(enemyPrefab) as Enemy;
+
+            PlayerStats stats = new PlayerStats();
+            PlayerCreationData creationData = new PlayerCreationData("Evil monster", stats, Job.BASIC_ENEMY);
+            instantiatedEnemy.Initialize(creationData);
 
             enemies.Add(instantiatedEnemy);
         }

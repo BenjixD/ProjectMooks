@@ -18,6 +18,7 @@ public class Party : MonoBehaviour {
         playerPos[index] = data.name;
         players.Add(data.name, new Tuple<int, Player>(index, player));
         Debug.Log("Created player: " + data.name);
+        Debug.Log("Player actions: " + player.actions);
         return player;
     }
 
