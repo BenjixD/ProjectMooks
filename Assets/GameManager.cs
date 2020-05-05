@@ -8,7 +8,7 @@ public class GameManager : Singleton<GameManager> {
 
     public TwitchChatBroadcaster chatBroadcaster;
 
-    public List<Enemy> enemies = new List<Enemy>();
+    public List<Enemy> enemies{get; set;}
 
     [SerializeField]
     List<Enemy> _enemyPrefabs;

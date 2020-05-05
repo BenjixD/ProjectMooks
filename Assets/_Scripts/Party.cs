@@ -28,7 +28,8 @@ public class Party : MonoBehaviour {
         if(playerPos[index] != null) {
             return;
         } else {
-            PlayerCreationData data = GetNPlayers(1)[0];
+            List<PlayerCreationData> nPlayers = GetNPlayers(1);
+            PlayerCreationData data = nPlayers[0];
             if(data != null) {
                 Player p = CreatePlayer(data);
                 playerPos[index] = data.name;
@@ -54,7 +55,9 @@ public class Party : MonoBehaviour {
     public List<Player> GetPlayersInPosition() {
         List<Player> pos = new List<Player>();
         for(int i = 0; i < playerPos.Length; i++) {
-            pos.Add(GetPlayer(i).Item2);
+            if (GetPlayer(i) != null) {
+                pos.Add(GetPlayer(i).Item2);
+            }  
         }
         return pos;
     }

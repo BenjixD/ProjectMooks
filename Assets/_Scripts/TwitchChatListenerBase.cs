@@ -13,4 +13,8 @@ public abstract class TwitchChatListenerBase : MonoBehaviour, TwitchChatListener
     public abstract void OnCommandReceived(string username, string message);
 
 
+    void OnDestroy() {
+        TwitchChatBroadcaster.Instance.removeListener(this);
+    }
+
 }
