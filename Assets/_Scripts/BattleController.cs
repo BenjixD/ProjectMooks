@@ -33,7 +33,6 @@ public class BattleController : MonoBehaviour
 
 
     BattleOption heroBattleOption = BattleOption.ATTACK;
-    List<Player> _players;
     Player _heroPlayer;
 
 
@@ -41,12 +40,15 @@ public class BattleController : MonoBehaviour
 
 
     void Start() {
-        _players = GameManager.Instance.party.GetPlayersInPosition();
-        _heroPlayer = _players[0];
+        _heroPlayer = GetPlayers()[0];
 
         // TODO: Waves
         GameManager.Instance.GenerateEnemyList();
         this.OnPlayerTurnStart();
+    }
+
+    private List<Player> GetPlayers() {
+        return GameManager.Instance.party.GetPlayersInPosition();
     }
 
     // Update is called once per frame
@@ -120,7 +122,7 @@ public class BattleController : MonoBehaviour
     }
 
     private bool hasEveryoneEnteredActions() {
-        foreach (var player in _players) {
+        foreach (var player in GetPlayers()) {
             if (player.HasSetCommand() == false) {
                 return false;
             }
@@ -168,7 +170,7 @@ public class BattleController : MonoBehaviour
     }
 
     public int getRandomEnemyTarget() {
-        int enemyTarget = Random.Range(0, _players.Count);
+        int enemyTarget = Random.Range(0, GetPlayers().Count);
         return enemyTarget;
     }
 
@@ -194,7 +196,7 @@ public class BattleController : MonoBehaviour
         this.CommentaryMenu.gameObject.SetActive(false);
 
         this.playerActionCounter = 0;
-        foreach (var player in _players) {
+        foreach (var player in GetPlayers()) {
             player.ResetCommand();
 
             if (player.modifiers.Contains("defend")) {
