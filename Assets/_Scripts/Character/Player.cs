@@ -23,13 +23,13 @@ public class Player : FightingEntity {
 	}
 
 	public void RemoveStatusAilment(string ailment) {
-		StatusAilment ailment = _ailments[ailment];
+		StatusAilment status = _ailments[ailment];
 		_ailments.Remove(ailment);
-		ailment.Recover(this);
+		status.Recover(this);
 	}
 
 	public void DecrementAilmentsDuration() {
-		list<string> timeout = new list<string>();
+		List<string> timeout = new List<string>();
 		foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
 			if(entry.Value.duration <= 0) {
 				timeout.Add(entry.Key);
