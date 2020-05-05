@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class PlayerStats {
+	public int level;
+
 	// Max Stats
 	public int maxHp;
 	public int maxMana;
@@ -34,6 +37,42 @@ public class PlayerStats {
 	private int _hpRegen;
 	[SerializeField]
 	private int _manaRegen;
+
+	public PlayerStats() {
+		level = 1;
+	}
+
+	public PlayerStats(PlayerStats stats) {
+		maxHp = stats.maxHp;
+		maxMana = stats.maxMana;
+		maxPhysical = stats.maxPhysical;
+		maxSpecial = stats.maxSpecial;
+		maxDefense = stats.maxDefense;
+		maxResistance = stats.maxResistance;
+		maxSpeed = stats.maxSpeed;
+	}
+
+	public void RandomizeStats() {
+		maxHp = (int)(maxHp * (BoxMuller.GetRandom() + 1)) + 1;
+		maxMana = (int)(maxMana * (BoxMuller.GetRandom() + 1)) + 1;
+		maxSpeed = (int)(maxSpeed * (BoxMuller.GetRandom() + 1));
+
+		maxPhysical = (int)(maxPhysical * (BoxMuller.GetRandom() + 1));
+		maxSpecial = (int)(maxSpecial * (BoxMuller.GetRandom() + 1));
+
+		maxDefense = (int)(maxDefense * (BoxMuller.GetRandom() + 1));
+		maxResistance = (int)(maxResistance * (BoxMuller.GetRandom() + 1));
+	}
+
+	public void LogStats() {
+		Debug.Log("HP: " + _hp);
+		Debug.Log("MANA: " + _mana);
+		Debug.Log("PHYSICAL: " + _physical);
+		Debug.Log("SPECIAL: " + _special);
+		Debug.Log("DEFENSE: " + _defense);
+		Debug.Log("RESISTANCE: " + _resistance);
+		Debug.Log("SPEED: " + _speed);
+	}
 
 	// Getter / Setter ------------ //
 	public int GetHp() {
@@ -114,6 +153,16 @@ public class PlayerStats {
 	}
 
 	// Resetter ------------------//
+	public void ResetStats() {
+		ResetHp();
+		ResetMana();
+		ResetPhysical();
+		ResetSpecial();
+		ResetDefense();
+		ResetResistance();
+		ResetSpeed();	
+	}
+
 	public void ResetHp() {
 		_hp = maxHp;
 	}
