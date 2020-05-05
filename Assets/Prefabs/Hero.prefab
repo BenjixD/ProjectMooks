@@ -98,13 +98,13 @@ MonoBehaviour:
   Name: dvchibot
   stats:
     level: 1
-    maxHp: 0
-    maxMana: 0
-    maxPhysical: 0
-    maxSpecial: 0
-    maxDefense: 0
-    maxResistance: 0
-    maxSpeed: 0
+    maxHp: 100
+    maxMana: 100
+    maxPhysical: 15
+    maxSpecial: 15
+    maxDefense: 15
+    maxResistance: 15
+    maxSpeed: 15
     isRare: 0
     _hp: 0
     _mana: 0

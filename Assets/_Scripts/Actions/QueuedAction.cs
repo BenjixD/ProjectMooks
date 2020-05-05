@@ -29,12 +29,12 @@ public class QueuedAction {
     }
 
     public void ExecuteAction() {
-
         List<FightingEntity> potentialTargets;
         if (_targetIdType == TargetType.PLAYER) {
             potentialTargets = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
         } else {
-            potentialTargets = new List<FightingEntity>(GameManager.Instance.enemies);
+            Debug.Log("List: " + GameManager.Instance.battleController.enemies);
+            potentialTargets = new List<FightingEntity>(GameManager.Instance.battleController.enemies);
         }
 
         List<FightingEntity> targets = new List<FightingEntity>();

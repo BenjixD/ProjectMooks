@@ -20,6 +20,13 @@ public class FireOneTest : ActionBase {
     }
 
     public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
-        // TODO: calculate damage and inflict on targets
+        int attackDamage = user.stats.GetSpecial();
+        
+        foreach (FightingEntity target in targets) {
+            int defence = target.stats.GetResistance();
+            int damage =  Mathf.Max(attackDamage - defence, 0);
+            
+            target.stats.SetHp(target.stats.GetHp() - damage);
+        }
     }
 }

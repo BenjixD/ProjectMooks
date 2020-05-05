@@ -16,6 +16,6 @@ public class Defend : ActionBase {
     }
 
     public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
-        // TODO: defend
+        user.modifiers.Add("defend");
     }
 }
