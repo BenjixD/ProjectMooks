@@ -6,15 +6,16 @@ using UnityEngine;
 public class Defend : ActionBase {
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
         // Defend command format: !d
-        if (splitCommand.Length != 1) {
-            Debug.Log("Malformed defend command. The proper defend command is !d");
+        if (!BasicValidation(splitCommand)) {
             return false;
         }
-        user.SetQueuedAction(new QueuedAction(this, null));
+
+        TargetType targetType = user.isEnemy() ? TargetType.ENEMY : TargetType.PLAYER;
+        user.SetQueuedAction(new QueuedAction(user, this, null, targetType));
         return true;
     }
 
-    public override void ExecuteAction(FightingEntity user, FightingEntity[] targets) {
+    public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
         // TODO: defend
     }
 }

@@ -14,7 +14,7 @@ public class GameManager : Singleton<GameManager> {
     List<Enemy> _enemyPrefabs;
 
     [SerializeField] private JobActionsList[] _jobActionsLists;
-    public Dictionary<Job, Dictionary<ActionType, ActionBase>> jobActions = new Dictionary<Job, Dictionary<ActionType, ActionBase>>();
+    public Dictionary<Job, List<ActionBase>> jobActions = new Dictionary<Job, List<ActionBase>>();
     
 
     void Awake() {
@@ -23,7 +23,6 @@ public class GameManager : Singleton<GameManager> {
         party.CreatePlayer(heroData, 0);
 
         foreach(JobActionsList jobActionsList in _jobActionsLists) {
-            jobActionsList.Initialize();
             jobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
     }
@@ -63,7 +62,7 @@ public class GameManager : Singleton<GameManager> {
         return entities;
     }
 
-    public Dictionary<ActionType, ActionBase> GetJobActionsList(Job job) {
+    public List<ActionBase> GetJobActionsList(Job job) {
         if(!jobActions.ContainsKey(job)) {
             Debug.Log("No JobActionsList for job " + job + " found");
             return null;

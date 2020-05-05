@@ -4,19 +4,6 @@ using System.Collections.Generic;
 
 
 
-public class BattleCommand {
-    public BattleOption option = BattleOption.ATTACK;
-    public int target = 0; // Remember that chat will enter a number of target + 1
-    public bool targetIsEnemy = true; // TODO: Allow for self targetting
-
-}
-
-public enum BattleOption {
-    ATTACK = 0,
-    MAGIC = 1,
-    DEFEND = 2,
-    LENGTH = 3
-};
 
 
 public class FightingEntity : MonoBehaviour
@@ -24,15 +11,11 @@ public class FightingEntity : MonoBehaviour
     public string Name;
     public PlayerStats stats;
 
-    public BattleCommand command = new BattleCommand();
-
     public HashSet<string> modifiers = new HashSet<string>();
-
-    public bool hasSetCommand = false;
 
 	public Job job;
 
-	private Dictionary<ActionType, ActionBase> _actions = new Dictionary<ActionType, ActionBase>();
+	private List<ActionBase> _actions = new List<ActionBase>();
 	private QueuedAction _queuedAction;
 
 
@@ -40,25 +23,50 @@ public class FightingEntity : MonoBehaviour
 		this.stats = stats;
 	}
 
+	// Getters / Setters 
+	public string GetJobName() {
+		return job.ToString();
+	}
+
+
 	public void SetJob(Job job) {
 		this.job = job;
 		_actions = GameManager.Instance.GetJobActionsList(job);
 	}
 
 
-	public void TryActionCommand(ActionType actionType, string[] splitCommand) {
-		if (_actions.ContainsKey(actionType)) {
-			if (!_actions[actionType].TryChooseAction(this, splitCommand)) {
-				Debug.Log("Trying to use Action of type " + actionType + " failed");
+	public void TryActionCommand(string message) {
+		string[] splitCommand = message.Split(' ');
+		foreach (ActionBase action in _actions) {
+			if (action.TryChooseAction(this, splitCommand)) {
+				return;
 			}
-		} else {
-			Debug.Log("Player does not have Action of type " + actionType);
 		}
+		Debug.Log("Invalid action command for player " + Name + ": " + message);
 	}
 
+
+
 	public void SetQueuedAction(QueuedAction queuedAction) {
-		Debug.Log("Sucessfully set action " + queuedAction.GetAction() + " for player " + this.Name);
+		Debug.Log("Sucessfully set action " + queuedAction.GetAction().name + " for player " + this.Name);
 		_queuedAction = queuedAction;
 	}
+
+    public QueuedAction  GetQueuedAction() {
+        return _queuedAction;
+    }
+
+    public bool HasSetCommand() {
+        return _queuedAction != null;
+    }
+
+    public void ResetCommand() {
+        _queuedAction = null;
+    }
+
+    public bool isEnemy() {
+        return this.GetType() == typeof(Enemy);
+    }
+    
 }
 

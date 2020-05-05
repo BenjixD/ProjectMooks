@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Fire One
   description: 
-  actionType: 1
+  commandKeyword: fire1
+  commandArgs: 1

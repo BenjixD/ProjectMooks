@@ -195,7 +195,7 @@ MonoBehaviour:
     _speed: 0
     _hpRegen: 0
     _manaRegen: 0
-  hasSetCommand: 0
+  job: 0
 --- !u!1 &199044898
 GameObject:
   m_ObjectHideFlags: 0
@@ -1709,6 +1709,7 @@ MonoBehaviour:
   _enemyPrefabs:
   - {fileID: 42403278}
   - {fileID: 42403278}
+  _jobActionsLists: []
 --- !u!114 &1240356890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2527,6 +2528,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059772348}
   m_CullTransparentMesh: 0
+--- !u!1 &2080289098 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7777298287657591932, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
+    type: 3}
+  m_PrefabInstance: {fileID: 7777298287208736098}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2080289099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080289098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe321b222c7fb947850511a6dad0258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speechCanvas: {fileID: 0}
+  speechCanvasText: {fileID: 0}
+  _chatBubbleAnimationTime: 5
 --- !u!1 &2113183329
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,13 @@ public enum BattlePhase {
 
 };
 
+public enum BattleOption {
+    ATTACK = 0,
+    MAGIC = 1,
+    DEFEND = 2,
+    LENGTH = 3
+};
+
 
 public class BattleController : MonoBehaviour
 {
@@ -25,6 +32,7 @@ public class BattleController : MonoBehaviour
     public Text CommentaryText;
 
 
+    BattleOption heroBattleOption = BattleOption.ATTACK;
     List<Player> _players;
     Player _heroPlayer;
 
@@ -46,38 +54,57 @@ public class BattleController : MonoBehaviour
     {
 
         if (startActions == false) {
-            if (_heroPlayer.hasSetCommand == false) {
+            if (_heroPlayer.HasSetCommand() == false) {
                 if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                    BattleOption nextBattleOption = (BattleOption)((int) _heroPlayer.command.option + 1);
+                    BattleOption nextBattleOption = (BattleOption)((int) heroBattleOption + 1);
                     if (nextBattleOption == BattleOption.LENGTH) {
                         nextBattleOption = BattleOption.ATTACK;
                     }
 
-                    _heroPlayer.command.option = nextBattleOption;
+                    heroBattleOption = nextBattleOption;
 
                     this.UpdateBattleOptionUI();
                 }
 
                 if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                    BattleOption nextBattleOption = _heroPlayer.command.option;
-                    if ((int) _heroPlayer.command.option == 0) {
+                    BattleOption nextBattleOption = heroBattleOption;
+                    if ((int) heroBattleOption == 0) {
                         nextBattleOption = (BattleOption) ((int)BattleOption.LENGTH - 1);
                     } else {
                         nextBattleOption = (BattleOption) ((int)nextBattleOption - 1);
                     }
 
-                    _heroPlayer.command.option = nextBattleOption;
+                    heroBattleOption = nextBattleOption;
                     this.UpdateBattleOptionUI();
                 }
 
 
                 if (Input.GetKeyDown(KeyCode.Z)) {
-                    _heroPlayer.hasSetCommand = true;
+
+                    switch (heroBattleOption) {
+                        case BattleOption.ATTACK:
+                        // TODO: Update this to allow for hero target selection.
+                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, new AttackTest(), new List<int>{0}, TargetType.ENEMY  ));
+                        break;
+
+                        case BattleOption.DEFEND:
+                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, new Defend(), new List<int>{}, TargetType.PLAYER  ));
+
+                        break;
+
+                        case BattleOption.MAGIC:
+                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, new FireOneTest(), new List<int>{0}, TargetType.ENEMY  ));
+
+                        break;
+
+                    }
+                   
+
                 }
             } else {
                 
                 if (Input.GetKeyDown(KeyCode.Z)) {
-                    _heroPlayer.hasSetCommand = false;
+
                 }
             }
 
@@ -94,7 +121,7 @@ public class BattleController : MonoBehaviour
 
     private bool hasEveryoneEnteredActions() {
         foreach (var player in _players) {
-            if (player.hasSetCommand == false) {
+            if (player.HasSetCommand() == false) {
                 return false;
             }
         }
@@ -104,7 +131,7 @@ public class BattleController : MonoBehaviour
 
 
     public void UpdateBattleOptionUI() {
-        selectionCursor.transform.parent = battleOptionsUI[(int)(_heroPlayer.command.option)].transform;
+        selectionCursor.transform.parent = battleOptionsUI[(int)(heroBattleOption)].transform;
         selectionCursor.anchoredPosition = selectionCursorOffset;
     }
 
@@ -130,15 +157,13 @@ public class BattleController : MonoBehaviour
         }
         
         FightingEntity entity = orderedEntities[curIndex];
-        FightingEntity enemyEntity;
         if (entity.GetType() == typeof(Enemy)) {
-            entity.command.target = getRandomEnemyTarget();
-            enemyEntity = _players[entity.command.target];
+            entity.SetQueuedAction(new QueuedAction(entity, new AttackTest(), new List<int>{0}, TargetType.PLAYER  ));
+
         } else {
-            enemyEntity = GameManager.Instance.enemies[entity.command.target];
         }
 
-        StartCoroutine(dummyAttackAnimation(entity, enemyEntity, orderedEntities, curIndex));
+        StartCoroutine(dummyAttackAnimation(entity, orderedEntities, curIndex));
         
     }
 
@@ -147,14 +172,18 @@ public class BattleController : MonoBehaviour
         return enemyTarget;
     }
 
-    IEnumerator dummyAttackAnimation(FightingEntity a, FightingEntity b, List<FightingEntity> orderedEntities, int index) {
+    IEnumerator dummyAttackAnimation(FightingEntity a, List<FightingEntity> orderedEntities, int index) {
 
         string attackerName = a.Name;
-        string attackName = a.command.option.ToString(); // TODO: Better names
+        if (a.GetQueuedAction() == null) {
+            Debug.LogError("Cannot find queued action: "  + attackerName);
+            yield break;
+        }
+        string attackName = a.GetQueuedAction()._action.name;
 
         CommentaryText.text = "" + attackerName + " used " + attackName;
         yield return new WaitForSeconds(2f);
-        this.DoAction(a, b);
+        this.DoAction(a);
         this.DoActionHelper(orderedEntities, index + 1);
     }
 
@@ -166,7 +195,7 @@ public class BattleController : MonoBehaviour
 
         this.playerActionCounter = 0;
         foreach (var player in _players) {
-            player.hasSetCommand = false;
+            player.ResetCommand();
 
             if (player.modifiers.Contains("defend")) {
                 player.modifiers.Remove("defend");
@@ -174,39 +203,7 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    public void DoAction(FightingEntity a, FightingEntity b) {
-        PlayerStats playerStats = a.stats;
-        PlayerStats enemyStats = b.stats;
-        int attackerAttack = 0;
-        int defenderDefence = 0;
-        int damage = 0;
-        switch (a.command.option) {
-            case BattleOption.ATTACK:
-                attackerAttack = playerStats.GetPhysical();
-                defenderDefence = playerStats.GetDefense();
-                if (b.modifiers.Contains("defend")) {
-                    defenderDefence *= 2;
-                }
-
-                damage = Mathf.Max(0, attackerAttack - defenderDefence);
-                enemyStats.SetHp(enemyStats.GetHp() - damage);
-
-            break;
-            case BattleOption.DEFEND:
-                a.modifiers.Add("defend");
-            break;
-            case BattleOption.MAGIC:
-                // TODO: Get the spell
-                attackerAttack = playerStats.GetSpecial();
-                defenderDefence = playerStats.GetResistance();
-                if (b.modifiers.Contains("defend")) {
-                    defenderDefence *= 2;
-                }
-
-                damage = Mathf.Max(0, attackerAttack - defenderDefence);
-                enemyStats.SetHp(enemyStats.GetHp() - damage);
-            break;
-        }
-            
+    public void DoAction(FightingEntity a) {
+        a.GetQueuedAction().ExecuteAction();
     }
 }
