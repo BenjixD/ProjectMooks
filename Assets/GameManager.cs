@@ -3,45 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
-	public PlayerQueue playerQueue;
-
+    public Party party;
     public BattleController battleController{get; set;}
 
     public TwitchChatBroadcaster chatBroadcaster;
-
-    public List<Player> players = new List<Player>();
 
     public List<Enemy> enemies = new List<Enemy>();
 
     [SerializeField]
     List<Enemy> _enemyPrefabs;
-
-
-    public int level = 1;
-
-
-	List<PlayerCreationData> GetNPlayers(int n) {
-		List<PlayerCreationData> players = new List<PlayerCreationData>();
-		for(int i = 0; i < n; i++) {
-			PlayerCreationData data = playerQueue.Dequeue();
-			if(data != null) {
-				players.Add(data);
-			}
-		}
-		return players;
-	}
-
-    void Awake() {
-        //heroPlayer = new Player(chatBroadcaster._channelToConnectTo);
-    }
-
-	void Start() {
-		StartCoroutine(TestPlayers());
-	}
-
-	void Update() {
-
-	}
 
     public void GenerateEnemyList() {
         int numberOfEnemiesToGenerate = 1; // TODO: Make this dependent on stage.
@@ -65,6 +35,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public List<FightingEntity> getAllFightingEntities() {
+        List<Player> players = GameManager.Instance.party.GetPlayersInPosition();
         List<FightingEntity> entities = new List<FightingEntity>();
         foreach (var player in players) {
             entities.Add(player);
@@ -76,18 +47,5 @@ public class GameManager : Singleton<GameManager> {
 
         return entities;
     }
-
-	IEnumerator TestPlayers() {
-		List<PlayerCreationData> players = GetNPlayers(2);
-		for(int i = 0; i < players.Count; i++) {
-			Debug.Log("Deploying Player: " + players[i].name);
-			playerQueue.Remove(players[i].name);
-		}
-		yield return new WaitForSeconds(5f);
-		yield return StartCoroutine(TestPlayers());
-	}
-
-
-
 
 }

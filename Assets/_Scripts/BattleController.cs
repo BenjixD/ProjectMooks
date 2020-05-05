@@ -38,6 +38,8 @@ public class BattleController : TwitchChatListenerBase
     public RectTransform selectionCursor;
     public Vector2 selectionCursorOffset = new Vector2(0, 0);
 
+    public float maxTimeBeforeAction = 15;
+    public float timeCounter {get; set;}
 
     List<BattleCommand> _mookBattleCommands;
 
@@ -46,16 +48,22 @@ public class BattleController : TwitchChatListenerBase
 
     List<BubbleAnimationValues> _mookBubbleAnimation;
 
+    List<Player> players;
 
+    BattlePhase battlePhase = BattlePhase.PLAYER;
+
+
+    
 
     void Start() {
+        players = GameManager.Instance.party.GetPlayersInPosition();
+
         _mookBattleCommands = new List<BattleCommand>();
-        int numPlayers = GameManager.Instance.players.Count;
+        int numPlayers = players.Count;
         for (int i = 0; i < numPlayers; i++) {
             _mookBattleCommands.Add(new BattleCommand());
             _mookBubbleAnimation.Add(new BubbleAnimationValues());
         }
-
 
         // TODO: Waves
         GameManager.Instance.GenerateEnemyList();
@@ -97,7 +105,7 @@ public class BattleController : TwitchChatListenerBase
 
     public override void OnMessageReceived(string username, string message) {
         for (int i = 0; i < _mookBattleCommands.Count; i++) {
-            if (username ==  GameManager.Instance.players[i].Name) {
+            if (username ==  players[i].Name) {
                 this.HandleMessage(i, message);
             }
         }
@@ -105,7 +113,7 @@ public class BattleController : TwitchChatListenerBase
 
     public override void OnCommandReceived(string username, string message) {
         for (int i = 0; i < _mookBattleCommands.Count; i++) {
-            if (username ==  GameManager.Instance.players[i].Name) {
+            if (username ==  players[i].Name) {
                 this.HandleCommand(i, message);
             }
         }
@@ -170,13 +178,18 @@ public class BattleController : TwitchChatListenerBase
         
     }
 
+
+    public void StartPlayerTurn() {
+        
+    }
+
     public void ExecutePlayerTurn() {
         // Sort by player speed
-        List<Player> orderedPlayers = new List<Player>(GameManager.Instance.players);
+        List<Player> orderedPlayers = new List<Player>(players);
         orderedPlayers.Sort( (Player a, Player b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
         foreach (var player in orderedPlayers) {
-            int playerIndex = player.playerIndex;
+            int playerIndex = GameManager.Instance.party.GetPlayer(player.Name).Item1;
 
             BattleCommand playerCommand;
             
@@ -189,25 +202,31 @@ public class BattleController : TwitchChatListenerBase
             this.DoAction(playerCommand, player, GameManager.Instance.enemies[playerCommand.target]);
             
         }
+
+        this.battlePhase = BattlePhase.ENEMY;
+        this.ExecuteEnemyTurn();
     }
 
     public void ExecuteEnemyTurn() {
         List<Enemy> orderedEnemies = new List<Enemy>(GameManager.Instance.enemies);
         orderedEnemies.Sort( (Enemy a, Enemy b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
+
         foreach (var enemy in orderedEnemies) {
-            int enemyTarget = Random.Range(0, GameManager.Instance.players.Count);
+            int enemyTarget = Random.Range(0, players.Count);
             BattleCommand command = new BattleCommand();
             command.target = enemyTarget;
             command.option = BattleOption.ATTACK; // TODO: Allow enemies to have other attacks
-            FightingEntity playerTarget = GameManager.Instance.players[enemyTarget];
+            FightingEntity playerTarget = players[enemyTarget];
             this.DoAction(command, enemy, playerTarget);
         }
+
+        this.battlePhase = BattlePhase.PLAYER;
     }
 
 
     public void OnPlayerTurnStart() {
-        foreach (var player in GameManager.Instance.players) {
+        foreach (var player in players) {
             if (player.modifiers.Contains("defend")) {
                 player.modifiers.Remove("defend");
             }
@@ -254,19 +273,18 @@ public class BattleController : TwitchChatListenerBase
 
 
     IEnumerator displayChatBubble(int mookIndex) {
-        
         _mookBubbleAnimation[mookIndex].isAnimating = true;
-        GameManager.Instance.players[mookIndex].speechCanvasText.text = _mookBubbleAnimation[mookIndex].message;
-        GameManager.Instance.players[mookIndex].speechCanvas.gameObject.SetActive(true);
+        players[mookIndex].speechCanvasText.text = _mookBubbleAnimation[mookIndex].message;
+        players[mookIndex].speechCanvas.gameObject.SetActive(true);
 
 
         while (_mookBubbleAnimation[mookIndex].counter < _chatBubbleAnimationTime) {
-            GameManager.Instance.players[mookIndex].speechCanvasText.text = _mookBubbleAnimation[mookIndex].message;
+            players[mookIndex].speechCanvasText.text = _mookBubbleAnimation[mookIndex].message;
             _mookBubbleAnimation[mookIndex].counter += Time.deltaTime;
             yield return null;
         }
 
-        GameManager.Instance.players[mookIndex].speechCanvas.gameObject.SetActive(true);
+        players[mookIndex].speechCanvas.gameObject.SetActive(true);
          _mookBubbleAnimation[mookIndex].isAnimating = false;
     }
 

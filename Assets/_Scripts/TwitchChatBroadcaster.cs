@@ -92,4 +92,8 @@ public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
             }
         }
 	}
+
+	public void Whisper(string username, string message) {
+		client.SendMessage(_channelToConnectTo, "/w " + username + " " + message);
+	}
 }
