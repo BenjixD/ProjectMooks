@@ -39,7 +39,7 @@ public class BattleController : MonoBehaviour
     int heroActionIndex = 0;
     public List<RectTransform> battleOptionsUI {get ; set; }
 
-    bool startActions = false;
+    public bool inputActionsPhase{get; set; }
 
 
     void Start() {
@@ -68,7 +68,7 @@ public class BattleController : MonoBehaviour
     void Update()
     {
 
-        if (startActions == false) {
+        if (inputActionsPhase == true) {
             if (_heroPlayer.HasSetCommand() == false) {
                 if (Input.GetKeyDown(KeyCode.DownArrow)) {
                     if (heroActionIndex == 0) {
@@ -132,7 +132,7 @@ public class BattleController : MonoBehaviour
 
 
     public void ExecutePlayerTurn() {
-        this.startActions = true;
+        this.inputActionsPhase = true;
         this.ActionMenu.gameObject.SetActive(false);
         this.CommentaryMenu.gameObject.SetActive(true);
 
@@ -183,7 +183,7 @@ public class BattleController : MonoBehaviour
     }
 
     public void OnPlayerTurnStart() {
-        this.startActions = false;
+        this.inputActionsPhase = false;
         
         this.ActionMenu.gameObject.SetActive(true);
         this.CommentaryMenu.gameObject.SetActive(false);

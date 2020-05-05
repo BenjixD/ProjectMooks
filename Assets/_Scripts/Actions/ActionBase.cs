@@ -19,7 +19,7 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected bool BasicValidation(string[] splitCommand) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1)) {
+        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.battleController.inputActionsPhase ) {
             return false;
         }
         return true;
