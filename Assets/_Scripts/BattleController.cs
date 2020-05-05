@@ -33,6 +33,15 @@ public class BattleController : MonoBehaviour
 
     public bool inputActionsPhase{get; set; }
 
+    public RectTransform playerStatusBarParent;
+
+    public RectTransform enemyStatusBarParent;
+
+    public StatusBarUI statusBarPrefab;
+
+    private List<StatusBarUI> statusBars;
+    private List<StatusBarUI> enemyStatusBars;
+
 
     void Start() {
         _heroPlayer = GetPlayers()[0];
@@ -48,8 +57,27 @@ public class BattleController : MonoBehaviour
             battleOptionsUI.Add(commandText.GetComponent<RectTransform>());
         }
 
+        int count = GetPlayers().Count;
+
+        statusBars = new List<StatusBarUI>();
+
+        for (int i = 0; i < count; i++) { 
+            StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
+            statusBarForPlayer.transform.parent = playerStatusBarParent;
+            statusBars.Add(statusBarForPlayer);
+        }
+
+        enemyStatusBars = new List<StatusBarUI>();
+
+        for (int i = 0; i < GameManager.Instance.enemies.Count; i++) {
+            StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
+            statusBarForPlayer.transform.parent = enemyStatusBarParent;
+            enemyStatusBars.Add(statusBarForPlayer);
+        }
+
         this.OnPlayerTurnStart();
         this.UpdateBattleOptionUI();
+        this.UpdateStatusBarUI();
     }
 
     private List<Player> GetPlayers() {
@@ -63,7 +91,6 @@ public class BattleController : MonoBehaviour
         if (inputActionsPhase == true) {
             if (_heroPlayer.HasSetCommand() == false) {
                 if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                    Debug.Log("Down");
                     if (heroActionIndex == 0) {
                         heroActionIndex = _heroPlayer.actions.Count - 1;
                     } else {
@@ -74,7 +101,6 @@ public class BattleController : MonoBehaviour
                 }
 
                 if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                    Debug.Log("Up");
                     if (heroActionIndex == _heroPlayer.actions.Count - 1) {
                         heroActionIndex = 0;
                     } else {
@@ -194,5 +220,19 @@ public class BattleController : MonoBehaviour
 
     public void DoAction(FightingEntity a) {
         a.GetQueuedAction().ExecuteAction();
+        this.UpdateStatusBarUI();
+    }
+
+    public void UpdateStatusBarUI() {
+        List<Player> players = GetPlayers();
+        for (int i = 0; i < players.Count; i++) {
+            statusBars[i].SetName(players[i].Name);
+            statusBars[i].SetHP(players[i].stats.GetHp(), players[i].stats.maxHp);
+        }
+
+        for (int i = 0; i < GameManager.Instance.enemies.Count; i++) {
+            enemyStatusBars[i].SetName(GameManager.Instance.enemies[i].Name);
+            enemyStatusBars[i].SetHP(GameManager.Instance.enemies[i].stats.GetHp(), GameManager.Instance.enemies[i].stats.maxHp);
+        }
     }
 }

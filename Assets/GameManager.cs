@@ -23,10 +23,11 @@ public class GameManager : Singleton<GameManager> {
         }
 
         PlayerStats stats = new PlayerStats();
+        stats.RandomizeStats();
+        stats.ResetStats();
+        stats.LogStats();
         PlayerCreationData heroData = new PlayerCreationData(chatBroadcaster._channelToConnectTo, stats, Job.HERO);
         party.CreatePlayer(heroData, 0);
- 
-
 
     }
 
@@ -43,6 +44,8 @@ public class GameManager : Singleton<GameManager> {
             Enemy instantiatedEnemy = Instantiate(enemyPrefab) as Enemy;
 
             PlayerStats stats = new PlayerStats();
+            stats.RandomizeStats();
+            stats.ResetStats();
             PlayerCreationData creationData = new PlayerCreationData("Evil monster", stats, Job.BASIC_ENEMY);
             instantiatedEnemy.Initialize(creationData);
 
