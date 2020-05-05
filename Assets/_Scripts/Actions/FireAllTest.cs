@@ -6,8 +6,7 @@ using UnityEngine;
 public class FireAllTest : ActionBase {
     public override bool TryChooseAction(Player user, string[] splitCommand) {
         // Fire All command format: !m fire2
-        if (splitCommand.Length != 2) {
-            Debug.Log("Malformed Fire All command. The proper Fire All command is !m fire2");
+        if (!BasicValidation(splitCommand)) {
             return false;
         }
         // TODO: target all
