@@ -20,6 +20,7 @@ public class ActionListener : TwitchChatListenerBase {
         switch (actionName) {
             case "a":
             case "attack":
+                // Attack command format: !a [target number]
                 _player.TryActionCommand(ActionType.ATTACK, split);
                 break;
             case "m":

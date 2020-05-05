@@ -11,6 +11,7 @@ public enum ActionType {
 
 public abstract class ActionBase : ScriptableObject {
     public string name;
+    [TextArea]
     public string description;
     public ActionType actionType;
 

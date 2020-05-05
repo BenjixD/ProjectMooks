@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "FireOne", menuName = "Actions/Fire One")]
 public class FireOneTest : ActionBase {
-    public FireOneTest() {
-        actionType = ActionType.FIRE_ONE;
-    }
-
     public override bool TryChooseAction(Player user, string[] splitCommand) {
         // Fire One command format: !m fire [target number]
         if (splitCommand.Length != 3) {

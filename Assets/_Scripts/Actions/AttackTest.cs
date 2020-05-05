@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Attack", menuName = "Actions/Attack")]
 public class AttackTest : ActionBase {
-    public AttackTest() {
-        actionType = ActionType.ATTACK;
-    }
-
     public override bool TryChooseAction(Player user, string[] splitCommand) {
         // Attack command format: !a [target number]
         if (splitCommand.Length != 2) {

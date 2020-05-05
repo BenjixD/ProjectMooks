@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Defend", menuName = "Actions/Defend")]
 public class Defend : ActionBase {
-    public Defend() {
-        actionType = ActionType.DEFEND;
-    }
-
     public override bool TryChooseAction(Player user, string[] splitCommand) {
         // Defend command format: !d
         if (splitCommand.Length != 1) {
