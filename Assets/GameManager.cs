@@ -6,7 +6,7 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField] private JobActionsList[] _jobActionsLists;
     public Dictionary<Job, Dictionary<ActionType, ActionBase>> jobActions = new Dictionary<Job, Dictionary<ActionType, ActionBase>>();
     
-    private void Start() {
+    private void Awake() {
         foreach(JobActionsList jobActionsList in _jobActionsLists) {
             jobActionsList.Initialize();
             jobActions.Add(jobActionsList.job, jobActionsList.GetActions());
