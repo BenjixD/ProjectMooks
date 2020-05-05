@@ -157,46 +157,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &42403277 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8249197650680591222, guid: ab21418be80c1cf41853d1e28cb6b341,
+--- !u!114 &42403278 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341,
     type: 3}
   m_PrefabInstance: {fileID: 8249197650638452411}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &42403278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 42403277}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c11087af7767b364c8265296922bf0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Evil Monster
-  stats:
-    level: 1
-    maxHp: 0
-    maxMana: 0
-    maxPhysical: 0
-    maxSpecial: 0
-    maxDefense: 0
-    maxResistance: 0
-    maxSpeed: 0
-    isRare: 0
-    _hp: 100
-    _mana: 0
-    _physical: 0
-    _special: 0
-    _defense: 0
-    _resistance: 0
-    _speed: 0
-    _hpRegen: 0
-    _manaRegen: 0
-  job: 0
-  actions: []
 --- !u!1 &199044898
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,7 +244,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199044898}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.2, y: 0.009999931, z: -3.3261719}
+  m_LocalPosition: {x: 3.34, y: 0.009999931, z: -3.3261719}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 935949281}
@@ -1877,7 +1849,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1333676682}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.21, y: 1.4, z: -3.3261719}
+  m_LocalPosition: {x: 3.34, y: 1.4, z: -3.3261719}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 909587421}
@@ -2371,27 +2343,6 @@ MonoBehaviour:
   ActionMenuTextParent: {fileID: 2001327354}
   CommentaryMenu: {fileID: 35925955}
   CommentaryText: {fileID: 883118801}
---- !u!1 &2080289098 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7777298287657591932, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
-    type: 3}
-  m_PrefabInstance: {fileID: 7777298287208736098}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2080289099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2080289098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fe321b222c7fb947850511a6dad0258, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speechCanvas: {fileID: 0}
-  speechCanvasText: {fileID: 0}
-  _chatBubbleAnimationTime: 5
 --- !u!1 &2113183329
 GameObject:
   m_ObjectHideFlags: 0
@@ -2566,7 +2517,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2132595313}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.17, y: -1.47, z: -3.3261719}
+  m_LocalPosition: {x: 3.34, y: -1.47, z: -3.3261719}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2113183330}
@@ -2580,15 +2531,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5101897393938031089, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
-        type: 3}
-      propertyPath: Name
-      value: dvchibot
-      objectReference: {fileID: 0}
     - target: {fileID: 7777298287657591874, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.99
+      value: 3.34
       objectReference: {fileID: 0}
     - target: {fileID: 7777298287657591874, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
         type: 3}
@@ -2662,7 +2608,7 @@ PrefabInstance:
     - target: {fileID: 8249197650680591220, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.68
+      value: -3.97
       objectReference: {fileID: 0}
     - target: {fileID: 8249197650680591220, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
@@ -2713,16 +2659,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8249197650680591220, guid: ab21418be80c1cf41853d1e28cb6b341,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.6043257
-      objectReference: {fileID: 0}
-    - target: {fileID: 8249197650680591220, guid: ab21418be80c1cf41853d1e28cb6b341,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.6639482
       objectReference: {fileID: 0}
     - target: {fileID: 8249197650680591222, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7777298287657591874}
   - component: {fileID: 7777298287657591933}
   - component: {fileID: 5101897393938031089}
+  - component: {fileID: 2080289099}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7777298287657591932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.99, y: 3.24, z: -3.3261719}
+  m_LocalPosition: {x: 3.34, y: 3.24, z: -3.3261719}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children: []
   m_Father: {fileID: 0}
@@ -94,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145117c0f72560f4f8ab5e2cd6715f22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 
+  Name: dvchibot
   stats:
     level: 1
     maxHp: 0
@@ -114,9 +115,20 @@ MonoBehaviour:
     _speed: 0
     _hpRegen: 0
     _manaRegen: 0
-  playerName: 
   job: 0
+  actions: []
+--- !u!114 &2080289099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7777298287657591932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe321b222c7fb947850511a6dad0258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   speechCanvas: {fileID: 0}
   speechCanvasText: {fileID: 0}
-  isHero: 1
   _chatBubbleAnimationTime: 5

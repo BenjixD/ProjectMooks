@@ -10,14 +10,6 @@ public enum BattlePhase {
 
 };
 
-public enum BattleOption {
-    ATTACK = 0,
-    MAGIC = 1,
-    DEFEND = 2,
-    LENGTH = 3
-};
-
-
 public class BattleController : MonoBehaviour
 {
 
@@ -71,6 +63,7 @@ public class BattleController : MonoBehaviour
         if (inputActionsPhase == true) {
             if (_heroPlayer.HasSetCommand() == false) {
                 if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                    Debug.Log("Down");
                     if (heroActionIndex == 0) {
                         heroActionIndex = _heroPlayer.actions.Count - 1;
                     } else {
@@ -81,6 +74,7 @@ public class BattleController : MonoBehaviour
                 }
 
                 if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                    Debug.Log("Up");
                     if (heroActionIndex == _heroPlayer.actions.Count - 1) {
                         heroActionIndex = 0;
                     } else {
@@ -132,7 +126,7 @@ public class BattleController : MonoBehaviour
 
 
     public void ExecutePlayerTurn() {
-        this.inputActionsPhase = true;
+        this.inputActionsPhase = false;
         this.ActionMenu.gameObject.SetActive(false);
         this.CommentaryMenu.gameObject.SetActive(true);
 
@@ -183,7 +177,7 @@ public class BattleController : MonoBehaviour
     }
 
     public void OnPlayerTurnStart() {
-        this.inputActionsPhase = false;
+        this.inputActionsPhase = true;
         
         this.ActionMenu.gameObject.SetActive(true);
         this.CommentaryMenu.gameObject.SetActive(false);

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8249197650680591220}
   - component: {fileID: 8249197650680591221}
+  - component: {fileID: 42403278}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 8249197650680591222}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.99, y: 1.26, z: -3.3261719}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6639482, y: 0.6043257, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -81,3 +82,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &42403278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8249197650680591222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c11087af7767b364c8265296922bf0be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Evil Monster
+  stats:
+    level: 1
+    maxHp: 0
+    maxMana: 0
+    maxPhysical: 0
+    maxSpecial: 0
+    maxDefense: 0
+    maxResistance: 0
+    maxSpeed: 0
+    isRare: 0
+    _hp: 100
+    _mana: 0
+    _physical: 0
+    _special: 0
+    _defense: 0
+    _resistance: 0
+    _speed: 0
+    _hpRegen: 0
+    _manaRegen: 0
+  job: 0
+  actions: []
