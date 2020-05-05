@@ -5,8 +5,9 @@ using UnityEngine;
 public class ActionListener : TwitchChatListenerBase {
     private Player _player;
 
-    public void SetPlayer(Player player) {
-        _player = player;
+    public override void Awake() {
+        base.Awake();
+        _player = GetComponent<Player>();
     }
 
     public override void OnMessageReceived(string username, string message) {

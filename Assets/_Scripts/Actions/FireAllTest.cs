@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "FireAll", menuName = "Actions/Fire All")]
+[CreateAssetMenu(fileName = "FireAll", menuName = "Actions/Fire All", order = 2)]
 public class FireAllTest : ActionBase {
     public override bool TryChooseAction(Player user, string[] splitCommand) {
         // Fire All command format: !m fire2

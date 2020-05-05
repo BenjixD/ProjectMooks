@@ -6,15 +6,8 @@ public class Player : MonoBehaviour {
 	public string playerName;
 	public PlayerStats stats;
 	public Job job;
-	[SerializeField] private ActionBase[] _availableActions;
 	private Dictionary<ActionType, ActionBase> _actions = new Dictionary<ActionType, ActionBase>();
 	private QueuedAction _queuedAction;
-
-	private void Awake() {
-		foreach(ActionBase action in _availableActions) {
-			_actions.Add(action.actionType, action);
-		}
-	}
 
 	public void Initialize(PlayerCreationData data) {
 		SetName(data.name);
@@ -37,8 +30,9 @@ public class Player : MonoBehaviour {
 
 	public void SetJob(Job job) {
 		this.job = job;
+		_actions = GameManager.Instance.GetJobActionsList(job);
 	}
-	
+
 	public void TryActionCommand(ActionType actionType, string[] splitCommand) {
 		if (_actions.ContainsKey(actionType)) {
 			if (!_actions[actionType].TryChooseAction(this, splitCommand)) {

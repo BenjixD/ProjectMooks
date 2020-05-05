@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Attack", menuName = "Actions/Attack")]
+[CreateAssetMenu(fileName = "Attack", menuName = "Actions/Attack", order = 2)]
 public class AttackTest : ActionBase {
     public override bool TryChooseAction(Player user, string[] splitCommand) {
         // Attack command format: !a [target number]
