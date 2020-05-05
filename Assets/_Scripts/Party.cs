@@ -17,19 +17,22 @@ public class Party : MonoBehaviour {
         player.Initialize(data);
         playerPos[index] = data.name;
         players.Add(data.name, new Tuple<int, Player>(index, player));
+        Debug.Log("Created player: " + data.name);
         return player;
     }
 
     public Player TryFillPartySlot(int index) {
         if(playerPos[index] != null) {
-            return;
+            return null;
         } else {
             List<PlayerCreationData> nPlayers = GetNPlayers(1);
             PlayerCreationData data = nPlayers[0];
             if(data != null) {
-                return CreatePlayer(data);
+                return CreatePlayer(data, index);
             }
         }
+
+        return null;
     }
     
     public void EvictPlayer(string username) {
@@ -44,6 +47,10 @@ public class Party : MonoBehaviour {
 
     public Tuple<int, Player> GetPlayer(int index) {
         string username = playerPos[index];
+        if (username == null || username == "") {
+            return null;
+        }
+
         return players[username];
     }
 
@@ -55,8 +62,9 @@ public class Party : MonoBehaviour {
     public List<Player> GetPlayersInPosition() {
         List<Player> pos = new List<Player>();
         for(int i = 0; i < playerPos.Length; i++) {
-            if (GetPlayer(i) != null) {
-                pos.Add(GetPlayer(i).Item2);
+            Tuple<int, Player> player = GetPlayer(i);
+            if (player != null) {
+                pos.Add(player.Item2);
             }  
         }
         return pos;

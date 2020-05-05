@@ -14,7 +14,9 @@ public abstract class TwitchChatListenerBase : MonoBehaviour, TwitchChatListener
 
 
     void OnDestroy() {
-        TwitchChatBroadcaster.Instance.removeListener(this);
+        if (TwitchChatBroadcaster.Instance != null) {
+            TwitchChatBroadcaster.Instance.removeListener(this);
+        }
     }
 
 }

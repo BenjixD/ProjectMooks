@@ -13,9 +13,16 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField]
     List<Enemy> _enemyPrefabs;
 
+    void Awake() {
+        PlayerStats stats = new PlayerStats();
+        PlayerCreationData heroData = new PlayerCreationData(chatBroadcaster._channelToConnectTo, stats);
+        Debug.Log("Hero data: " + heroData.name);
+        party.CreatePlayer(heroData, 0);
+    }
+
     public void GenerateEnemyList() {
         int numberOfEnemiesToGenerate = 1; // TODO: Make this dependent on stage.
-        enemies.Clear();
+        enemies = new List<Enemy>();
         List<Enemy> validEnemies = new List<Enemy>(_enemyPrefabs);  // TODO: make validEnemies dependent on the level - best done in a JSON object
 
 

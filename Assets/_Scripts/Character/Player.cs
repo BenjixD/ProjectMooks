@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Player : FightingEntity,  TwitchChatListener {
-	public string playerName;
 	public Job job;
 
     public Canvas speechCanvas; 
@@ -23,7 +22,7 @@ public class Player : FightingEntity,  TwitchChatListener {
     }
 
 	public void Initialize(PlayerCreationData data) {
-		SetName(data.name);
+		Name = data.name;
 		SetStats(data.stats);
 		SetJob(data.job);
 	}
@@ -89,6 +88,8 @@ public class Player : FightingEntity,  TwitchChatListener {
         }
 
          command.target = target - 1;
+
+         this.hasSetCommand = true;
     }
 
     public void HandleMessage(string message) {
@@ -121,12 +122,10 @@ public class Player : FightingEntity,  TwitchChatListener {
     }
 
     void OnDestroy() {
-        TwitchChatBroadcaster.Instance.removeListener(this);
+        if (TwitchChatBroadcaster.Instance != null) {
+            TwitchChatBroadcaster.Instance.removeListener(this);
+        }
     }
-
-	public void SetName(string name) {
-		this.playerName = name;
-	}
 
 	public void SetStats(PlayerStats stats) {
 		this.stats = stats;

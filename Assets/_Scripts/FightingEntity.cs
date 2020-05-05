@@ -24,7 +24,9 @@ public class FightingEntity : MonoBehaviour
     public string Name;
     public PlayerStats stats;
 
-    public BattleCommand command;
+    public BattleCommand command = new BattleCommand();
 
     public HashSet<string> modifiers = new HashSet<string>();
+
+    public bool hasSetCommand = false;
 }
