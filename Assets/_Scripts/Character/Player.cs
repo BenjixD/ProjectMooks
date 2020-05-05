@@ -6,7 +6,7 @@ public class Player : MonoBehaviour {
 	public string playerName;
 	public PlayerStats stats;
 	public Job job;
-	private Dictionary<ActionType, ActionBase> _actions = new Dictionary<ActionType, ActionBase>();
+	private List<ActionBase> _actions = new List<ActionBase>();
 	private QueuedAction _queuedAction;
 
 	public void Initialize(PlayerCreationData data) {
@@ -33,14 +33,14 @@ public class Player : MonoBehaviour {
 		_actions = GameManager.Instance.GetJobActionsList(job);
 	}
 
-	public void TryActionCommand(ActionType actionType, string[] splitCommand) {
-		if (_actions.ContainsKey(actionType)) {
-			if (!_actions[actionType].TryChooseAction(this, splitCommand)) {
-				Debug.Log("Trying to use Action of type " + actionType + " failed");
+	public void TryActionCommand(string message) {
+		string[] splitCommand = message.Split(' ');
+		foreach (ActionBase action in _actions) {
+			if (action.TryChooseAction(this, splitCommand)) {
+				return;
 			}
-		} else {
-			Debug.Log("Player does not have Action of type " + actionType);
 		}
+		Debug.Log("Invalid action command for player " + playerName + ": " + message);
 	}
 
 	public void SetQueuedAction(QueuedAction queuedAction) {

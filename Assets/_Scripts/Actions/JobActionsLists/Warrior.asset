@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Warrior
   m_EditorClassIdentifier: 
   job: 0
-  availableActions: []
+  _actions:
+  - {fileID: 11400000, guid: 45f018787ba0632428d557234669d7f5, type: 2}
+  - {fileID: 11400000, guid: 46a449bf53492cb41b829822dd2515ea, type: 2}
