@@ -13,11 +13,19 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField]
     List<Enemy> _enemyPrefabs;
 
+    [SerializeField] private JobActionsList[] _jobActionsLists;
+    public Dictionary<Job, Dictionary<ActionType, ActionBase>> jobActions = new Dictionary<Job, Dictionary<ActionType, ActionBase>>();
+    
+
     void Awake() {
         PlayerStats stats = new PlayerStats();
         PlayerCreationData heroData = new PlayerCreationData(chatBroadcaster._channelToConnectTo, stats);
-        Debug.Log("Hero data: " + heroData.name);
         party.CreatePlayer(heroData, 0);
+
+        foreach(JobActionsList jobActionsList in _jobActionsLists) {
+            jobActionsList.Initialize();
+            jobActions.Add(jobActionsList.job, jobActionsList.GetActions());
+        }
     }
 
     public void GenerateEnemyList() {
@@ -55,4 +63,11 @@ public class GameManager : Singleton<GameManager> {
         return entities;
     }
 
+    public Dictionary<ActionType, ActionBase> GetJobActionsList(Job job) {
+        if(!jobActions.ContainsKey(job)) {
+            Debug.Log("No JobActionsList for job " + job + " found");
+            return null;
+        }
+        return jobActions[job];
+    }
 }

@@ -5,35 +5,35 @@ using System.Collections.Generic;
 
 public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
 {
-    [SerializeField]
-    public HashSet<TwitchChatListener> listeners = new HashSet<TwitchChatListener>();
+	[SerializeField]
+	public HashSet<TwitchChatListener> listeners = new HashSet<TwitchChatListener>();
 
 	public string _channelToConnectTo = "dvchibot";
 
 	private Client client;
 
-    public void addListener(TwitchChatListener newListener) {
-        if (this.listeners.Contains(newListener)) {
-            Debug.LogWarning("Warning: Already pushed this listener");
-            return;
-        }
+	public void addListener(TwitchChatListener newListener) {
+		if (this.listeners.Contains(newListener)) {
+			Debug.LogWarning("Warning: Already pushed this listener");
+			return;
+		}
 
-        this.listeners.Add(newListener);
-    }
+		this.listeners.Add(newListener);
+	}
 
-    public void removeListener(TwitchChatListener removeListener) {
-        if (!this.listeners.Contains(removeListener)) {
-            Debug.LogWarning("Warning: Listener does not contain");
-            return;
-        }
+	public void removeListener(TwitchChatListener removeListener) {
+		if (!this.listeners.Contains(removeListener)) {
+			Debug.LogWarning("Warning: Listener does not contain");
+			return;
+		}
 
-        this.listeners.Remove(removeListener);
-    }
+		this.listeners.Remove(removeListener);
+	}
 
 	private void Awake()
 	{
 
-        Secrets.Initialize();
+		Secrets.Initialize();
 
 		// To keep the Unity application active in the background, you can enable "Run In Background" in the player settings:
 		// Unity Editor --> Edit --> Project Settings --> Player --> Resolution and Presentation --> Resolution --> Run In Background
@@ -74,23 +74,29 @@ public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
 
 	private void OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
 	{
-        string username = e.ChatMessage.Username;
-        string message = e.ChatMessage.Message;
+		string username = e.ChatMessage.Username;
+		string message = e.ChatMessage.Message;
 		Debug.Log("Raw chat message: " + username + " " + message);
-        foreach (var listener in listeners) {
+		
+		bool isCommand = false;
+		string command = "";
+		if (message[0] == '!') {
+			isCommand = true;
+			command = message.Substring(1);
+			command = command.ToLower();
+		}
 
-            if (message.Length == 0) {
-                continue;
-            }
+		foreach (var listener in listeners) {
+			if (message.Length == 0) {
+				continue;
+			}
 
-            if (message[0] == '!') {
-                message = message.Substring(1);
-                message = message.ToLower();
-                listener.OnCommandReceived(username, message);
-            } else {
-                listener.OnMessageReceived(username, message);
-            }
-        }
+			if (isCommand) {
+				listener.OnCommandReceived(username, command);
+			} else {
+				listener.OnMessageReceived(username, message);
+			}
+		}
 	}
 
 	public void Whisper(string username, string message) {

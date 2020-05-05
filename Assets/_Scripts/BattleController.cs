@@ -36,11 +36,6 @@ public class BattleController : MonoBehaviour
         _players = GameManager.Instance.party.GetPlayersInPosition();
         _heroPlayer = _players[0];
 
-        Debug.Log("Players: " + _players.Count);
-        for (int i = 0; i < _players.Count; i++) {
-            Debug.Log(_players[i].Name);
-        }
-
         // TODO: Waves
         GameManager.Instance.GenerateEnemyList();
         this.OnPlayerTurnStart();

@@ -3,22 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : FightingEntity,  TwitchChatListener {
-	public Job job;
-
-    public Canvas speechCanvas; 
-    public Text speechCanvasText;
-
+public class Player : FightingEntity {
     public bool isHero = false;
 
-
-    public float _chatBubbleAnimationTime = 5f;
-    private float _textCounter = 0;
-    private bool _isTextAnimating = false;
-    private string _textMessage = "";
-
     void Start() {
-        TwitchChatBroadcaster.Instance.addListener(this);
     }
 
 	public void Initialize(PlayerCreationData data) {
@@ -31,12 +19,6 @@ public class Player : FightingEntity,  TwitchChatListener {
 	public string GetJobName() {
 		return job.ToString();
 	}
-
-    public void OnMessageReceived(string username, string message) {
-        if (username ==  Name) {
-            this.HandleMessage(message);
-        }
-    }
 
     public void OnCommandReceived(string username, string message) {
         if (username == Name) {
@@ -91,47 +73,5 @@ public class Player : FightingEntity,  TwitchChatListener {
 
          this.hasSetCommand = true;
     }
-
-    public void HandleMessage(string message) {
-        // TODO: this can probably be handled in the Player class.
-        _textCounter = 0;
-        _textMessage = message;
-
-        if (_isTextAnimating == true) {
-            // Do nothing
-        } else {
-            StartCoroutine(displayChatBubble());
-        }
-    }
-
-
-    IEnumerator displayChatBubble() {
-        _isTextAnimating = true;
-        speechCanvasText.text = _textMessage;
-        speechCanvas.gameObject.SetActive(true);
-
-
-        while (_textCounter < _chatBubbleAnimationTime) {
-            speechCanvasText.text = _textMessage;
-            _textCounter += Time.deltaTime;
-            yield return null;
-        }
-
-        speechCanvas.gameObject.SetActive(true);
-        _isTextAnimating = false;
-    }
-
-    void OnDestroy() {
-        if (TwitchChatBroadcaster.Instance != null) {
-            TwitchChatBroadcaster.Instance.removeListener(this);
-        }
-    }
-
-	public void SetStats(PlayerStats stats) {
-		this.stats = stats;
-	}
-
-	public void SetJob(Job job) {
-		this.job = job;
-	}
 }
+
