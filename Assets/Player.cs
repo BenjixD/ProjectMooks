@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Player {
+public class Player : FightingEntity {
 
     public Canvas speechCanvas; 
+    public Text speechCanvasText;
 
-	public string Name;
+
+    public int playerIndex = 0; // Should match index in GameManager.Instance.players, or -1 if it is the hero
 
 	// Max Stats
 	public int MaxHp;

@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class BattleCommand {
     public BattleOption option = BattleOption.ATTACK;
-    int target = 0; // Remember that chat will enter a number of target + 1
-    bool targetIsEnemy = true;
+    public int target = 0; // Remember that chat will enter a number of target + 1
+    public bool targetIsEnemy = true; // TODO: Allow for self targetting
 
 }
 
@@ -55,13 +55,11 @@ public class BattleController : TwitchChatListenerBase
             _mookBattleCommands.Add(new BattleCommand());
             _mookBubbleAnimation.Add(new BubbleAnimationValues());
         }
-    }
 
-    public void UpdateBattleOptionUI() {
-        selectionCursor.transform.parent = battleOptionsUI[(int)(heroBattleCommand.option)].transform;
-        selectionCursor.anchoredPosition = selectionCursorOffset;
-    }
 
+        // TODO: Waves
+        GameManager.Instance.GenerateEnemyList();
+    }
 
     // Update is called once per frame
     void Update()
@@ -91,10 +89,16 @@ public class BattleController : TwitchChatListenerBase
         }
     }
 
+
+    public void UpdateBattleOptionUI() {
+        selectionCursor.transform.parent = battleOptionsUI[(int)(heroBattleCommand.option)].transform;
+        selectionCursor.anchoredPosition = selectionCursorOffset;
+    }
+
     public override void OnMessageReceived(string username, string message) {
         for (int i = 0; i < _mookBattleCommands.Count; i++) {
             if (username ==  GameManager.Instance.players[i].Name) {
-                this.handleMessage(i, message);
+                this.HandleMessage(i, message);
             }
         }
     }
@@ -102,42 +106,24 @@ public class BattleController : TwitchChatListenerBase
     public override void OnCommandReceived(string username, string message) {
         for (int i = 0; i < _mookBattleCommands.Count; i++) {
             if (username ==  GameManager.Instance.players[i].Name) {
-                this.handleCommand(i, message);
+                this.HandleCommand(i, message);
             }
         }
     }
 
-    public void handleMessage(int mookIndex, string message) {
+    public void HandleMessage(int mookIndex, string message) {
+        // TODO: this can probably be handled in the Player class.
         _mookBubbleAnimation[mookIndex].counter = 0;
         _mookBubbleAnimation[mookIndex].message = message;
-
 
         if (_mookBubbleAnimation[mookIndex].isAnimating == true) {
             // Do nothing
         } else {
             StartCoroutine(displayChatBubble(mookIndex));
         }
-        
     }
 
-    IEnumerator displayChatBubble(int mookIndex) {
-        
-        _mookBubbleAnimation[mookIndex].isAnimating = true;
-        GameManager.Instance.players[mookIndex].speechCanvas.gameObject.SetActive(true);
-
-
-        while (_mookBubbleAnimation[mookIndex].counter < _chatBubbleAnimationTime) {
-            _mookBubbleAnimation[mookIndex].counter += Time.deltaTime;
-            yield return null;
-        }
-
-        GameManager.Instance.players[mookIndex].speechCanvas.gameObject.SetActive(true);
-         _mookBubbleAnimation[mookIndex].isAnimating = false;
-
-    }
-
-
-    public void handleCommand(int mookIndex, string message) {
+    public void HandleCommand(int mookIndex, string message) {
         string[] split = message.Split(' ');
         if (split.Length < 1) {
             Debug.Log("Invalid battle command");
@@ -165,7 +151,6 @@ public class BattleController : TwitchChatListenerBase
                 _mookBattleCommands[mookIndex].option = BattleOption.MAGIC;
             break;
 
-
             case "defend":
             case "d":
                 _mookBattleCommands[mookIndex].option = BattleOption.DEFEND;
@@ -176,10 +161,113 @@ public class BattleController : TwitchChatListenerBase
             break;
         }
 
-        
-        
+        if (target <= 0 || target >= GameManager.Instance.enemies.Count) {
+            Debug.Log("Invalid target");
+            return;
+        }
 
+         _mookBattleCommands[mookIndex].target = target - 1;
+        
     }
 
-    
+    public void ExecutePlayerTurn() {
+        // Sort by player speed
+        List<Player> orderedPlayers = new List<Player>(GameManager.Instance.players);
+        orderedPlayers.Sort( (Player a, Player b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
+
+        foreach (var player in orderedPlayers) {
+            int playerIndex = player.playerIndex;
+
+            BattleCommand playerCommand;
+            
+            if (playerIndex == 0) {
+                playerCommand = heroBattleCommand;
+            } else {
+                playerCommand = _mookBattleCommands[playerIndex];
+            }
+
+            this.DoAction(playerCommand, player, GameManager.Instance.enemies[playerCommand.target]);
+            
+        }
+    }
+
+    public void ExecuteEnemyTurn() {
+        List<Enemy> orderedEnemies = new List<Enemy>(GameManager.Instance.enemies);
+        orderedEnemies.Sort( (Enemy a, Enemy b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
+
+        foreach (var enemy in orderedEnemies) {
+            int enemyTarget = Random.Range(0, GameManager.Instance.players.Count);
+            BattleCommand command = new BattleCommand();
+            command.target = enemyTarget;
+            command.option = BattleOption.ATTACK; // TODO: Allow enemies to have other attacks
+            FightingEntity playerTarget = GameManager.Instance.players[enemyTarget];
+            this.DoAction(command, enemy, playerTarget);
+        }
+    }
+
+
+    public void OnPlayerTurnStart() {
+        foreach (var player in GameManager.Instance.players) {
+            if (player.modifiers.Contains("defend")) {
+                player.modifiers.Remove("defend");
+            }
+        }
+    }
+
+
+    public void DoAction(BattleCommand command, FightingEntity a, FightingEntity b) {
+        PlayerStats playerStats = a.stats;
+        PlayerStats enemyStats = b.stats;
+        int attackerAttack = 0;
+        int defenderDefence = 0;
+        int damage = 0;
+        switch (command.option) {
+            case BattleOption.ATTACK:
+                attackerAttack = playerStats.GetPhysical();
+                defenderDefence = playerStats.GetDefense();
+                if (b.modifiers.Contains("defend")) {
+                    defenderDefence *= 2;
+                }
+
+                damage = Mathf.Max(0, attackerAttack - defenderDefence);
+                enemyStats.SetHp(enemyStats.GetHp() - damage);
+
+            break;
+            case BattleOption.DEFEND:
+                a.modifiers.Add("defend");
+            break;
+            case BattleOption.MAGIC:
+                // TODO: Get the spell
+                attackerAttack = playerStats.GetSpecial();
+                defenderDefence = playerStats.GetResistance();
+                if (b.modifiers.Contains("defend")) {
+                    defenderDefence *= 2;
+                }
+
+                damage = Mathf.Max(0, attackerAttack - defenderDefence);
+                enemyStats.SetHp(enemyStats.GetHp() - damage);
+            break;
+        }
+            
+    }
+
+
+
+    IEnumerator displayChatBubble(int mookIndex) {
+        
+        _mookBubbleAnimation[mookIndex].isAnimating = true;
+        GameManager.Instance.players[mookIndex].speechCanvasText.text = _mookBubbleAnimation[mookIndex].message;
+        GameManager.Instance.players[mookIndex].speechCanvas.gameObject.SetActive(true);
+
+
+        while (_mookBubbleAnimation[mookIndex].counter < _chatBubbleAnimationTime) {
+            GameManager.Instance.players[mookIndex].speechCanvasText.text = _mookBubbleAnimation[mookIndex].message;
+            _mookBubbleAnimation[mookIndex].counter += Time.deltaTime;
+            yield return null;
+        }
+
+        GameManager.Instance.players[mookIndex].speechCanvas.gameObject.SetActive(true);
+         _mookBubbleAnimation[mookIndex].isAnimating = false;
+    }
+
 }
