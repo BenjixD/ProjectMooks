@@ -12,29 +12,29 @@ public class Party : MonoBehaviour {
     [SerializeField]
     private string[] playerPos = new string[4];
 
-    public Player CreatePlayer(PlayerCreationData data) {
+    public Player CreatePlayer(PlayerCreationData data, int index) {
         Player player = Instantiate(playerPrefab).GetComponent<Player>();
         player.Initialize(data);
+        playerPos[index] = data.name;
+        players.Add(data.name, new Tuple<int, Player>(index, player));
         return player;
     }
 
-    public void EvictPlayer(string username) {
-        Tuple<int, Player> player = players[username];
-        playerPos[player.Item1] = null;
-        players.Remove(username);
-    }
-
-    public void TryFillPartySlot(int index) {
+    public Player TryFillPartySlot(int index) {
         if(playerPos[index] != null) {
             return;
         } else {
             PlayerCreationData data = GetNPlayers(1)[0];
             if(data != null) {
-                Player p = CreatePlayer(data);
-                playerPos[index] = data.name;
-                players.Add(data.name, new Tuple<int, Player>(index, p));
+                return CreatePlayer(data);
             }
         }
+    }
+    
+    public void EvictPlayer(string username) {
+        Tuple<int, Player> player = players[username];
+        playerPos[player.Item1] = null;
+        players.Remove(username);
     }
 
     public Tuple<int, Player> GetPlayer(string username) {
