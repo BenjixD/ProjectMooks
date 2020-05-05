@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class TwitchChatListenerBase : MonoBehaviour, TwitchChatListener
 {
-    public void Awake() {
+    public virtual void Awake() {
         TwitchChatBroadcaster.Instance.addListener(this);
     }
 
