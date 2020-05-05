@@ -77,16 +77,22 @@ public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
         string username = e.ChatMessage.Username;
         string message = e.ChatMessage.Message;
 		Debug.Log("Raw chat message: " + username + " " + message);
-        foreach (var listener in listeners) {
+		
+		bool isCommand = false;
+		string command = "";
+        if (message[0] == '!') {
+			isCommand = true;
+			command = message.Substring(1);
+			command = command.ToLower();
+		}
 
+        foreach (var listener in listeners) {
             if (message.Length == 0) {
                 continue;
             }
 
-            if (message[0] == '!') {
-                message = message.Substring(1);
-                message = message.ToLower();
-                listener.OnCommandReceived(username, message);
+            if (isCommand) {
+                listener.OnCommandReceived(username, command);
             } else {
                 listener.OnMessageReceived(username, message);
             }
