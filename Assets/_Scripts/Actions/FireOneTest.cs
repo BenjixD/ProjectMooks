@@ -22,7 +22,7 @@ public class FireOneTest : ActionBase {
         return true;
     }
 
-    public override void ExecuteAction() {
+    public override void ExecuteAction(Player user, Player[] targets) {
         // TODO: calculate damage and inflict on targets
     }
 }

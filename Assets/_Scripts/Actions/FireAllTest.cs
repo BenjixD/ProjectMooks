@@ -13,12 +13,12 @@ public class FireAllTest : ActionBase {
             Debug.Log("Malformed Fire All command. The proper Fire All command is !m fire2");
             return false;
         }
-        // TODO: get and pass all target slots
+        // TODO: target all
         user.SetQueuedAction(new QueuedAction(this, null));
         return true;
     }
 
-    public override void ExecuteAction() {
+    public override void ExecuteAction(Player user, Player[] targets) {
         // TODO: calculate damage and inflict on targets
     }
 }

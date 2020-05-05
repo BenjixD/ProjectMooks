@@ -16,6 +16,6 @@ public abstract class ActionBase : ScriptableObject {
 
     public abstract bool TryChooseAction(Player user, string[] splitCommand);
     
-    // TODO: params
-    public abstract void ExecuteAction();
+    // TODO: update params
+    public abstract void ExecuteAction(Player user, Player[] targets);
 }

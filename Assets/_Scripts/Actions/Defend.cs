@@ -17,7 +17,7 @@ public class Defend : ActionBase {
         return true;
     }
 
-    public override void ExecuteAction() {
+    public override void ExecuteAction(Player user, Player[] targets) {
         // TODO: defend
     }
 }
