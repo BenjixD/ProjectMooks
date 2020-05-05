@@ -26,7 +26,7 @@ public class FireAllTest : ActionBase {
             int defence = target.stats.GetResistance();
             int damage =  Mathf.Max(attackDamage - defence, 0);
             
-            target.stats.SetHp(target.stats.maxHp - damage);
+            target.stats.SetHp(target.stats.GetHp() - damage);
         }
     }
 }

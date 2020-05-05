@@ -9,6 +9,13 @@ public enum BattlePhase {
     ENEMY
 
 };
+public enum HeroInputActionState {
+    SELECT_ACTION,
+    SELECT_ENEMY_TARGET,
+    SELECT_PLAYER_TARGET,
+    BATTLE_START
+}
+
 
 public class BattleController : MonoBehaviour
 {
@@ -31,6 +38,8 @@ public class BattleController : MonoBehaviour
 
     public List<Transform> enemySlots;
 
+    public Color targetSelectionColor;
+
 
     Player _heroPlayer;
     int heroActionIndex = 0;
@@ -50,6 +59,9 @@ public class BattleController : MonoBehaviour
 
     [SerializeField]
     List<Enemy> _enemyPrefabs;
+
+    private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
+    private int heroTargetIndex = 0;
 
     void Start() {
         GameManager.Instance.battleController = this;
@@ -91,7 +103,7 @@ public class BattleController : MonoBehaviour
 
 
     private void GenerateEnemyList() {
-        int numberOfEnemiesToGenerate = 1; // TODO: Make this dependent on stage.
+        int numberOfEnemiesToGenerate = 4; // TODO: Make this dependent on stage.
         enemies = new List<Enemy>();
         List<Enemy> validEnemies = new List<Enemy>(_enemyPrefabs);  // TODO: make validEnemies dependent on the level - best done in a JSON object
 
@@ -105,7 +117,7 @@ public class BattleController : MonoBehaviour
             PlayerStats stats = new PlayerStats(enemyPrefab.stats);
             stats.RandomizeStats();
             stats.ResetStats();
-            PlayerCreationData creationData = new PlayerCreationData("Evil monster", stats, Job.BASIC_ENEMY);
+            PlayerCreationData creationData = new PlayerCreationData("Evil monster " + (i+1), stats, Job.BASIC_ENEMY);
             instantiatedEnemy.Initialize(creationData);
             
 
@@ -130,41 +142,72 @@ public class BattleController : MonoBehaviour
     {
 
         if (inputActionsPhase == true) {
-            if (_heroPlayer.HasSetCommand() == false) {
-                if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                    if (heroActionIndex == 0) {
-                        heroActionIndex = _heroPlayer.actions.Count - 1;
-                    } else {
-                        heroActionIndex--;
+
+            switch (heroInputActionState) {
+                case HeroInputActionState.SELECT_ACTION:
+                    if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                        if (heroActionIndex == 0) {
+                            heroActionIndex = _heroPlayer.actions.Count - 1;
+                        } else {
+                            heroActionIndex--;
+                        }
+
+                        this.UpdateBattleOptionUI();
                     }
 
-                    this.UpdateBattleOptionUI();
-                }
+                    if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                        if (heroActionIndex == _heroPlayer.actions.Count - 1) {
+                            heroActionIndex = 0;
+                        } else {
+                            heroActionIndex++;
+                        }
 
-                if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                    if (heroActionIndex == _heroPlayer.actions.Count - 1) {
-                        heroActionIndex = 0;
-                    } else {
-                        heroActionIndex++;
+                        this.UpdateBattleOptionUI();
                     }
 
-                    this.UpdateBattleOptionUI();
-                }
+
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
+                        this.UpdateTargetSelectionUI();
+                    }
+                    break;
+
+                case HeroInputActionState.SELECT_ENEMY_TARGET:
+
+                    // Note: It is reverse on purpose
+                    if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                        if (heroTargetIndex == enemies.Count - 1) {
+                            heroTargetIndex = 0;
+                        } else {
+                            heroTargetIndex++;
+                        }
 
 
-                if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.UpdateTargetSelectionUI();
+                    }
 
-                    _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{0}, TargetType.ENEMY  ));
+                    if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                        if (heroTargetIndex == 0) {
+                            heroTargetIndex = enemies.Count - 1;
+                        } else {
+                            heroTargetIndex--;
+                        }
 
-                }
-            } else {
-                
-                if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.UpdateTargetSelectionUI();
+                    }
 
-                }
+
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        heroInputActionState = HeroInputActionState.BATTLE_START;
+                        this.UpdateTargetSelectionUI();
+                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{heroTargetIndex}, TargetType.ENEMY  ));
+                    }
+                    break;
+
+                default:
+
+                    break;
             }
-
-
 
             playerActionCounter += Time.deltaTime;
 
@@ -189,6 +232,30 @@ public class BattleController : MonoBehaviour
     public void UpdateBattleOptionUI() {
         selectionCursor.transform.parent = battleOptionsUI[heroActionIndex].transform;
         selectionCursor.anchoredPosition = selectionCursorOffset;
+    }
+
+    public void UpdateTargetSelectionUI() {
+
+        //TODO: Update this animation
+
+        switch (heroInputActionState) {
+            case HeroInputActionState.SELECT_ENEMY_TARGET:
+                foreach (var enemy in enemies) {
+                    enemy.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                enemies[heroTargetIndex].GetComponent<SpriteRenderer>().color = targetSelectionColor;
+            break;
+
+            case HeroInputActionState.SELECT_PLAYER_TARGET:
+                // TODO: 
+                break;
+
+            default:
+                foreach (var enemy in enemies) {
+                    enemy.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                break;
+        }
     }
 
 
@@ -245,6 +312,7 @@ public class BattleController : MonoBehaviour
 
     public void OnPlayerTurnStart() {
         this.inputActionsPhase = true;
+        this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
         
         this.ActionMenu.gameObject.SetActive(true);
         this.CommentaryMenu.gameObject.SetActive(false);
