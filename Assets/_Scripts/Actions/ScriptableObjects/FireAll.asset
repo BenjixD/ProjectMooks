@@ -16,3 +16,4 @@ MonoBehaviour:
   description: 
   commandKeyword: fire2
   commandArgs: 0
+  targetIdType: 1

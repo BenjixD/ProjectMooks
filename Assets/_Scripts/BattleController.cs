@@ -200,7 +200,7 @@ public class BattleController : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Z)) {
                         heroInputActionState = HeroInputActionState.BATTLE_START;
                         this.UpdateTargetSelectionUI();
-                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{heroTargetIndex}, TargetType.ENEMY  ));
+                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
                     }
                     break;
 
@@ -281,7 +281,7 @@ public class BattleController : MonoBehaviour
         
         FightingEntity entity = orderedEntities[curIndex];
         if (entity.GetType() == typeof(Enemy)) {
-            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{0}, TargetType.PLAYER  ));
+            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{0}  ));
 
         } else {
         }

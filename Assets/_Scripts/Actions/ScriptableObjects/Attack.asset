@@ -16,3 +16,4 @@ MonoBehaviour:
   description: 
   commandKeyword: a
   commandArgs: 1
+  targetIdType: 1

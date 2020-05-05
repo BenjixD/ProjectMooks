@@ -14,8 +14,7 @@ public class FireAllTest : ActionBase {
             targetIds.Add(i);
         }
 
-        TargetType targetType = user.isEnemy() ? TargetType.PLAYER : TargetType.ENEMY;
-        user.SetQueuedAction(new QueuedAction(user, this, targetIds, targetType));
+        user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         return true;
     }
 

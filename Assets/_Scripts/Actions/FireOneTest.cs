@@ -14,8 +14,7 @@ public class FireOneTest : ActionBase {
             return false;
         }
 
-        TargetType targetType = user.isEnemy() ? TargetType.PLAYER : TargetType.ENEMY;
-        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }, targetType));
+        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
         return true;
     }
 

@@ -15,8 +15,7 @@ public class AttackTest : ActionBase {
             return false;
         }
 
-        TargetType targetType = user.isEnemy() ? TargetType.PLAYER : TargetType.ENEMY;
-        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }, targetType ));
+        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId } ));
         return true;
     }
 
@@ -27,7 +26,6 @@ public class AttackTest : ActionBase {
         
         foreach (FightingEntity target in targets) {
             int defence = target.stats.GetDefense();
-            Debug.Log("Attack: " + attackDamage + " Defence: " + defence);
             int damage =  Mathf.Max(attackDamage - defence, 0);
             
             target.stats.SetHp(target.stats.GetHp() - damage);
