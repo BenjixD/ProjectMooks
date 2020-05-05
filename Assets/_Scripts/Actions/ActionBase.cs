@@ -19,14 +19,14 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected bool BasicValidation(string[] splitCommand) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1)) {
+        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.battleController.inputActionsPhase ) {
             return false;
         }
         return true;
     }
 
-    public abstract bool TryChooseAction(Player user, string[] splitCommand);
+    public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
     
     // TODO: update params
-    public abstract void ExecuteAction(Player user, Player[] targets);
+    public abstract void ExecuteAction(FightingEntity user, List<FightingEntity> targets);
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "Attack", menuName = "Actions/Attack", order = 2)]
 public class AttackTest : ActionBase {
-    public override bool TryChooseAction(Player user, string[] splitCommand) {
+    public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
         // Attack command format: !a [target number]
         if (!BasicValidation(splitCommand)) {
             return false;
@@ -13,11 +13,13 @@ public class AttackTest : ActionBase {
         if (!int.TryParse(splitCommand[1], out targetId)) {
             return false;
         }
-        user.SetQueuedAction(new QueuedAction(this, new List<int>{ targetId }));
+
+        TargetType targetType = user.isEnemy() ? TargetType.PLAYER : TargetType.ENEMY;
+        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }, targetType ));
         return true;
     }
 
-    public override void ExecuteAction(Player user, Player[] targets) {
+    public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
         // TODO: calculate damage and inflict on targets
     }
 }
