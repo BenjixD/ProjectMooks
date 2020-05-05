@@ -22,10 +22,16 @@ public class Player : FightingEntity,  TwitchChatListener {
         TwitchChatBroadcaster.Instance.addListener(this);
     }
 
+	public void Initialize(PlayerCreationData data) {
+		SetName(data.name);
+		SetStats(data.stats);
+		SetJob(data.job);
+	}
+
+	// Getters / Setters 
 	public string GetJobName() {
 		return job.ToString();
 	}
-
 
     public void OnMessageReceived(string username, string message) {
         if (username ==  Name) {
@@ -118,4 +124,15 @@ public class Player : FightingEntity,  TwitchChatListener {
         TwitchChatBroadcaster.Instance.removeListener(this);
     }
 
+	public void SetName(string name) {
+		this.playerName = name;
+	}
+
+	public void SetStats(PlayerStats stats) {
+		this.stats = stats;
+	}
+
+	public void SetJob(Job job) {
+		this.job = job;
+	}
 }

@@ -14,7 +14,7 @@ public class Party : MonoBehaviour {
 
     public Player CreatePlayer(PlayerCreationData data) {
         Player player = Instantiate(playerPrefab).GetComponent<Player>();
-        player.stats = data.stats;
+        player.Initialize(data);
         return player;
     }
 
