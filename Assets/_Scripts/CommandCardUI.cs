@@ -12,7 +12,6 @@ enum CommandCardUIMode {
 [RequireComponent (typeof(BattleController))]
 public class CommandCardUI : MonoBehaviour
 {
-    private BattleController _controller;
 
     //  SELECT_COMMAND variables ===
     [Header("SELECT COMMAND")]
@@ -49,11 +48,6 @@ public class CommandCardUI : MonoBehaviour
     // The text if mode is TEXT_ONLY
     [SerializeField]
     private Text _commentaryText;
-
-
-    void Awake() {
-        _controller = GetComponent<BattleController>();
-    }
 
     void Start() {
         _battleOptionsUI = new List<CommandOptionText>();

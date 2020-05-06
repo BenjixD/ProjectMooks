@@ -20,13 +20,16 @@ public enum HeroInputActionState {
 
 [RequireComponent(typeof(BattleUI))]
 [RequireComponent(typeof(StageInfo))]
+[RequireComponent(typeof(BattleTurnController))]
 public class BattleController : MonoBehaviour
 {
 
     public BattleUI ui {get; set; }
 
     public StageInfo stage {get; set; }
-    
+
+    public BattleTurnController turn {get; set; }
+
     [Header ("References")]
 
     public CommandSelector commandSelector;
@@ -54,6 +57,7 @@ public class BattleController : MonoBehaviour
     void Awake() {
         ui = GetComponent<BattleUI>();
         stage = GetComponent<StageInfo>();
+        turn = GetComponent<BattleTurnController>();
     }
 
     void Start() {
