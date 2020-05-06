@@ -53,6 +53,24 @@ public class StageInfo : MonoBehaviour
         return entities;
     }
 
+    public int GetRandomEnemyIndex() {
+        List<int> validIndices = new List<int>();
+        List<Enemy> enemies = GetEnemies();
+        for (int i = 0; i < enemies.Count; i++) {
+            if (enemies[i] != null) {
+                validIndices.Add(i);
+            }
+        }
+
+        return validIndices[Random.Range(0, validIndices.Count)];
+    }
+
+    public int GetRandomPlayerIndex() {
+        int enemyTarget = Random.Range(0, GetPlayers().Count);
+        return enemyTarget;
+    }
+
+
     private void InitializePlayers() {
         Player instantiatedHeroPlayer = GameManager.Instance.party.InstantiatePlayer(0);
         instantiatedHeroPlayer.transform.SetParent(heroSlot);

@@ -60,18 +60,15 @@ public class BattleController : MonoBehaviour
     void Start() {
         GameManager.Instance.battleController = this;
 
-        // Instantiate hero
+        this.Initialize();
+    }
 
-        // TODO: Waves
+    private void Initialize() {
         this.stage.Initialize();
         this.ui.statusBarsUI.Initialize();
         this.OnPlayerTurnStart();
     }
 
-    private void InitializeCommandCardActionUI() {
-        List<string> actionNames = stage.GetHeroPlayer().actions.Map((ActionBase action) => { return action.name; });
-        this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
-    }
 
 
     // Update is called once per frame
@@ -120,6 +117,12 @@ public class BattleController : MonoBehaviour
         } else {
             stateText.text = "";
         }
+    }
+
+    // Initializes the command card to display the hero's actions
+    private void InitializeCommandCardActionUI() {
+        List<string> actionNames = stage.GetHeroPlayer().actions.Map((ActionBase action) => { return action.name; });
+        this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
     }
 
 
@@ -178,21 +181,12 @@ public class BattleController : MonoBehaviour
     private void SetUnsetMookCommands() {
         foreach (var player in stage.GetPlayers()) {
             if (player.HasSetCommand() == false) {
-                player.SetQueuedAction(new QueuedAction(player, player.actions[0], new List<int>{GetRandomEnemyIndex()}  ));
+                player.SetQueuedAction(new QueuedAction(player, player.actions[0], new List<int>{stage.GetRandomEnemyIndex()}  ));
             }
         }
     }
 
-    private int GetRandomEnemyIndex() {
-        List<int> validIndices = new List<int>();
-        for (int i = 0; i < stage.GetEnemies().Count; i++) {
-            if (stage.GetEnemies()[i] != null) {
-                validIndices.Add(i);
-            }
-        }
 
-        return validIndices[Random.Range(0, validIndices.Count)];
-    }
 
 
     public void DoActionHelper(List<FightingEntity> orderedEntities, int curIndex) {
@@ -203,17 +197,13 @@ public class BattleController : MonoBehaviour
         
         FightingEntity entity = orderedEntities[curIndex];
         if (entity.GetType() == typeof(Enemy)) {
-            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{GetRandomPlayerTarget()}  ));
+            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{stage.GetRandomPlayerIndex()}  ));
         } else {
         }
 
         StartCoroutine(dummyAttackAnimation(entity, orderedEntities, curIndex));
     }
 
-    public int GetRandomPlayerTarget() {
-        int enemyTarget = Random.Range(0, stage.GetPlayers().Count);
-        return enemyTarget;
-    }
 
     IEnumerator dummyAttackAnimation(FightingEntity a, List<FightingEntity> orderedEntities, int index) {
 

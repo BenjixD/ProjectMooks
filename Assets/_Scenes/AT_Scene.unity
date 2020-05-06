@@ -2290,7 +2290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   commandCardUI: {fileID: 2026179246}
-  statusBarsUI: {fileID: 0}
+  statusBarsUI: {fileID: 2026179249}
 --- !u!114 &2026179248
 MonoBehaviour:
   m_ObjectHideFlags: 0
