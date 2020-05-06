@@ -10,30 +10,55 @@ public class Party : MonoBehaviour {
     // (Name, (position, player obj)) mapping
     private Dictionary<string, Tuple<int, Player>> players = new Dictionary<string, Tuple<int, Player>>();
     [SerializeField]
-    private string[] playerPos = new string[4];
+    private PlayerCreationData[] playerPos = new PlayerCreationData[4];
 
-    public Player CreatePlayer(PlayerCreationData data, int index) {
+    public void CreatePlayer(PlayerCreationData data, int index) {
+        playerPos[index] = data;
+    }
+
+    public Player InstantiatePlayer(int index) {
+        PlayerCreationData data = playerPos[index];
+        if (data == null) {
+            Debug.LogError("Error: Player not found!");
+            return null;
+        }
+
         Player player = Instantiate(playerPrefab).GetComponent<Player>();
         player.Initialize(data);
-        playerPos[index] = data.name;
         players.Add(data.name, new Tuple<int, Player>(index, player));
+
         Debug.Log("Created player: " + data.name);
         Debug.Log("Player actions: " + player.actions);
+
         return player;
     }
 
-    public Player TryFillPartySlot(int index) {
+
+    public void TryFillPartySlot(int index) {
         if(playerPos[index] != null) {
-            return null;
+            return;
         } else {
             List<PlayerCreationData> nPlayers = GetNPlayers(1);
+            if (nPlayers.Count == 0) {
+                return;
+            }
+
             PlayerCreationData data = nPlayers[0];
             if(data != null) {
-                return CreatePlayer(data, index);
+                CreatePlayer(data, index);
+            }
+        }
+    }
+
+    public int GetNumPlayersInParty() {
+        int numPlayers = 0;
+        for(int i = 0; i < playerPos.Length; i++) {
+            if (playerPos[i] != null) {
+                numPlayers++;
             }
         }
 
-        return null;
+        return numPlayers;
     }
     
     public void EvictPlayer(string username) {
@@ -47,16 +72,26 @@ public class Party : MonoBehaviour {
     }
 
     public Tuple<int, Player> GetPlayer(int index) {
-        string username = playerPos[index];
-        if (username == null || username == "") {
+        if (playerPos[index] == null) {
+            return null;
+        }
+
+        string username = playerPos[index].name;
+        if (username == "") {
             return null;
         }
 
         return players[username];
     }
 
-    public List<string> GetPlayersPosition() {
-        List<string> pos = new List<string>(playerPos);
+    public List<PlayerCreationData> GetPlayersPosition() {
+        List<PlayerCreationData> pos = new List<PlayerCreationData>();
+        for (int i = 0; i < playerPos.Length; i++) {
+            if(playerPos[i] != null) {
+                pos.Add(playerPos[i]);
+            }
+        }
+    
         return pos;
     }
 

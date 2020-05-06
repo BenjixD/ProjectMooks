@@ -38,9 +38,13 @@ public class BattleController : MonoBehaviour
     public RectTransform CommentaryMenu;
     public Text CommentaryText;
 
+    
+    public Transform heroSlot;
+    public List<Transform> mookSlots;
     public List<Transform> enemySlots;
 
     public Color targetSelectionColor;
+
 
 
     Player _heroPlayer;
@@ -55,6 +59,8 @@ public class BattleController : MonoBehaviour
 
     public StatusBarUI statusBarPrefab;
 
+    public Text stateText;
+
     private List<StatusBarUI> statusBars;
     private List<StatusBarUI> enemyStatusBars;
 
@@ -66,9 +72,24 @@ public class BattleController : MonoBehaviour
     private int heroTargetIndex = 0;
 
 
-
     void Start() {
         GameManager.Instance.battleController = this;
+
+        // Instantiate hero
+        
+        Player instantiatedHeroPlayer = GameManager.Instance.party.InstantiatePlayer(0);
+        instantiatedHeroPlayer.transform.SetParent(heroSlot);
+        instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
+
+
+        int numPlayersInParty = GameManager.Instance.party.GetNumPlayersInParty();
+        for (int i = 1; i < numPlayersInParty; i++) {
+            Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(i);
+            instantiatedPlayer.transform.SetParent(mookSlots[i].transform);
+            instantiatedPlayer.transform.localPosition = Vector3.zero;
+        }
+
+
         _heroPlayer = GetPlayers()[0];
 
         // TODO: Waves
@@ -136,11 +157,18 @@ public class BattleController : MonoBehaviour
             }
 
             playerActionCounter += Time.deltaTime;
-
-            if ( (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction) || hasEveryoneEnteredActions()) {
+            bool startTurn = (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction) || hasEveryoneEnteredActions();
+            if (startTurn) {
                 playerActionCounter = 0;
                 this.ExecutePlayerTurn();
+            } else if (!_heroPlayer.HasSetCommand()) {
+                    stateText.text = "Waiting on streamer input";
+            } else {
+                stateText.text = "Waiting on Chat: " + (int)(this.maxTimeBeforeAction - playerActionCounter);
             }
+        
+        } else {
+            stateText.text = "";
         }
     }
 
@@ -201,8 +229,6 @@ public class BattleController : MonoBehaviour
         this.heroTargetIndex = this.commandSelector.GetChoice();
 
         //TODO: Update this animation
-        Debug.Log("Hero target index: " + heroTargetIndex);
-
         switch (heroInputActionState) {
             case HeroInputActionState.SELECT_ENEMY_TARGET:
                 foreach (var enemy in enemies) {

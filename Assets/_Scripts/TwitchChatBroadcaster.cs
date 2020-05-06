@@ -30,7 +30,7 @@ public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
 		this.listeners.Remove(removeListener);
 	}
 
-	private void Awake()
+	private void Start()
 	{
 
 		Secrets.Initialize();
