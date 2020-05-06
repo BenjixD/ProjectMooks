@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent (typeof(BattleController))]
+[RequireComponent (typeof(TurnController))]
 public class StatusBarsUI : MonoBehaviour
 {
-    private BattleController _controller{get; set;}
+    private TurnController _controller{get; set;}
 
     [Header("References")]
     public RectTransform playerStatusBarParent;
@@ -21,7 +21,7 @@ public class StatusBarsUI : MonoBehaviour
     private List<StatusBarUI> enemyStatusBars;
 
     void Awake() {
-        _controller = GetComponent<BattleController>();
+        _controller = GetComponent<TurnController>();
     }
 
     public void Initialize() {

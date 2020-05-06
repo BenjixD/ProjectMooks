@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
     public Party party;
-    public BattleController battleController{get; set;}
+    public TurnController TurnController{get; set;}
 
     public TwitchChatBroadcaster chatBroadcaster;
 

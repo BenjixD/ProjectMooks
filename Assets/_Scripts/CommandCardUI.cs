@@ -9,7 +9,7 @@ enum CommandCardUIMode {
     TEXT_ONLY
 };
 
-[RequireComponent (typeof(BattleController))]
+[RequireComponent (typeof(TurnController))]
 public class CommandCardUI : MonoBehaviour
 {
 

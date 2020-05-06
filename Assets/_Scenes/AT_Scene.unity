@@ -2234,14 +2234,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2026179242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aa6c7c34c646f243a88aed58c209d90, type: 3}
+  m_Script: {fileID: 11500000, guid: 2074fd21091089048a040b786dcb148f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui: {fileID: 2026179247}
-  stage: {fileID: 2026179248}
   commandSelector: {fileID: 2026179245}
   maxTimeBeforeAction: 15
-  targetSelectionColor: {r: 0, g: 0.62623525, b: 1, a: 1}
   stateText: {fileID: 1184654007}
 --- !u!114 &2026179245
 MonoBehaviour:

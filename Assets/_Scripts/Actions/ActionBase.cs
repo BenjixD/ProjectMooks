@@ -28,7 +28,7 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected bool BasicValidation(string[] splitCommand) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.battleController.inputActionsPhase ) {
+        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.TurnController.inputActionsPhase ) {
             return false;
         }
         return true;
@@ -41,10 +41,10 @@ public abstract class ActionBase : ScriptableObject {
 
     public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
         if (targetIdType == TargetType.ALL_TEAMS) {
-            return GameManager.Instance.battleController.stage.GetAllFightingEntities();
+            return GameManager.Instance.TurnController.stage.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleController.stage.GetEnemies());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.TurnController.stage.GetEnemies());
         List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
 
         if (user.isEnemy()) {
