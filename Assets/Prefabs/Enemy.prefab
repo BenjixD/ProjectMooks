@@ -95,19 +95,19 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
-  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
-  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
-  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
-  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
-  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
-  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
-  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
-  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
-  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
-  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
-  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
-  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 76506fa7fbeed084ab2dfb084648c628, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 56e7a798fe7ffa8418a7cee5ffdb9f25, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0

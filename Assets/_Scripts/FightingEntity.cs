@@ -22,7 +22,7 @@ public class FightingEntity : MonoBehaviour
 	private void Awake() {
 		_animController = GetComponent<AnimationController>();
 	}
-
+	
 	public void Initialize(PlayerCreationData data) {
 		Name = data.name;
 		SetStats(data.stats);
@@ -85,6 +85,5 @@ public class FightingEntity : MonoBehaviour
 	public void Animate(string animationName, bool loop) {
 		_animController.AddAnimation(animationName, loop);
 	}
-    
 }
 

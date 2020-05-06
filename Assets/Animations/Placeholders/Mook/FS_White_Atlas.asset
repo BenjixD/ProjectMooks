@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba7470dbe4525d24fa6d48a4f5ea7eb9, type: 3}
-  m_Name: Defend
+  m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+  m_Name: FS_White_Atlas
   m_EditorClassIdentifier: 
-  name: Defend
-  description: 
-  commandKeyword: d
-  commandArgs: 0
-  userAnimName: 
-  targetIdType: 0
+  atlasFile: {fileID: 4900000, guid: c5ea064f6b9ab99459e0f68d50641441, type: 3}
+  materials:
+  - {fileID: 2100000, guid: 1576695127f426346901d89207d7e3dc, type: 2}

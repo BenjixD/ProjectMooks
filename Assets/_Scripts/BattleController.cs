@@ -71,7 +71,6 @@ public class BattleController : MonoBehaviour
     private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
     private int heroTargetIndex = 0;
 
-
     void Start() {
         GameManager.Instance.battleController = this;
 
@@ -124,7 +123,6 @@ public class BattleController : MonoBehaviour
         this.UpdateBattleOptionUI();
         this.UpdateStatusBarUI();
     }
-
 
     // Update is called once per frame
     void Update()
@@ -251,9 +249,6 @@ public class BattleController : MonoBehaviour
                 break;
         }
     }
-
-    
-
 
     public void ExecutePlayerTurn() {
         this.SetUnsetMookCommands();
