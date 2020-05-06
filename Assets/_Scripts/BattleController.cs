@@ -18,9 +18,11 @@ public enum HeroInputActionState {
     BATTLE_START
 }
 
-
+[RequireComponent(typeof(BattleUI))]
+[RequireComponent(typeof(StageInfo))]
 public class BattleController : MonoBehaviour
 {
+    [Header ("References")]
 
     public BattleUI ui;
 
@@ -29,6 +31,7 @@ public class BattleController : MonoBehaviour
     public CommandSelector commandSelector;
 
 
+    [Header ("Other")]
     public float maxTimeBeforeAction = 15;
     public float playerActionCounter {get; set;}
 
@@ -43,16 +46,11 @@ public class BattleController : MonoBehaviour
 
     public bool inputActionsPhase{get; set; }
 
-    public RectTransform playerStatusBarParent;
 
-    public RectTransform enemyStatusBarParent;
 
-    public StatusBarUI statusBarPrefab;
 
     public Text stateText;
 
-    private List<StatusBarUI> statusBars;
-    private List<StatusBarUI> enemyStatusBars;
 
 
     private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
@@ -64,37 +62,10 @@ public class BattleController : MonoBehaviour
 
         // Instantiate hero
 
-
         // TODO: Waves
         this.stage.Initialize();
-
-
-        this.InitializeCommandCardActionUI();
-       
-
-        int count = stage.GetPlayers().Count;
-
-        statusBars = new List<StatusBarUI>();
-
-        for (int i = 0; i < count; i++) { 
-            StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
-            statusBarForPlayer.transform.parent = playerStatusBarParent;
-            statusBars.Add(statusBarForPlayer);
-        }
-
-        enemyStatusBars = new List<StatusBarUI>();
-
-        for (int i = 0; i < this.stage.GetEnemies().Count; i++) {
-            StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
-            statusBarForPlayer.transform.parent = enemyStatusBarParent;
-            enemyStatusBars.Add(statusBarForPlayer);
-        }
-
+        this.ui.statusBarsUI.Initialize();
         this.OnPlayerTurnStart();
-
-        this.ui.commandCardUI.SetSelectionCursor(0);
-
-        this.UpdateStatusBarUI();
     }
 
     private void InitializeCommandCardActionUI() {
@@ -289,22 +260,6 @@ public class BattleController : MonoBehaviour
 
     public void DoAction(FightingEntity a) {
         a.GetQueuedAction().ExecuteAction();
-        this.UpdateStatusBarUI();
+        this.ui.statusBarsUI.UpdateStatusBarUI();
     }
-
-    public void UpdateStatusBarUI() {
-        List<Player> players = stage.GetPlayers();
-        for (int i = 0; i < players.Count; i++) {
-            statusBars[i].SetName(players[i].Name);
-            statusBars[i].SetHP(players[i].stats.GetHp(), players[i].stats.maxHp);
-        }
-
-        for (int i = 0; i < stage.GetEnemies().Count; i++) {
-            enemyStatusBars[i].SetName(stage.GetEnemies()[i].Name);
-            enemyStatusBars[i].SetHP(stage.GetEnemies()[i].stats.GetHp(), stage.GetEnemies()[i].stats.maxHp);
-        }
-    }
-
-
-
 }
