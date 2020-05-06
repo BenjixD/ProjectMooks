@@ -15,3 +15,4 @@ MonoBehaviour:
   job: 4
   _actions:
   - {fileID: 11400000, guid: 45f018787ba0632428d557234669d7f5, type: 2}
+  prefab: {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}

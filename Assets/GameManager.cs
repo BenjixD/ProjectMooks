@@ -16,24 +16,32 @@ public class GameManager : Singleton<GameManager> {
     
 
     void Awake() {
+        if (FindObjectsOfType<GameManager>().Length >= 2) {
+            Destroy(this.gameObject);
+            return;
+        }
+
         DontDestroyOnLoad(gameObject);
         foreach(JobActionsList jobActionsList in _jobActionsLists) {
             jobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
 
-        PlayerStats stats = new PlayerStats();
-        // TODO: change this later
-        stats.maxHp = 100;
-        stats.maxMana = 100;
-        stats.maxPhysical = 20;
-        stats.maxSpecial = 20;
-        stats.maxSpeed = 35;
-        stats.maxDefense = 10;
-        stats.maxResistance = 10;
-        stats.RandomizeStats();
-        
-        PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
-        GameManager.Instance.party.CreatePlayer(heroData, 0);
+
+        if (party.GetPlayersInPosition().Count == 0) {
+            PlayerStats stats = new PlayerStats();
+            // TODO: change this later
+            stats.maxHp = 100;
+            stats.maxMana = 100;
+            stats.maxPhysical = 20;
+            stats.maxSpecial = 20;
+            stats.maxSpeed = 35;
+            stats.maxDefense = 10;
+            stats.maxResistance = 10;
+            stats.RandomizeStats();
+            
+            PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
+            GameManager.Instance.party.CreatePlayer(heroData, 0);
+        }
     }
 
     public List<ActionBase> GetJobActionsList(Job job) {
@@ -42,5 +50,15 @@ public class GameManager : Singleton<GameManager> {
             return null;
         }
         return jobActions[job];
+    }
+
+    public FightingEntity GetPrefabForJob(Job job) {
+        foreach(JobActionsList jobActionsList in _jobActionsLists) {
+            if (jobActionsList.job == job) {
+                return jobActionsList.prefab;
+            }
+        }
+
+        return null;
     }
 }

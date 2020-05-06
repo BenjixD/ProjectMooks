@@ -55,7 +55,6 @@ public class CommandSelector : MonoBehaviour
         } else {
             choice--;
         }
-        Debug.Log("GO DOWN: " + choice);
     }
 
     void incrementChoice() {
@@ -64,7 +63,6 @@ public class CommandSelector : MonoBehaviour
         } else {
             choice++;
         }
-        Debug.Log("GO UP: " + choice);
     }
 
 }

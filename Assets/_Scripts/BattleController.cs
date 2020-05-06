@@ -38,9 +38,13 @@ public class BattleController : MonoBehaviour
     public RectTransform CommentaryMenu;
     public Text CommentaryText;
 
+    
+    public Transform heroSlot;
+    public List<Transform> mookSlots;
     public List<Transform> enemySlots;
 
     public Color targetSelectionColor;
+
 
 
     Player _heroPlayer;
@@ -55,6 +59,8 @@ public class BattleController : MonoBehaviour
 
     public StatusBarUI statusBarPrefab;
 
+    public Text stateText;
+
     private List<StatusBarUI> statusBars;
     private List<StatusBarUI> enemyStatusBars;
 
@@ -66,9 +72,23 @@ public class BattleController : MonoBehaviour
     private int heroTargetIndex = 0;
 
 
-
     void Start() {
         GameManager.Instance.battleController = this;
+
+        // Instantiate hero
+        
+        Player instantiatedHeroPlayer = GameManager.Instance.party.InstantiatePlayer(0);
+        instantiatedHeroPlayer.transform.SetParent(heroSlot);
+        instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
+
+        int numPlayersInParty = GameManager.Instance.party.GetNumPlayersInParty();
+        for (int i = 1; i < numPlayersInParty; i++) {
+            Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(i);
+            instantiatedPlayer.transform.SetParent(mookSlots[i-1].transform);
+            instantiatedPlayer.transform.localPosition = Vector3.zero;
+        }
+
+
         _heroPlayer = GetPlayers()[0];
 
         // TODO: Waves
@@ -136,11 +156,21 @@ public class BattleController : MonoBehaviour
             }
 
             playerActionCounter += Time.deltaTime;
+            //bool timeOutIfChatTooSlow = (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
+            bool timeOutIfChatTooSlow = false;
 
-            if ( (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction) || hasEveryoneEnteredActions()) {
+            bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
+            if (startTurn) {
                 playerActionCounter = 0;
                 this.ExecutePlayerTurn();
+            } else if (!_heroPlayer.HasSetCommand()) {
+                    stateText.text = "Waiting on streamer input";
+            } else {
+                stateText.text = "Waiting on Chat: " + (int)(this.maxTimeBeforeAction - playerActionCounter);
             }
+        
+        } else {
+            stateText.text = "";
         }
     }
 
@@ -201,8 +231,6 @@ public class BattleController : MonoBehaviour
         this.heroTargetIndex = this.commandSelector.GetChoice();
 
         //TODO: Update this animation
-        Debug.Log("Hero target index: " + heroTargetIndex);
-
         switch (heroInputActionState) {
             case HeroInputActionState.SELECT_ENEMY_TARGET:
                 foreach (var enemy in enemies) {
@@ -225,16 +253,37 @@ public class BattleController : MonoBehaviour
 
 
     public void ExecutePlayerTurn() {
+        this.SetUnsetMookCommands();
+
         this.inputActionsPhase = false;
         this.ActionMenu.gameObject.SetActive(false);
         this.CommentaryMenu.gameObject.SetActive(true);
 
         // Sort by player speed
-        List<FightingEntity> orderedPlayers = new List<FightingEntity>(getAllFightingEntities());
+        List<FightingEntity> orderedPlayers = new List<FightingEntity>(GetAllFightingEntities());
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
         this.DoActionHelper(orderedPlayers, 0);
         
+    }
+
+    private void SetUnsetMookCommands() {
+        foreach (var player in GetPlayers()) {
+            if (player.HasSetCommand() == false) {
+                player.SetQueuedAction(new QueuedAction(player, player.actions[0], new List<int>{GetRandomEnemyIndex()}  ));
+            }
+        }
+    }
+
+    private int GetRandomEnemyIndex() {
+        List<int> validIndices = new List<int>();
+        for (int i = 0; i < enemies.Count; i++) {
+            if (enemies[i] != null) {
+                validIndices.Add(i);
+            }
+        }
+
+        return validIndices[Random.Range(0, validIndices.Count)];
     }
 
 
@@ -246,16 +295,14 @@ public class BattleController : MonoBehaviour
         
         FightingEntity entity = orderedEntities[curIndex];
         if (entity.GetType() == typeof(Enemy)) {
-            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{0}  ));
-
+            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{GetRandomPlayerTarget()}  ));
         } else {
         }
 
         StartCoroutine(dummyAttackAnimation(entity, orderedEntities, curIndex));
-        
     }
 
-    public int getRandomEnemyTarget() {
+    public int GetRandomPlayerTarget() {
         int enemyTarget = Random.Range(0, GetPlayers().Count);
         return enemyTarget;
     }
@@ -268,8 +315,13 @@ public class BattleController : MonoBehaviour
             yield break;
         }
         string attackName = a.GetQueuedAction()._action.name;
-
-        CommentaryText.text = "" + attackerName + " used " + attackName;
+        List<FightingEntity> targets = a.GetQueuedAction()._action.GetTargets(a, a.GetQueuedAction().GetTargetIds());
+        if (targets.Count == 1) {
+            CommentaryText.text = "" + attackerName + " used " + attackName + " on " + targets[0].Name;
+        } else {
+            CommentaryText.text = "" + attackerName + " used " + attackName;
+        }
+        
         yield return new WaitForSeconds(2f);
         this.DoAction(a);
         this.DoActionHelper(orderedEntities, index + 1);
@@ -312,7 +364,7 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    public List<FightingEntity> getAllFightingEntities() {
+    public List<FightingEntity> GetAllFightingEntities() {
         List<Player> players = GameManager.Instance.party.GetPlayersInPosition();
         List<FightingEntity> entities = new List<FightingEntity>();
         foreach (var player in players) {

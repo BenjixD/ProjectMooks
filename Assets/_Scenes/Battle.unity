@@ -249,7 +249,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0550780f82c48028b6f8f6fca50457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerQueue: {fileID: 1240356888}
+  party: {fileID: 0}
+  chatBroadcaster: {fileID: 0}
+  _jobActionsLists: []
 --- !u!1 &1533845730
 GameObject:
   m_ObjectHideFlags: 0
