@@ -51,4 +51,14 @@ public class GameManager : Singleton<GameManager> {
         }
         return jobActions[job];
     }
+
+    public FightingEntity GetPrefabForJob(Job job) {
+        foreach(JobActionsList jobActionsList in _jobActionsLists) {
+            if (jobActionsList.job == job) {
+                return jobActionsList.prefab;
+            }
+        }
+
+        return null;
+    }
 }

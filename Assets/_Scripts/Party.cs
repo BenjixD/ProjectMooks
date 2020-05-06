@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Party : MonoBehaviour {
     public PlayerQueue playerQueue;
-    public Player heroPrefab;    // Optional TODO: Dependent on streamer
-    public Player mookPrefab; // TODO: Dependent on JOB
 
     // (Name, (position, player obj)) mapping
     private Dictionary<string, Tuple<int, Player>> players = new Dictionary<string, Tuple<int, Player>>();
@@ -18,6 +16,8 @@ public class Party : MonoBehaviour {
     }
 
     public void CreateHeroPlayer() {
+        // Optional TODO: If streamer name is special, then give them a special hero
+        FightingEntity heroPrefab = GameManager.Instance.GetPrefabForJob(Job.HERO);
         PlayerStats stats = new PlayerStats(heroPrefab.stats);
         PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
         CreatePlayer(heroData, 0);
@@ -29,13 +29,8 @@ public class Party : MonoBehaviour {
             Debug.LogError("Error: Player not found!");
             return null;
         }
-
-        Player player;
-        if (index == 0) {
-            player = Instantiate(heroPrefab).GetComponent<Player>();
-        } else {
-            player = Instantiate(mookPrefab).GetComponent<Player>();
-        }
+        FightingEntity prefab = GameManager.Instance.GetPrefabForJob(data.job);
+        Player player = Instantiate(prefab).GetComponent<Player>();
 
         player.Initialize(data);
         players.Add(data.name, new Tuple<int, Player>(index, player));

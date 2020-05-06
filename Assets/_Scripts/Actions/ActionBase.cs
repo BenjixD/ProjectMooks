@@ -5,7 +5,8 @@ using UnityEngine;
 
 public enum TargetType{
     MY_TEAM,
-    ENEMY_TEAM
+    ENEMY_TEAM,
+    ALL_TEAMS
 }
 public abstract class ActionBase : ScriptableObject {
     public string name;
@@ -39,6 +40,9 @@ public abstract class ActionBase : ScriptableObject {
     public abstract void ExecuteAction(FightingEntity user, List<FightingEntity> targets);
 
     public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
+        if (targetIdType == TargetType.ALL_TEAMS) {
+            return GameManager.Instance.battleController.GetAllFightingEntities();
+        }
         List<FightingEntity> potentialTargets;
         List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleController.enemies);
         List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());

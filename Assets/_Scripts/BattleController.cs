@@ -253,21 +253,21 @@ public class BattleController : MonoBehaviour
 
 
     public void ExecutePlayerTurn() {
-        this.SetUnsetNookCommands();
+        this.SetUnsetMookCommands();
 
         this.inputActionsPhase = false;
         this.ActionMenu.gameObject.SetActive(false);
         this.CommentaryMenu.gameObject.SetActive(true);
 
         // Sort by player speed
-        List<FightingEntity> orderedPlayers = new List<FightingEntity>(getAllFightingEntities());
+        List<FightingEntity> orderedPlayers = new List<FightingEntity>(GetAllFightingEntities());
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
         this.DoActionHelper(orderedPlayers, 0);
         
     }
 
-    private void SetUnsetNookCommands() {
+    private void SetUnsetMookCommands() {
         foreach (var player in GetPlayers()) {
             if (player.HasSetCommand() == false) {
                 player.SetQueuedAction(new QueuedAction(player, player.actions[0], new List<int>{GetRandomEnemyIndex()}  ));
@@ -364,7 +364,7 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    public List<FightingEntity> getAllFightingEntities() {
+    public List<FightingEntity> GetAllFightingEntities() {
         List<Player> players = GameManager.Instance.party.GetPlayersInPosition();
         List<FightingEntity> entities = new List<FightingEntity>();
         foreach (var player in players) {

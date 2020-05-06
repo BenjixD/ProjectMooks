@@ -6,6 +6,8 @@ using UnityEngine;
 public class JobActionsList : ScriptableObject {
     public Job job;
 	[SerializeField] private List<ActionBase> _actions;
+
+    public FightingEntity prefab;
     
     public List<ActionBase> GetActions() {
         return _actions;
