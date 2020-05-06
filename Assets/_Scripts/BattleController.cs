@@ -193,7 +193,7 @@ public class BattleController : MonoBehaviour
             instantiatedEnemy.Initialize(creationData);
             
 
-            instantiatedEnemy.GetComponent<SpriteRenderer>().sortingOrder = i;
+            instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
             instantiatedEnemy.transform.SetParent(enemySlots[i]);
             instantiatedEnemy.transform.localPosition = Vector3.zero;
 
@@ -232,11 +232,12 @@ public class BattleController : MonoBehaviour
 
         //TODO: Update this animation
         switch (heroInputActionState) {
+            // TODO: fix broken target highlighting
             case HeroInputActionState.SELECT_ENEMY_TARGET:
                 foreach (var enemy in enemies) {
-                    enemy.GetComponent<SpriteRenderer>().color = Color.white;
+                    // enemy.GetComponent<SpriteRenderer>().color = Color.white;
                 }
-                enemies[heroTargetIndex].GetComponent<SpriteRenderer>().color = targetSelectionColor;
+                // enemies[heroTargetIndex].GetComponent<SpriteRenderer>().color = targetSelectionColor;
             break;
 
             case HeroInputActionState.SELECT_PLAYER_TARGET:
@@ -245,11 +246,13 @@ public class BattleController : MonoBehaviour
 
             default:
                 foreach (var enemy in enemies) {
-                    enemy.GetComponent<SpriteRenderer>().color = Color.white;
+                    // enemy.GetComponent<SpriteRenderer>().color = Color.white;
                 }
                 break;
         }
     }
+
+    
 
 
     public void ExecutePlayerTurn() {
