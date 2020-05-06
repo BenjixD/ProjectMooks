@@ -2239,7 +2239,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commandSelector: {fileID: 2026179245}
   maxTimeBeforeAction: 15
-  stateText: {fileID: 1184654007}
 --- !u!114 &2026179245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2290,6 +2289,7 @@ MonoBehaviour:
   commandCardUI: {fileID: 2026179246}
   statusBarsUI: {fileID: 2026179249}
   targetSelectionUI: {fileID: 2026179250}
+  stateText: {fileID: 1184654007}
 --- !u!114 &2026179248
 MonoBehaviour:
   m_ObjectHideFlags: 0

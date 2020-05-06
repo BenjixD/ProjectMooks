@@ -39,18 +39,14 @@ public class TurnController : MonoBehaviour
     public float playerActionCounter {get; set;}
 
 
-    int heroActionIndex = 0;
+    private int _heroActionIndex = 0;
     
 
     public bool inputActionsPhase{get; set; }
 
 
-    public Text stateText;
-
-
-
     private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
-    private int heroTargetIndex = 0;
+    private int _heroTargetIndex = 0;
 
 
     void Awake() {
@@ -60,15 +56,14 @@ public class TurnController : MonoBehaviour
 
     void Start() {
         GameManager.Instance.TurnController = this;
-        this.Initialize();
+        this.initialize();
     }
 
-    private void Initialize() {
+    private void initialize() {
         this.stage.Initialize();
         this.ui.statusBarsUI.Initialize();
         this.OnPlayerTurnStart();
     }
-
 
 
     // Update is called once per frame
@@ -80,13 +75,13 @@ public class TurnController : MonoBehaviour
             switch (heroInputActionState) {
                 case HeroInputActionState.SELECT_ACTION:
                     if (Input.GetKeyDown(KeyCode.Z)) {
-                       this.SetHeroAction();
+                       this.setHeroAction();
                     }
                     break;
 
                 case HeroInputActionState.SELECT_ENEMY_TARGET:
                     if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.SetHeroTarget();
+                        this.setHeroTarget();
                     }
                     break;
 
@@ -96,38 +91,11 @@ public class TurnController : MonoBehaviour
             }
 
             playerActionCounter += Time.deltaTime;
-            this.CheckExecuteTurn();
+            this.checkExecuteTurn();
         } else {
-            stateText.text = "";
         }
     }
 
-    private void CheckExecuteTurn() {
-        //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
-        bool timeOutIfChatTooSlow = false;
-        bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
-        if (startTurn) {
-            playerActionCounter = 0;
-            this.ExecutePlayerTurn();
-        } else {
-            this.UpdateStateText();
-
-        }
-    }
-
-    private void ExecutePlayerTurn() {
-        this.inputActionsPhase = false;
-        this.turn = new Battle(this);
-        this.turn.StartTurn();
-    }
-
-    private void UpdateStateText() {
-        if (!stage.GetHeroPlayer().HasSetCommand()) {
-            stateText.text = "Waiting on streamer input";
-        } else {
-            stateText.text = "Waiting on Chat: " + (int)(this.maxTimeBeforeAction - playerActionCounter);
-        }
-    }
 
     public void OnPlayerTurnStart() {
         this.inputActionsPhase = true;
@@ -135,7 +103,7 @@ public class TurnController : MonoBehaviour
 
         this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
 
-        this.InitializeCommandCardActionUI();
+        this.initializeCommandCardActionUI();
 
 
         this.playerActionCounter = 0;
@@ -150,25 +118,54 @@ public class TurnController : MonoBehaviour
         }
     }
 
-    private void SetHeroAction() {
-        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
-        heroActionIndex = this.commandSelector.GetChoice();
+    private void checkExecuteTurn() {
+        //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
+        bool timeOutIfChatTooSlow = false;
+        bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
+        if (startTurn) {
+            playerActionCounter = 0;
+            this.ui.SetStateText("");
+            this.executePlayerTurn();
+        } else {
+            this.UpdateStateText();
 
-        ActionBase heroAction = stage.GetHeroPlayer().actions[heroActionIndex];
+        }
+    }
+
+    private void executePlayerTurn() {
+        this.inputActionsPhase = false;
+        this.turn = new Battle(this);
+        this.turn.StartTurn();
+    }
+
+    private void UpdateStateText() {
+        if (!stage.GetHeroPlayer().HasSetCommand()) {
+            this.ui.SetStateText("Waiting on streamer input");
+        } else {
+            int timer = (int)(this.maxTimeBeforeAction - playerActionCounter);
+            this.ui.SetStateText("Waiting on Chat: " + timer);
+        }
+    }
+
+    private void setHeroAction() {
+        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
+        _heroActionIndex = this.commandSelector.GetChoice();
+
+        ActionBase heroAction = stage.GetHeroPlayer().actions[_heroActionIndex];
     
         // TODO: Differentiate between ALL and single target.
         this.ui.targetSelectionUI.InitializeTargetSelectionSingle(heroAction.GetPotentialTargets(stage.GetHeroPlayer()), 0, this.commandSelector);
     }
 
-    private void SetHeroTarget() {
+    private void setHeroTarget() {
         heroInputActionState = HeroInputActionState.BATTLE_START;
-        this.heroTargetIndex = this.commandSelector.GetChoice();
+        this._heroTargetIndex = this.commandSelector.GetChoice();
         this.ui.targetSelectionUI.ClearSelection();
-        stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), stage.GetHeroPlayer().actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
+        stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), stage.GetHeroPlayer().actions[_heroActionIndex], new List<int>{_heroTargetIndex}  ));
     }
 
     // Initializes the command card to display the hero's actions
-    private void InitializeCommandCardActionUI() {
+    private void initializeCommandCardActionUI() {
         List<string> actionNames = stage.GetHeroPlayer().actions.Map((ActionBase action) => { return action.name; });
         this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
     }

@@ -13,4 +13,11 @@ public class BattleUI : MonoBehaviour
     
     public TargetSelectionUI targetSelectionUI;
 
+    [SerializeField]
+    private Text stateText;
+
+    public void SetStateText(string text) {
+        this.stateText.text = text;
+    }
+
 }
