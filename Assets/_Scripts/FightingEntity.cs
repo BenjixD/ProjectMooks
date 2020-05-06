@@ -16,10 +16,13 @@ public class FightingEntity : MonoBehaviour
 	public Job job;
 
 	public List<ActionBase> actions = new List<ActionBase>();
-	private QueuedAction _queuedAction;
+	
+	protected QueuedAction _queuedAction;
+	protected FightingEntityAI _ai;
 
 	public void Initialize(PlayerCreationData data) {
 		Name = data.name;
+		_ai = new FightingEntityAI(this);
 		SetStats(data.stats);
         Debug.Log(data.job);
 		SetJob(data.job);
