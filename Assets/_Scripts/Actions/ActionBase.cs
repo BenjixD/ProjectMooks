@@ -35,7 +35,6 @@ public abstract class ActionBase : ScriptableObject {
 
     public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
     
-    // TODO: update params
     public abstract void ExecuteAction(FightingEntity user, List<FightingEntity> targets);
 
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
