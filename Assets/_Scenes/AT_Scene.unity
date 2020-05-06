@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 200177947}
   - component: {fileID: 200177946}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SelectionCursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -688,7 +688,7 @@ GameObject:
   - component: {fileID: 556893872}
   - component: {fileID: 556893871}
   m_Layer: 5
-  m_Name: Image
+  m_Name: CommandCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2101,7 +2101,7 @@ GameObject:
   - component: {fileID: 2001327356}
   - component: {fileID: 2001327355}
   m_Layer: 5
-  m_Name: Options
+  m_Name: ActionTextParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2199,6 +2199,8 @@ GameObject:
   - component: {fileID: 2026179243}
   - component: {fileID: 2026179244}
   - component: {fileID: 2026179245}
+  - component: {fileID: 2026179247}
+  - component: {fileID: 2026179246}
   m_Layer: 0
   m_Name: StageController
   m_TagString: Untagged
@@ -2232,16 +2234,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aa6c7c34c646f243a88aed58c209d90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ui: {fileID: 2026179247}
   commandSelector: {fileID: 2026179245}
-  commandTextPrefab: {fileID: 3463448965843034932, guid: 5cfe1b8b9b1037c4186cab841b508ee8,
-    type: 3}
   selectionCursor: {fileID: 200177945}
   selectionCursorOffset: {x: 0, y: 0}
   maxTimeBeforeAction: 15
   ActionMenu: {fileID: 242386836}
-  ActionMenuTextParent: {fileID: 2001327354}
-  CommentaryMenu: {fileID: 35925955}
-  CommentaryText: {fileID: 883118801}
   heroSlot: {fileID: 1502207788}
   mookSlots:
   - {fileID: 1333676684}
@@ -2275,6 +2273,39 @@ MonoBehaviour:
   choice: 0
   maxChoice: 1
   inverse: 0
+--- !u!114 &2026179246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a8764a590f2e1f4d80950c119eb27d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actionMenu: {fileID: 242386836}
+  _actionMenuTextParent: {fileID: 2001327354}
+  _commandTextPrefab: {fileID: 3463448965843034932, guid: 60505eff966ea484e956fee2a7bb63a3,
+    type: 3}
+  _selectionCursor: {fileID: 200177945}
+  _selectionCursorOffset: {x: 0, y: 0}
+  _commentaryMenu: {fileID: 35925955}
+  _commentaryText: {fileID: 883118801}
+--- !u!114 &2026179247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627e6b8c9cdf1cb4baac689e1109d301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  commandCardUI: {fileID: 2026179246}
 --- !u!1 &2132595313
 GameObject:
   m_ObjectHideFlags: 0

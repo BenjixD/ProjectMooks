@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public enum BattlePhase {
-    PLAYER,
-    ENEMY
-
+public enum BattlePhase{
+    PARTY_SETUP,
+    MOVE_SELECTION,
+    ENTER_BATTLE,
+    START_TURN,
+    END_TURN
 };
+
 public enum HeroInputActionState {
     SELECT_ACTION,
     SELECT_ENEMY_TARGET,
@@ -20,12 +22,13 @@ public enum HeroInputActionState {
 public class BattleController : MonoBehaviour
 {
 
+    public BattleUI ui;
+
     public CommandSelector commandSelector;
 
     public List<Enemy> enemies{get; set;}
 
-    public CommandOptionText commandTextPrefab;
-    public RectTransform selectionCursor;
+      public RectTransform selectionCursor;
     public Vector2 selectionCursorOffset = new Vector2(0, 0);
 
     public float maxTimeBeforeAction = 15;
@@ -33,10 +36,9 @@ public class BattleController : MonoBehaviour
 
     public RectTransform ActionMenu;
 
-    public RectTransform ActionMenuTextParent;
 
-    public RectTransform CommentaryMenu;
-    public Text CommentaryText;
+
+
 
     
     public Transform heroSlot;
@@ -49,7 +51,7 @@ public class BattleController : MonoBehaviour
 
     Player _heroPlayer;
     int heroActionIndex = 0;
-    public List<RectTransform> battleOptionsUI {get ; set; }
+    
 
     public bool inputActionsPhase{get; set; }
 
@@ -93,14 +95,10 @@ public class BattleController : MonoBehaviour
 
         // TODO: Waves
         this.GenerateEnemyList();
-        battleOptionsUI = new List<RectTransform>();
 
-        foreach (ActionBase action in _heroPlayer.actions) {
-            CommandOptionText  commandText = Instantiate(commandTextPrefab) as CommandOptionText;
-            commandText.text.text = action.name;
-            commandText.transform.parent = ActionMenuTextParent.transform;
-            battleOptionsUI.Add(commandText.GetComponent<RectTransform>());
-        }
+
+        this.InitializeCommandCardActionUI();
+       
 
         int count = GetPlayers().Count;
 
@@ -121,8 +119,15 @@ public class BattleController : MonoBehaviour
         }
 
         this.OnPlayerTurnStart();
-        this.UpdateBattleOptionUI();
+
+        this.ui.commandCardUI.SetSelectionCursor(0);
+
         this.UpdateStatusBarUI();
+    }
+
+    private void InitializeCommandCardActionUI() {
+        List<string> actionNames = _heroPlayer.actions.Map((ActionBase action) => { return action.name; });
+        this.ui.commandCardUI.InitializeCommandSelection(actionNames);
     }
 
 
@@ -220,12 +225,6 @@ public class BattleController : MonoBehaviour
     }
 
 
-    public void UpdateBattleOptionUI() {
-        this.heroActionIndex = this.commandSelector.GetChoice();
-        selectionCursor.transform.parent = battleOptionsUI[heroActionIndex].transform;
-        selectionCursor.anchoredPosition = selectionCursorOffset;
-    }
-
     public void UpdateTargetSelectionUI() {
 
         this.heroTargetIndex = this.commandSelector.GetChoice();
@@ -256,8 +255,8 @@ public class BattleController : MonoBehaviour
         this.SetUnsetMookCommands();
 
         this.inputActionsPhase = false;
-        this.ActionMenu.gameObject.SetActive(false);
-        this.CommentaryMenu.gameObject.SetActive(true);
+
+        this.ui.commandCardUI.InitializeCommantaryUI();
 
         // Sort by player speed
         List<FightingEntity> orderedPlayers = new List<FightingEntity>(GetAllFightingEntities());
@@ -316,11 +315,15 @@ public class BattleController : MonoBehaviour
         }
         string attackName = a.GetQueuedAction()._action.name;
         List<FightingEntity> targets = a.GetQueuedAction()._action.GetTargets(a, a.GetQueuedAction().GetTargetIds());
+
+        string commentaryText;
         if (targets.Count == 1) {
-            CommentaryText.text = "" + attackerName + " used " + attackName + " on " + targets[0].Name;
+            commentaryText = "" + attackerName + " used " + attackName + " on " + targets[0].Name;
         } else {
-            CommentaryText.text = "" + attackerName + " used " + attackName;
+            commentaryText = "" + attackerName + " used " + attackName;
         }
+
+        this.ui.commandCardUI.SetCommentaryUIText(commentaryText);
         
         yield return new WaitForSeconds(2f);
         this.DoAction(a);
@@ -329,14 +332,15 @@ public class BattleController : MonoBehaviour
 
     public void OnPlayerTurnStart() {
         this.inputActionsPhase = true;
-        this.commandSelector.Initialize(0, _heroPlayer.actions.Count-1, this.UpdateBattleOptionUI);
-
         this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
-        
-        this.ActionMenu.gameObject.SetActive(true);
-        this.CommentaryMenu.gameObject.SetActive(false);
+
+        this.InitializeCommandCardActionUI();
+        this.commandSelector.Initialize(0, _heroPlayer.actions.Count-1, this.UpdateCommandCardUISelection);
+
 
         this.playerActionCounter = 0;
+        
+        // Reset defence state
         foreach (var player in GetPlayers()) {
             player.ResetCommand();
 
@@ -344,6 +348,10 @@ public class BattleController : MonoBehaviour
                 player.modifiers.Remove("defend");
             }
         }
+    }
+
+    private void UpdateCommandCardUISelection() {
+        this.ui.commandCardUI.SetSelectionCursor(this.commandSelector.GetChoice());
     }
 
     public void DoAction(FightingEntity a) {
