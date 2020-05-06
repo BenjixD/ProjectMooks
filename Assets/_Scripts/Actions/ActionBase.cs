@@ -38,7 +38,7 @@ public abstract class ActionBase : ScriptableObject {
     // TODO: update params
     public abstract void ExecuteAction(FightingEntity user, List<FightingEntity> targets);
 
-    public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
+    public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
         List<FightingEntity> potentialTargets;
         List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleController.enemies);
         List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
@@ -49,6 +49,11 @@ public abstract class ActionBase : ScriptableObject {
             potentialTargets = targetIdType == TargetType.MY_TEAM ? players : enemies;
         }
 
+        return potentialTargets;
+    }
+
+    public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
+        List<FightingEntity> potentialTargets = GetPotentialTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
             if (target < potentialTargets.Count) {
@@ -69,7 +74,9 @@ public abstract class ActionBase : ScriptableObject {
             return -1;
         }
 
-        if (targetId < 0 || targetId >= GetTargets(user, targetId).Count) {
+        List<FightingEntity> targets = GetPotentialTargets(user);
+
+        if (targetId < 0 || targetId >= targets.Count) {
             return -1;
         }
 

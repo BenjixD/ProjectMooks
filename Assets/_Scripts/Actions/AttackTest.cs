@@ -12,9 +12,10 @@ public class AttackTest : ActionBase {
         }
         int targetId = this.GetTargetIdFromString(splitCommand[1], user);
         if (targetId == -1) {
+            Debug.Log("Target id -1");
             return false;
         }
-        
+
         user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId } ));
         return true;
     }
