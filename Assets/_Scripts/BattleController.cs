@@ -20,6 +20,8 @@ public enum HeroInputActionState {
 public class BattleController : MonoBehaviour
 {
 
+    public CommandSelector commandSelector;
+
     public List<Enemy> enemies{get; set;}
 
     public CommandOptionText commandTextPrefab;
@@ -63,6 +65,8 @@ public class BattleController : MonoBehaviour
     private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
     private int heroTargetIndex = 0;
 
+
+
     void Start() {
         GameManager.Instance.battleController = this;
         _heroPlayer = GetPlayers()[0];
@@ -102,6 +106,44 @@ public class BattleController : MonoBehaviour
     }
 
 
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (inputActionsPhase == true) {
+
+            switch (heroInputActionState) {
+                case HeroInputActionState.SELECT_ACTION:
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
+                        this.UpdateTargetSelectionUI();
+
+                        this.commandSelector.Initialize(0, enemies.Count-1, this.UpdateTargetSelectionUI, true);
+                    }
+                    break;
+
+                case HeroInputActionState.SELECT_ENEMY_TARGET:
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        heroInputActionState = HeroInputActionState.BATTLE_START;
+                        this.UpdateTargetSelectionUI();
+                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
+                    }
+                    break;
+
+                default:
+
+                    break;
+            }
+
+            playerActionCounter += Time.deltaTime;
+
+            if ( (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction) || hasEveryoneEnteredActions()) {
+                playerActionCounter = 0;
+                this.ExecutePlayerTurn();
+            }
+        }
+    }
+
     private void GenerateEnemyList() {
         int numberOfEnemiesToGenerate = 4; // TODO: Make this dependent on stage.
         enemies = new List<Enemy>();
@@ -137,87 +179,6 @@ public class BattleController : MonoBehaviour
         return GameManager.Instance.party.GetPlayersInPosition();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-        if (inputActionsPhase == true) {
-
-            switch (heroInputActionState) {
-                case HeroInputActionState.SELECT_ACTION:
-                    if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                        if (heroActionIndex == 0) {
-                            heroActionIndex = _heroPlayer.actions.Count - 1;
-                        } else {
-                            heroActionIndex--;
-                        }
-
-                        this.UpdateBattleOptionUI();
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                        if (heroActionIndex == _heroPlayer.actions.Count - 1) {
-                            heroActionIndex = 0;
-                        } else {
-                            heroActionIndex++;
-                        }
-
-                        this.UpdateBattleOptionUI();
-                    }
-
-
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
-                        this.UpdateTargetSelectionUI();
-                    }
-                    break;
-
-                case HeroInputActionState.SELECT_ENEMY_TARGET:
-
-                    // Note: It is reverse on purpose
-                    if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                        if (heroTargetIndex == enemies.Count - 1) {
-                            heroTargetIndex = 0;
-                        } else {
-                            heroTargetIndex++;
-                        }
-
-
-                        this.UpdateTargetSelectionUI();
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                        if (heroTargetIndex == 0) {
-                            heroTargetIndex = enemies.Count - 1;
-                        } else {
-                            heroTargetIndex--;
-                        }
-
-                        this.UpdateTargetSelectionUI();
-                    }
-
-
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        heroInputActionState = HeroInputActionState.BATTLE_START;
-                        this.UpdateTargetSelectionUI();
-                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
-                    }
-                    break;
-
-                default:
-
-                    break;
-            }
-
-            playerActionCounter += Time.deltaTime;
-
-            if ( (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction) || hasEveryoneEnteredActions()) {
-                playerActionCounter = 0;
-                this.ExecutePlayerTurn();
-            }
-        }
-    }
-
     private bool hasEveryoneEnteredActions() {
         foreach (var player in GetPlayers()) {
             if (player.HasSetCommand() == false) {
@@ -230,13 +191,17 @@ public class BattleController : MonoBehaviour
 
 
     public void UpdateBattleOptionUI() {
+        this.heroActionIndex = this.commandSelector.GetChoice();
         selectionCursor.transform.parent = battleOptionsUI[heroActionIndex].transform;
         selectionCursor.anchoredPosition = selectionCursorOffset;
     }
 
     public void UpdateTargetSelectionUI() {
 
+        this.heroTargetIndex = this.commandSelector.GetChoice();
+
         //TODO: Update this animation
+        Debug.Log("Hero target index: " + heroTargetIndex);
 
         switch (heroInputActionState) {
             case HeroInputActionState.SELECT_ENEMY_TARGET:
@@ -312,6 +277,8 @@ public class BattleController : MonoBehaviour
 
     public void OnPlayerTurnStart() {
         this.inputActionsPhase = true;
+        this.commandSelector.Initialize(0, _heroPlayer.actions.Count-1, this.UpdateBattleOptionUI);
+
         this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
         
         this.ActionMenu.gameObject.SetActive(true);

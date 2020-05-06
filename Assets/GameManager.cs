@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager> {
     
 
     void Awake() {
+        DontDestroyOnLoad(gameObject);
         foreach(JobActionsList jobActionsList in _jobActionsLists) {
             jobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
@@ -31,9 +32,8 @@ public class GameManager : Singleton<GameManager> {
         stats.maxResistance = 10;
         stats.RandomizeStats();
         
-        PlayerCreationData heroData = new PlayerCreationData(chatBroadcaster._channelToConnectTo, stats, Job.HERO);
-        party.CreatePlayer(heroData, 0);
-
+        PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
+        GameManager.Instance.party.CreatePlayer(heroData, 0);
     }
 
     public List<ActionBase> GetJobActionsList(Job job) {
