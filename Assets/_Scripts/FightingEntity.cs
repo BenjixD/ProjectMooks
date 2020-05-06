@@ -16,10 +16,16 @@ public class FightingEntity : MonoBehaviour
 	public Job job;
 
 	public List<ActionBase> actions = new List<ActionBase>();
+<<<<<<< HEAD
 
     public int targetId;
 	private QueuedAction _queuedAction;
 	private AnimationController _animController;
+=======
+	
+	protected QueuedAction _queuedAction;
+	protected FightingEntityAI _ai;
+>>>>>>> [FEAT] - Adding basic AI feature
 
 	private void Awake() {
 		_animController = GetComponent<AnimationController>();
@@ -28,6 +34,7 @@ public class FightingEntity : MonoBehaviour
 	public void Initialize(int index, PlayerCreationData data) {
         this.targetId = index;
 		Name = data.name;
+		_ai = new FightingEntityAI(this);
 		SetStats(data.stats);
 		SetJob(data.job);
 	}
