@@ -24,32 +24,20 @@ public class BattleController : MonoBehaviour
 
     public BattleUI ui;
 
+    public StageInfo stage;
+
     public CommandSelector commandSelector;
 
-    public List<Enemy> enemies{get; set;}
-
-      public RectTransform selectionCursor;
-    public Vector2 selectionCursorOffset = new Vector2(0, 0);
 
     public float maxTimeBeforeAction = 15;
     public float playerActionCounter {get; set;}
 
-    public RectTransform ActionMenu;
-
-
-
-
 
     
-    public Transform heroSlot;
-    public List<Transform> mookSlots;
-    public List<Transform> enemySlots;
-
     public Color targetSelectionColor;
 
 
 
-    Player _heroPlayer;
     int heroActionIndex = 0;
     
 
@@ -67,9 +55,6 @@ public class BattleController : MonoBehaviour
     private List<StatusBarUI> enemyStatusBars;
 
 
-    [SerializeField]
-    List<Enemy> _enemyPrefabs;
-
     private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
     private int heroTargetIndex = 0;
 
@@ -78,29 +63,16 @@ public class BattleController : MonoBehaviour
         GameManager.Instance.battleController = this;
 
         // Instantiate hero
-        
-        Player instantiatedHeroPlayer = GameManager.Instance.party.InstantiatePlayer(0);
-        instantiatedHeroPlayer.transform.SetParent(heroSlot);
-        instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
 
-        int numPlayersInParty = GameManager.Instance.party.GetNumPlayersInParty();
-        for (int i = 1; i < numPlayersInParty; i++) {
-            Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(i);
-            instantiatedPlayer.transform.SetParent(mookSlots[i-1].transform);
-            instantiatedPlayer.transform.localPosition = Vector3.zero;
-        }
-
-
-        _heroPlayer = GetPlayers()[0];
 
         // TODO: Waves
-        this.GenerateEnemyList();
+        this.stage.Initialize();
 
 
         this.InitializeCommandCardActionUI();
        
 
-        int count = GetPlayers().Count;
+        int count = stage.GetPlayers().Count;
 
         statusBars = new List<StatusBarUI>();
 
@@ -112,7 +84,7 @@ public class BattleController : MonoBehaviour
 
         enemyStatusBars = new List<StatusBarUI>();
 
-        for (int i = 0; i < enemies.Count; i++) {
+        for (int i = 0; i < this.stage.GetEnemies().Count; i++) {
             StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
             statusBarForPlayer.transform.parent = enemyStatusBarParent;
             enemyStatusBars.Add(statusBarForPlayer);
@@ -126,8 +98,8 @@ public class BattleController : MonoBehaviour
     }
 
     private void InitializeCommandCardActionUI() {
-        List<string> actionNames = _heroPlayer.actions.Map((ActionBase action) => { return action.name; });
-        this.ui.commandCardUI.InitializeCommandSelection(actionNames);
+        List<string> actionNames = stage.GetHeroPlayer().actions.Map((ActionBase action) => { return action.name; });
+        this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
     }
 
 
@@ -143,7 +115,7 @@ public class BattleController : MonoBehaviour
                         this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
                         this.UpdateTargetSelectionUI();
 
-                        this.commandSelector.Initialize(0, enemies.Count-1, this.UpdateTargetSelectionUI, true);
+                        this.commandSelector.Initialize(0, stage.GetEnemies().Count-1, this.UpdateTargetSelectionUI, true);
                     }
                     break;
 
@@ -151,7 +123,7 @@ public class BattleController : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Z)) {
                         heroInputActionState = HeroInputActionState.BATTLE_START;
                         this.UpdateTargetSelectionUI();
-                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
+                        stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), stage.GetHeroPlayer().actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
                     }
                     break;
 
@@ -161,14 +133,14 @@ public class BattleController : MonoBehaviour
             }
 
             playerActionCounter += Time.deltaTime;
-            //bool timeOutIfChatTooSlow = (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
+            //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
             bool timeOutIfChatTooSlow = false;
 
             bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
             if (startTurn) {
                 playerActionCounter = 0;
                 this.ExecutePlayerTurn();
-            } else if (!_heroPlayer.HasSetCommand()) {
+            } else if (!stage.GetHeroPlayer().HasSetCommand()) {
                     stateText.text = "Waiting on streamer input";
             } else {
                 stateText.text = "Waiting on Chat: " + (int)(this.maxTimeBeforeAction - playerActionCounter);
@@ -179,43 +151,9 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    private void GenerateEnemyList() {
-        int numberOfEnemiesToGenerate = 4; // TODO: Make this dependent on stage.
-        enemies = new List<Enemy>();
-        List<Enemy> validEnemies = new List<Enemy>(_enemyPrefabs);  // TODO: make validEnemies dependent on the level - best done in a JSON object
-
-
-        for (int i = 0; i < numberOfEnemiesToGenerate; i++) {
-            int enemyIndex = Random.Range(0, validEnemies.Count);
-
-            Enemy enemyPrefab = validEnemies[enemyIndex];
-            Enemy instantiatedEnemy = Instantiate(enemyPrefab) as Enemy;
-
-            PlayerStats stats = new PlayerStats(enemyPrefab.stats);
-            stats.RandomizeStats();
-            stats.ResetStats();
-            PlayerCreationData creationData = new PlayerCreationData("Evil monster " + (i+1), stats, Job.BASIC_ENEMY);
-            instantiatedEnemy.Initialize(creationData);
-            
-
-            instantiatedEnemy.GetComponent<SpriteRenderer>().sortingOrder = i;
-            instantiatedEnemy.transform.SetParent(enemySlots[i]);
-            instantiatedEnemy.transform.localPosition = Vector3.zero;
-
-            enemies.Add(instantiatedEnemy);
-        }
-
-        if (enemies.Count == 0) {
-            Debug.LogError("ERROR: No enemies found!");
-        }
-    }
-
-    private List<Player> GetPlayers() {
-        return GameManager.Instance.party.GetPlayersInPosition();
-    }
 
     private bool hasEveryoneEnteredActions() {
-        foreach (var player in GetPlayers()) {
+        foreach (var player in stage.GetPlayers()) {
             if (player.HasSetCommand() == false) {
                 return false;
             }
@@ -232,10 +170,10 @@ public class BattleController : MonoBehaviour
         //TODO: Update this animation
         switch (heroInputActionState) {
             case HeroInputActionState.SELECT_ENEMY_TARGET:
-                foreach (var enemy in enemies) {
+                foreach (var enemy in stage.GetEnemies()) {
                     enemy.GetComponent<SpriteRenderer>().color = Color.white;
                 }
-                enemies[heroTargetIndex].GetComponent<SpriteRenderer>().color = targetSelectionColor;
+                stage.GetEnemies()[heroTargetIndex].GetComponent<SpriteRenderer>().color = targetSelectionColor;
             break;
 
             case HeroInputActionState.SELECT_PLAYER_TARGET:
@@ -243,7 +181,7 @@ public class BattleController : MonoBehaviour
                 break;
 
             default:
-                foreach (var enemy in enemies) {
+                foreach (var enemy in stage.GetEnemies()) {
                     enemy.GetComponent<SpriteRenderer>().color = Color.white;
                 }
                 break;
@@ -259,7 +197,7 @@ public class BattleController : MonoBehaviour
         this.ui.commandCardUI.InitializeCommantaryUI();
 
         // Sort by player speed
-        List<FightingEntity> orderedPlayers = new List<FightingEntity>(GetAllFightingEntities());
+        List<FightingEntity> orderedPlayers = new List<FightingEntity>(stage.GetAllFightingEntities());
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
         this.DoActionHelper(orderedPlayers, 0);
@@ -267,7 +205,7 @@ public class BattleController : MonoBehaviour
     }
 
     private void SetUnsetMookCommands() {
-        foreach (var player in GetPlayers()) {
+        foreach (var player in stage.GetPlayers()) {
             if (player.HasSetCommand() == false) {
                 player.SetQueuedAction(new QueuedAction(player, player.actions[0], new List<int>{GetRandomEnemyIndex()}  ));
             }
@@ -276,8 +214,8 @@ public class BattleController : MonoBehaviour
 
     private int GetRandomEnemyIndex() {
         List<int> validIndices = new List<int>();
-        for (int i = 0; i < enemies.Count; i++) {
-            if (enemies[i] != null) {
+        for (int i = 0; i < stage.GetEnemies().Count; i++) {
+            if (stage.GetEnemies()[i] != null) {
                 validIndices.Add(i);
             }
         }
@@ -302,7 +240,7 @@ public class BattleController : MonoBehaviour
     }
 
     public int GetRandomPlayerTarget() {
-        int enemyTarget = Random.Range(0, GetPlayers().Count);
+        int enemyTarget = Random.Range(0, stage.GetPlayers().Count);
         return enemyTarget;
     }
 
@@ -335,13 +273,12 @@ public class BattleController : MonoBehaviour
         this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
 
         this.InitializeCommandCardActionUI();
-        this.commandSelector.Initialize(0, _heroPlayer.actions.Count-1, this.UpdateCommandCardUISelection);
 
 
         this.playerActionCounter = 0;
         
         // Reset defence state
-        foreach (var player in GetPlayers()) {
+        foreach (var player in stage.GetPlayers()) {
             player.ResetCommand();
 
             if (player.modifiers.Contains("defend")) {
@@ -350,40 +287,24 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    private void UpdateCommandCardUISelection() {
-        this.ui.commandCardUI.SetSelectionCursor(this.commandSelector.GetChoice());
-    }
-
     public void DoAction(FightingEntity a) {
         a.GetQueuedAction().ExecuteAction();
         this.UpdateStatusBarUI();
     }
 
     public void UpdateStatusBarUI() {
-        List<Player> players = GetPlayers();
+        List<Player> players = stage.GetPlayers();
         for (int i = 0; i < players.Count; i++) {
             statusBars[i].SetName(players[i].Name);
             statusBars[i].SetHP(players[i].stats.GetHp(), players[i].stats.maxHp);
         }
 
-        for (int i = 0; i < enemies.Count; i++) {
-            enemyStatusBars[i].SetName(enemies[i].Name);
-            enemyStatusBars[i].SetHP(enemies[i].stats.GetHp(), enemies[i].stats.maxHp);
+        for (int i = 0; i < stage.GetEnemies().Count; i++) {
+            enemyStatusBars[i].SetName(stage.GetEnemies()[i].Name);
+            enemyStatusBars[i].SetHP(stage.GetEnemies()[i].stats.GetHp(), stage.GetEnemies()[i].stats.maxHp);
         }
     }
 
-    public List<FightingEntity> GetAllFightingEntities() {
-        List<Player> players = GameManager.Instance.party.GetPlayersInPosition();
-        List<FightingEntity> entities = new List<FightingEntity>();
-        foreach (var player in players) {
-            entities.Add(player);
-        }
 
-        foreach (var enemy in enemies) {
-            entities.Add(enemy);
-        }
-
-        return entities;
-    }
 
 }

@@ -35,6 +35,8 @@ public class CommandCardUI : MonoBehaviour
     [SerializeField]
     private Vector2 _selectionCursorOffset = new Vector2(0, 0);
 
+    private CommandSelector _commandSelector {get; set;}
+
     // TEXT_ONLY variables ===
     // The parent object if mode is TEXT_ONLY
     [Header("TEXT ONLY")]
@@ -49,9 +51,10 @@ public class CommandCardUI : MonoBehaviour
 
     void Start() {
         _battleOptionsUI = new List<CommandOptionText>();
+        _selectionCursor.gameObject.SetActive(false);
     }
 
-    public void InitializeCommandSelection(List<string> options) {
+    public void InitializeCommandSelection(List<string> options, int startChoice, CommandSelector selector) {
         this.clearExistingCommands();
 
         this.SetCommandCardUIActive(CommandCardUIMode.SELECT_COMMAND);
@@ -62,6 +65,10 @@ public class CommandCardUI : MonoBehaviour
             commandText.transform.parent = _actionMenuTextParent.transform;
             _battleOptionsUI.Add(commandText);
         }
+
+        _commandSelector = selector;
+        _commandSelector.Initialize(0, options.Count - 1, this.SetSelectionCursorFromCommandSelector);
+        this.SetSelectionCursor(startChoice);
     }
 
     public void InitializeCommantaryUI() {
@@ -77,9 +84,16 @@ public class CommandCardUI : MonoBehaviour
             return;
         }
 
+        this._selectionCursor.gameObject.SetActive(true);
+
         _selectionCursor.transform.parent = _battleOptionsUI[index].transform;
         _selectionCursor.anchoredPosition = _selectionCursorOffset;
     }
+
+    private void SetSelectionCursorFromCommandSelector() {
+        SetSelectionCursor(_commandSelector.GetChoice());
+    }
+
 
 
     private void SetCommandCardUIActive(CommandCardUIMode mode) {
@@ -99,6 +113,9 @@ public class CommandCardUI : MonoBehaviour
     }
 
     private void clearExistingCommands() {
+        _selectionCursor.transform.SetParent(_actionMenu.transform);
+        _selectionCursor.gameObject.SetActive(false);
+
         for (int i = 0; i < _battleOptionsUI.Count; i++) {
             Destroy(_battleOptionsUI[i].gameObject);
         }

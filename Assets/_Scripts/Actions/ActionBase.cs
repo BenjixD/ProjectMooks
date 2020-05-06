@@ -41,10 +41,10 @@ public abstract class ActionBase : ScriptableObject {
 
     public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
         if (targetIdType == TargetType.ALL_TEAMS) {
-            return GameManager.Instance.battleController.GetAllFightingEntities();
+            return GameManager.Instance.battleController.stage.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleController.enemies);
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleController.stage.GetEnemies());
         List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
 
         if (user.isEnemy()) {
