@@ -1947,13 +1947,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerQueue: {fileID: 1240356888}
-  playerPrefab: {fileID: 7777298287657591932, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
-    type: 3}
-  playerPos:
-  - 
-  - 
-  - 
-  - 
 --- !u!1 &1255832211
 GameObject:
   m_ObjectHideFlags: 0
@@ -2947,6 +2940,8 @@ MonoBehaviour:
   ActionMenuTextParent: {fileID: 2001327354}
   CommentaryMenu: {fileID: 35925955}
   CommentaryText: {fileID: 883118801}
+  heroSlot: {fileID: 0}
+  mookSlots: []
   enemySlots:
   - {fileID: 90986366}
   - {fileID: 308413030}
@@ -2957,6 +2952,7 @@ MonoBehaviour:
   enemyStatusBarParent: {fileID: 1220186407}
   statusBarPrefab: {fileID: 3995272244792367493, guid: 50ba95f8f56711d4fb49d3c208f4d94a,
     type: 3}
+  stateText: {fileID: 0}
   _enemyPrefabs:
   - {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
 --- !u!114 &2026179245
