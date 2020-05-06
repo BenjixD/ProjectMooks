@@ -18,7 +18,7 @@ public class FireAllTest : ActionBase {
         return true;
     }
 
-    public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+    public override void ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         int attackDamage = user.stats.GetSpecial();
         
         foreach (FightingEntity target in targets) {

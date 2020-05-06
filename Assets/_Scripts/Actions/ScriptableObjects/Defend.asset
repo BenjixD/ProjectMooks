@@ -16,3 +16,5 @@ MonoBehaviour:
   description: 
   commandKeyword: d
   commandArgs: 0
+  userAnimName: 
+  targetIdType: 0

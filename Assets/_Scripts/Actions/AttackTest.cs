@@ -20,9 +20,7 @@ public class AttackTest : ActionBase {
         return true;
     }
 
-    public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
-        // TODO: calculate damage and inflict on targets
-
+    public override void ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         int attackDamage = user.stats.GetPhysical();
         
         foreach (FightingEntity target in targets) {
