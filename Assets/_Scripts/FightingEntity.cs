@@ -83,7 +83,7 @@ public class FightingEntity : MonoBehaviour
     }
 
 	public void Animate(string animationName, bool loop) {
-		_animController.AddAnimation(animationName, loop);
+		_animController.SetAnimation(animationName, loop);
 	}
 }
 
