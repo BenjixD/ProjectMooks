@@ -21,7 +21,6 @@ public class FightingEntity : MonoBehaviour
 	public void Initialize(PlayerCreationData data) {
 		Name = data.name;
 		SetStats(data.stats);
-        Debug.Log(data.job);
 		SetJob(data.job);
 	}
 

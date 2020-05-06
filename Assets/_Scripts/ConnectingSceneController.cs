@@ -7,30 +7,34 @@ public class ConnectingSceneController : MonoBehaviour
 {
 
     public string battleScene = "AT_Scene";
-    // Start is called before the first frame update
-    void Start()
-    {
-        PlayerStats stats = new PlayerStats();
-        // TODO: change this later
-        stats.maxHp = 100;
-        stats.maxMana = 100;
-        stats.maxPhysical = 20;
-        stats.maxSpecial = 20;
-        stats.maxSpeed = 35;
-        stats.maxDefense = 10;
-        stats.maxResistance = 10;
-        stats.RandomizeStats();
-        
-        PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
-        GameManager.Instance.party.CreatePlayer(heroData, 0);
 
-    }
+    public RectTransform partyContainer;
+
+    public List<CommandOptionText> commandOptionTexts;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown) {
-            SceneManager.LoadScene(battleScene);
+        GameManager.Instance.party.TryFillAllPartySlots();
+        List<PlayerCreationData> curPartyMembers = GameManager.Instance.party.GetPlayersPosition();
+
+        for (int i = 0; i < curPartyMembers.Count; i++) {
+            commandOptionTexts[i].text.text = curPartyMembers[i].name;
+            commandOptionTexts[i].gameObject.SetActive(true);
         }
+
+        for (int i = curPartyMembers.Count; i < 4; i++) {
+            commandOptionTexts[i].gameObject.SetActive(false);
+        }
+        
+
+        if (Input.GetKeyUp(KeyCode.Z)) {
+            StartCoroutine(changeSceneAfterSeconds(0.1f));
+        }
+    }
+
+    IEnumerator changeSceneAfterSeconds(float seconds) {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene(battleScene);
     }
 }

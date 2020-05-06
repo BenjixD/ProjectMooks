@@ -28,7 +28,10 @@ public class ActionListener : TwitchChatListenerBase {
     }
 
     public override void OnCommandReceived(string username, string message) {
-        _player.TryActionCommand(message);
+        if (username == _player.Name) {
+            this.HandleMessage("!" + message);
+            _player.TryActionCommand(message);
+        }
     }
 
 
@@ -61,7 +64,7 @@ public class ActionListener : TwitchChatListenerBase {
             yield return null;
         }
 
-        speechCanvas.gameObject.SetActive(true);
+        speechCanvas.gameObject.SetActive(false);
         _isTextAnimating = false;
     }
 

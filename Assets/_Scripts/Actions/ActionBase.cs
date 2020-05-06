@@ -5,7 +5,8 @@ using UnityEngine;
 
 public enum TargetType{
     MY_TEAM,
-    ENEMY_TEAM
+    ENEMY_TEAM,
+    ALL_TEAMS
 }
 public abstract class ActionBase : ScriptableObject {
     public string name;
@@ -38,7 +39,10 @@ public abstract class ActionBase : ScriptableObject {
     // TODO: update params
     public abstract void ExecuteAction(FightingEntity user, List<FightingEntity> targets);
 
-    public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
+    public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
+        if (targetIdType == TargetType.ALL_TEAMS) {
+            return GameManager.Instance.battleController.GetAllFightingEntities();
+        }
         List<FightingEntity> potentialTargets;
         List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleController.enemies);
         List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
@@ -49,11 +53,37 @@ public abstract class ActionBase : ScriptableObject {
             potentialTargets = targetIdType == TargetType.MY_TEAM ? players : enemies;
         }
 
+        return potentialTargets;
+    }
+
+    public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
+        List<FightingEntity> potentialTargets = GetPotentialTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
-            targets.Add(potentialTargets[target]);
+            if (target < potentialTargets.Count) {
+                targets.Add(potentialTargets[target]);
+            }
         }
 
         return targets;
+    }
+
+    public List<FightingEntity> GetTargets(FightingEntity user, int targetId) {
+        return this.GetTargets(user, new List<int>{targetId});
+    }
+
+    protected int GetTargetIdFromString(string str, FightingEntity user) {
+        int targetId;
+        if (!int.TryParse(str, out targetId)) {
+            return -1;
+        }
+
+        List<FightingEntity> targets = GetPotentialTargets(user);
+
+        if (targetId < 0 || targetId >= targets.Count) {
+            return -1;
+        }
+
+        return targetId;
     }
 }

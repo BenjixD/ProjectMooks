@@ -9,8 +9,9 @@ public class FireOneTest : ActionBase {
         if (!BasicValidation(splitCommand)) {
             return false;
         }
-        int targetId;
-        if (!int.TryParse(splitCommand[2], out targetId)) {
+
+        int targetId = this.GetTargetIdFromString(splitCommand[2], user);
+        if (targetId == -1) {
             return false;
         }
 
