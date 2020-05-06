@@ -2203,6 +2203,7 @@ GameObject:
   - component: {fileID: 2026179246}
   - component: {fileID: 2026179248}
   - component: {fileID: 2026179249}
+  - component: {fileID: 2026179250}
   m_Layer: 0
   m_Name: StageController
   m_TagString: Untagged
@@ -2291,6 +2292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commandCardUI: {fileID: 2026179246}
   statusBarsUI: {fileID: 2026179249}
+  targetSelectionUI: {fileID: 2026179250}
 --- !u!114 &2026179248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2331,6 +2333,19 @@ MonoBehaviour:
   enemyStatusBarParent: {fileID: 1220186407}
   statusBarPrefab: {fileID: 3995272244792367493, guid: 50ba95f8f56711d4fb49d3c208f4d94a,
     type: 3}
+--- !u!114 &2026179250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed6110fdf0f7b12409b115ba141da521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSelectionColor: {r: 0, g: 0.62623525, b: 1, a: 1}
 --- !u!1 &2132595313
 GameObject:
   m_ObjectHideFlags: 0

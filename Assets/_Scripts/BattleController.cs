@@ -36,11 +36,6 @@ public class BattleController : MonoBehaviour
     public float playerActionCounter {get; set;}
 
 
-    
-    public Color targetSelectionColor;
-
-
-
     int heroActionIndex = 0;
     
 
@@ -80,18 +75,13 @@ public class BattleController : MonoBehaviour
             switch (heroInputActionState) {
                 case HeroInputActionState.SELECT_ACTION:
                     if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
-                        this.UpdateTargetSelectionUI();
-
-                        this.commandSelector.Initialize(0, stage.GetEnemies().Count-1, this.UpdateTargetSelectionUI, true);
+                       this.SetHeroAction();
                     }
                     break;
 
                 case HeroInputActionState.SELECT_ENEMY_TARGET:
                     if (Input.GetKeyDown(KeyCode.Z)) {
-                        heroInputActionState = HeroInputActionState.BATTLE_START;
-                        this.UpdateTargetSelectionUI();
-                        stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), stage.GetHeroPlayer().actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
+                        this.SetHeroTarget();
                     }
                     break;
 
@@ -101,69 +91,26 @@ public class BattleController : MonoBehaviour
             }
 
             playerActionCounter += Time.deltaTime;
-            //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
-            bool timeOutIfChatTooSlow = false;
-
-            bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
-            if (startTurn) {
-                playerActionCounter = 0;
-                this.ExecutePlayerTurn();
-            } else if (!stage.GetHeroPlayer().HasSetCommand()) {
-                    stateText.text = "Waiting on streamer input";
-            } else {
-                stateText.text = "Waiting on Chat: " + (int)(this.maxTimeBeforeAction - playerActionCounter);
-            }
-        
+            this.CheckExecuteTurn();
         } else {
             stateText.text = "";
         }
     }
 
-    // Initializes the command card to display the hero's actions
-    private void InitializeCommandCardActionUI() {
-        List<string> actionNames = stage.GetHeroPlayer().actions.Map((ActionBase action) => { return action.name; });
-        this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
-    }
+    private void CheckExecuteTurn() {
+        //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
+        bool timeOutIfChatTooSlow = false;
+        bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
+        if (startTurn) {
+            playerActionCounter = 0;
+            this.ExecutePlayerTurn();
+        } else {
+            this.UpdateStateText();
 
-
-    private bool hasEveryoneEnteredActions() {
-        foreach (var player in stage.GetPlayers()) {
-            if (player.HasSetCommand() == false) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-    public void UpdateTargetSelectionUI() {
-
-        this.heroTargetIndex = this.commandSelector.GetChoice();
-
-        //TODO: Update this animation
-        switch (heroInputActionState) {
-            case HeroInputActionState.SELECT_ENEMY_TARGET:
-                foreach (var enemy in stage.GetEnemies()) {
-                    enemy.GetComponent<SpriteRenderer>().color = Color.white;
-                }
-                stage.GetEnemies()[heroTargetIndex].GetComponent<SpriteRenderer>().color = targetSelectionColor;
-            break;
-
-            case HeroInputActionState.SELECT_PLAYER_TARGET:
-                // TODO: 
-                break;
-
-            default:
-                foreach (var enemy in stage.GetEnemies()) {
-                    enemy.GetComponent<SpriteRenderer>().color = Color.white;
-                }
-                break;
         }
     }
 
-
-    public void ExecutePlayerTurn() {
+    private void ExecutePlayerTurn() {
         this.SetUnsetMookCommands();
 
         this.inputActionsPhase = false;
@@ -178,6 +125,66 @@ public class BattleController : MonoBehaviour
         
     }
 
+    private void UpdateStateText() {
+        if (!stage.GetHeroPlayer().HasSetCommand()) {
+            stateText.text = "Waiting on streamer input";
+        } else {
+            stateText.text = "Waiting on Chat: " + (int)(this.maxTimeBeforeAction - playerActionCounter);
+        }
+    }
+
+    private void OnPlayerTurnStart() {
+        this.inputActionsPhase = true;
+        this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
+
+        this.InitializeCommandCardActionUI();
+
+
+        this.playerActionCounter = 0;
+        
+        // Reset defence state
+        foreach (var player in stage.GetPlayers()) {
+            player.ResetCommand();
+
+            if (player.modifiers.Contains("defend")) {
+                player.modifiers.Remove("defend");
+            }
+        }
+    }
+
+    private void SetHeroAction() {
+        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
+        heroActionIndex = this.commandSelector.GetChoice();
+
+        ActionBase heroAction = stage.GetHeroPlayer().actions[heroActionIndex];
+    
+        // TODO: Differentiate between ALL and single target.
+        this.ui.targetSelectionUI.InitializeTargetSelectionSingle(heroAction.GetPotentialTargets(stage.GetHeroPlayer()), 0, this.commandSelector);
+    }
+
+    private void SetHeroTarget() {
+        heroInputActionState = HeroInputActionState.BATTLE_START;
+        this.heroTargetIndex = this.commandSelector.GetChoice();
+        this.ui.targetSelectionUI.ClearSelection();
+        stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), stage.GetHeroPlayer().actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
+    }
+
+    // Initializes the command card to display the hero's actions
+    private void InitializeCommandCardActionUI() {
+        List<string> actionNames = stage.GetHeroPlayer().actions.Map((ActionBase action) => { return action.name; });
+        this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
+    }
+
+    private bool hasEveryoneEnteredActions() {
+        foreach (var player in stage.GetPlayers()) {
+            if (player.HasSetCommand() == false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private void SetUnsetMookCommands() {
         foreach (var player in stage.GetPlayers()) {
             if (player.HasSetCommand() == false) {
@@ -186,10 +193,7 @@ public class BattleController : MonoBehaviour
         }
     }
 
-
-
-
-    public void DoActionHelper(List<FightingEntity> orderedEntities, int curIndex) {
+    private void DoActionHelper(List<FightingEntity> orderedEntities, int curIndex) {
         if (curIndex == orderedEntities.Count) {
             this.OnPlayerTurnStart();
             return;
@@ -204,8 +208,7 @@ public class BattleController : MonoBehaviour
         StartCoroutine(dummyAttackAnimation(entity, orderedEntities, curIndex));
     }
 
-
-    IEnumerator dummyAttackAnimation(FightingEntity a, List<FightingEntity> orderedEntities, int index) {
+    private IEnumerator dummyAttackAnimation(FightingEntity a, List<FightingEntity> orderedEntities, int index) {
 
         string attackerName = a.Name;
         if (a.GetQueuedAction() == null) {
@@ -229,26 +232,8 @@ public class BattleController : MonoBehaviour
         this.DoActionHelper(orderedEntities, index + 1);
     }
 
-    public void OnPlayerTurnStart() {
-        this.inputActionsPhase = true;
-        this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
 
-        this.InitializeCommandCardActionUI();
-
-
-        this.playerActionCounter = 0;
-        
-        // Reset defence state
-        foreach (var player in stage.GetPlayers()) {
-            player.ResetCommand();
-
-            if (player.modifiers.Contains("defend")) {
-                player.modifiers.Remove("defend");
-            }
-        }
-    }
-
-    public void DoAction(FightingEntity a) {
+    private void DoAction(FightingEntity a) {
         a.GetQueuedAction().ExecuteAction();
         this.ui.statusBarsUI.UpdateStatusBarUI();
     }
