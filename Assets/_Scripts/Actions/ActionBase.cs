@@ -76,14 +76,9 @@ public abstract class ActionBase : ScriptableObject {
         List<FightingEntity> potentialTargets = GetPotentialTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
-<<<<<<< f42a400c41ae64587b5606908bf5beb851f2e2fb
             if (target < potentialTargets.Count) {
                 targets.Add(potentialTargets[target]);
             }
-=======
-            // TODO: if targetId is no longer valid, change it or remove it from the list
-            targets.Add(potentialTargets[target]);
->>>>>>> Merge with battle-after
         }
 
         return targets;
