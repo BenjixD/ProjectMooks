@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TargetType{
-    PLAYER,
-    ENEMY
-}
 
 public class QueuedAction {
     public FightingEntity user;
@@ -13,11 +9,10 @@ public class QueuedAction {
     public List<int> _targetIds;
     public TargetType _targetIdType = 0;
 
-    public QueuedAction(FightingEntity user, ActionBase action, List<int> targetIds, TargetType targetIdType) {
+    public QueuedAction(FightingEntity user, ActionBase action, List<int> targetIds) {
         this.user = user;
         _action = action;
         _targetIds = targetIds;
-        _targetIdType = targetIdType;
     }
 
     public ActionBase GetAction() {
@@ -29,19 +24,7 @@ public class QueuedAction {
     }
 
     public void ExecuteAction() {
-
-        List<FightingEntity> potentialTargets;
-        if (_targetIdType == TargetType.PLAYER) {
-            potentialTargets = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
-        } else {
-            potentialTargets = new List<FightingEntity>(GameManager.Instance.enemies);
-        }
-
-        List<FightingEntity> targets = new List<FightingEntity>();
-        foreach (int target in _targetIds) {
-            targets.Add(potentialTargets[target]);
-        }
-
+        List<FightingEntity> targets = _action.GetTargets(this.user, _targetIds);
         _action.ExecuteAction(user, targets);
     }
 }

@@ -14,12 +14,18 @@ public class FireOneTest : ActionBase {
             return false;
         }
 
-        TargetType targetType = user.isEnemy() ? TargetType.PLAYER : TargetType.ENEMY;
-        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }, targetType));
+        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
         return true;
     }
 
     public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
-        // TODO: calculate damage and inflict on targets
+        int attackDamage = user.stats.GetSpecial();
+        
+        foreach (FightingEntity target in targets) {
+            int defence = target.stats.GetResistance();
+            int damage =  Mathf.Max(attackDamage - defence, 0);
+            
+            target.stats.SetHp(target.stats.GetHp() - damage);
+        }
     }
 }

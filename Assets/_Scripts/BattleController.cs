@@ -9,9 +9,20 @@ public enum BattlePhase {
     ENEMY
 
 };
+public enum HeroInputActionState {
+    SELECT_ACTION,
+    SELECT_ENEMY_TARGET,
+    SELECT_PLAYER_TARGET,
+    BATTLE_START
+}
+
 
 public class BattleController : MonoBehaviour
 {
+
+    public CommandSelector commandSelector;
+
+    public List<Enemy> enemies{get; set;}
 
     public CommandOptionText commandTextPrefab;
     public RectTransform selectionCursor;
@@ -27,18 +38,41 @@ public class BattleController : MonoBehaviour
     public RectTransform CommentaryMenu;
     public Text CommentaryText;
 
+    public List<Transform> enemySlots;
+
+    public Color targetSelectionColor;
+
+
     Player _heroPlayer;
     int heroActionIndex = 0;
     public List<RectTransform> battleOptionsUI {get ; set; }
 
     public bool inputActionsPhase{get; set; }
 
+    public RectTransform playerStatusBarParent;
+
+    public RectTransform enemyStatusBarParent;
+
+    public StatusBarUI statusBarPrefab;
+
+    private List<StatusBarUI> statusBars;
+    private List<StatusBarUI> enemyStatusBars;
+
+
+    [SerializeField]
+    List<Enemy> _enemyPrefabs;
+
+    private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
+    private int heroTargetIndex = 0;
+
+
 
     void Start() {
+        GameManager.Instance.battleController = this;
         _heroPlayer = GetPlayers()[0];
 
         // TODO: Waves
-        GameManager.Instance.GenerateEnemyList();
+        this.GenerateEnemyList();
         battleOptionsUI = new List<RectTransform>();
 
         foreach (ActionBase action in _heroPlayer.actions) {
@@ -48,56 +82,58 @@ public class BattleController : MonoBehaviour
             battleOptionsUI.Add(commandText.GetComponent<RectTransform>());
         }
 
+        int count = GetPlayers().Count;
+
+        statusBars = new List<StatusBarUI>();
+
+        for (int i = 0; i < count; i++) { 
+            StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
+            statusBarForPlayer.transform.parent = playerStatusBarParent;
+            statusBars.Add(statusBarForPlayer);
+        }
+
+        enemyStatusBars = new List<StatusBarUI>();
+
+        for (int i = 0; i < enemies.Count; i++) {
+            StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
+            statusBarForPlayer.transform.parent = enemyStatusBarParent;
+            enemyStatusBars.Add(statusBarForPlayer);
+        }
+
         this.OnPlayerTurnStart();
         this.UpdateBattleOptionUI();
+        this.UpdateStatusBarUI();
     }
 
-    private List<Player> GetPlayers() {
-        return GameManager.Instance.party.GetPlayersInPosition();
-    }
 
     // Update is called once per frame
     void Update()
     {
 
         if (inputActionsPhase == true) {
-            if (_heroPlayer.HasSetCommand() == false) {
-                if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                    Debug.Log("Down");
-                    if (heroActionIndex == 0) {
-                        heroActionIndex = _heroPlayer.actions.Count - 1;
-                    } else {
-                        heroActionIndex--;
+
+            switch (heroInputActionState) {
+                case HeroInputActionState.SELECT_ACTION:
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
+                        this.UpdateTargetSelectionUI();
+
+                        this.commandSelector.Initialize(0, enemies.Count-1, this.UpdateTargetSelectionUI, true);
                     }
+                    break;
 
-                    this.UpdateBattleOptionUI();
-                }
-
-                if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                    Debug.Log("Up");
-                    if (heroActionIndex == _heroPlayer.actions.Count - 1) {
-                        heroActionIndex = 0;
-                    } else {
-                        heroActionIndex++;
+                case HeroInputActionState.SELECT_ENEMY_TARGET:
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        heroInputActionState = HeroInputActionState.BATTLE_START;
+                        this.UpdateTargetSelectionUI();
+                        _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{heroTargetIndex}  ));
                     }
+                    break;
 
-                    this.UpdateBattleOptionUI();
-                }
+                default:
 
-
-                if (Input.GetKeyDown(KeyCode.Z)) {
-
-                    _heroPlayer.SetQueuedAction(new QueuedAction(_heroPlayer, _heroPlayer.actions[heroActionIndex], new List<int>{0}, TargetType.ENEMY  ));
-
-                }
-            } else {
-                
-                if (Input.GetKeyDown(KeyCode.Z)) {
-
-                }
+                    break;
             }
-
-
 
             playerActionCounter += Time.deltaTime;
 
@@ -106,6 +142,41 @@ public class BattleController : MonoBehaviour
                 this.ExecutePlayerTurn();
             }
         }
+    }
+
+    private void GenerateEnemyList() {
+        int numberOfEnemiesToGenerate = 4; // TODO: Make this dependent on stage.
+        enemies = new List<Enemy>();
+        List<Enemy> validEnemies = new List<Enemy>(_enemyPrefabs);  // TODO: make validEnemies dependent on the level - best done in a JSON object
+
+
+        for (int i = 0; i < numberOfEnemiesToGenerate; i++) {
+            int enemyIndex = Random.Range(0, validEnemies.Count);
+
+            Enemy enemyPrefab = validEnemies[enemyIndex];
+            Enemy instantiatedEnemy = Instantiate(enemyPrefab) as Enemy;
+
+            PlayerStats stats = new PlayerStats(enemyPrefab.stats);
+            stats.RandomizeStats();
+            stats.ResetStats();
+            PlayerCreationData creationData = new PlayerCreationData("Evil monster " + (i+1), stats, Job.BASIC_ENEMY);
+            instantiatedEnemy.Initialize(creationData);
+            
+
+            instantiatedEnemy.GetComponent<SpriteRenderer>().sortingOrder = i;
+            instantiatedEnemy.transform.SetParent(enemySlots[i]);
+            instantiatedEnemy.transform.localPosition = Vector3.zero;
+
+            enemies.Add(instantiatedEnemy);
+        }
+
+        if (enemies.Count == 0) {
+            Debug.LogError("ERROR: No enemies found!");
+        }
+    }
+
+    private List<Player> GetPlayers() {
+        return GameManager.Instance.party.GetPlayersInPosition();
     }
 
     private bool hasEveryoneEnteredActions() {
@@ -120,8 +191,36 @@ public class BattleController : MonoBehaviour
 
 
     public void UpdateBattleOptionUI() {
+        this.heroActionIndex = this.commandSelector.GetChoice();
         selectionCursor.transform.parent = battleOptionsUI[heroActionIndex].transform;
         selectionCursor.anchoredPosition = selectionCursorOffset;
+    }
+
+    public void UpdateTargetSelectionUI() {
+
+        this.heroTargetIndex = this.commandSelector.GetChoice();
+
+        //TODO: Update this animation
+        Debug.Log("Hero target index: " + heroTargetIndex);
+
+        switch (heroInputActionState) {
+            case HeroInputActionState.SELECT_ENEMY_TARGET:
+                foreach (var enemy in enemies) {
+                    enemy.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                enemies[heroTargetIndex].GetComponent<SpriteRenderer>().color = targetSelectionColor;
+            break;
+
+            case HeroInputActionState.SELECT_PLAYER_TARGET:
+                // TODO: 
+                break;
+
+            default:
+                foreach (var enemy in enemies) {
+                    enemy.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                break;
+        }
     }
 
 
@@ -131,7 +230,7 @@ public class BattleController : MonoBehaviour
         this.CommentaryMenu.gameObject.SetActive(true);
 
         // Sort by player speed
-        List<FightingEntity> orderedPlayers = new List<FightingEntity>(GameManager.Instance.getAllFightingEntities());
+        List<FightingEntity> orderedPlayers = new List<FightingEntity>(getAllFightingEntities());
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
         this.DoActionHelper(orderedPlayers, 0);
@@ -147,7 +246,7 @@ public class BattleController : MonoBehaviour
         
         FightingEntity entity = orderedEntities[curIndex];
         if (entity.GetType() == typeof(Enemy)) {
-            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{0}, TargetType.PLAYER  ));
+            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{0}  ));
 
         } else {
         }
@@ -178,6 +277,9 @@ public class BattleController : MonoBehaviour
 
     public void OnPlayerTurnStart() {
         this.inputActionsPhase = true;
+        this.commandSelector.Initialize(0, _heroPlayer.actions.Count-1, this.UpdateBattleOptionUI);
+
+        this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
         
         this.ActionMenu.gameObject.SetActive(true);
         this.CommentaryMenu.gameObject.SetActive(false);
@@ -194,5 +296,34 @@ public class BattleController : MonoBehaviour
 
     public void DoAction(FightingEntity a) {
         a.GetQueuedAction().ExecuteAction();
+        this.UpdateStatusBarUI();
     }
+
+    public void UpdateStatusBarUI() {
+        List<Player> players = GetPlayers();
+        for (int i = 0; i < players.Count; i++) {
+            statusBars[i].SetName(players[i].Name);
+            statusBars[i].SetHP(players[i].stats.GetHp(), players[i].stats.maxHp);
+        }
+
+        for (int i = 0; i < enemies.Count; i++) {
+            enemyStatusBars[i].SetName(enemies[i].Name);
+            enemyStatusBars[i].SetHP(enemies[i].stats.GetHp(), enemies[i].stats.maxHp);
+        }
+    }
+
+    public List<FightingEntity> getAllFightingEntities() {
+        List<Player> players = GameManager.Instance.party.GetPlayersInPosition();
+        List<FightingEntity> entities = new List<FightingEntity>();
+        foreach (var player in players) {
+            entities.Add(player);
+        }
+
+        foreach (var enemy in enemies) {
+            entities.Add(enemy);
+        }
+
+        return entities;
+    }
+
 }

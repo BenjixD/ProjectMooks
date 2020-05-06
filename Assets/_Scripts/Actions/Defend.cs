@@ -10,12 +10,11 @@ public class Defend : ActionBase {
             return false;
         }
 
-        TargetType targetType = user.isEnemy() ? TargetType.ENEMY : TargetType.PLAYER;
-        user.SetQueuedAction(new QueuedAction(user, this, null, targetType));
+        user.SetQueuedAction(new QueuedAction(user, this, null));
         return true;
     }
 
     public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
-        // TODO: defend
+        user.modifiers.Add("defend");
     }
 }

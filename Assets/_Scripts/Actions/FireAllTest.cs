@@ -9,13 +9,23 @@ public class FireAllTest : ActionBase {
         if (!BasicValidation(splitCommand)) {
             return false;
         }
-        // TODO: target all
-        TargetType targetType = user.isEnemy() ? TargetType.PLAYER : TargetType.ENEMY;
-        user.SetQueuedAction(new QueuedAction(user, this, null, targetType));
+        List<int> targetIds = new List<int>();
+        for (int i = 0; i < GameManager.Instance.battleController.enemies.Count; i++) {
+            targetIds.Add(i);
+        }
+
+        user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         return true;
     }
 
     public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
-        // TODO: calculate damage and inflict on targets
+        int attackDamage = user.stats.GetSpecial();
+        
+        foreach (FightingEntity target in targets) {
+            int defence = target.stats.GetResistance();
+            int damage =  Mathf.Max(attackDamage - defence, 0);
+            
+            target.stats.SetHp(target.stats.GetHp() - damage);
+        }
     }
 }
