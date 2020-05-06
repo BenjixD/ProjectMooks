@@ -10,6 +10,8 @@ public abstract class ActionBase : ScriptableObject {
     public string commandKeyword;
     [Tooltip("The number of arguments following the keyword.")]
     public int commandArgs;
+    [Tooltip("The name of the animation played for the user of the attack.")]
+    public string userAnimName;
 
     private bool CheckKeyword(string keyword) {
         return keyword == commandKeyword;
@@ -27,6 +29,10 @@ public abstract class ActionBase : ScriptableObject {
 
     public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
     
-    // TODO: update params
-    public abstract void ExecuteAction(FightingEntity user, List<FightingEntity> targets);
+    public void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+        user.Animate(userAnimName, false);
+        ApplyEffect(user, targets);
+    }
+
+    public abstract void ApplyEffect(FightingEntity user, List<FightingEntity> targets);
 }

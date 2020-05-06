@@ -15,7 +15,7 @@ public class Defend : ActionBase {
         return true;
     }
 
-    public override void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+    public override void ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         // TODO: defend
     }
 }

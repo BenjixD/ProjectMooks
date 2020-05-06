@@ -39,7 +39,9 @@ public class QueuedAction {
 
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in _targetIds) {
-            targets.Add(potentialTargets[target]);
+            if (potentialTargets.Count < target) {
+                targets.Add(potentialTargets[target]);
+            }
         }
 
         _action.ExecuteAction(user, targets);
