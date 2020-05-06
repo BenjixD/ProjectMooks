@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent (typeof(BattleController))]
 public class StatusBarsUI : MonoBehaviour
 {
+    private BattleController _controller{get; set;}
+
     [Header("References")]
     public RectTransform playerStatusBarParent;
 
@@ -17,8 +20,12 @@ public class StatusBarsUI : MonoBehaviour
     private List<StatusBarUI> statusBars;
     private List<StatusBarUI> enemyStatusBars;
 
+    void Awake() {
+        _controller = GetComponent<BattleController>();
+    }
+
     public void Initialize() {
-        int playerCount = GameManager.Instance.battleController.stage.GetPlayers().Count;
+        int playerCount = _controller.stage.GetPlayers().Count;
 
         statusBars = new List<StatusBarUI>();
 
@@ -30,7 +37,7 @@ public class StatusBarsUI : MonoBehaviour
 
         enemyStatusBars = new List<StatusBarUI>();
 
-        int enemyCount = GameManager.Instance.battleController.stage.GetEnemies().Count;
+        int enemyCount = _controller.stage.GetEnemies().Count;
 
         for (int i = 0; i < enemyCount; i++) {
             StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
@@ -42,13 +49,13 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     public void UpdateStatusBarUI() {
-        List<Player> players = GameManager.Instance.battleController.stage.GetPlayers();
+        List<Player> players = _controller.stage.GetPlayers();
         for (int i = 0; i < players.Count; i++) {
             statusBars[i].SetName(players[i].Name);
             statusBars[i].SetHP(players[i].stats.GetHp(), players[i].stats.maxHp);
         }
 
-        List<Enemy> enemies = GameManager.Instance.battleController.stage.GetEnemies();
+        List<Enemy> enemies = _controller.stage.GetEnemies();
 
         for (int i = 0; i < enemies.Count; i++) {
             enemyStatusBars[i].SetName(enemies[i].Name);

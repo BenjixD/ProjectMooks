@@ -22,11 +22,12 @@ public enum HeroInputActionState {
 [RequireComponent(typeof(StageInfo))]
 public class BattleController : MonoBehaviour
 {
+
+    public BattleUI ui {get; set; }
+
+    public StageInfo stage {get; set; }
+    
     [Header ("References")]
-
-    public BattleUI ui;
-
-    public StageInfo stage;
 
     public CommandSelector commandSelector;
 
@@ -42,8 +43,6 @@ public class BattleController : MonoBehaviour
     public bool inputActionsPhase{get; set; }
 
 
-
-
     public Text stateText;
 
 
@@ -51,6 +50,11 @@ public class BattleController : MonoBehaviour
     private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
     private int heroTargetIndex = 0;
 
+
+    void Awake() {
+        ui = GetComponent<BattleUI>();
+        stage = GetComponent<StageInfo>();
+    }
 
     void Start() {
         GameManager.Instance.battleController = this;
