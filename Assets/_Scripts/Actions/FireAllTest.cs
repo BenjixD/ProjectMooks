@@ -17,7 +17,7 @@ public class FireAllTest : ActionBase {
         user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         return true;
     }
-    
+
     public override void ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         int attackDamage = user.stats.GetSpecial();
         
