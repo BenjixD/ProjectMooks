@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Party : MonoBehaviour {
     public PlayerQueue playerQueue;
-    public GameObject playerPrefab;
+    public Player heroPrefab;    // Optional TODO: Dependent on streamer
+    public Player mookPrefab; // TODO: Dependent on JOB
 
     // (Name, (position, player obj)) mapping
     private Dictionary<string, Tuple<int, Player>> players = new Dictionary<string, Tuple<int, Player>>();
@@ -16,6 +17,12 @@ public class Party : MonoBehaviour {
         playerPos[index] = data;
     }
 
+    public void CreateHeroPlayer() {
+        PlayerStats stats = new PlayerStats(heroPrefab.stats);
+        PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
+        CreatePlayer(heroData, 0);
+    }
+
     public Player InstantiatePlayer(int index) {
         PlayerCreationData data = playerPos[index];
         if (data == null) {
@@ -23,7 +30,13 @@ public class Party : MonoBehaviour {
             return null;
         }
 
-        Player player = Instantiate(playerPrefab).GetComponent<Player>();
+        Player player;
+        if (index == 0) {
+            player = Instantiate(heroPrefab).GetComponent<Player>();
+        } else {
+            player = Instantiate(mookPrefab).GetComponent<Player>();
+        }
+
         player.Initialize(data);
         players.Add(data.name, new Tuple<int, Player>(index, player));
 

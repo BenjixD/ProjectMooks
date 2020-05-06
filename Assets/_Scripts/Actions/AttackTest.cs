@@ -10,11 +10,11 @@ public class AttackTest : ActionBase {
         if (!BasicValidation(splitCommand)) {
             return false;
         }
-        int targetId;
-        if (!int.TryParse(splitCommand[1], out targetId)) {
+        int targetId = this.GetTargetIdFromString(splitCommand[1], user);
+        if (targetId == -1) {
             return false;
         }
-
+        
         user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId } ));
         return true;
     }

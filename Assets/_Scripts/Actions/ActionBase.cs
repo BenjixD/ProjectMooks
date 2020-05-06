@@ -51,9 +51,28 @@ public abstract class ActionBase : ScriptableObject {
 
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
-            targets.Add(potentialTargets[target]);
+            if (target < potentialTargets.Count) {
+                targets.Add(potentialTargets[target]);
+            }
         }
 
         return targets;
+    }
+
+    public List<FightingEntity> GetTargets(FightingEntity user, int targetId) {
+        return this.GetTargets(user, new List<int>{targetId});
+    }
+
+    protected int GetTargetIdFromString(string str, FightingEntity user) {
+        int targetId;
+        if (!int.TryParse(str, out targetId)) {
+            return -1;
+        }
+
+        if (targetId < 0 || targetId >= GetTargets(user, targetId).Count) {
+            return -1;
+        }
+
+        return targetId;
     }
 }

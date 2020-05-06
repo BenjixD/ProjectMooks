@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5961816476775266575}
   - component: {fileID: 1415617723668341999}
   - component: {fileID: 8356248066131107559}
+  - component: {fileID: 1519749899}
   m_Layer: 0
   m_Name: Mook
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5588856247799786281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.34, y: 1.4, z: -3.3261719}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 942915696813994679}
@@ -98,8 +99,8 @@ MonoBehaviour:
   Name: 
   stats:
     level: 1
-    maxHp: 100
-    maxMana: 1000
+    maxHp: 30
+    maxMana: 100
     maxPhysical: 25
     maxSpecial: 25
     maxDefense: 25
@@ -117,6 +118,21 @@ MonoBehaviour:
     _manaRegen: 0
   job: 0
   actions: []
+--- !u!114 &1519749899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588856247799786281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe321b222c7fb947850511a6dad0258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speechCanvas: {fileID: 7348616418389152573}
+  speechCanvasText: {fileID: 1183965979804533663}
+  _chatBubbleAnimationTime: 5
 --- !u!1 &7441704366931571572
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,8 +242,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.008399963, y: -0.008000016}
-  m_SizeDelta: {x: 595.5357, y: 140.5061}
+  m_AnchoredPosition: {x: 0.0000076293945, y: -0.014800012}
+  m_SizeDelta: {x: 347.83997, y: 143.21747}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8125835519820088781
 CanvasRenderer:
@@ -306,8 +322,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -2.4, y: 0.11}
-  m_SizeDelta: {x: 3.5, y: 1}
+  m_AnchoredPosition: {x: -1.651, y: 0.11}
+  m_SizeDelta: {x: 2.0019813, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7348616418389152573
 Canvas:

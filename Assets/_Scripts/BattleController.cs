@@ -81,11 +81,10 @@ public class BattleController : MonoBehaviour
         instantiatedHeroPlayer.transform.SetParent(heroSlot);
         instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
 
-
         int numPlayersInParty = GameManager.Instance.party.GetNumPlayersInParty();
         for (int i = 1; i < numPlayersInParty; i++) {
             Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(i);
-            instantiatedPlayer.transform.SetParent(mookSlots[i].transform);
+            instantiatedPlayer.transform.SetParent(mookSlots[i-1].transform);
             instantiatedPlayer.transform.localPosition = Vector3.zero;
         }
 
@@ -157,7 +156,10 @@ public class BattleController : MonoBehaviour
             }
 
             playerActionCounter += Time.deltaTime;
-            bool startTurn = (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction) || hasEveryoneEnteredActions();
+            //bool timeOutIfChatTooSlow = (_heroPlayer.HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
+            bool timeOutIfChatTooSlow = false;
+
+            bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
             if (startTurn) {
                 playerActionCounter = 0;
                 this.ExecutePlayerTurn();
@@ -251,6 +253,8 @@ public class BattleController : MonoBehaviour
 
 
     public void ExecutePlayerTurn() {
+        this.SetUnsetNookCommands();
+
         this.inputActionsPhase = false;
         this.ActionMenu.gameObject.SetActive(false);
         this.CommentaryMenu.gameObject.SetActive(true);
@@ -263,6 +267,25 @@ public class BattleController : MonoBehaviour
         
     }
 
+    private void SetUnsetNookCommands() {
+        foreach (var player in GetPlayers()) {
+            if (player.HasSetCommand() == false) {
+                player.SetQueuedAction(new QueuedAction(player, player.actions[0], new List<int>{GetRandomEnemyIndex()}  ));
+            }
+        }
+    }
+
+    private int GetRandomEnemyIndex() {
+        List<int> validIndices = new List<int>();
+        for (int i = 0; i < enemies.Count; i++) {
+            if (enemies[i] != null) {
+                validIndices.Add(i);
+            }
+        }
+
+        return validIndices[Random.Range(0, validIndices.Count)];
+    }
+
 
     public void DoActionHelper(List<FightingEntity> orderedEntities, int curIndex) {
         if (curIndex == orderedEntities.Count) {
@@ -272,16 +295,14 @@ public class BattleController : MonoBehaviour
         
         FightingEntity entity = orderedEntities[curIndex];
         if (entity.GetType() == typeof(Enemy)) {
-            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{0}  ));
-
+            entity.SetQueuedAction(new QueuedAction(entity, entity.GetRandomAction(), new List<int>{GetRandomPlayerTarget()}  ));
         } else {
         }
 
         StartCoroutine(dummyAttackAnimation(entity, orderedEntities, curIndex));
-        
     }
 
-    public int getRandomEnemyTarget() {
+    public int GetRandomPlayerTarget() {
         int enemyTarget = Random.Range(0, GetPlayers().Count);
         return enemyTarget;
     }
@@ -294,8 +315,13 @@ public class BattleController : MonoBehaviour
             yield break;
         }
         string attackName = a.GetQueuedAction()._action.name;
-
-        CommentaryText.text = "" + attackerName + " used " + attackName;
+        List<FightingEntity> targets = a.GetQueuedAction()._action.GetTargets(a, a.GetQueuedAction().GetTargetIds());
+        if (targets.Count == 1) {
+            CommentaryText.text = "" + attackerName + " used " + attackName + " on " + targets[0].Name;
+        } else {
+            CommentaryText.text = "" + attackerName + " used " + attackName;
+        }
+        
         yield return new WaitForSeconds(2f);
         this.DoAction(a);
         this.DoActionHelper(orderedEntities, index + 1);

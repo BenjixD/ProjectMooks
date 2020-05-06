@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5902595311601403729}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -80,13 +80,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerQueue: {fileID: 5902595311601403740}
-  playerPrefab: {fileID: 7777298287657591932, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
+  heroPrefab: {fileID: 5101897393938031089, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
     type: 3}
-  playerPos:
-  - 
-  - 
-  - 
-  - 
+  mookPrefab: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+    type: 3}
 --- !u!114 &5902595311601403740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,13 +98,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _template:
     level: 1
-    maxHp: 0
-    maxMana: 0
-    maxPhysical: 0
-    maxSpecial: 0
-    maxDefense: 0
-    maxResistance: 0
-    maxSpeed: 0
+    maxHp: 30
+    maxMana: 100
+    maxPhysical: 25
+    maxSpecial: 25
+    maxDefense: 7
+    maxResistance: 7
+    maxSpeed: 25
     isRare: 0
     _hp: 0
     _mana: 0
