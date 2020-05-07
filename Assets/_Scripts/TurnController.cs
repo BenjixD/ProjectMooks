@@ -126,7 +126,7 @@ public class TurnController : MonoBehaviour
         this.playerActionCounter = 0;
         
         // Reset defence state
-        foreach (var player in stage.GetPlayers()) {
+        foreach (var player in stage.GetAllFightingEntities()) {
             player.ResetCommand();
 
             if (player.modifiers.Contains("defend")) {
@@ -140,7 +140,7 @@ public class TurnController : MonoBehaviour
 
     private void onPartySetup() {
         this.battlePhase = BattlePhase.PARTY_SETUP;
-        //TODO: Party setup
+        this.stage.RequestRecruitNewParty();
 
         this.BroadcastMoveSelection();
     }
@@ -192,9 +192,14 @@ public class TurnController : MonoBehaviour
         ActionBase heroAction = stage.GetHeroPlayer().actions[_heroActionIndex];
     
         // TODO: Differentiate between ALL and single target.
-        this.ui.targetSelectionUI.InitializeTargetSelectionSingle(heroAction.GetPotentialTargets(stage.GetHeroPlayer()), 0, this.commandSelector);
+        if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
+            this.ui.targetSelectionUI.InitializeTargetSelectionSingle(heroAction.GetPotentialActiveTargets(stage.GetHeroPlayer()), 0, this.commandSelector);
+            this.battlePhase = BattlePhase.TARGET_SELECTION;
+        } else {
+            stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), heroAction, new List<int>()));
+            this.checkExecuteTurn();
+        }
 
-        this.battlePhase = BattlePhase.TARGET_SELECTION;
     }
 
     private void setHeroTarget() {
@@ -211,7 +216,7 @@ public class TurnController : MonoBehaviour
     }
 
     private bool hasEveryoneEnteredActions() {
-        foreach (var player in stage.GetPlayers()) {
+        foreach (var player in stage.GetActivePlayers()) {
             if (player.HasSetCommand() == false) {
                 return false;
             }

@@ -16,6 +16,8 @@ public class FightingEntity : MonoBehaviour
 	public Job job;
 
 	public List<ActionBase> actions = new List<ActionBase>();
+
+    public int targetId;
 	private QueuedAction _queuedAction;
 	private AnimationController _animController;
 
@@ -23,7 +25,8 @@ public class FightingEntity : MonoBehaviour
 		_animController = GetComponent<AnimationController>();
 	}
 	
-	public void Initialize(PlayerCreationData data) {
+	public void Initialize(int index, PlayerCreationData data) {
+        this.targetId = index;
 		Name = data.name;
 		SetStats(data.stats);
 		SetJob(data.job);

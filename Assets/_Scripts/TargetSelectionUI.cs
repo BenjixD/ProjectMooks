@@ -20,6 +20,7 @@ public class TargetSelectionUI : MonoBehaviour
 
     
     public void InitializeTargetSelectionSingle(List<FightingEntity> possibleTargets, int initialChoice, CommandSelector selector) {
+        this.ClearSelection();
         this.potentialTargets = possibleTargets;
         this._commandSelector = selector;
         this._commandSelector.Initialize(0, possibleTargets.Count-1, this.UpdateTargetSelectionUI, true);
@@ -30,16 +31,20 @@ public class TargetSelectionUI : MonoBehaviour
     }
 
     public void InitializeTargetSelectionAll(List<FightingEntity> possibleTargets) {
+        this.ClearSelection();
         this.potentialTargets = possibleTargets;
         this._commandSelector = null;
     }
 
     public void ClearSelection() {
-        for (int i = 0; i < potentialTargets.Count; i++) {
-            this.SetMaterialOutline(i, false);
+        if (potentialTargets != null) {
+            for (int i = 0; i < potentialTargets.Count; i++) {
+                this.SetMaterialOutline(i, false);
+            }
+
+            potentialTargets.Clear();
         }
 
-        potentialTargets.Clear();
         _commandSelector = null;
     }
 

@@ -6,7 +6,7 @@ using System.Linq;
 
 public class StageInfo : MonoBehaviour
 {
-    private List<Enemy> _enemies{get; set;}
+    private Enemy[] _enemies = new Enemy[Party.numPlayers];
 
 
     [Header("Slots")]
@@ -24,24 +24,48 @@ public class StageInfo : MonoBehaviour
     public Player GetHeroPlayer() {
         return _heroPlayer;
     }
-    public List<Enemy> GetEnemies() {
+    public Enemy[] GetEnemies() {
         return _enemies;
     }
 
-    public List<Player> GetPlayers() {
+    public Player[] GetPartyPlayers() {
         return GameManager.Instance.party.GetPlayersInPosition();
     }
 
+    public List<Player> GetActivePlayers() {
+        List<Player> activePlayers = new List<Player>();
+        Player[] players = GetPartyPlayers();
+        for (int i = 0; i < players.Length; i++) {
+            if (players[i] != null) {
+                activePlayers.Add(players[i]);
+            }
+        }
+
+        return activePlayers;
+    }
+
+    public List<Enemy> GetActiveEnemies() {
+        List<Enemy> activeEnemies = new List<Enemy>();
+        Enemy[] enemies = GetEnemies();
+        for (int i = 0; i < enemies.Length; i++) {
+            if (enemies[i] != null) {
+                activeEnemies.Add(enemies[i]);
+            }
+        }
+
+        return activeEnemies;
+    }
+
     public List<FightingEntity> GetAllFightingEntities() {
-        List<Player> players = GetPlayers();
+        List<Player> players = GetActivePlayers();
         List<FightingEntity> entities = new List<FightingEntity>();
         foreach (var player in players) {
             entities.Add(player);
         }
 
-        List<Enemy> _enemies = GetEnemies();
+        List<Enemy> enemies = GetActiveEnemies();
 
-        foreach (var enemy in _enemies) {
+        foreach (var enemy in enemies) {
             entities.Add(enemy);
         }
 
@@ -49,20 +73,29 @@ public class StageInfo : MonoBehaviour
     }
 
     public int GetRandomEnemyIndex() {
-        List<int> validIndices = new List<int>();
-        List<Enemy> enemies = GetEnemies();
-        for (int i = 0; i < enemies.Count; i++) {
-            if (enemies[i] != null) {
-                validIndices.Add(i);
-            }
-        }
-
-        return validIndices[Random.Range(0, validIndices.Count)];
+        List<Enemy> enemies = GetActiveEnemies();
+        return enemies[Random.Range(0, enemies.Count)].targetId;
     }
 
     public int GetRandomPlayerIndex() {
-        int enemyTarget = Random.Range(0, GetPlayers().Count);
-        return enemyTarget;
+        List<Player> players = GetActivePlayers();
+        return players[Random.Range(0, players.Count)].targetId;
+    }
+
+    public void RequestRecruitNewParty() {
+        List<int> emptySlots = new List<int>();
+        Player[] players = GetPartyPlayers();
+        for (int i = 1; i < players.Length; i++) {
+            if (players[i] == null) {
+                emptySlots.Add(i);
+            }
+        }
+
+        GameManager.Instance.party.TryFillAllPartySlots();
+
+        foreach (int emptySlot in emptySlots) {
+            this.InstantiatePlayer(emptySlot, true);
+        }
     }
 
 
@@ -71,24 +104,36 @@ public class StageInfo : MonoBehaviour
         instantiatedHeroPlayer.transform.SetParent(heroSlot, false);
         instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
 
-        int numPlayersInParty = GameManager.Instance.party.GetNumPlayersInParty();
-        for (int i = 1; i < numPlayersInParty; i++) {
-            Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(i);
-            instantiatedPlayer.transform.SetParent(mookSlots[i-1].transform, false);
-            instantiatedPlayer.transform.localPosition = Vector3.zero;
+        for (int i = 1; i < Party.numPlayers; i++) {
+            this.InstantiatePlayer(i, false);
         }
 
-        _heroPlayer = GetPlayers()[0];
+        _heroPlayer = GetPartyPlayers()[0];
+    }
+
+    private void InstantiatePlayer(int index, bool broadcastJoin) {
+        Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(index);
+        if (instantiatedPlayer != null) {
+            instantiatedPlayer.transform.SetParent(mookSlots[index-1].transform, false);
+            instantiatedPlayer.transform.localPosition = Vector3.zero;
+            Debug.Log("Instantiated player " + instantiatedPlayer.Name + " in slot: " + index);
+
+            if (broadcastJoin) {
+                Messenger.Broadcast<Player>(Messages.OnPlayerJoinBattle, instantiatedPlayer);
+            }
+        } else {
+            Debug.Log("Failed to instantiate player in slot: " + index);
+        }
+
     }
 
     private void InitializeEnemies() {
-        _enemies = new List<Enemy>();
         this.GenerateEnemyList();
     }
 
 
     private void GenerateEnemyList() {
-        int numberOfEnemiesToGenerate = 4; // TODO: Make this dependent on stage.
+        int numberOfEnemiesToGenerate = 3; // TODO: Make this dependent on stage.
         List<Job> enemyJobList = GameManager.Instance.enemyJobActions.Keys.ToList();
 
         for (int i = 0; i < numberOfEnemiesToGenerate; i++) {
@@ -104,18 +149,14 @@ public class StageInfo : MonoBehaviour
             stats.RandomizeStats();
             stats.ResetStats();
             PlayerCreationData creationData = new PlayerCreationData(enemyPrefab.Name + " (" + i + ")", stats, Job.BASIC_ENEMY);
-            instantiatedEnemy.Initialize(creationData);
+            instantiatedEnemy.Initialize(i, creationData);
             
 
             instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
             instantiatedEnemy.transform.SetParent(enemySlots[i]);
             instantiatedEnemy.transform.localPosition = Vector3.zero;
 
-            _enemies.Add(instantiatedEnemy);
-        }
-
-        if (_enemies.Count == 0) {
-            Debug.LogError("ERROR: No _enemies found!");
+            _enemies[i] = instantiatedEnemy;
         }
     }
 

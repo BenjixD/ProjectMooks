@@ -22,10 +22,16 @@ public class StatusBarsUI : MonoBehaviour
 
     void Awake() {
         _controller = GetComponent<TurnController>();
+        Messenger.AddListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+    }
+
+    void OnDestroy() {
+        Messenger.RemoveListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
     }
 
     public void Initialize() {
-        int playerCount = _controller.stage.GetPlayers().Count;
+        this.DestroyCurrentStatusBars();
+        int playerCount = _controller.stage.GetActivePlayers().Count;
 
         statusBars = new List<StatusBarUI>();
 
@@ -37,7 +43,7 @@ public class StatusBarsUI : MonoBehaviour
 
         enemyStatusBars = new List<StatusBarUI>();
 
-        int enemyCount = _controller.stage.GetEnemies().Count;
+        int enemyCount = _controller.stage.GetActiveEnemies().Count;
 
         for (int i = 0; i < enemyCount; i++) {
             StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
@@ -48,14 +54,15 @@ public class StatusBarsUI : MonoBehaviour
         this.UpdateStatusBarUI();
     }
 
+
     public void UpdateStatusBarUI() {
-        List<Player> players = _controller.stage.GetPlayers();
+        List<Player> players = _controller.stage.GetActivePlayers();
         for (int i = 0; i < players.Count; i++) {
             statusBars[i].SetName(players[i].Name);
             statusBars[i].SetHP(players[i].stats.GetHp(), players[i].stats.maxHp);
         }
 
-        List<Enemy> enemies = _controller.stage.GetEnemies();
+        List<Enemy> enemies = _controller.stage.GetActiveEnemies();
 
         for (int i = 0; i < enemies.Count; i++) {
             enemyStatusBars[i].SetName(enemies[i].Name);
@@ -63,6 +70,26 @@ public class StatusBarsUI : MonoBehaviour
         }
     }
 
+    public void onPlayerJoin(Player player) {
+        this.Initialize();
+    }
+
+    private void DestroyCurrentStatusBars() {
+        if (statusBars != null) {
+            foreach (var statusBar in statusBars) {
+                Destroy(statusBar);
+            }
+            this.statusBars.Clear();
+        }
+
+        if (enemyStatusBars != null) {
+            foreach (var statusBar in enemyStatusBars) {
+                Destroy(statusBar);
+            }
+            this.enemyStatusBars.Clear();
+        }
+
+    }
   
 
 }
