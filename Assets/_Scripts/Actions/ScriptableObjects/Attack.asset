@@ -16,4 +16,5 @@ MonoBehaviour:
   description: 
   commandKeyword: a
   commandArgs: 1
+  userAnimName: attack
   targetIdType: 1

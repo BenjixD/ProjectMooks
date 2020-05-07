@@ -30,15 +30,18 @@ public class TargetSelectionUI : MonoBehaviour
     }
 
     public void ClearSelection() {
-        foreach (var target in potentialTargets) {
-            target.GetComponent<SpriteRenderer>().color = Color.white;
-        }
+        //foreach (var target in potentialTargets) {
+        //    target.GetComponent<SpriteRenderer>().color = Color.white;
+        //}
 
         potentialTargets.Clear();
         _commandSelector = null;
     }
 
     private void UpdateTargetSelectionUI() {
+        // TODO: Fix broken target highlighting
+        return;
+        
         if (potentialTargets == null) {
             return;
         }

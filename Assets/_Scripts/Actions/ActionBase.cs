@@ -16,6 +16,8 @@ public abstract class ActionBase : ScriptableObject {
     public string commandKeyword;
     [Tooltip("The number of arguments following the keyword.")]
     public int commandArgs;
+    [Tooltip("The name of the animation played for the user of the attack.")]
+    public string userAnimName;
 
 
     public TargetType targetIdType;
@@ -34,10 +36,24 @@ public abstract class ActionBase : ScriptableObject {
         return true;
     }
 
+    // Returns true iff input is an integer, non-negative, and no less than the number of enemies
+    protected bool TargetIdValidation(string targetStr) {
+        int targetId;
+        if (!int.TryParse(targetStr, out targetId)) {
+            return false;
+        }
+        if (targetId < 0 || targetId >= GameManager.Instance.turnController.stage.GetEnemies().Count) {
+            return false;
+        }
+        return true;
+    }
+
     public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
     
-    // TODO: update params
-    public abstract FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets);
+    public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+        user.Animate(userAnimName, false);
+        return ApplyEffect(user, targets);
+    }
 
     public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
         if (targetIdType == TargetType.ALL_TEAMS) {
@@ -86,4 +102,6 @@ public abstract class ActionBase : ScriptableObject {
 
         return targetId;
     }
+
+    public abstract FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets);
 }
