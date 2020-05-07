@@ -42,9 +42,9 @@ public class FightingEntity : MonoBehaviour
 	public void SetJob(Job job) {
 		this.job = job;
         if (this.isEnemy()) {
-            actions = GameManager.Instance.GetEnemyJobActionsList(job);
+            actions = GameManager.Instance.GetEnemyJobActions(job);
         } else {
-		    actions =  GameManager.Instance.GetPlayerJobActionsList(job);
+		    actions =  GameManager.Instance.GetPlayerJobActions(job);
         }
 	}
 

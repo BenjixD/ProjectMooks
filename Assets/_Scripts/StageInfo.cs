@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System.Linq;
 
 public class StageInfo : MonoBehaviour
 {
@@ -13,11 +13,6 @@ public class StageInfo : MonoBehaviour
     public Transform heroSlot;
     public List<Transform> mookSlots;
     public List<Transform> enemySlots;
-
-    // TODO: Maybe this should be an enemy job list instead
-    [Header("Prefabs")]
-    [SerializeField]
-    List<Enemy> _enemyPrefabs;
 
     Player _heroPlayer;
 
@@ -94,18 +89,21 @@ public class StageInfo : MonoBehaviour
 
     private void GenerateEnemyList() {
         int numberOfEnemiesToGenerate = 4; // TODO: Make this dependent on stage.
-        List<Enemy> validEnemies = new List<Enemy>(_enemyPrefabs);  // TODO: make validEnemies dependent on the level - best done in a JSON object
+        List<Job> enemyJobList = GameManager.Instance.enemyJobActions.Keys.ToList();
 
         for (int i = 0; i < numberOfEnemiesToGenerate; i++) {
-            int enemyIndex = Random.Range(0, validEnemies.Count);
+            int enemyTypeIndex = Random.Range(0, enemyJobList.Count);
 
-            Enemy enemyPrefab = validEnemies[enemyIndex];
+            JobActionsList jobList = GameManager.Instance.GetEnemyJobActionsList(enemyJobList[enemyTypeIndex]);
+
+
+            FightingEntity enemyPrefab = jobList.prefab;
             Enemy instantiatedEnemy = Instantiate(enemyPrefab) as Enemy;
 
             PlayerStats stats = new PlayerStats(enemyPrefab.stats);
             stats.RandomizeStats();
             stats.ResetStats();
-            PlayerCreationData creationData = new PlayerCreationData("Evil monster " + i, stats, Job.BASIC_ENEMY);
+            PlayerCreationData creationData = new PlayerCreationData(enemyPrefab.Name + " (" + i + ")", stats, Job.BASIC_ENEMY);
             instantiatedEnemy.Initialize(creationData);
             
 

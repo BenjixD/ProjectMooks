@@ -36,8 +36,6 @@ public class ActionListener : TwitchChatListenerBase {
 
 
     public void HandleMessage(string message) {
-        // TODO: this can probably be handled in the Player class.
-
         if (speechCanvas == null || speechCanvasText == null ) {
             return;
         }

@@ -17,7 +17,8 @@ public class Party : MonoBehaviour {
 
     public void CreateHeroPlayer() {
         // Optional TODO: If streamer name is special, then give them a special hero
-        FightingEntity heroPrefab = GameManager.Instance.GetPrefabForPlayerJob(Job.HERO);
+        JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(Job.HERO);
+        FightingEntity heroPrefab = jobActionsList.prefab;
         PlayerStats stats = new PlayerStats(heroPrefab.stats);
         PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
         CreatePlayer(heroData, 0);
@@ -30,8 +31,8 @@ public class Party : MonoBehaviour {
             return null;
         }
 
-        Debug.Log("Job: " + data.job);
-        FightingEntity prefab = GameManager.Instance.GetPrefabForPlayerJob(data.job);
+        JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(data.job);
+        FightingEntity prefab = jobActionsList.prefab;
         Player player = Instantiate(prefab).GetComponent<Player>();
 
         player.Initialize(data);

@@ -37,7 +37,7 @@ public class GameManager : Singleton<GameManager> {
         party.CreateHeroPlayer();
     }
 
-    public List<ActionBase> GetPlayerJobActionsList(Job job) {
+    public List<ActionBase> GetPlayerJobActions(Job job) {
         if(!playerJobActions.ContainsKey(job)) {
             Debug.Log("No JobActionsList for job " + job + " found");
             return null;
@@ -45,7 +45,7 @@ public class GameManager : Singleton<GameManager> {
         return playerJobActions[job];
     }
 
-    public List<ActionBase> GetEnemyJobActionsList(Job job) {
+    public List<ActionBase> GetEnemyJobActions(Job job) {
         if(!enemyJobActions.ContainsKey(job)) {
             Debug.Log("No JobActionsList for job " + job + " found");
             return null;
@@ -53,20 +53,20 @@ public class GameManager : Singleton<GameManager> {
         return enemyJobActions[job];
     }
 
-    public FightingEntity GetPrefabForPlayerJob(Job job) {
+    public JobActionsList GetPlayerJobActionsList(Job job) {
         foreach(JobActionsList jobActionsList in _playerJobActionsLists) {
             if (jobActionsList.job == job) {
-                return jobActionsList.prefab;
+                return jobActionsList;
             }
         }
 
         return null;
     }
 
-    public FightingEntity GetPrefabForEnemyJob(Job job) {
+    public JobActionsList GetEnemyJobActionsList(Job job) {
         foreach(JobActionsList jobActionsList in _enemyJobActionsLists) {
             if (jobActionsList.job == job) {
-                return jobActionsList.prefab;
+                return jobActionsList;
             }
         }
 
