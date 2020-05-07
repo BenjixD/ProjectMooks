@@ -27,7 +27,7 @@ public abstract class ActionBase : ScriptableObject {
         return argQuantity == commandArgs;
     }
 
-    protected bool BasicValidation(string[] splitCommand) {
+    protected virtual bool BasicValidation(string[] splitCommand) {
         if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() ) {
             return false;
         }
