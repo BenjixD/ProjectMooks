@@ -45,8 +45,6 @@ public class Battle
         Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, result);
         result = new BattleResult(orderedPlayers);
 
-        Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
-
         _controller.StartCoroutine(handleBattle(orderedPlayers));
     }
 
