@@ -109,7 +109,7 @@ public class StageInfo : MonoBehaviour
             instantiatedEnemy.Initialize(creationData);
             
 
-            instantiatedEnemy.GetComponent<SpriteRenderer>().sortingOrder = i;
+            instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
             instantiatedEnemy.transform.SetParent(enemySlots[i]);
             instantiatedEnemy.transform.localPosition = Vector3.zero;
 

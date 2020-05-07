@@ -17,7 +17,12 @@ public class FightingEntity : MonoBehaviour
 
 	public List<ActionBase> actions = new List<ActionBase>();
 	private QueuedAction _queuedAction;
+	private AnimationController _animController;
 
+	private void Awake() {
+		_animController = GetComponent<AnimationController>();
+	}
+	
 	public void Initialize(PlayerCreationData data) {
 		Name = data.name;
 		SetStats(data.stats);
@@ -77,6 +82,9 @@ public class FightingEntity : MonoBehaviour
     public ActionBase GetRandomAction() {
         return actions[Random.Range(0, actions.Count)];
     }
-    
+
+	public void Animate(string animationName, bool loop) {
+		_animController.AddAnimation(animationName, loop);
+	}
 }
 

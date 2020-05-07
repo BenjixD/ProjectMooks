@@ -20,9 +20,7 @@ public class AttackTest : ActionBase {
         return true;
     }
 
-    public override FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
-        // TODO: calculate damage and inflict on targets
-
+    public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         List<DamageReceiver> receivers = new List<DamageReceiver>();
         int attackDamage = user.stats.GetPhysical();
         

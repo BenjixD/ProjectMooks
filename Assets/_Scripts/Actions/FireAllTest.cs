@@ -10,8 +10,7 @@ public class FireAllTest : ActionBase {
             return false;
         }
         List<int> targetIds = new List<int>();
-        List<FightingEntity> targets = this.GetPotentialTargets(user);
-        for (int i = 0; i < targets.Count; i++) {
+        for (int i = 0; i < GameManager.Instance.turnController.stage.GetEnemies().Count; i++) {
             targetIds.Add(i);
         }
 
@@ -19,9 +18,8 @@ public class FireAllTest : ActionBase {
         return true;
     }
 
-    public override FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+    public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         List<DamageReceiver> receivers = new List<DamageReceiver>();
-
         int attackDamage = user.stats.GetSpecial();
         
         foreach (FightingEntity target in targets) {
