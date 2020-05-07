@@ -10,7 +10,8 @@ public class FireAllTest : ActionBase {
             return false;
         }
         List<int> targetIds = new List<int>();
-        for (int i = 0; i < GameManager.Instance.turnController.stage.GetEnemies().Count; i++) {
+        List<FightingEntity> targets = this.GetPotentialTargets(user);
+        for (int i = 0; i < targets.Count; i++) {
             targetIds.Add(i);
         }
 
