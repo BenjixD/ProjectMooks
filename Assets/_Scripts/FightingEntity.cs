@@ -41,7 +41,11 @@ public class FightingEntity : MonoBehaviour
 
 	public void SetJob(Job job) {
 		this.job = job;
-		actions = GameManager.Instance.GetJobActionsList(job);
+        if (this.isEnemy()) {
+            actions = GameManager.Instance.GetEnemyJobActionsList(job);
+        } else {
+		    actions =  GameManager.Instance.GetPlayerJobActionsList(job);
+        }
 	}
 
 
@@ -55,10 +59,7 @@ public class FightingEntity : MonoBehaviour
 		Debug.Log("Invalid action command for player " + Name + ": " + message);
 	}
 
-
-
 	public void SetQueuedAction(QueuedAction queuedAction) {
-		Debug.Log("Sucessfully set action " + queuedAction.GetAction().name + " for player " + this.Name);
 		_queuedAction = queuedAction;
 	}
 

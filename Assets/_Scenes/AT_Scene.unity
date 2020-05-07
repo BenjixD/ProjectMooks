@@ -167,7 +167,7 @@ GameObject:
   m_Component:
   - component: {fileID: 90986366}
   m_Layer: 0
-  m_Name: EnemySlot
+  m_Name: EnemySlot0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 200177947}
   - component: {fileID: 200177946}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SelectionCursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -419,7 +419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 308413030}
   m_Layer: 0
-  m_Name: EnemySlot
+  m_Name: EnemySlot1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -688,7 +688,7 @@ GameObject:
   - component: {fileID: 556893872}
   - component: {fileID: 556893871}
   m_Layer: 5
-  m_Name: Image
+  m_Name: CommandCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -848,7 +848,7 @@ GameObject:
   m_Component:
   - component: {fileID: 681689154}
   m_Layer: 0
-  m_Name: EnemySlot
+  m_Name: EnemySlot3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2067,7 +2067,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1855386539}
   m_Layer: 0
-  m_Name: EnemySlot
+  m_Name: EnemySlot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2101,7 +2101,7 @@ GameObject:
   - component: {fileID: 2001327356}
   - component: {fileID: 2001327355}
   m_Layer: 5
-  m_Name: Options
+  m_Name: ActionTextParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2199,6 +2199,11 @@ GameObject:
   - component: {fileID: 2026179243}
   - component: {fileID: 2026179244}
   - component: {fileID: 2026179245}
+  - component: {fileID: 2026179247}
+  - component: {fileID: 2026179246}
+  - component: {fileID: 2026179248}
+  - component: {fileID: 2026179249}
+  - component: {fileID: 2026179250}
   m_Layer: 0
   m_Name: StageController
   m_TagString: Untagged
@@ -2229,37 +2234,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2026179242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aa6c7c34c646f243a88aed58c209d90, type: 3}
+  m_Script: {fileID: 11500000, guid: 2074fd21091089048a040b786dcb148f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   commandSelector: {fileID: 2026179245}
-  commandTextPrefab: {fileID: 3463448965843034932, guid: 5cfe1b8b9b1037c4186cab841b508ee8,
-    type: 3}
-  selectionCursor: {fileID: 200177945}
-  selectionCursorOffset: {x: 0, y: 0}
   maxTimeBeforeAction: 15
-  ActionMenu: {fileID: 242386836}
-  ActionMenuTextParent: {fileID: 2001327354}
-  CommentaryMenu: {fileID: 35925955}
-  CommentaryText: {fileID: 883118801}
-  heroSlot: {fileID: 1502207788}
-  mookSlots:
-  - {fileID: 1333676684}
-  - {fileID: 199044900}
-  - {fileID: 2132595315}
-  enemySlots:
-  - {fileID: 90986366}
-  - {fileID: 308413030}
-  - {fileID: 1855386539}
-  - {fileID: 681689154}
-  targetSelectionColor: {r: 0, g: 0.62623525, b: 1, a: 1}
-  playerStatusBarParent: {fileID: 1748184513}
-  enemyStatusBarParent: {fileID: 1220186407}
-  statusBarPrefab: {fileID: 3995272244792367493, guid: 50ba95f8f56711d4fb49d3c208f4d94a,
-    type: 3}
-  stateText: {fileID: 1184654007}
-  _enemyPrefabs:
-  - {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
 --- !u!114 &2026179245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2275,6 +2254,95 @@ MonoBehaviour:
   choice: 0
   maxChoice: 1
   inverse: 0
+--- !u!114 &2026179246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a8764a590f2e1f4d80950c119eb27d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actionMenu: {fileID: 242386836}
+  _actionMenuTextParent: {fileID: 2001327354}
+  _commandTextPrefab: {fileID: 3463448965843034932, guid: 60505eff966ea484e956fee2a7bb63a3,
+    type: 3}
+  _selectionCursor: {fileID: 200177945}
+  _selectionCursorOffset: {x: 0, y: 0}
+  _commentaryMenu: {fileID: 35925955}
+  _commentaryText: {fileID: 883118801}
+--- !u!114 &2026179247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627e6b8c9cdf1cb4baac689e1109d301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  commandCardUI: {fileID: 2026179246}
+  statusBarsUI: {fileID: 2026179249}
+  targetSelectionUI: {fileID: 2026179250}
+  stateText: {fileID: 1184654007}
+--- !u!114 &2026179248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87197772a09a8f748bc123611b1e1058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroSlot: {fileID: 1502207788}
+  mookSlots:
+  - {fileID: 1333676684}
+  - {fileID: 199044900}
+  - {fileID: 2132595315}
+  enemySlots:
+  - {fileID: 90986366}
+  - {fileID: 308413030}
+  - {fileID: 1855386539}
+  - {fileID: 681689154}
+  _enemyPrefabs:
+  - {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
+--- !u!114 &2026179249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d03d92a63185084394a72f38d8bcb8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStatusBarParent: {fileID: 1748184513}
+  enemyStatusBarParent: {fileID: 1220186407}
+  statusBarPrefab: {fileID: 3995272244792367493, guid: 50ba95f8f56711d4fb49d3c208f4d94a,
+    type: 3}
+--- !u!114 &2026179250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed6110fdf0f7b12409b115ba141da521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSelectionColor: {r: 0, g: 0.62623525, b: 1, a: 1}
 --- !u!1 &2132595313
 GameObject:
   m_ObjectHideFlags: 0

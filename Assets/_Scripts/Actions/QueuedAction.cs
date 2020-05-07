@@ -23,8 +23,8 @@ public class QueuedAction {
         return _targetIds;
     }
 
-    public void ExecuteAction() {
+    public FightResult ExecuteAction() {
         List<FightingEntity> targets = _action.GetTargets(this.user, _targetIds);
-        _action.ExecuteAction(user, targets);
+        return _action.ExecuteAction(user, targets);
     }
 }

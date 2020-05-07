@@ -61,11 +61,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   party: {fileID: 5902595311601403742}
   chatBroadcaster: {fileID: 5902595311601403730}
-  _jobActionsLists:
+  _playerJobActionsLists:
   - {fileID: 11400000, guid: bd82d9fdf5b21804caff0ce69b578f01, type: 2}
   - {fileID: 11400000, guid: 372d059ea52793146a680ded329e4347, type: 2}
   - {fileID: 11400000, guid: d09a40123d671e8488ff6b4affb9cdb3, type: 2}
   - {fileID: 11400000, guid: 560d63ceaa43a8146b242f0b21c603c9, type: 2}
+  _enemyJobActionsLists:
   - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
 --- !u!114 &5902595311601403742
 MonoBehaviour:
@@ -80,10 +81,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerQueue: {fileID: 5902595311601403740}
-  heroPrefab: {fileID: 5101897393938031089, guid: 9ebd1c8bac4282a4eb1722906e3d6253,
-    type: 3}
-  mookPrefab: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
-    type: 3}
 --- !u!114 &5902595311601403740
 MonoBehaviour:
   m_ObjectHideFlags: 0

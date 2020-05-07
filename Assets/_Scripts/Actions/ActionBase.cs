@@ -30,7 +30,7 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected bool BasicValidation(string[] splitCommand) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.battleController.inputActionsPhase ) {
+        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() ) {
             return false;
         }
         return true;
@@ -42,7 +42,7 @@ public abstract class ActionBase : ScriptableObject {
         if (!int.TryParse(targetStr, out targetId)) {
             return false;
         }
-        if (targetId < 0 || targetId >= GameManager.Instance.battleController.enemies.Count) {
+        if (targetId < 0 || targetId >= GameManager.Instance.turnController.stage.GetEnemies().Count) {
             return false;
         }
         return true;
@@ -50,17 +50,17 @@ public abstract class ActionBase : ScriptableObject {
 
     public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
     
-    public void ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+    public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
         user.Animate(userAnimName, false);
-        ApplyEffect(user, targets);
+        return ApplyEffect(user, targets);
     }
 
     public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
         if (targetIdType == TargetType.ALL_TEAMS) {
-            return GameManager.Instance.battleController.GetAllFightingEntities();
+            return GameManager.Instance.turnController.stage.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleController.enemies);
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetEnemies());
         List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
 
         if (user.isEnemy()) {
@@ -103,5 +103,5 @@ public abstract class ActionBase : ScriptableObject {
         return targetId;
     }
 
-    public abstract void ApplyEffect(FightingEntity user, List<FightingEntity> targets);
+    public abstract FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets);
 }
