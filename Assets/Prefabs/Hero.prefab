@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2080289099}
   - component: {fileID: 2911693358557053094}
   - component: {fileID: 3735248720158477236}
-  - component: {fileID: 7203115357658705341}
+  - component: {fileID: 733374879293583672}
   - component: {fileID: 6128172596105089094}
   m_Layer: 0
   m_Name: Hero
@@ -103,7 +103,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 9aa2023c2c91b254f9cb0a4fba19af00, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -132,7 +132,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7777298287657591932}
   m_Mesh: {fileID: 0}
---- !u!114 &7203115357658705341
+--- !u!114 &733374879293583672
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,10 +141,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7777298287657591932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Script: {fileID: 11500000, guid: cd0c89fa66bf0f1499f2a32393d24771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: c9b3336867b462045ba56743b00fb8ce, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 2f899e95232e6144786de8fb99678a8d, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0

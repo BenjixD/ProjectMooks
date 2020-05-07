@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1519749899}
   - component: {fileID: 625841003950948007}
   - component: {fileID: 2979245312994801430}
-  - component: {fileID: 2371511938509268151}
+  - component: {fileID: 8414977803074077456}
   - component: {fileID: 1365926307686284328}
   m_Layer: 0
   m_Name: Mook
@@ -133,7 +133,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2371511938509268151
+--- !u!114 &8414977803074077456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5588856247799786281}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Script: {fileID: 11500000, guid: cd0c89fa66bf0f1499f2a32393d24771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 11400000, guid: e57cdb51287d3924ebb2ececf816733b, type: 2}

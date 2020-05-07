@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 42403278}
   - component: {fileID: 5907855612439490822}
   - component: {fileID: 6258014410280954371}
-  - component: {fileID: 1297918545276418445}
+  - component: {fileID: 5699381447560999886}
   - component: {fileID: 4325314968240556404}
   m_Layer: 0
   m_Name: Enemy
@@ -95,19 +95,19 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
+  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
+  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
+  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
+  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
+  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
+  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
+  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
+  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
+  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
+  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
+  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
+  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -128,7 +128,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1297918545276418445
+--- !u!114 &5699381447560999886
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8249197650680591222}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Script: {fileID: 11500000, guid: cd0c89fa66bf0f1499f2a32393d24771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonDataAsset: {fileID: 11400000, guid: 76506fa7fbeed084ab2dfb084648c628, type: 2}
