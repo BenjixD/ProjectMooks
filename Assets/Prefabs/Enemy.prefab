@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6258014410280954371}
   - component: {fileID: 5699381447560999886}
   - component: {fileID: 4325314968240556404}
+  - component: {fileID: 620964168174642243}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -177,3 +178,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultAnimName: flying
+--- !u!114 &620964168174642243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8249197650680591222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 544535d63c6b45540b5a2254709867e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialToReplace: {fileID: 0}
+  materialIWantToUse: {fileID: 0}
+  meshRenderer: {fileID: 6258014410280954371}

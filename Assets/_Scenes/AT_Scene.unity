@@ -2363,7 +2363,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed6110fdf0f7b12409b115ba141da521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSelectionColor: {r: 0, g: 0.62623525, b: 1, a: 1}
+  targetSelectionColor: {r: 1, g: 0.91147983, b: 0, a: 1}
+  targetSelectionOutlineWidth: 5
 --- !u!1 &2132595313
 GameObject:
   m_ObjectHideFlags: 0
