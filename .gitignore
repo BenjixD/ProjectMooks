@@ -61,8 +61,4 @@ crashlytics-build.properties
 # Secrets
 Assets/Resources/secrets.json
 
-# Spine package
-Assets/Spine
-Assets/Spine.meta
-
 .vscode/
