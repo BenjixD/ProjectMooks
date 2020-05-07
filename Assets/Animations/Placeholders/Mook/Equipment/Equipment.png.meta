@@ -1,9 +1,13 @@
 fileFormatVersion: 2
-guid: 57b57f94df266f94ea0981915a4472e1
+guid: ddb89f63d0296cf4f8572b0448bb6b30
 timeCreated: 1560707248
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Equipment/shield1
+    21300002: Equipment/shield2
+    21300004: Equipment/sword1
+    21300006: Equipment/sword4
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -65,7 +69,63 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Equipment/shield1
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 24
+        width: 118
+        height: 71
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Equipment/shield2
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 24
+        width: 111
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Equipment/sword1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 95
+        width: 161
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Equipment/sword4
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 24
+        width: 216
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
     outline: []
     physicsShape: []
   spritePackingTag: 

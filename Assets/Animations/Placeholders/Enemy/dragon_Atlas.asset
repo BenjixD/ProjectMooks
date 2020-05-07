@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c3753d8e0a32664da3caff3774bb55f, type: 3}
   m_Name: dragon_Atlas
   m_EditorClassIdentifier: 
   atlasFile: {fileID: 4900000, guid: 40ca8efa87a2fae4a9de6fa585dc6b4b, type: 3}
   materials:
-  - {fileID: 2100000, guid: 3277fd5561d95724e83c6ca4a1dd28a4, type: 2}
-  - {fileID: 2100000, guid: d58543c96f991934ca874395eb40222c, type: 2}
+  - {fileID: 2100000, guid: f761a5b363715c24a8f8f7c1d0e665c5, type: 2}
+  - {fileID: 2100000, guid: 42b157aefbb767e4e919df082d96a4ef, type: 2}
