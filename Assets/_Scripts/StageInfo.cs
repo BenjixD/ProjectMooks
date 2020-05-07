@@ -73,13 +73,13 @@ public class StageInfo : MonoBehaviour
 
     private void InitializePlayers() {
         Player instantiatedHeroPlayer = GameManager.Instance.party.InstantiatePlayer(0);
-        instantiatedHeroPlayer.transform.SetParent(heroSlot);
+        instantiatedHeroPlayer.transform.SetParent(heroSlot, false);
         instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
 
         int numPlayersInParty = GameManager.Instance.party.GetNumPlayersInParty();
         for (int i = 1; i < numPlayersInParty; i++) {
             Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(i);
-            instantiatedPlayer.transform.SetParent(mookSlots[i-1].transform);
+            instantiatedPlayer.transform.SetParent(mookSlots[i-1].transform, false);
             instantiatedPlayer.transform.localPosition = Vector3.zero;
         }
 
