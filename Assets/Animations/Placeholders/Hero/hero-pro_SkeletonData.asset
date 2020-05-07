@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: hero-pro_SkeletonData
   m_EditorClassIdentifier: 
   atlasAssets:
-  - {fileID: 11400000, guid: 8384ab388a4037649a1f64fb2e1a8e7f, type: 2}
+  - {fileID: 11400000, guid: 6da1e9985be81e04d88072b7f3438a87, type: 2}
   scale: 0.01
   skeletonJSON: {fileID: 4900000, guid: 683d41fd3acae834a85e0e081e1d6ac6, type: 3}
   skeletonDataModifiers: []
