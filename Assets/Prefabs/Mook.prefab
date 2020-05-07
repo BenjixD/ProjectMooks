@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 1519749899}
   - component: {fileID: 625841003950948007}
   - component: {fileID: 2979245312994801430}
-  - component: {fileID: 8414977803074077456}
   - component: {fileID: 1365926307686284328}
+  - component: {fileID: 7091001244129940285}
   m_Layer: 0
   m_Name: Mook
   m_TagString: Untagged
@@ -133,7 +133,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8414977803074077456
+--- !u!114 &1365926307686284328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588856247799786281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da91b99b96e11145b73ba7da2254faf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultAnimName: Idle
+--- !u!114 &7091001244129940285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,19 +182,6 @@ MonoBehaviour:
   _animationName: 
   loop: 0
   timeScale: 1
---- !u!114 &1365926307686284328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5588856247799786281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9da91b99b96e11145b73ba7da2254faf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _defaultAnimName: Idle
 --- !u!1 &7441704366931571572
 GameObject:
   m_ObjectHideFlags: 0
