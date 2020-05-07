@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: hero-pro_MaterialOutline
-  m_Shader: {fileID: 4800000, guid: e158cbe58baa093438feb3d691f3daba, type: 3}
+  m_Shader: {fileID: 4800000, guid: 6d06667a3c62bbb40a59dfb754559583, type: 3}
   m_ShaderKeywords: _USE8NEIGHBOURHOOD_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
