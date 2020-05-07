@@ -4,25 +4,54 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+
+public class BattleResult {
+
+    public List<FightingEntity> fighters = new List<FightingEntity>();
+    public List<FightResult> results = new List<FightResult>();
+
+    public BattleResult(){ }
+    public BattleResult(List<FightingEntity> fighters) {
+        this.fighters = new List<FightingEntity>(fighters);
+    }
+}
+
+
 public class Battle
 {
     private TurnController _controller {get; set;}
 
     public BattleFight currentFight{get; set;}
 
+    private BattleResult result;
+
     public Battle(TurnController controller) {
         _controller = controller;
+        Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
     }
 
-    public void StartTurn() {
+    ~Battle() {
+        Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
+    }
+
+    public void StartBattle() {
 
         this.initialize();
         // Sort by player speed
         List<FightingEntity> orderedPlayers = new List<FightingEntity>(_controller.stage.GetAllFightingEntities());
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
-        _controller.StartCoroutine(handleBattle(orderedPlayers));
+        result = new BattleResult(orderedPlayers);
+        Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, result);
+        result = new BattleResult(orderedPlayers);
 
+        Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
+
+        _controller.StartCoroutine(handleBattle(orderedPlayers));
+    }
+
+    private void onFightEnd(FightResult result) {
+        this.result.results.Add(result);
     }
 
     private void initialize() {
@@ -37,12 +66,13 @@ public class Battle
             yield return _controller.StartCoroutine(fight.DoFight());
         }
 
-        this.endTurn();
+        this.endBattle();
     }
 
-    private void endTurn() {
-        this._controller.OnPlayerTurnStart();
+    private void endBattle() {
         this.currentFight = null;
+
+        Messenger.Broadcast<BattleResult>(Messages.OnBattleEnd, result);
     }
 
     private void setUnsetMookCommands() {

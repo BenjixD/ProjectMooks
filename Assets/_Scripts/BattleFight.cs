@@ -4,6 +4,38 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+public class DamageReceiver {
+    public FightingEntity fighter;
+    public int damage;
+
+    public DamageReceiver(FightingEntity fighter, int damage) {
+        this.fighter = fighter;
+        this.damage = damage;
+    }
+}
+
+
+public class FightResult {
+    public FightingEntity fighter;
+    public List<DamageReceiver> receivers;
+
+    public FightResult(FightingEntity fighter) {
+        this.fighter = fighter;
+        this.receivers = new List<DamageReceiver>(); 
+    }
+
+    public FightResult(FightingEntity fighter, List<DamageReceiver> receivers) {
+        this.fighter = fighter;
+        this.receivers = receivers;
+    }
+
+    public FightResult(FightingEntity fighter, DamageReceiver receiver) {
+        this.fighter = fighter;
+        this.receivers = new List<DamageReceiver>();
+        this.receivers.Add(receiver);
+    }
+}
+
 public class BattleFight
 {
     private TurnController _controller {get; set;}
@@ -19,6 +51,8 @@ public class BattleFight
         if (this.fighter.isEnemy()) {
             this.getEnemyAction();
         }
+
+        Messenger.Broadcast<FightResult>(Messages.OnFightStart, new FightResult(this.fighter));
 
         QueuedAction attackerAction = this.fighter.GetQueuedAction();
         string attackerName = this.fighter.Name;
@@ -39,26 +73,23 @@ public class BattleFight
 
         this._controller.ui.commandCardUI.SetCommentaryUIText(commentaryText);
 
+
         yield return this._controller.StartCoroutine(doAnimation(this.fighter, attackerAction, targets));
 
-        this.applyEffect(attackerAction);
+        FightResult fightResult = attackerAction.ExecuteAction();
 
         this._controller.ui.statusBarsUI.UpdateStatusBarUI();
 
-        this.onFightEnd();
+        this.onFightEnd(fightResult);
     }
 
-    private void onFightEnd() {
-
+    private void onFightEnd(FightResult result) {
+        Messenger.Broadcast<FightResult>(Messages.OnFightEnd, result);
     }
 
     private void getEnemyAction() {
         // TODO: Implment AI here
         this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRandomAction(), new List<int>{_controller.stage.GetRandomPlayerIndex()}  ));
-    }
-
-    private void applyEffect(QueuedAction attackerAction) {
-        attackerAction.ExecuteAction();
     }
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {

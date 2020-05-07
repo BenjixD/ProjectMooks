@@ -49,11 +49,6 @@ public class CommandCardUI : MonoBehaviour
     [SerializeField]
     private Text _commentaryText;
 
-    void Start() {
-        _battleOptionsUI = new List<CommandOptionText>();
-        _selectionCursor.gameObject.SetActive(false);
-    }
-
     public void InitializeCommandSelection(List<string> options, int startChoice, CommandSelector selector) {
         this.clearExistingCommands();
 
@@ -116,10 +111,13 @@ public class CommandCardUI : MonoBehaviour
         _selectionCursor.transform.SetParent(_actionMenu.transform);
         _selectionCursor.gameObject.SetActive(false);
 
-        for (int i = 0; i < _battleOptionsUI.Count; i++) {
-            Destroy(_battleOptionsUI[i].gameObject);
+        if (_battleOptionsUI != null) {
+            for (int i = 0; i < _battleOptionsUI.Count; i++) {
+                Destroy(_battleOptionsUI[i].gameObject);
+            }
         }
-        _battleOptionsUI.Clear();
+
+        _battleOptionsUI = new List<CommandOptionText>();
     }
 
 

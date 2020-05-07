@@ -4,19 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum BattlePhase{
+    TURN_START,
     PARTY_SETUP,
     MOVE_SELECTION,
-    ENTER_BATTLE,
-    START_TURN,
-    END_TURN
+    MAGIC_SELECTION,
+    TARGET_SELECTION,
+    WAITING_FOR_CHAT,
+    BATTLE
 };
-
-public enum HeroInputActionState {
-    SELECT_ACTION,
-    SELECT_ENEMY_TARGET,
-    SELECT_PLAYER_TARGET,
-    BATTLE_START
-}
 
 [RequireComponent(typeof(BattleUI))]
 [RequireComponent(typeof(StageInfo))]
@@ -26,7 +21,7 @@ public class TurnController : MonoBehaviour
     public BattleUI ui {get; set; }
 
     public StageInfo stage {get; set; }
-    public Battle turn {get; set; }
+    public Battle battle {get; set; }
 
 
     [Header ("References")]
@@ -36,16 +31,12 @@ public class TurnController : MonoBehaviour
 
     [Header ("Other")]
     public float maxTimeBeforeAction = 15;
-    public float playerActionCounter {get; set;}
+    public BattlePhase battlePhase = BattlePhase.PARTY_SETUP;
 
+    private float playerActionCounter {get; set;}
 
+    // Selection
     private int _heroActionIndex = 0;
-    
-
-    public bool inputActionsPhase{get; set; }
-
-
-    private HeroInputActionState heroInputActionState = HeroInputActionState.SELECT_ACTION;
     private int _heroTargetIndex = 0;
 
 
@@ -55,53 +46,79 @@ public class TurnController : MonoBehaviour
     }
 
     void Start() {
-        GameManager.Instance.TurnController = this;
+        GameManager.Instance.turnController = this;
         this.initialize();
     }
 
     private void initialize() {
+        Messenger.AddListener(Messages.OnTurnStart, this.onTurnStart);
+        Messenger.AddListener(Messages.OnTurnEnd, this.onTurnEnd);
+        Messenger.AddListener(Messages.OnPartySetup, this.onPartySetup);
+        Messenger.AddListener(Messages.OnMoveSelection, this.onMoveSelection);
+
+        Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
+
         this.stage.Initialize();
         this.ui.statusBarsUI.Initialize();
-        this.OnPlayerTurnStart();
+
+        this.BroadcastOnStartTurn();
     }
 
+    public void BroadcastPartySetup() {
+        Messenger.Broadcast(Messages.OnPartySetup);
+    }
 
-    // Update is called once per frame
+    public void BroadcastMoveSelection() {
+        Messenger.Broadcast(Messages.OnMoveSelection);
+    }    
+
+
+    public void BroadcastOnStartTurn() {
+        Messenger.Broadcast(Messages.OnTurnStart);
+    }
+
+    public void BroadcastOnTurnEnd() {
+        Messenger.Broadcast(Messages.OnTurnEnd);
+    }
+
+    public bool CanInputActions() {
+        return this.battlePhase != BattlePhase.BATTLE;
+    }
+
     void Update()
     {
+        if (this.CanInputActions()) {
 
-        if (inputActionsPhase == true) {
-
-            switch (heroInputActionState) {
-                case HeroInputActionState.SELECT_ACTION:
+            switch (battlePhase) {
+                case BattlePhase.MOVE_SELECTION:
                     if (Input.GetKeyDown(KeyCode.Z)) {
                        this.setHeroAction();
                     }
                     break;
 
-                case HeroInputActionState.SELECT_ENEMY_TARGET:
+                case BattlePhase.TARGET_SELECTION:
                     if (Input.GetKeyDown(KeyCode.Z)) {
                         this.setHeroTarget();
                     }
                     break;
-
+                case BattlePhase.MAGIC_SELECTION:
+                    // TODO: 
+                    break;
                 default:
-
                     break;
             }
 
             playerActionCounter += Time.deltaTime;
             this.checkExecuteTurn();
-        } else {
         }
     }
 
 
-    public void OnPlayerTurnStart() {
-        this.inputActionsPhase = true;
-        this.turn = null;
 
-        this.heroInputActionState = HeroInputActionState.SELECT_ACTION;
+    private void onTurnStart() {
+
+        this.battlePhase = BattlePhase.TURN_START;
+        this.battle = null;
 
         this.initializeCommandCardActionUI();
 
@@ -116,6 +133,28 @@ public class TurnController : MonoBehaviour
                 player.modifiers.Remove("defend");
             }
         }
+
+        this.BroadcastPartySetup();
+    }
+
+
+    private void onPartySetup() {
+        this.battlePhase = BattlePhase.PARTY_SETUP;
+        //TODO: Party setup
+
+        this.BroadcastMoveSelection();
+    }
+
+    private void onMoveSelection() {
+        this.battlePhase = BattlePhase.MOVE_SELECTION;
+    }
+
+    private void onBattleEnd(BattleResult result) {
+        this.BroadcastOnTurnEnd();
+    }
+
+    private void onTurnEnd() {
+        this.BroadcastOnStartTurn();
     }
 
     private void checkExecuteTurn() {
@@ -133,9 +172,9 @@ public class TurnController : MonoBehaviour
     }
 
     private void executePlayerTurn() {
-        this.inputActionsPhase = false;
-        this.turn = new Battle(this);
-        this.turn.StartTurn();
+        this.battlePhase = BattlePhase.BATTLE;
+        this.battle = new Battle(this);
+        this.battle.StartBattle();
     }
 
     private void UpdateStateText() {
@@ -148,17 +187,18 @@ public class TurnController : MonoBehaviour
     }
 
     private void setHeroAction() {
-        this.heroInputActionState = HeroInputActionState.SELECT_ENEMY_TARGET;
         _heroActionIndex = this.commandSelector.GetChoice();
 
         ActionBase heroAction = stage.GetHeroPlayer().actions[_heroActionIndex];
     
         // TODO: Differentiate between ALL and single target.
         this.ui.targetSelectionUI.InitializeTargetSelectionSingle(heroAction.GetPotentialTargets(stage.GetHeroPlayer()), 0, this.commandSelector);
+
+        this.battlePhase = BattlePhase.TARGET_SELECTION;
     }
 
     private void setHeroTarget() {
-        heroInputActionState = HeroInputActionState.BATTLE_START;
+        this.battlePhase = BattlePhase.WAITING_FOR_CHAT;
         this._heroTargetIndex = this.commandSelector.GetChoice();
         this.ui.targetSelectionUI.ClearSelection();
         stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), stage.GetHeroPlayer().actions[_heroActionIndex], new List<int>{_heroTargetIndex}  ));
@@ -179,4 +219,13 @@ public class TurnController : MonoBehaviour
 
         return true;
     }
+
+    void OnDestroy() {
+        Messenger.RemoveListener(Messages.OnTurnStart, this.onTurnStart);
+        Messenger.RemoveListener(Messages.OnTurnEnd, this.onTurnEnd);
+        Messenger.RemoveListener(Messages.OnPartySetup, this.onPartySetup);
+        Messenger.RemoveListener(Messages.OnMoveSelection, this.onMoveSelection);
+        Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
+    }
+
 }

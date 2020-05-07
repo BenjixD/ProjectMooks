@@ -96,7 +96,6 @@ public class StageInfo : MonoBehaviour
         int numberOfEnemiesToGenerate = 4; // TODO: Make this dependent on stage.
         List<Enemy> validEnemies = new List<Enemy>(_enemyPrefabs);  // TODO: make validEnemies dependent on the level - best done in a JSON object
 
-
         for (int i = 0; i < numberOfEnemiesToGenerate; i++) {
             int enemyIndex = Random.Range(0, validEnemies.Count);
 
@@ -106,7 +105,7 @@ public class StageInfo : MonoBehaviour
             PlayerStats stats = new PlayerStats(enemyPrefab.stats);
             stats.RandomizeStats();
             stats.ResetStats();
-            PlayerCreationData creationData = new PlayerCreationData("Evil monster " + (i+1), stats, Job.BASIC_ENEMY);
+            PlayerCreationData creationData = new PlayerCreationData("Evil monster " + i, stats, Job.BASIC_ENEMY);
             instantiatedEnemy.Initialize(creationData);
             
 

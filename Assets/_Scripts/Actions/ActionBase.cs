@@ -28,7 +28,7 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected bool BasicValidation(string[] splitCommand) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.TurnController.inputActionsPhase ) {
+        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() ) {
             return false;
         }
         return true;
@@ -37,14 +37,14 @@ public abstract class ActionBase : ScriptableObject {
     public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
     
     // TODO: update params
-    public abstract void ExecuteAction(FightingEntity user, List<FightingEntity> targets);
+    public abstract FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets);
 
     public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
         if (targetIdType == TargetType.ALL_TEAMS) {
-            return GameManager.Instance.TurnController.stage.GetAllFightingEntities();
+            return GameManager.Instance.turnController.stage.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.TurnController.stage.GetEnemies());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetEnemies());
         List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
 
         if (user.isEnemy()) {
