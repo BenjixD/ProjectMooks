@@ -21,7 +21,7 @@ public class TestAI : Player {
 			} else {
 				Debug.Log("That move was super effective!");
 			}
-			_ai.FeedbackOnBestAction(result);
+			//_ai.FeedbackOnBestAction(result);
 			_ai.PerturbScore();
 			yield return new WaitForSeconds(3f);
 		}
