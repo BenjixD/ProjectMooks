@@ -16,4 +16,9 @@ public class Messages {
 
     public static string OnFightEnd = "OnFightEnd"; // FightResults
 
+    public static string OnPlayerJoinBattle = "OnPlayerJoinBattle"; // Player
+
+
 }
+
+

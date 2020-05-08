@@ -4,12 +4,12 @@ using System;
 using UnityEngine;
 
 public class Party : MonoBehaviour {
+    public const int numPlayers = 4;
     public PlayerQueue playerQueue;
 
     // (Name, (position, player obj)) mapping
     private Dictionary<string, Tuple<int, Player>> players = new Dictionary<string, Tuple<int, Player>>();
-    [SerializeField]
-    private PlayerCreationData[] playerPos = new PlayerCreationData[4];
+    private PlayerCreationData[] playerPos = new PlayerCreationData[numPlayers];
 
     public void CreatePlayer(PlayerCreationData data, int index) {
         playerPos[index] = data;
@@ -17,7 +17,8 @@ public class Party : MonoBehaviour {
 
     public void CreateHeroPlayer() {
         // Optional TODO: If streamer name is special, then give them a special hero
-        FightingEntity heroPrefab = GameManager.Instance.GetPrefabForPlayerJob(Job.HERO);
+        JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(Job.HERO);
+        FightingEntity heroPrefab = jobActionsList.prefab;
         PlayerStats stats = new PlayerStats(heroPrefab.stats);
         PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
         CreatePlayer(heroData, 0);
@@ -26,15 +27,13 @@ public class Party : MonoBehaviour {
     public Player InstantiatePlayer(int index) {
         PlayerCreationData data = playerPos[index];
         if (data == null) {
-            Debug.LogError("Error: Player not found!");
             return null;
         }
 
-        Debug.Log("Job: " + data.job);
-        FightingEntity prefab = GameManager.Instance.GetPrefabForPlayerJob(data.job);
+        JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(data.job);
+        FightingEntity prefab = jobActionsList.prefab;
         Player player = Instantiate(prefab).GetComponent<Player>();
-
-        player.Initialize(data);
+        player.Initialize(index, data);
         players.Add(data.name, new Tuple<int, Player>(index, player));
 
         Debug.Log("Created player: " + data.name);
@@ -105,14 +104,17 @@ public class Party : MonoBehaviour {
         return pos;
     }
 
-    public List<Player> GetPlayersInPosition() {
-        List<Player> pos = new List<Player>();
-        for(int i = 0; i < playerPos.Length; i++) {
+    public Player[] GetPlayersInPosition() {
+        Player[] pos = new Player[numPlayers];
+        for(int i = 0; i < pos.Length; i++) {
             Tuple<int, Player> player = GetPlayer(i);
             if (player != null) {
-                pos.Add(player.Item2);
-            }  
+                pos[i] = player.Item2;
+            } else {
+                pos[i] = null;
+            }
         }
+
         return pos;
     }
 
@@ -134,7 +136,7 @@ public class Party : MonoBehaviour {
     }
 
     void Start() {
-        StartCoroutine(TestPlayers());
+        // StartCoroutine(TestPlayers());
     }
 
     IEnumerator TestPlayers() {

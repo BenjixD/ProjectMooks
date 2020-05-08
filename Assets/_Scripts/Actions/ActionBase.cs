@@ -3,11 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum TargetType{
+public enum TargetTeam{
     MY_TEAM,
     ENEMY_TEAM,
-    ALL_TEAMS
+    BOTH_TEAMS,
+    NONE
+
 }
+
+public enum TargetType {
+    SINGLE,
+    ALL,
+    NONE
+};
+
+[System.Serializable]
+public class TargetInfo {
+    public TargetTeam targetTeam;
+    public TargetType targetType;
+
+    public TargetInfo(TargetTeam team, TargetType type) {
+        this.targetTeam = team;
+        this.targetType = type;
+    }
+}
+
+// BASIC = get its own command in the command line (i.e. attack/defend/run)
+// MAGIC = magic
+// ITEM = item
+public enum ActionType {
+    BASIC,
+    MAGIC,
+    ITEM
+
+}
+
 public abstract class ActionBase : ScriptableObject {
     public string name;
     [TextArea]
@@ -19,8 +49,8 @@ public abstract class ActionBase : ScriptableObject {
     [Tooltip("The name of the animation played for the user of the attack.")]
     public string userAnimName;
 
-
-    public TargetType targetIdType;
+    public TargetInfo targetInfo;
+    public ActionType actionType;
 
     private bool CheckKeyword(string keyword) {
         return keyword == commandKeyword;
@@ -36,17 +66,7 @@ public abstract class ActionBase : ScriptableObject {
         return true;
     }
 
-    // Returns true iff input is an integer, non-negative, and no less than the number of enemies
-    protected bool TargetIdValidation(string targetStr) {
-        int targetId;
-        if (!int.TryParse(targetStr, out targetId)) {
-            return false;
-        }
-        if (targetId < 0 || targetId >= GameManager.Instance.turnController.stage.GetEnemies().Count) {
-            return false;
-        }
-        return true;
-    }
+
 
     public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
     
@@ -55,25 +75,25 @@ public abstract class ActionBase : ScriptableObject {
         return ApplyEffect(user, targets);
     }
 
-    public List<FightingEntity> GetPotentialTargets(FightingEntity user) {
-        if (targetIdType == TargetType.ALL_TEAMS) {
+    public List<FightingEntity> GetPotentialActiveTargets(FightingEntity user) {
+        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
             return GameManager.Instance.turnController.stage.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetEnemies());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.party.GetPlayersInPosition());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetActiveEnemies());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetActivePlayers());
 
         if (user.isEnemy()) {
-            potentialTargets = targetIdType == TargetType.MY_TEAM ? enemies : players;
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
         } else {
-            potentialTargets = targetIdType == TargetType.MY_TEAM ? players : enemies;
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? players : enemies;
         }
 
         return potentialTargets;
     }
 
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
-        List<FightingEntity> potentialTargets = GetPotentialTargets(user);
+        List<FightingEntity> potentialTargets = GetPotentialActiveTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
             if (target < potentialTargets.Count) {
@@ -94,9 +114,18 @@ public abstract class ActionBase : ScriptableObject {
             return -1;
         }
 
-        List<FightingEntity> targets = GetPotentialTargets(user);
+        List<FightingEntity> targets = GetPotentialActiveTargets(user);
 
-        if (targetId < 0 || targetId >= targets.Count) {
+        bool foundTargetId = false;
+
+        foreach (FightingEntity target in targets) {
+            if (target.targetId == targetId) {
+                foundTargetId = true;
+                break;
+            }
+        }
+
+        if (!foundTargetId) {
             return -1;
         }
 

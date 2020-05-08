@@ -16,6 +16,8 @@ public class FightingEntity : MonoBehaviour
 	public Job job;
 
 	public List<ActionBase> actions = new List<ActionBase>();
+
+    public int targetId;
 	private QueuedAction _queuedAction;
 	private AnimationController _animController;
 
@@ -23,7 +25,8 @@ public class FightingEntity : MonoBehaviour
 		_animController = GetComponent<AnimationController>();
 	}
 	
-	public void Initialize(PlayerCreationData data) {
+	public void Initialize(int index, PlayerCreationData data) {
+        this.targetId = index;
 		Name = data.name;
 		SetStats(data.stats);
 		SetJob(data.job);
@@ -42,9 +45,9 @@ public class FightingEntity : MonoBehaviour
 	public void SetJob(Job job) {
 		this.job = job;
         if (this.isEnemy()) {
-            actions = GameManager.Instance.GetEnemyJobActionsList(job);
+            actions = GameManager.Instance.GetEnemyJobActions(job);
         } else {
-		    actions =  GameManager.Instance.GetPlayerJobActionsList(job);
+		    actions =  GameManager.Instance.GetPlayerJobActions(job);
         }
 	}
 
@@ -63,7 +66,7 @@ public class FightingEntity : MonoBehaviour
 		_queuedAction = queuedAction;
 	}
 
-    public QueuedAction  GetQueuedAction() {
+    public QueuedAction GetQueuedAction() {
         return _queuedAction;
     }
 
@@ -86,5 +89,9 @@ public class FightingEntity : MonoBehaviour
 	public void Animate(string animationName, bool loop) {
 		_animController.AddAnimation(animationName, loop);
 	}
+
+    public List<ActionBase> GetFilteredActions(ActionType actionType) {
+        return this.actions.Filter( (ActionBase action) => action.actionType == actionType );
+    }
 }
 
