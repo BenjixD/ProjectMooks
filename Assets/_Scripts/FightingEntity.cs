@@ -33,6 +33,7 @@ public class FightingEntity : MonoBehaviour
 	public void Initialize(int index, PlayerCreationData data) {
         this.targetId = index;
 		Name = data.name;
+		_ai = new FightingEntityAI(this);
 		SetStats(data.stats);
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);
