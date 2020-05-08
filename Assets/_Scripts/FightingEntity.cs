@@ -1,9 +1,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-
-
-
+using System.Linq;
 
 
 public class FightingEntity : MonoBehaviour
@@ -18,11 +16,18 @@ public class FightingEntity : MonoBehaviour
 	public List<ActionBase> actions = new List<ActionBase>();
 
     public int targetId;
-	private QueuedAction _queuedAction;
-	private AnimationController _animController;
 
-	private void Awake() {
+	protected QueuedAction _queuedAction;
+	protected AnimationController _animController;
+	protected FightingEntityAI _ai;
+
+	protected virtual void Awake() {
 		_animController = GetComponent<AnimationController>();
+		Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
+	}
+
+	protected virtual void OnDestroy() {
+		Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
 	}
 	
 	public void Initialize(int index, PlayerCreationData data) {
@@ -30,6 +35,7 @@ public class FightingEntity : MonoBehaviour
 		Name = data.name;
 		SetStats(data.stats);
 		SetJob(data.job);
+		_ai = new FightingEntityAI(this);
 	}
 
 	public void SetStats(PlayerStats stats) {
@@ -62,6 +68,10 @@ public class FightingEntity : MonoBehaviour
 		Debug.Log("Invalid action command for player " + Name + ": " + message);
 	}
 
+	public ActionBase GetRecommendedAction() {
+		return _ai.GetSuggestion();
+	}
+
 	public void SetQueuedAction(QueuedAction queuedAction) {
 		_queuedAction = queuedAction;
 	}
@@ -92,6 +102,11 @@ public class FightingEntity : MonoBehaviour
 
     public List<ActionBase> GetFilteredActions(ActionType actionType) {
         return this.actions.Filter( (ActionBase action) => action.actionType == actionType );
+    }
+
+    private void OnBattleEnd(BattleResult result) {
+    	List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
+    	_ai.ReviewFightResult(myFights);
     }
 }
 
