@@ -7,7 +7,7 @@ public class ActionListener : TwitchChatListenerBase {
     public Canvas speechCanvas; 
     public Text speechCanvasText;
 
-
+    [SerializeField]
     private Player _player;
 
 
