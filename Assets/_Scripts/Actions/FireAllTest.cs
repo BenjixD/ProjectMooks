@@ -9,11 +9,7 @@ public class FireAllTest : ActionBase {
         if (!BasicValidation(splitCommand)) {
             return false;
         }
-        List<int> targetIds = new List<int>();
-        for (int i = 0; i < GameManager.Instance.turnController.field.GetEnemies().Length; i++) {
-            targetIds.Add(i);
-        }
-
+        List<int> targetIds = this.GetPotentialActiveTargets(user).Map((FightingEntity target) => target.targetId );
         user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         return true;
     }

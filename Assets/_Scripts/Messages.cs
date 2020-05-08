@@ -20,6 +20,7 @@ public class Messages {
 
     public static string OnEntityDeath = "OnEntityDeath"; // DeathResult
 
+    public static string OnWaveComplete = "OnWaveComplete"; // DeathResult
 
 }
 

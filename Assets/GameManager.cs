@@ -8,9 +8,6 @@ public class GameManager : Singleton<GameManager> {
 
     public TwitchChatBroadcaster chatBroadcaster;
 
-  
-
-
     [SerializeField] private JobActionsList[] _playerJobActionsLists;
     [SerializeField] private JobActionsList[] _enemyJobActionsLists;
 
@@ -18,6 +15,13 @@ public class GameManager : Singleton<GameManager> {
 
     public Dictionary<Job, List<ActionBase>> enemyJobActions = new Dictionary<Job, List<ActionBase>>();
     
+    public List<StageInfoContainer> stages {get; set;}
+
+    public int currentStageIndex = 0;
+
+
+    [SerializeField]
+    private List<StageInfo> stageInfo = new List<StageInfo>();
 
     void Awake() {
         if (FindObjectsOfType<GameManager>().Length >= 2) {
@@ -34,7 +38,10 @@ public class GameManager : Singleton<GameManager> {
             enemyJobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
 
+        this.InitializeStages();
+
         party.CreateHeroPlayer();
+
     }
 
     public List<ActionBase> GetPlayerJobActions(Job job) {
@@ -78,5 +85,24 @@ public class GameManager : Singleton<GameManager> {
         jobs.Remove(Job.HERO);
         return jobs;
     }
+
+    public StageInfoContainer GetCurrentStage() {
+        return this.stages[this.currentStageIndex];
+    }
+
+    public void SetStageIndex(int index) {
+        this.currentStageIndex = index;
+    }
+
+
+    private void InitializeStages() {
+        this.stages = new List<StageInfoContainer>();
+        foreach (StageInfo stage in stageInfo) {
+            StageInfoContainer stageInfo = new StageInfoContainer(stage);
+            stageInfo.InitializeWaveList(); // Does random generation
+            this.stages.Add(stageInfo);
+        }
+    }
+
 
 }
