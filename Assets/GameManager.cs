@@ -18,6 +18,7 @@ public class GameManager : Singleton<GameManager> {
     public List<StageInfoContainer> stages {get; set;}
 
     public int currentStageIndex = 0;
+    public int nextStageIndex = 1;
 
 
     [SerializeField]
@@ -92,6 +93,10 @@ public class GameManager : Singleton<GameManager> {
 
     public void SetStageIndex(int index) {
         this.currentStageIndex = index;
+    }
+
+    public void SetNextStageIndex(int index) {
+        this.nextStageIndex = index;
     }
 
 
