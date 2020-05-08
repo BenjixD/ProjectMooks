@@ -87,7 +87,7 @@ public class BattleFight
 
     private void getEnemyAction() {
         // TODO: Implment AI here
-        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRandomAction(), new List<int>{_controller.stage.GetRandomPlayerIndex()}  ));
+        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRandomAction(), new List<int>{_controller.field.GetRandomPlayerIndex()}  ));
     }
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {

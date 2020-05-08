@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public class StageInfo : MonoBehaviour
+public class FieldState : MonoBehaviour
 {
     private Enemy[] _enemies = new Enemy[Party.numPlayers];
 
