@@ -76,20 +76,18 @@ public class StatusBarsUI : MonoBehaviour
 
     private void DestroyCurrentStatusBars() {
         if (statusBars != null) {
-            foreach (var statusBar in statusBars) {
-                Destroy(statusBar);
+            foreach (StatusBarUI statusBar in statusBars) {
+                Destroy(statusBar.gameObject);
             }
             this.statusBars.Clear();
         }
 
         if (enemyStatusBars != null) {
-            foreach (var statusBar in enemyStatusBars) {
-                Destroy(statusBar);
+            foreach (StatusBarUI statusBar in enemyStatusBars) {
+                Destroy(statusBar.gameObject);
             }
             this.enemyStatusBars.Clear();
         }
 
     }
-  
-
 }

@@ -28,6 +28,16 @@ public class TargetInfo {
     }
 }
 
+// BASIC = get its own command in the command line (i.e. attack/defend/run)
+// MAGIC = magic
+// ITEM = item
+public enum ActionType {
+    BASIC,
+    MAGIC,
+    ITEM
+
+}
+
 public abstract class ActionBase : ScriptableObject {
     public string name;
     [TextArea]
@@ -40,6 +50,7 @@ public abstract class ActionBase : ScriptableObject {
     public string userAnimName;
 
     public TargetInfo targetInfo;
+    public ActionType actionType;
 
     private bool CheckKeyword(string keyword) {
         return keyword == commandKeyword;

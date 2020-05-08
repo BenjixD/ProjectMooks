@@ -49,7 +49,11 @@ public class CommandCardUI : MonoBehaviour
     [SerializeField]
     private Text _commentaryText;
 
+    private List<string> options;
+
+
     public void InitializeCommandSelection(List<string> options, int startChoice, CommandSelector selector) {
+        this.options = options;
         this.clearExistingCommands();
 
         this.SetCommandCardUIActive(CommandCardUIMode.SELECT_COMMAND);
@@ -62,7 +66,7 @@ public class CommandCardUI : MonoBehaviour
         }
 
         _commandSelector = selector;
-        _commandSelector.Initialize(0, options.Count - 1, this.SetSelectionCursorFromCommandSelector);
+        _commandSelector.Initialize(0, options.Count - 1, this.SetSelectionCursorFromCommandSelector, true);
         this.SetSelectionCursor(startChoice);
     }
 
@@ -86,10 +90,9 @@ public class CommandCardUI : MonoBehaviour
     }
 
     private void SetSelectionCursorFromCommandSelector() {
-        SetSelectionCursor(_commandSelector.GetChoice());
+        int index = _commandSelector.GetChoice();
+        SetSelectionCursor( index );
     }
-
-
 
     private void SetCommandCardUIActive(CommandCardUIMode mode) {
         switch (mode) {
@@ -118,6 +121,7 @@ public class CommandCardUI : MonoBehaviour
         }
 
         _battleOptionsUI = new List<CommandOptionText>();
+        
     }
 
 

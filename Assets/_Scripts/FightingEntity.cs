@@ -66,7 +66,7 @@ public class FightingEntity : MonoBehaviour
 		_queuedAction = queuedAction;
 	}
 
-    public QueuedAction  GetQueuedAction() {
+    public QueuedAction GetQueuedAction() {
         return _queuedAction;
     }
 
@@ -89,5 +89,9 @@ public class FightingEntity : MonoBehaviour
 	public void Animate(string animationName, bool loop) {
 		_animController.AddAnimation(animationName, loop);
 	}
+
+    public List<ActionBase> GetFilteredActions(ActionType actionType) {
+        return this.actions.Filter( (ActionBase action) => action.actionType == actionType );
+    }
 }
 

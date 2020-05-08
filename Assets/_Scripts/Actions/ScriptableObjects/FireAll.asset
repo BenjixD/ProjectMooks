@@ -20,3 +20,4 @@ MonoBehaviour:
   targetInfo:
     targetTeam: 1
     targetType: 1
+  actionType: 1

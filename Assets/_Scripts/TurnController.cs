@@ -13,6 +13,18 @@ public enum BattlePhase{
     BATTLE
 };
 
+[System.Serializable]
+public class HeroActionChoice {
+    public string choiceName = "";
+    public ActionBase action = null;
+
+    public HeroActionChoice(string actionName, ActionBase action) {
+        this.choiceName = actionName;
+        this.action = action;
+    }
+}
+
+
 [RequireComponent(typeof(BattleUI))]
 [RequireComponent(typeof(StageInfo))]
 public class TurnController : MonoBehaviour
@@ -34,6 +46,8 @@ public class TurnController : MonoBehaviour
     public BattlePhase battlePhase = BattlePhase.PARTY_SETUP;
 
     private float playerActionCounter {get; set;}
+
+    public List<HeroActionChoice> currentHeroChoices;
 
     // Selection
     private int _heroActionIndex = 0;
@@ -92,7 +106,7 @@ public class TurnController : MonoBehaviour
             switch (battlePhase) {
                 case BattlePhase.MOVE_SELECTION:
                     if (Input.GetKeyDown(KeyCode.Z)) {
-                       this.setHeroAction();
+                        this.setHeroAction();
                     }
                     break;
 
@@ -102,7 +116,9 @@ public class TurnController : MonoBehaviour
                     }
                     break;
                 case BattlePhase.MAGIC_SELECTION:
-                    // TODO: 
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.setHeroAction();
+                    }
                     break;
                 default:
                     break;
@@ -120,7 +136,7 @@ public class TurnController : MonoBehaviour
         this.battlePhase = BattlePhase.TURN_START;
         this.battle = null;
 
-        this.initializeCommandCardActionUI();
+        this.initializeCommandCardActionUI(ActionType.BASIC);
 
 
         this.playerActionCounter = 0;
@@ -189,29 +205,77 @@ public class TurnController : MonoBehaviour
     private void setHeroAction() {
         _heroActionIndex = this.commandSelector.GetChoice();
 
-        ActionBase heroAction = stage.GetHeroPlayer().actions[_heroActionIndex];
-    
-        // TODO: Differentiate between ALL and single target.
-        if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
-            this.ui.targetSelectionUI.InitializeTargetSelectionSingle(heroAction.GetPotentialActiveTargets(stage.GetHeroPlayer()), 0, this.commandSelector);
-            this.battlePhase = BattlePhase.TARGET_SELECTION;
-        } else {
-            stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), heroAction, new List<int>()));
-            this.checkExecuteTurn();
-        }
+        HeroActionChoice choice = this.currentHeroChoices[_heroActionIndex];
 
+        if (choice.choiceName == "Magic" && choice.action == null) {
+            this.battlePhase = BattlePhase.MAGIC_SELECTION;
+            this.initializeCommandCardActionUI(ActionType.MAGIC);
+        } else {
+            ActionBase heroAction = choice.action;
+            // TODO: Differentiate between ALL and single target.
+            if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
+                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(stage.GetHeroPlayer());
+                switch (heroAction.targetInfo.targetType) {
+                    case TargetType.SINGLE:
+                        this.ui.targetSelectionUI.InitializeTargetSelectionSingle(possibleTargets, 0, this.commandSelector);
+                        break;
+
+                    case TargetType.ALL:
+                        this.ui.targetSelectionUI.InitializeTargetSelectionAll(possibleTargets);
+                    break;
+
+                    default:
+
+                    break;
+                }
+                this.battlePhase = BattlePhase.TARGET_SELECTION;
+            } else {
+                stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), heroAction, new List<int>()));
+                this.checkExecuteTurn();
+            }
+        }
     }
 
     private void setHeroTarget() {
         this.battlePhase = BattlePhase.WAITING_FOR_CHAT;
         this._heroTargetIndex = this.commandSelector.GetChoice();
         this.ui.targetSelectionUI.ClearSelection();
-        stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), stage.GetHeroPlayer().actions[_heroActionIndex], new List<int>{_heroTargetIndex}  ));
+        ActionBase heroAction = this.currentHeroChoices[_heroActionIndex].action;
+
+        switch (heroAction.targetInfo.targetType) {
+            case TargetType.SINGLE:
+                stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), heroAction, new List<int>{_heroTargetIndex}  ));
+                break;
+
+            case TargetType.ALL:
+                List<int> allEnemies = stage.GetActiveEnemies().Map((Enemy enemy) => enemy.targetId);
+                stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), heroAction, allEnemies ));
+            break;
+
+            default:
+
+            break;
+        }
     }
 
     // Initializes the command card to display the hero's actions
-    private void initializeCommandCardActionUI() {
-        List<string> actionNames = stage.GetHeroPlayer().actions.Map((ActionBase action) => { return action.name; });
+    private void initializeCommandCardActionUI(ActionType type) {
+
+        List<ActionBase> actions = stage.GetHeroPlayer().GetFilteredActions(type);
+        this.currentHeroChoices = new List<HeroActionChoice>();
+
+        foreach (ActionBase action in actions) {
+            Debug.Log("Type: " + type + " action: " + action.actionType);
+            this.currentHeroChoices.Add(new HeroActionChoice(action.name, action));
+        }
+
+        if (type == ActionType.BASIC) {
+            if (stage.GetHeroPlayer().GetFilteredActions(ActionType.MAGIC).Count != 0) {
+                this.currentHeroChoices.Insert(1, new HeroActionChoice("Magic", null));
+            }
+        }
+
+        List<string> actionNames = this.currentHeroChoices.Map((HeroActionChoice choice) => { return choice.choiceName; });
         this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
     }
 
