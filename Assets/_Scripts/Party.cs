@@ -74,6 +74,7 @@ public class Party : MonoBehaviour {
         Tuple<int, Player> player = players[username];
         playerPos[player.Item1] = null;
         players.Remove(username);
+        playerQueue.Remove(username);
     }
 
     public Tuple<int, Player> GetPlayer(string username) {

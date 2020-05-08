@@ -73,4 +73,10 @@ public class GameManager : Singleton<GameManager> {
         return null;
     }
 
+    public List<Job> getMookJobs() {
+        List<Job> jobs = new List<Job>(playerJobActions.Keys);
+        jobs.Remove(Job.HERO);
+        return jobs;
+    }
+
 }

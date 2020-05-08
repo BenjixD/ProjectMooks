@@ -22,14 +22,33 @@ public class StatusBarsUI : MonoBehaviour
 
     void Awake() {
         _controller = GetComponent<TurnController>();
-        Messenger.AddListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+
     }
 
     void OnDestroy() {
         Messenger.RemoveListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+        Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
     }
 
     public void Initialize() {
+        Messenger.AddListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+        Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
+
+        this.UpdateStatusBars();
+    }
+
+    public void UpdateStatusBars() {
+        List<Player> players = _controller.stage.GetActivePlayers();
+        List<Enemy> enemies = _controller.stage.GetActiveEnemies();
+
+        if (statusBars == null || enemyStatusBars == null || players.Count != statusBars.Count || enemies.Count != enemyStatusBars.Count) {
+            this.rebuildStatusBars();
+        }
+
+        this.setStatusBarUI();
+    }
+
+    private void rebuildStatusBars() {
         this.DestroyCurrentStatusBars();
         int playerCount = _controller.stage.GetActivePlayers().Count;
 
@@ -50,12 +69,9 @@ public class StatusBarsUI : MonoBehaviour
             statusBarForPlayer.transform.parent = enemyStatusBarParent;
             enemyStatusBars.Add(statusBarForPlayer);
         }
-
-        this.UpdateStatusBarUI();
     }
 
-
-    public void UpdateStatusBarUI() {
+    private void setStatusBarUI() {
         List<Player> players = _controller.stage.GetActivePlayers();
         for (int i = 0; i < players.Count; i++) {
             statusBars[i].SetName(players[i].Name);
@@ -70,8 +86,12 @@ public class StatusBarsUI : MonoBehaviour
         }
     }
 
-    public void onPlayerJoin(Player player) {
-        this.Initialize();
+    private void onPlayerJoin(Player player) {
+        this.UpdateStatusBars();
+    }
+
+    private void onFightEnd(FightResult result) {
+        this.UpdateStatusBars();
     }
 
     private void DestroyCurrentStatusBars() {

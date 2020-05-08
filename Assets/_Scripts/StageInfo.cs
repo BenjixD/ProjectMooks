@@ -17,8 +17,14 @@ public class StageInfo : MonoBehaviour
     Player _heroPlayer;
 
     public void Initialize() {
+        Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
+
         this.InitializePlayers();
         this.InitializeEnemies();
+    }
+
+    void OnDestroy() {
+        Messenger.RemoveListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
     }
 
     public Player GetHeroPlayer() {
@@ -97,6 +103,33 @@ public class StageInfo : MonoBehaviour
             this.InstantiatePlayer(emptySlot, true);
         }
     }
+
+    private void onEntityDeath(DeathResult result) {
+        FightingEntity deadFighter = result.deadEntity.fighter;
+        // TODO: Play death animation
+        
+
+
+        bool isEnemy = deadFighter.isEnemy();
+        if (isEnemy) {
+            _enemies[deadFighter.targetId] = null;
+            Destroy(deadFighter.gameObject);
+        } else {
+
+            if (deadFighter.targetId == 0) {
+                this.onHeroDeath(result);
+                return;
+            }
+
+            GameManager.Instance.party.EvictPlayer(deadFighter.Name);
+            Destroy(deadFighter.gameObject);
+        }
+
+    }
+
+    private void onHeroDeath(DeathResult result) {
+        // TODO: end the game
+    } 
 
 
     private void InitializePlayers() {

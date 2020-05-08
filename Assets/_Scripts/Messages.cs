@@ -18,6 +18,8 @@ public class Messages {
 
     public static string OnPlayerJoinBattle = "OnPlayerJoinBattle"; // Player
 
+    public static string OnEntityDeath = "OnEntityDeath"; // DeathResult
+
 
 }
 

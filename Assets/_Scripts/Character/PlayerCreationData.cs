@@ -32,8 +32,9 @@ public class PlayerCreationData {
 		} else if(stats.maxDefense > template.maxDefense && stats.maxResistance > template.maxResistance) {
 			return Job.CLERIC;
 		} else {
-			Array values = Enum.GetValues(typeof(Job));
-			return (Job)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+            List<Job> jobsList = GameManager.Instance.getMookJobs();
+
+			return jobsList[UnityEngine.Random.Range(0, jobsList.Count)];
 		}
 	}
 }

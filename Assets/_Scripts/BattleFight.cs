@@ -78,8 +78,6 @@ public class BattleFight
 
         FightResult fightResult = attackerAction.ExecuteAction();
 
-        this._controller.ui.statusBarsUI.UpdateStatusBarUI();
-
         this.onFightEnd(fightResult);
     }
 
