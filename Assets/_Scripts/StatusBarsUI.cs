@@ -56,7 +56,7 @@ public class StatusBarsUI : MonoBehaviour
 
         for (int i = 0; i < playerCount; i++) { 
             StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
-            statusBarForPlayer.transform.parent = playerStatusBarParent;
+            statusBarForPlayer.transform.SetParent(playerStatusBarParent);
             statusBars.Add(statusBarForPlayer);
         }
 
@@ -66,7 +66,7 @@ public class StatusBarsUI : MonoBehaviour
 
         for (int i = 0; i < enemyCount; i++) {
             StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
-            statusBarForPlayer.transform.parent = enemyStatusBarParent;
+            statusBarForPlayer.transform.SetParent(enemyStatusBarParent);
             enemyStatusBars.Add(statusBarForPlayer);
         }
     }
