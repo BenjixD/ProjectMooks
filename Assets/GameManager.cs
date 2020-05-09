@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : Singleton<GameManager> {
     public Party party;
@@ -31,6 +33,13 @@ public class GameManager : Singleton<GameManager> {
         }
 
         DontDestroyOnLoad(gameObject);
+
+        // Initialize with the field for debugging purposes
+        if (SceneManager.GetActiveScene().name != "_MainMenu") {
+            chatBroadcaster.ConnectToChannel(chatBroadcaster._channelToConnectTo);
+        }
+
+
         foreach(JobActionsList jobActionsList in _playerJobActionsLists) {
             playerJobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
