@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
-public class StageInfo : MonoBehaviour
+public class FieldState : MonoBehaviour
 {
     private Enemy[] _enemies = new Enemy[Party.numPlayers];
 
@@ -14,11 +15,22 @@ public class StageInfo : MonoBehaviour
     public List<Transform> mookSlots;
     public List<Transform> enemySlots;
 
+    public int currentWaveIndex {get; set;}
+
     Player _heroPlayer;
 
+
     public void Initialize() {
+        Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
+        Messenger.AddListener(Messages.OnWaveComplete, this.onWaveComplete);
+
         this.InitializePlayers();
         this.InitializeEnemies();
+    }
+
+    void OnDestroy() {
+        Messenger.RemoveListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
+        Messenger.RemoveListener(Messages.OnWaveComplete, this.onWaveComplete);
     }
 
     public Player GetHeroPlayer() {
@@ -98,6 +110,57 @@ public class StageInfo : MonoBehaviour
         }
     }
 
+    private void onEntityDeath(DeathResult result) {
+        FightingEntity deadFighter = result.deadEntity.fighter;
+        // TODO: Play death animation
+
+        bool isEnemy = deadFighter.isEnemy();
+        if (isEnemy) {
+            _enemies[deadFighter.targetId] = null;
+            Destroy(deadFighter.gameObject);
+
+            bool stillHasEnemies = false;
+            for (int i = 0; i < _enemies.Length; i++) {
+                if (_enemies[i] != null) {
+                    stillHasEnemies = true;
+                    break;
+                }
+            }
+
+            if (!stillHasEnemies) {
+                this.onWaveComplete();
+            }
+        } else {
+
+            if (deadFighter.targetId == 0) {
+                this.onHeroDeath(result);
+                return;
+            }
+
+            GameManager.Instance.party.EvictPlayer(deadFighter.Name);
+            Destroy(deadFighter.gameObject);
+        }
+
+    }
+
+    private void onHeroDeath(DeathResult result) {
+        SceneManager.LoadScene("GameOverScreen");
+    }
+
+    private void onWaveComplete() {
+        StageInfoContainer stageInfo = GameManager.Instance.GetCurrentStage();
+        WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.currentWaveIndex);
+
+        this.currentWaveIndex++;
+        if (this.currentWaveIndex >= stageInfo.numWaves) {
+            GameManager.Instance.SetNextStageIndex(GameManager.Instance.currentStageIndex + 1); // May want to change logic in the future
+            SceneManager.LoadScene("WorldMap");
+
+        } else {
+            this.GenerateEnemyList(this.currentWaveIndex);
+        }
+    }
+
 
     private void InitializePlayers() {
         Player instantiatedHeroPlayer = GameManager.Instance.party.InstantiatePlayer(0);
@@ -128,19 +191,21 @@ public class StageInfo : MonoBehaviour
     }
 
     private void InitializeEnemies() {
-        this.GenerateEnemyList();
+        this.GenerateEnemyList(0);
     }
 
+    private void GenerateEnemyList(int waveIndex) {
+        this.currentWaveIndex = waveIndex;
 
-    private void GenerateEnemyList() {
-        int numberOfEnemiesToGenerate = 3; // TODO: Make this dependent on stage.
-        List<Job> enemyJobList = GameManager.Instance.enemyJobActions.Keys.ToList();
+        StageInfoContainer stageInfo = GameManager.Instance.GetCurrentStage();
+        WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.currentWaveIndex);
+        waveInfo.InitializeEnemyList(); // Does random generation
 
-        for (int i = 0; i < numberOfEnemiesToGenerate; i++) {
-            int enemyTypeIndex = Random.Range(0, enemyJobList.Count);
+        int numberOfEnemiesToGenerate = waveInfo.numEnemies; // TODO: Make this dependent on stage.
+        List<JobActionsList> enemyList = waveInfo.GetEnemyList();
 
-            JobActionsList jobList = GameManager.Instance.GetEnemyJobActionsList(enemyJobList[enemyTypeIndex]);
-
+        for (int i = 0; i < enemyList.Count; i++) {
+            JobActionsList jobList = enemyList[i];
 
             FightingEntity enemyPrefab = jobList.prefab;
             Enemy instantiatedEnemy = Instantiate(enemyPrefab) as Enemy;
@@ -150,8 +215,9 @@ public class StageInfo : MonoBehaviour
             stats.ResetStats();
             PlayerCreationData creationData = new PlayerCreationData(enemyPrefab.Name + " (" + i + ")", stats, Job.BASIC_ENEMY);
             instantiatedEnemy.Initialize(i, creationData);
-            
 
+            // TODO: Some sort of entrance animation
+            
             instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
             instantiatedEnemy.transform.SetParent(enemySlots[i]);
             instantiatedEnemy.transform.localPosition = Vector3.zero;

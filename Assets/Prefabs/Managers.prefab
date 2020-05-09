@@ -68,6 +68,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 560d63ceaa43a8146b242f0b21c603c9, type: 2}
   _enemyJobActionsLists:
   - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
+  currentStageIndex: 0
+  nextStageIndex: 0
+  stageInfo:
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
 --- !u!114 &5902595311601403742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95,7 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _template:
     level: 1
-    maxHp: 30
+    maxHp: 5
     maxMana: 100
     maxPhysical: 25
     maxSpecial: 25

@@ -38,6 +38,18 @@ public enum ActionType {
 
 }
 
+public class DeathResult {
+    public FightingEntity attacker;
+    public DamageReceiver deadEntity;
+    public ActionBase movedUsedToKill;
+
+    public DeathResult(FightingEntity attacker, DamageReceiver deadEntity, ActionBase move) {
+        this.attacker = attacker;
+        this.deadEntity = deadEntity;
+        this.movedUsedToKill = move;
+    }
+}
+
 public abstract class ActionBase : ScriptableObject {
     public string name;
     [TextArea]
@@ -71,16 +83,36 @@ public abstract class ActionBase : ScriptableObject {
     
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
         user.Animate(userAnimName, false);
-        return ApplyEffect(user, targets);
+        FightResult result = ApplyEffect(user, targets);
+        this.OnPostEffect(result);
+
+        return result;
     }
 
     public List<FightingEntity> GetPotentialActiveTargets(FightingEntity user) {
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
-            return GameManager.Instance.turnController.stage.GetAllFightingEntities();
+            return GameManager.Instance.turnController.field.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetActiveEnemies());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetActivePlayers());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetActiveEnemies());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetActivePlayers());
+
+        if (user.isEnemy()) {
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
+        } else {
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? players : enemies;
+        }
+
+        return potentialTargets;
+    }
+
+    public List<FightingEntity> GetAllPotentialTargets(FightingEntity user) {
+        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
+            return GameManager.Instance.turnController.field.GetAllFightingEntities();
+        }
+        List<FightingEntity> potentialTargets;
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetEnemies());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetPartyPlayers());
 
         if (user.isEnemy()) {
             potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
@@ -92,10 +124,10 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
-        List<FightingEntity> potentialTargets = GetPotentialActiveTargets(user);
+        List<FightingEntity> potentialTargets = GetAllPotentialTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
-            if (target < potentialTargets.Count) {
+            if (target < potentialTargets.Count && potentialTargets[target] != null) {
                 targets.Add(potentialTargets[target]);
             }
         }
@@ -106,6 +138,10 @@ public abstract class ActionBase : ScriptableObject {
     public List<FightingEntity> GetTargets(FightingEntity user, int targetId) {
         return this.GetTargets(user, new List<int>{targetId});
     }
+
+    protected virtual void OnPostEffect(FightResult result) {
+    }
+
 
     protected int GetTargetIdFromString(string str, FightingEntity user) {
         int targetId;

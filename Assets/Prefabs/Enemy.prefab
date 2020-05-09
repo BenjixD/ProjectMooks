@@ -51,7 +51,7 @@ MonoBehaviour:
   Name: Evil Monster
   stats:
     level: 1
-    maxHp: 50
+    maxHp: 15
     maxMana: 25
     maxPhysical: 15
     maxSpecial: 15
@@ -70,6 +70,7 @@ MonoBehaviour:
     _manaRegen: 0
   job: 0
   actions: []
+  targetId: 0
 --- !u!33 &5907855612439490822
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -190,6 +191,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544535d63c6b45540b5a2254709867e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialToReplace: {fileID: 0}
-  materialIWantToUse: {fileID: 0}
-  meshRenderer: {fileID: 6258014410280954371}
+  setOriginal: 0

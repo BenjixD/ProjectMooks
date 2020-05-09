@@ -26,13 +26,13 @@ public class HeroActionChoice {
 
 
 [RequireComponent(typeof(BattleUI))]
-[RequireComponent(typeof(StageInfo))]
+[RequireComponent(typeof(FieldState))]
 public class TurnController : MonoBehaviour
 {
 
     public BattleUI ui {get; set; }
 
-    public StageInfo stage {get; set; }
+    public FieldState field {get; set; }
     public Battle battle {get; set; }
 
 
@@ -56,7 +56,7 @@ public class TurnController : MonoBehaviour
 
     void Awake() {
         ui = GetComponent<BattleUI>();
-        stage = GetComponent<StageInfo>();
+        field = GetComponent<FieldState>();
     }
 
     void Start() {
@@ -72,7 +72,7 @@ public class TurnController : MonoBehaviour
 
         Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
 
-        this.stage.Initialize();
+        this.field.Initialize();
         this.ui.statusBarsUI.Initialize();
 
         this.BroadcastOnStartTurn();
@@ -100,7 +100,7 @@ public class TurnController : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
         if (this.CanInputActions()) {
 
             switch (battlePhase) {
@@ -142,7 +142,7 @@ public class TurnController : MonoBehaviour
         this.playerActionCounter = 0;
         
         // Reset defence state
-        foreach (var player in stage.GetAllFightingEntities()) {
+        foreach (var player in field.GetAllFightingEntities()) {
             player.ResetCommand();
 
             if (player.modifiers.Contains("defend")) {
@@ -156,7 +156,7 @@ public class TurnController : MonoBehaviour
 
     private void onPartySetup() {
         this.battlePhase = BattlePhase.PARTY_SETUP;
-        this.stage.RequestRecruitNewParty();
+        this.field.RequestRecruitNewParty();
 
         this.BroadcastMoveSelection();
     }
@@ -174,6 +174,8 @@ public class TurnController : MonoBehaviour
     }
 
     private void checkExecuteTurn() {
+        List<Player> players = field.GetActivePlayers();
+
         //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
         bool timeOutIfChatTooSlow = false;
         bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
@@ -194,7 +196,7 @@ public class TurnController : MonoBehaviour
     }
 
     private void UpdateStateText() {
-        if (!stage.GetHeroPlayer().HasSetCommand()) {
+        if (!field.GetHeroPlayer().HasSetCommand()) {
             this.ui.SetStateText("Waiting on streamer input");
         } else {
             int timer = (int)(this.maxTimeBeforeAction - playerActionCounter);
@@ -214,7 +216,7 @@ public class TurnController : MonoBehaviour
             ActionBase heroAction = choice.action;
             // TODO: Differentiate between ALL and single target.
             if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
-                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(stage.GetHeroPlayer());
+                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(field.GetHeroPlayer());
                 switch (heroAction.targetInfo.targetType) {
                     case TargetType.SINGLE:
                         this.ui.targetSelectionUI.InitializeTargetSelectionSingle(possibleTargets, 0, this.commandSelector);
@@ -230,7 +232,7 @@ public class TurnController : MonoBehaviour
                 }
                 this.battlePhase = BattlePhase.TARGET_SELECTION;
             } else {
-                stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), heroAction, new List<int>()));
+                field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>()));
                 this.checkExecuteTurn();
             }
         }
@@ -241,15 +243,18 @@ public class TurnController : MonoBehaviour
         this._heroTargetIndex = this.commandSelector.GetChoice();
         this.ui.targetSelectionUI.ClearSelection();
         ActionBase heroAction = this.currentHeroChoices[_heroActionIndex].action;
+    
 
         switch (heroAction.targetInfo.targetType) {
             case TargetType.SINGLE:
-                stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), heroAction, new List<int>{_heroTargetIndex}  ));
+                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(field.GetHeroPlayer());
+                FightingEntity target = possibleTargets[this._heroTargetIndex];
+                field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>{target.targetId}  ));
                 break;
 
             case TargetType.ALL:
-                List<int> allEnemies = stage.GetActiveEnemies().Map((Enemy enemy) => enemy.targetId);
-                stage.GetHeroPlayer().SetQueuedAction(new QueuedAction(stage.GetHeroPlayer(), heroAction, allEnemies ));
+                List<int> allEnemies = field.GetActiveEnemies().Map((Enemy enemy) => enemy.targetId);
+                field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, allEnemies ));
             break;
 
             default:
@@ -260,17 +265,17 @@ public class TurnController : MonoBehaviour
 
     // Initializes the command card to display the hero's actions
     private void initializeCommandCardActionUI(ActionType type) {
-
-        List<ActionBase> actions = stage.GetHeroPlayer().GetFilteredActions(type);
+        Debug.Log("Initialize command card: " + type);
+        FightingEntity heroPlayer = field.GetHeroPlayer();
+        List<ActionBase> actions = field.GetHeroPlayer().GetFilteredActions(type);
         this.currentHeroChoices = new List<HeroActionChoice>();
 
         foreach (ActionBase action in actions) {
-            Debug.Log("Type: " + type + " action: " + action.actionType);
             this.currentHeroChoices.Add(new HeroActionChoice(action.name, action));
         }
 
         if (type == ActionType.BASIC) {
-            if (stage.GetHeroPlayer().GetFilteredActions(ActionType.MAGIC).Count != 0) {
+            if (field.GetHeroPlayer().GetFilteredActions(ActionType.MAGIC).Count != 0) {
                 this.currentHeroChoices.Insert(1, new HeroActionChoice("Magic", null));
             }
         }
@@ -280,7 +285,7 @@ public class TurnController : MonoBehaviour
     }
 
     private bool hasEveryoneEnteredActions() {
-        foreach (var player in stage.GetActivePlayers()) {
+        foreach (var player in field.GetActivePlayers()) {
             if (player.HasSetCommand() == false) {
                 return false;
             }

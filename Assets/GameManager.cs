@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : Singleton<GameManager> {
     public Party party;
     public TurnController turnController{get; set;}
 
     public TwitchChatBroadcaster chatBroadcaster;
-
-  
-
 
     [SerializeField] private JobActionsList[] _playerJobActionsLists;
     [SerializeField] private JobActionsList[] _enemyJobActionsLists;
@@ -18,6 +17,14 @@ public class GameManager : Singleton<GameManager> {
 
     public Dictionary<Job, List<ActionBase>> enemyJobActions = new Dictionary<Job, List<ActionBase>>();
     
+    public List<StageInfoContainer> stages {get; set;}
+
+    public int currentStageIndex = 0;
+    public int nextStageIndex = 0;
+
+
+    [SerializeField]
+    private List<StageInfo> stageInfo = new List<StageInfo>();
 
     void Awake() {
         if (FindObjectsOfType<GameManager>().Length >= 2) {
@@ -26,6 +33,14 @@ public class GameManager : Singleton<GameManager> {
         }
 
         DontDestroyOnLoad(gameObject);
+
+        // Initialize with the field for debugging purposes
+        if (SceneManager.GetActiveScene().name != "_MainMenu") {
+            chatBroadcaster.ConnectToChannel(chatBroadcaster._channelToConnectTo);
+            party.CreateHeroPlayer();
+        }
+
+
         foreach(JobActionsList jobActionsList in _playerJobActionsLists) {
             playerJobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
@@ -34,7 +49,7 @@ public class GameManager : Singleton<GameManager> {
             enemyJobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
 
-        party.CreateHeroPlayer();
+        this.InitializeStages();
     }
 
     public List<ActionBase> GetPlayerJobActions(Job job) {
@@ -72,5 +87,34 @@ public class GameManager : Singleton<GameManager> {
 
         return null;
     }
+
+    public List<Job> getMookJobs() {
+        List<Job> jobs = new List<Job>(playerJobActions.Keys);
+        jobs.Remove(Job.HERO);
+        return jobs;
+    }
+
+    public StageInfoContainer GetCurrentStage() {
+        return this.stages[this.currentStageIndex];
+    }
+
+    public void SetStageIndex(int index) {
+        this.currentStageIndex = index;
+    }
+
+    public void SetNextStageIndex(int index) {
+        this.nextStageIndex = index;
+    }
+
+
+    private void InitializeStages() {
+        this.stages = new List<StageInfoContainer>();
+        foreach (StageInfo stage in stageInfo) {
+            StageInfoContainer stageInfo = new StageInfoContainer(stage);
+            stageInfo.InitializeWaveList(); // Does random generation
+            this.stages.Add(stageInfo);
+        }
+    }
+
 
 }

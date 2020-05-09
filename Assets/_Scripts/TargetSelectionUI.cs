@@ -65,9 +65,6 @@ public class TargetSelectionUI : MonoBehaviour
     }
 
     private void UpdateTargetSelectionUI() {
-        // TOOD: FIX sprite highlighting
-
-
         if (potentialTargets == null) {
             return;
         }
@@ -91,6 +88,8 @@ public class TargetSelectionUI : MonoBehaviour
     }
 
     private void SetMaterialOutline(int targetIndex, bool enabled) {
+
+
         FightingEntity target = potentialTargets[targetIndex];
         SkeletonMaterialReplacer materialReplacer = target.GetComponent<SkeletonMaterialReplacer>();
         if (enabled) {
