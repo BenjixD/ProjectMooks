@@ -16,6 +16,6 @@ public class Defend : ActionBase {
 
     public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         user.modifiers.Add("defend");
-        return new FightResult(user);
+        return new FightResult(user, this);
     }
 }

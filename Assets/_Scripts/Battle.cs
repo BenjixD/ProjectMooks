@@ -41,8 +41,7 @@ public class Battle
         List<FightingEntity> orderedPlayers = new List<FightingEntity>(_controller.field.GetAllFightingEntities());
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
-        result = new BattleResult(orderedPlayers);
-        Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, result);
+        Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, new BattleResult(orderedPlayers));
         result = new BattleResult(orderedPlayers);
 
         _controller.StartCoroutine(handleBattle(orderedPlayers));
@@ -95,7 +94,7 @@ public class Battle
     private void setUnsetMookCommands() {
         foreach (var player in _controller.field.GetActivePlayers()) {
             if (player.HasSetCommand() == false) {
-                player.SetQueuedAction(new QueuedAction(player, player.actions[0], new List<int>{_controller.field.GetRandomEnemyIndex()}  ));
+                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{_controller.field.GetRandomEnemyIndex()}  ));
             }
         }
     }

@@ -39,6 +39,21 @@ public class PlayerQueue : TwitchChatListenerBase {
 		_inQueue.Remove(username);
 	}
 
+	public List<PlayerCreationData> Peek(int n) {
+		List<PlayerCreationData> peek = new List<PlayerCreationData>();
+
+		foreach(PlayerCreationData data in _waitingQueue) {
+			if(n <= 0) {
+				break;
+			}
+
+			peek.Add(data);
+			n--;
+		}
+
+		return peek;
+	}
+
 	public override void OnMessageReceived(string username, string message) {
 		
 	}

@@ -61,10 +61,10 @@ public class TurnController : MonoBehaviour
 
     void Start() {
         GameManager.Instance.turnController = this;
-        this.initialize();
+        this.Initialize();
     }
 
-    private void initialize() {
+    private void Initialize() {
         Messenger.AddListener(Messages.OnTurnStart, this.onTurnStart);
         Messenger.AddListener(Messages.OnTurnEnd, this.onTurnEnd);
         Messenger.AddListener(Messages.OnPartySetup, this.onPartySetup);

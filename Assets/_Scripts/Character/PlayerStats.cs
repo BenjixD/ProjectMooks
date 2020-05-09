@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [System.Serializable]
-public class PlayerStats {
+public class PlayerStats: ICloneable {
 	public int level;
 
 	// Max Stats
@@ -62,6 +63,10 @@ public class PlayerStats {
 
 		maxDefense = (int)(maxDefense * (BoxMuller.GetRandom() + 1));
 		maxResistance = (int)(maxResistance * (BoxMuller.GetRandom() + 1));
+	}
+
+	public object Clone() {
+		return this.MemberwiseClone();
 	}
 
 	public void LogStats() {

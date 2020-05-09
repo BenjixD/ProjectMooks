@@ -25,13 +25,17 @@ public class AttackTest : ActionBase {
         int attackDamage = user.stats.GetPhysical();
         
         foreach (FightingEntity target in targets) {
+            PlayerStats before, after;
             int defence = target.stats.GetDefense();
             int damage =  Mathf.Max(attackDamage - defence, 0);
-            receivers.Add(new DamageReceiver(target, damage));
-            
+
+            before = (PlayerStats)target.stats.Clone();
             target.stats.SetHp(target.stats.GetHp() - damage);
+            after = (PlayerStats)target.stats.Clone();
+
+            receivers.Add(new DamageReceiver(target, before, after));
         }
 
-        return new FightResult(user, receivers);
+        return new FightResult(user, this, receivers);
     }
 }
