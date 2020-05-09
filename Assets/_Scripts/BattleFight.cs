@@ -103,7 +103,7 @@ public class BattleFight
 
     private void getEnemyAction() {
         // TODO: Aggro targetting
-        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRecommendedAction(), new List<int>{_controller.stage.GetRandomPlayerIndex()}  ));
+        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRecommendedAction(), new List<int>{_controller.field.GetRandomPlayerIndex()}  ));
     }
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {

@@ -94,7 +94,7 @@ public class Battle
     private void setUnsetMookCommands() {
         foreach (var player in _controller.field.GetActivePlayers()) {
             if (player.HasSetCommand() == false) {
-                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{_controller.stage.GetRandomEnemyIndex()}  ));
+                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{_controller.field.GetRandomEnemyIndex()}  ));
             }
         }
     }
