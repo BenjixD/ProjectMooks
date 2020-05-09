@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager> {
     public List<StageInfoContainer> stages {get; set;}
 
     public int currentStageIndex = 0;
-    public int nextStageIndex = 1;
+    public int nextStageIndex = 0;
 
 
     [SerializeField]
@@ -37,6 +37,7 @@ public class GameManager : Singleton<GameManager> {
         // Initialize with the field for debugging purposes
         if (SceneManager.GetActiveScene().name != "_MainMenu") {
             chatBroadcaster.ConnectToChannel(chatBroadcaster._channelToConnectTo);
+            party.CreateHeroPlayer();
         }
 
 
@@ -49,9 +50,6 @@ public class GameManager : Singleton<GameManager> {
         }
 
         this.InitializeStages();
-
-        party.CreateHeroPlayer();
-
     }
 
     public List<ActionBase> GetPlayerJobActions(Job job) {

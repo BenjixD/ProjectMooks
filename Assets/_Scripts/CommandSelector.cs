@@ -23,6 +23,10 @@ public class CommandSelector : MonoBehaviour
         return choice;
     }
 
+    public int GetInvertedChoice() {
+        return this.maxChoice - this.choice;
+    }
+
     void Update() {
         if (Input.GetKeyDown(KeyCode.DownArrow)) {
             if (!inverse) {

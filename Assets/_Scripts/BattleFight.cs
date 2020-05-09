@@ -48,6 +48,11 @@ public class BattleFight
     }
 
     public IEnumerator DoFight() {
+        if (this.fighter == null || this.fighter.gameObject == null) {
+            this.onFightEnd(null);
+            yield break;
+        }
+
         if (this.fighter.isEnemy()) {
             this.getEnemyAction();
         }
@@ -62,6 +67,12 @@ public class BattleFight
         }
         string attackName = attackerAction._action.name;
         List<FightingEntity> targets = attackerAction._action.GetTargets(this.fighter, attackerAction.GetTargetIds());
+        targets.Filter( (FightingEntity entity) => entity != null && entity.gameObject != null );
+
+        if (targets.Count == 0) {
+            this.onFightEnd(null);
+            yield break;
+        }
 
         // Set commentary text
         string commentaryText;

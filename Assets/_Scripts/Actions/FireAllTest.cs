@@ -9,7 +9,7 @@ public class FireAllTest : ActionBase {
         if (!BasicValidation(splitCommand)) {
             return false;
         }
-        List<int> targetIds = this.GetPotentialActiveTargets(user).Map((FightingEntity target) => target.targetId );
+        List<int> targetIds = this.GetAllPotentialTargets(user).Map((FightingEntity target) => target.targetId );
         user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         return true;
     }
@@ -17,8 +17,10 @@ public class FireAllTest : ActionBase {
     public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         List<DamageReceiver> receivers = new List<DamageReceiver>();
         int attackDamage = user.stats.GetSpecial();
+        Debug.Log("Target count: " + targets.Count);
         
         foreach (FightingEntity target in targets) {
+            Debug.Log("Hit target: " + target.Name);
             int defence = target.stats.GetResistance();
             int damage =  Mathf.Max(attackDamage - defence, 0);
 

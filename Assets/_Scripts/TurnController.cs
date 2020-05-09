@@ -100,7 +100,7 @@ public class TurnController : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
         if (this.CanInputActions()) {
 
             switch (battlePhase) {
@@ -174,6 +174,8 @@ public class TurnController : MonoBehaviour
     }
 
     private void checkExecuteTurn() {
+        List<Player> players = field.GetActivePlayers();
+
         //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
         bool timeOutIfChatTooSlow = false;
         bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
@@ -241,10 +243,13 @@ public class TurnController : MonoBehaviour
         this._heroTargetIndex = this.commandSelector.GetChoice();
         this.ui.targetSelectionUI.ClearSelection();
         ActionBase heroAction = this.currentHeroChoices[_heroActionIndex].action;
+    
 
         switch (heroAction.targetInfo.targetType) {
             case TargetType.SINGLE:
-                field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>{_heroTargetIndex}  ));
+                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(field.GetHeroPlayer());
+                FightingEntity target = possibleTargets[this._heroTargetIndex];
+                field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>{target.targetId}  ));
                 break;
 
             case TargetType.ALL:
@@ -260,12 +265,12 @@ public class TurnController : MonoBehaviour
 
     // Initializes the command card to display the hero's actions
     private void initializeCommandCardActionUI(ActionType type) {
-
+        Debug.Log("Initialize command card: " + type);
+        FightingEntity heroPlayer = field.GetHeroPlayer();
         List<ActionBase> actions = field.GetHeroPlayer().GetFilteredActions(type);
         this.currentHeroChoices = new List<HeroActionChoice>();
 
         foreach (ActionBase action in actions) {
-            Debug.Log("Type: " + type + " action: " + action.actionType);
             this.currentHeroChoices.Add(new HeroActionChoice(action.name, action));
         }
 

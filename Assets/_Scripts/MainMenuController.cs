@@ -46,6 +46,7 @@ public class MainMenuController : MonoBehaviour
 
 
     private void onJoinChannel() {
+        GameManager.Instance.party.CreateHeroPlayer();
         SceneManager.LoadScene("WorldMap");
     }
 

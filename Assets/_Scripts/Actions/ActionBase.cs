@@ -107,11 +107,28 @@ public abstract class ActionBase : ScriptableObject {
         return potentialTargets;
     }
 
+    public List<FightingEntity> GetAllPotentialTargets(FightingEntity user) {
+        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
+            return GameManager.Instance.turnController.field.GetAllFightingEntities();
+        }
+        List<FightingEntity> potentialTargets;
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetEnemies());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetPartyPlayers());
+
+        if (user.isEnemy()) {
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
+        } else {
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? players : enemies;
+        }
+
+        return potentialTargets;
+    }
+
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
-        List<FightingEntity> potentialTargets = GetPotentialActiveTargets(user);
+        List<FightingEntity> potentialTargets = GetAllPotentialTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
-            if (target < potentialTargets.Count) {
+            if (target < potentialTargets.Count && potentialTargets[target] != null) {
                 targets.Add(potentialTargets[target]);
             }
         }

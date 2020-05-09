@@ -34,7 +34,11 @@ public class Party : MonoBehaviour {
         FightingEntity prefab = jobActionsList.prefab;
         Player player = Instantiate(prefab).GetComponent<Player>();
         player.Initialize(index, data);
-        players.Add(data.name, new Tuple<int, Player>(index, player));
+        if (!players.ContainsKey(data.name)) {
+            players.Add(data.name, new Tuple<int, Player>(index, player));
+        } else {
+            players[data.name] = new Tuple<int, Player>(index, player);
+        }
 
         Debug.Log("Created player: " + data.name);
         Debug.Log("Player actions: " + player.actions);

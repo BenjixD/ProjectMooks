@@ -69,7 +69,15 @@ MonoBehaviour:
   _enemyJobActionsLists:
   - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
   currentStageIndex: 0
+  nextStageIndex: 0
   stageInfo:
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
   - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
 --- !u!114 &5902595311601403742
 MonoBehaviour:
