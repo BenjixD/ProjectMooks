@@ -16,7 +16,7 @@ public class Messages {
 
     public static string OnFightEnd = "OnFightEnd"; // FightResult
 
-    public static string OnPlayerJoinBattle = "OnPlayerJoinBattle"; // Player
+    public static string OnPlayersJoinBattle = "OnPlayersJoinBattle"; // List<Player>
 
     public static string OnEntityDeath = "OnEntityDeath"; // DeathResult
 

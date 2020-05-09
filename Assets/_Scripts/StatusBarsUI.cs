@@ -26,12 +26,12 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     void OnDestroy() {
-        Messenger.RemoveListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+        Messenger.RemoveListener<List<Player>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
         Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
     }
 
     public void Initialize() {
-        Messenger.AddListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+        Messenger.AddListener<List<Player>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
         Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
 
         this.UpdateStatusBars();
@@ -86,7 +86,7 @@ public class StatusBarsUI : MonoBehaviour
         }
     }
 
-    private void onPlayerJoin(Player player) {
+    private void onPlayerJoin(List<Player> players) {
         this.UpdateStatusBars();
     }
 
