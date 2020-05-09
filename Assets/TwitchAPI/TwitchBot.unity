@@ -309,5 +309,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c9623d9a9366a4ebb563058565d97e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _channelToConnectTo: dvchibot
+  _channelToConnectTo: dvchibotdsfsdf
   _oauthToken: oauth:3rgar8wne1q12pro6d4llyufzid3me

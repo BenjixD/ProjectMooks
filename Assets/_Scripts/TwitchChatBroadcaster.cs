@@ -30,8 +30,13 @@ public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
 		this.listeners.Remove(removeListener);
 	}
 
-	private void Start()
+	public void ConnectToChannel(string channelName)
 	{
+        this._channelToConnectTo = channelName;
+        if (client != null) {
+            this.DisconnectClient();
+        }
+
 
 		Secrets.Initialize();
 
@@ -53,10 +58,15 @@ public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
 		client.OnConnected += OnConnected;
 		client.OnJoinedChannel += OnJoinedChannel;
 		client.OnMessageReceived += OnMessageReceived;
+        client.OnFailureToReceiveJoinConfirmation += OnFailureToJoinChannel;
 
 		// Connect
 		client.Connect();
 	}
+
+    public void DisconnectClient() {
+        client.Disconnect();
+    }
 
 	private void OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
 	{
@@ -68,9 +78,15 @@ public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
 
 	private void OnJoinedChannel(object sender, TwitchLib.Client.Events.OnJoinedChannelArgs e)
 	{
+        Messenger.Broadcast(Messages.OnJoinChannel);
 		Debug.Log($"The bot {e.BotUsername} just joined the channel: {e.Channel}");
 		client.SendMessage(e.Channel, "I just joined the channel! PogChamp");
 	}
+
+    private void OnFailureToJoinChannel(object sender, TwitchLib.Client.Events.OnFailureToReceiveJoinConfirmationArgs e) {
+        Debug.Log("Failed to join channel: " + _channelToConnectTo);
+        Messenger.Broadcast(Messages.OnFailedJoinChannel);
+    }
 
 	private void OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
 	{

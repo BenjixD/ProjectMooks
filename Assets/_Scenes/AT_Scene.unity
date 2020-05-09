@@ -2407,6 +2407,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Managers
       objectReference: {fileID: 0}
+    - target: {fileID: 5902595311601403730, guid: 7901b6c10faa1124a8204c4dbf1e348c,
+        type: 3}
+      propertyPath: _channelToConnectTo
+      value: dvchibot
+      objectReference: {fileID: 0}
     - target: {fileID: 5902595311601403731, guid: 7901b6c10faa1124a8204c4dbf1e348c,
         type: 3}
       propertyPath: m_LocalPosition.x

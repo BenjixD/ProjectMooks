@@ -59,6 +59,25 @@ public class Battle
 
     private IEnumerator handleBattle(List<FightingEntity> fighters) {
         for (int i = 0; i < fighters.Count; i++) {
+
+            if (fighters[i] == null) {
+                // This can happen if the fighter dies mid-battle
+                continue;
+            }
+
+            if (fighters[i].GetQueuedAction() == null) {
+                // This sets the enemy's action
+                // TODO: Will be moved after AI is merged.
+                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], fighters[i].GetRandomAction(), new List<int>{_controller.field.GetRandomPlayerIndex()}  ));
+            }
+
+            QueuedAction attackerAction = fighters[i].GetQueuedAction();
+
+            // This can happen if target dies mid-battle
+            if (attackerAction._action.GetTargets(fighters[i], attackerAction.GetTargetIds()).Count == 0) {
+                continue;
+            }
+            
             BattleFight fight = new BattleFight(_controller, fighters[i]);
             this.currentFight = fight;
             yield return _controller.StartCoroutine(fight.DoFight());

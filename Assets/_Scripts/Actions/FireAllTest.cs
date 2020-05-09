@@ -9,7 +9,7 @@ public class FireAllTest : ActionBase {
         if (!BasicValidation(splitCommand)) {
             return false;
         }
-        List<int> targetIds = this.GetPotentialActiveTargets(user).Map((FightingEntity target) => target.targetId );
+        List<int> targetIds = this.GetAllPotentialTargets(user).Map((FightingEntity target) => target.targetId );
         user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         return true;
     }

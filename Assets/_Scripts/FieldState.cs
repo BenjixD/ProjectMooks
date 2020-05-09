@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class FieldState : MonoBehaviour
 {
@@ -143,7 +144,7 @@ public class FieldState : MonoBehaviour
     }
 
     private void onHeroDeath(DeathResult result) {
-        // TODO: end the game
+        SceneManager.LoadScene("GameOverScreen");
     }
 
     private void onWaveComplete() {
@@ -152,7 +153,9 @@ public class FieldState : MonoBehaviour
 
         this.currentWaveIndex++;
         if (this.currentWaveIndex >= stageInfo.numWaves) {
-            // TODO: End the battle
+            GameManager.Instance.SetNextStageIndex(GameManager.Instance.currentStageIndex + 1); // May want to change logic in the future
+            SceneManager.LoadScene("WorldMap");
+
         } else {
             this.GenerateEnemyList(this.currentWaveIndex);
         }

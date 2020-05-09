@@ -38,10 +38,15 @@ public class TwitchClientExample : MonoBehaviour
 		_client.OnJoinedChannel += OnJoinedChannel;
 		_client.OnMessageReceived += OnMessageReceived;
 		_client.OnChatCommandReceived += OnChatCommandReceived;
+        _client.OnFailureToReceiveJoinConfirmation += OnFailureToReceiveJoinConfirmation;
 
 		// Connect
 		_client.Connect();
 	}
+
+    private void OnFailureToReceiveJoinConfirmation(object sender, TwitchLib.Client.Events.OnFailureToReceiveJoinConfirmationArgs e) {
+        Debug.Log ("Could not join");
+    }
 
 	private void OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
 	{

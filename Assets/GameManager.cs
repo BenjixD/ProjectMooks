@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : Singleton<GameManager> {
     public Party party;
@@ -18,6 +20,7 @@ public class GameManager : Singleton<GameManager> {
     public List<StageInfoContainer> stages {get; set;}
 
     public int currentStageIndex = 0;
+    public int nextStageIndex = 0;
 
 
     [SerializeField]
@@ -30,6 +33,14 @@ public class GameManager : Singleton<GameManager> {
         }
 
         DontDestroyOnLoad(gameObject);
+
+        // Initialize with the field for debugging purposes
+        if (SceneManager.GetActiveScene().name != "_MainMenu") {
+            chatBroadcaster.ConnectToChannel(chatBroadcaster._channelToConnectTo);
+            party.CreateHeroPlayer();
+        }
+
+
         foreach(JobActionsList jobActionsList in _playerJobActionsLists) {
             playerJobActions.Add(jobActionsList.job, jobActionsList.GetActions());
         }
@@ -39,9 +50,6 @@ public class GameManager : Singleton<GameManager> {
         }
 
         this.InitializeStages();
-
-        party.CreateHeroPlayer();
-
     }
 
     public List<ActionBase> GetPlayerJobActions(Job job) {
@@ -92,6 +100,10 @@ public class GameManager : Singleton<GameManager> {
 
     public void SetStageIndex(int index) {
         this.currentStageIndex = index;
+    }
+
+    public void SetNextStageIndex(int index) {
+        this.nextStageIndex = index;
     }
 
 
