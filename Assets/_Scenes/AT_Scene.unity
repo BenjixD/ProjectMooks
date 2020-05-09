@@ -2260,6 +2260,7 @@ MonoBehaviour:
   commandSelector: {fileID: 2026179245}
   maxTimeBeforeAction: 15
   battlePhase: 1
+  currentHeroChoices: []
 --- !u!114 &2026179245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2333,8 +2334,6 @@ MonoBehaviour:
   - {fileID: 308413030}
   - {fileID: 1855386539}
   - {fileID: 681689154}
-  _enemyPrefabs:
-  - {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
 --- !u!114 &2026179249
 MonoBehaviour:
   m_ObjectHideFlags: 0

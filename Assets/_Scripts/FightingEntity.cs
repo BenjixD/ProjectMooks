@@ -87,7 +87,9 @@ public class FightingEntity : MonoBehaviour
     }
 
 	public void Animate(string animationName, bool loop) {
-		_animController.AddAnimation(animationName, loop);
+        if (_animController != null) {
+		    _animController.AddAnimation(animationName, loop);
+        }
 	}
 
     public List<ActionBase> GetFilteredActions(ActionType actionType) {

@@ -22,47 +22,63 @@ public class StatusBarsUI : MonoBehaviour
 
     void Awake() {
         _controller = GetComponent<TurnController>();
-        Messenger.AddListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+
     }
 
     void OnDestroy() {
         Messenger.RemoveListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+        Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
     }
 
     public void Initialize() {
+        Messenger.AddListener<Player>(Messages.OnPlayerJoinBattle, this.onPlayerJoin);
+        Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
+
+        this.UpdateStatusBars();
+    }
+
+    public void UpdateStatusBars() {
+        List<Player> players = _controller.field.GetActivePlayers();
+        List<Enemy> enemies = _controller.field.GetActiveEnemies();
+
+        if (statusBars == null || enemyStatusBars == null || players.Count != statusBars.Count || enemies.Count != enemyStatusBars.Count) {
+            this.rebuildStatusBars();
+        }
+
+        this.setStatusBarUI();
+    }
+
+    private void rebuildStatusBars() {
         this.DestroyCurrentStatusBars();
-        int playerCount = _controller.stage.GetActivePlayers().Count;
+        int playerCount = _controller.field.GetActivePlayers().Count;
 
         statusBars = new List<StatusBarUI>();
 
         for (int i = 0; i < playerCount; i++) { 
             StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
-            statusBarForPlayer.transform.parent = playerStatusBarParent;
+            statusBarForPlayer.transform.SetParent(playerStatusBarParent);
             statusBars.Add(statusBarForPlayer);
         }
 
         enemyStatusBars = new List<StatusBarUI>();
 
-        int enemyCount = _controller.stage.GetActiveEnemies().Count;
+        int enemyCount = _controller.field.GetActiveEnemies().Count;
 
         for (int i = 0; i < enemyCount; i++) {
             StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
-            statusBarForPlayer.transform.parent = enemyStatusBarParent;
+            statusBarForPlayer.transform.SetParent(enemyStatusBarParent);
             enemyStatusBars.Add(statusBarForPlayer);
         }
-
-        this.UpdateStatusBarUI();
     }
 
-
-    public void UpdateStatusBarUI() {
-        List<Player> players = _controller.stage.GetActivePlayers();
+    private void setStatusBarUI() {
+        List<Player> players = _controller.field.GetActivePlayers();
         for (int i = 0; i < players.Count; i++) {
             statusBars[i].SetName(players[i].Name);
             statusBars[i].SetHP(players[i].stats.GetHp(), players[i].stats.maxHp);
         }
 
-        List<Enemy> enemies = _controller.stage.GetActiveEnemies();
+        List<Enemy> enemies = _controller.field.GetActiveEnemies();
 
         for (int i = 0; i < enemies.Count; i++) {
             enemyStatusBars[i].SetName(enemies[i].Name);
@@ -70,8 +86,12 @@ public class StatusBarsUI : MonoBehaviour
         }
     }
 
-    public void onPlayerJoin(Player player) {
-        this.Initialize();
+    private void onPlayerJoin(Player player) {
+        this.UpdateStatusBars();
+    }
+
+    private void onFightEnd(FightResult result) {
+        this.UpdateStatusBars();
     }
 
     private void DestroyCurrentStatusBars() {

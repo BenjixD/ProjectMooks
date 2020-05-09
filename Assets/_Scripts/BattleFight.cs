@@ -78,9 +78,18 @@ public class BattleFight
 
         FightResult fightResult = attackerAction.ExecuteAction();
 
-        this._controller.ui.statusBarsUI.UpdateStatusBarUI();
+        this.CheckIfAnyEntityDied(fightResult, attackerAction._action);
 
         this.onFightEnd(fightResult);
+    }
+
+    private void CheckIfAnyEntityDied(FightResult result, ActionBase action) {
+        foreach (var damageReceiver in result.receivers) {
+            if (damageReceiver.fighter.stats.GetHp() <= 0) {
+                DeathResult deathResult = new DeathResult(result.fighter, damageReceiver, action);
+                Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, deathResult);
+            }
+        }
     }
 
     private void onFightEnd(FightResult result) {
@@ -89,7 +98,7 @@ public class BattleFight
 
     private void getEnemyAction() {
         // TODO: Implment AI here
-        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRandomAction(), new List<int>{_controller.stage.GetRandomPlayerIndex()}  ));
+        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRandomAction(), new List<int>{_controller.field.GetRandomPlayerIndex()}  ));
     }
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {

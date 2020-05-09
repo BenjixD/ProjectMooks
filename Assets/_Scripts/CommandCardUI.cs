@@ -61,7 +61,7 @@ public class CommandCardUI : MonoBehaviour
         foreach (var option in options) {
             CommandOptionText  commandText = Instantiate(_commandTextPrefab) as CommandOptionText;
             commandText.text.text = option;
-            commandText.transform.parent = _actionMenuTextParent.transform;
+            commandText.transform.SetParent(_actionMenuTextParent.transform);
             _battleOptionsUI.Add(commandText);
         }
 
@@ -85,7 +85,7 @@ public class CommandCardUI : MonoBehaviour
 
         this._selectionCursor.gameObject.SetActive(true);
 
-        _selectionCursor.transform.parent = _battleOptionsUI[index].transform;
+        _selectionCursor.transform.SetParent(_battleOptionsUI[index].transform);
         _selectionCursor.anchoredPosition = _selectionCursorOffset;
     }
 

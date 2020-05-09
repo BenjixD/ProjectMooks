@@ -38,6 +38,18 @@ public enum ActionType {
 
 }
 
+public class DeathResult {
+    public FightingEntity attacker;
+    public DamageReceiver deadEntity;
+    public ActionBase movedUsedToKill;
+
+    public DeathResult(FightingEntity attacker, DamageReceiver deadEntity, ActionBase move) {
+        this.attacker = attacker;
+        this.deadEntity = deadEntity;
+        this.movedUsedToKill = move;
+    }
+}
+
 public abstract class ActionBase : ScriptableObject {
     public string name;
     [TextArea]
@@ -72,16 +84,19 @@ public abstract class ActionBase : ScriptableObject {
     
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
         user.Animate(userAnimName, false);
-        return ApplyEffect(user, targets);
+        FightResult result = ApplyEffect(user, targets);
+        this.OnPostEffect(result);
+
+        return result;
     }
 
     public List<FightingEntity> GetPotentialActiveTargets(FightingEntity user) {
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
-            return GameManager.Instance.turnController.stage.GetAllFightingEntities();
+            return GameManager.Instance.turnController.field.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetActiveEnemies());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.stage.GetActivePlayers());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetActiveEnemies());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetActivePlayers());
 
         if (user.isEnemy()) {
             potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
@@ -107,6 +122,10 @@ public abstract class ActionBase : ScriptableObject {
     public List<FightingEntity> GetTargets(FightingEntity user, int targetId) {
         return this.GetTargets(user, new List<int>{targetId});
     }
+
+    protected virtual void OnPostEffect(FightResult result) {
+    }
+
 
     protected int GetTargetIdFromString(string str, FightingEntity user) {
         int targetId;
