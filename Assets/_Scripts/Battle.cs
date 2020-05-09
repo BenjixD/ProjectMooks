@@ -73,12 +73,8 @@ public class Battle
 
             QueuedAction attackerAction = fighters[i].GetQueuedAction();
 
-
-            List<FightingEntity> targets = attackerAction._action.GetTargets(fighters[i], attackerAction.GetTargetIds());
-            targets.Filter( (FightingEntity entity) => entity != null);
-
             // This can happen if target dies mid-battle
-            if (targets.Count == 0) {
+            if (attackerAction._action.GetTargets(fighters[i], attackerAction.GetTargetIds()).Count == 0) {
                 continue;
             }
             
