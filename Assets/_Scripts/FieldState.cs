@@ -112,8 +112,6 @@ public class FieldState : MonoBehaviour
     private void onEntityDeath(DeathResult result) {
         FightingEntity deadFighter = result.deadEntity.fighter;
         // TODO: Play death animation
-        
-
 
         bool isEnemy = deadFighter.isEnemy();
         if (isEnemy) {

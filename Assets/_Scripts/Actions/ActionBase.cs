@@ -124,18 +124,8 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected virtual void OnPostEffect(FightResult result) {
-        this.CheckIfAnyEntityDied(result);
     }
 
-    protected void CheckIfAnyEntityDied(FightResult result) {
-        foreach (var damageReceiver in result.receivers) {
-            if (damageReceiver.fighter.stats.GetHp() <= 0) {
-                DeathResult deathResult = new DeathResult(result.fighter, damageReceiver, this);
-                Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, deathResult);
-            }
-        }
-
-    }
 
     protected int GetTargetIdFromString(string str, FightingEntity user) {
         int targetId;
