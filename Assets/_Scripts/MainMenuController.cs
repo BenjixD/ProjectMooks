@@ -9,6 +9,7 @@ public class MainMenuController : MonoBehaviour
 
     public InputField channelInputField;
     public Button startButton;
+    public Button instructionsButton;
     public Text errorText;
 
     bool hasChangedChannelText = false;
@@ -21,25 +22,26 @@ public class MainMenuController : MonoBehaviour
         Messenger.AddListener(Messages.OnFailedJoinChannel, onFailedJoinChannel);
 
         errorText.gameObject.SetActive(false);
-        channelInputField.enabled = true;
-        startButton.enabled = false;
+        channelInputField.interactable = true;
+        startButton.interactable = false;
     }
 
     void OnDestroy() {
         Messenger.RemoveListener(Messages.OnJoinChannel, onJoinChannel);
-        Messenger.RemoveListener(Messages.OnJoinChannel, onFailedJoinChannel);
+        Messenger.RemoveListener(Messages.OnFailedJoinChannel, onFailedJoinChannel);
     }
 
 
     public void OnPressStart() {
-        startButton.enabled = false;
-        channelInputField.enabled = false;
+        startButton.interactable = false;
+        channelInputField.interactable = false;
+        instructionsButton.interactable = false;
         GameManager.Instance.chatBroadcaster.ConnectToChannel(channelInputField.text);
     }
 
     public void OnInputFieldChanged(string value) {
         errorText.gameObject.SetActive(false);
-        startButton.enabled = true;
+        startButton.interactable = true;
     }
 
 
@@ -48,7 +50,8 @@ public class MainMenuController : MonoBehaviour
     }
 
     private void onFailedJoinChannel() {
-        channelInputField.enabled = true;
+        channelInputField.interactable = true;
+        instructionsButton.interactable = true;
         errorText.gameObject.SetActive(true);
     }
 }
