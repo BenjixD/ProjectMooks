@@ -7,16 +7,20 @@ public class AnimationController : MonoBehaviour {
     private SkeletonAnimation _skeletonAnimation;
     private Spine.AnimationState _animState;
     [SerializeField] private string _defaultAnimName;
+    private HashSet<string> _animations = new HashSet<string>();
 
     private void Start() {
         _skeletonAnimation = GetComponent<SkeletonAnimation>();
         _animState = _skeletonAnimation.state;
-        AddAnimation(_defaultAnimName, true);
+        // Store all the names of this skeleton's anims
+        foreach (Spine.Animation anim in _animState.Data.SkeletonData.Animations) {
+            _animations.Add(anim.Name);
+        }
+        SetAnimation(_defaultAnimName, true);
     }
 
-    public void AddAnimation(string animationName, bool loop) {
-        // TODO: inefficient to call this repeatedly; should cache results
-        if (_animState.Data.SkeletonData.FindAnimation(animationName) == null) {
+    public void SetAnimation(string animationName, bool loop) {
+        if (!_animations.Contains(animationName)) {
             Debug.Log("No animation named " + animationName + " for " + GetComponent<FightingEntity>().Name);
             return;
         }
@@ -28,6 +32,6 @@ public class AnimationController : MonoBehaviour {
     }
 
     private void AnimationEntry_Complete(Spine.TrackEntry trackEntry) {
-        AddAnimation(_defaultAnimName, true);
+        SetAnimation(_defaultAnimName, true);
     }
 }
