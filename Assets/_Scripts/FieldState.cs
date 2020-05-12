@@ -23,6 +23,7 @@ public class FieldState : MonoBehaviour
     public void Initialize() {
         Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
         Messenger.AddListener(Messages.OnWaveComplete, this.onWaveComplete);
+        GameManager.Instance.party.Initialize();
 
         this.InitializePlayers();
         this.InitializeEnemies();
@@ -104,10 +105,19 @@ public class FieldState : MonoBehaviour
         }
 
         GameManager.Instance.party.TryFillAllPartySlots();
+        List<Player> joinedPlayers = new List<Player>();
 
         foreach (int emptySlot in emptySlots) {
-            this.InstantiatePlayer(emptySlot, true);
+            Player player = this.InstantiatePlayer(emptySlot);
+            if (player != null) {
+                joinedPlayers.Add(player);
+            }
         }
+
+        if (joinedPlayers.Count > 0) {
+            Messenger.Broadcast<List<Player>>(Messages.OnPlayersJoinBattle, joinedPlayers);
+        }
+
     }
 
     private void onEntityDeath(DeathResult result) {
@@ -168,26 +178,23 @@ public class FieldState : MonoBehaviour
         instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
 
         for (int i = 1; i < Party.numPlayers; i++) {
-            this.InstantiatePlayer(i, false);
+            this.InstantiatePlayer(i);
         }
 
         _heroPlayer = GetPartyPlayers()[0];
     }
 
-    private void InstantiatePlayer(int index, bool broadcastJoin) {
+    private Player InstantiatePlayer(int index) {
         Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(index);
         if (instantiatedPlayer != null) {
             instantiatedPlayer.transform.SetParent(mookSlots[index-1].transform, false);
             instantiatedPlayer.transform.localPosition = Vector3.zero;
             Debug.Log("Instantiated player " + instantiatedPlayer.Name + " in slot: " + index);
-
-            if (broadcastJoin) {
-                Messenger.Broadcast<Player>(Messages.OnPlayerJoinBattle, instantiatedPlayer);
-            }
         } else {
             Debug.Log("Failed to instantiate player in slot: " + index);
         }
 
+        return instantiatedPlayer;
     }
 
     private void InitializeEnemies() {

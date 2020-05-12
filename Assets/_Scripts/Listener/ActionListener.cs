@@ -55,6 +55,12 @@ public class ActionListener : TwitchChatListenerBase {
         speechCanvasText.text = _textMessage;
         speechCanvas.gameObject.SetActive(true);
 
+        if (_player != null && speechCanvas != null && speechCanvasText != null) {
+            // This is a hacky fix for the text direction
+            // TODO: Should restructure the Player gameObject so we don't have to do this
+            speechCanvas.transform.localScale = _player.transform.parent.transform.localScale;
+        }
+
 
         while (_textCounter < _chatBubbleAnimationTime) {
             speechCanvasText.text = _textMessage;

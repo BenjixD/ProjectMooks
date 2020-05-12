@@ -40,7 +40,7 @@ public class WorldMapController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         GameManager.Instance.currentStageIndex = GameManager.Instance.nextStageIndex;
-        SceneManager.LoadScene("AT_Scene");
+        SceneManager.LoadScene(battleScene);
     }
 
 }

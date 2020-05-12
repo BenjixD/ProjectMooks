@@ -8,8 +8,15 @@ public class Party : MonoBehaviour {
     public PlayerQueue playerQueue;
 
     // (Name, (position, player obj)) mapping
+    // TODO: Move this to FieldState. I don't think that Players should be stored in this class.
     private Dictionary<string, Tuple<int, Player>> players = new Dictionary<string, Tuple<int, Player>>();
     private PlayerCreationData[] playerPos = new PlayerCreationData[numPlayers];
+
+
+    // TODO: Remove this. I don't think that Players should be stored in this class.
+    public void Initialize() {
+        players.Clear();
+    }
 
     public void CreatePlayer(PlayerCreationData data, int index) {
         playerPos[index] = data;
