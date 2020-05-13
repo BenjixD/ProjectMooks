@@ -6,13 +6,14 @@ public abstract class StatusAilment {
 	public string name;
 	public int duration;
 	public int level;
+	public BattlePhase phase;
 
 	public virtual void DecrementDuration() {
 		duration--;
 	}
 
-	public abstract void StackWith(Player p, StatusAilment other);
-	public abstract void ApplyTo(Player p);
-	public abstract void Recover(Player p);
-	public abstract void TickEffect(Player p);
+	public abstract void StackWith(FightingEntity p, StatusAilment other);
+	public abstract void ApplyTo(FightingEntity p);
+	public abstract void Recover(FightingEntity p);
+	public abstract void TickEffect(FightingEntity p);
 }
