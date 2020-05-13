@@ -145,11 +145,13 @@ public class TurnController : MonoBehaviour
         foreach (var player in field.GetAllFightingEntities()) {
             player.ResetCommand();
 
+            // TODO: Make defense a status buff
             if (player.modifiers.Contains("defend")) {
                 player.modifiers.Remove("defend");
             }
         }
 
+        this.ApplyStatusAilments();
         this.BroadcastPartySetup();
     }
 
@@ -157,12 +159,12 @@ public class TurnController : MonoBehaviour
     private void onPartySetup() {
         this.battlePhase = BattlePhase.PARTY_SETUP;
         this.field.RequestRecruitNewParty();
-
         this.BroadcastMoveSelection();
     }
 
     private void onMoveSelection() {
         this.battlePhase = BattlePhase.MOVE_SELECTION;
+        this.ApplyStatusAilments();
     }
 
     private void onBattleEnd(BattleResult result) {
@@ -170,6 +172,8 @@ public class TurnController : MonoBehaviour
     }
 
     private void onTurnEnd() {
+        this.ApplyStatusAilments();
+        this.DecrementStatusAilmentDuration();
         this.BroadcastOnStartTurn();
     }
 
@@ -292,6 +296,19 @@ public class TurnController : MonoBehaviour
         }
 
         return true;
+    }
+
+    // Triggers status ailments
+    private void ApplyStatusAilments() {
+        foreach (var entity in field.GetAllFightingEntities()) {
+            entity.GetAilmentController().TickAilmentEffects(battlePhase);
+        }
+    }
+
+    private void DecrementStatusAilmentDuration() {
+        foreach(var entity in field.GetAllFightingEntities()) {
+            entity.GetAilmentController().DecrementAllAilmentsDuration();
+        }
     }
 
     void OnDestroy() {
