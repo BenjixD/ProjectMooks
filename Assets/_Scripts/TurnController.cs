@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum BattlePhase{
     TURN_START,
@@ -65,17 +66,16 @@ public class TurnController : MonoBehaviour
     }
 
     private void Initialize() {
-        Messenger.AddListener(Messages.OnTurnStart, this.onTurnStart);
-        Messenger.AddListener(Messages.OnTurnEnd, this.onTurnEnd);
-        Messenger.AddListener(Messages.OnPartySetup, this.onPartySetup);
-        Messenger.AddListener(Messages.OnMoveSelection, this.onMoveSelection);
-
-        Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
+        this.AddListeners();
 
         this.field.Initialize();
         this.ui.statusBarsUI.Initialize();
 
         this.BroadcastOnStartTurn();
+    }
+
+    void OnDestroy() {
+        this.RemoveListeners();
     }
 
     public void BroadcastPartySetup() {
@@ -294,12 +294,81 @@ public class TurnController : MonoBehaviour
         return true;
     }
 
-    void OnDestroy() {
+    private void onWaveComplete() {
+        StageInfoContainer stageInfo = GameManager.Instance.GetCurrentStage();
+        WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.field.currentWaveIndex);
+
+        this.field.currentWaveIndex++;
+        if (this.field.currentWaveIndex >= stageInfo.numWaves) {
+            GameManager.Instance.SetNextStageIndex(GameManager.Instance.currentStageIndex + 1); // May want to change logic in the future
+            SceneManager.LoadScene("WorldMap");
+
+        } else {
+            this.field.GenerateEnemyList(this.field.currentWaveIndex);
+        }
+    }
+
+
+    // TODO: This should be done in turncontroller.
+    private void onEntityDeath(DeathResult result) {
+        FightingEntity deadFighter = result.deadEntity.fighter;
+        // TODO: Play death animation
+
+        bool isEnemy = deadFighter.isEnemy();
+        if (isEnemy) {
+            this.field.enemyParty.members[deadFighter.targetId] = null;
+            Destroy(deadFighter.gameObject);
+
+            bool stillHasEnemies = false;
+            for (int i = 0; i < this.field.enemyParty.members.Length; i++) {
+                if (this.field.enemyParty.members[i] != null) {
+                    stillHasEnemies = true;
+                    break;
+                }
+            }
+
+            if (!stillHasEnemies) {
+                this.onWaveComplete();
+            }
+        } else {
+
+            if (deadFighter.targetId == 0) {
+                this.onHeroDeath(result);
+                return;
+            }
+
+            GameManager.Instance.party.EvictPlayer(deadFighter.targetId);
+            Destroy(deadFighter.gameObject);
+        }
+
+    }
+
+    private void onHeroDeath(DeathResult result) {
+        SceneManager.LoadScene("GameOverScreen");
+    }
+
+
+    private void AddListeners() {
+        Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
+        Messenger.AddListener(Messages.OnWaveComplete, this.onWaveComplete);
+
+        Messenger.AddListener(Messages.OnTurnStart, this.onTurnStart);
+        Messenger.AddListener(Messages.OnTurnEnd, this.onTurnEnd);
+        Messenger.AddListener(Messages.OnPartySetup, this.onPartySetup);
+        Messenger.AddListener(Messages.OnMoveSelection, this.onMoveSelection);
+
+        Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
+    }
+
+    private void RemoveListeners() {
+        Messenger.RemoveListener(Messages.OnWaveComplete, this.onWaveComplete);
+        Messenger.RemoveListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
         Messenger.RemoveListener(Messages.OnTurnStart, this.onTurnStart);
         Messenger.RemoveListener(Messages.OnTurnEnd, this.onTurnEnd);
         Messenger.RemoveListener(Messages.OnPartySetup, this.onPartySetup);
         Messenger.RemoveListener(Messages.OnMoveSelection, this.onMoveSelection);
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
     }
+
 
 }

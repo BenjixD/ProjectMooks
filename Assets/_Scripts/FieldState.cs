@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using UnityEngine.SceneManagement;
 
 public class FieldState : MonoBehaviour
 {   
@@ -18,20 +17,10 @@ public class FieldState : MonoBehaviour
 
     public int currentWaveIndex {get; set;}
 
-    Player _heroPlayer;
-
-
     public void Initialize() {
-        Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
-        Messenger.AddListener(Messages.OnWaveComplete, this.onWaveComplete);
 
         this.InitializePlayers();
         this.InitializeEnemies();
-    }
-
-    void OnDestroy() {
-        Messenger.RemoveListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
-        Messenger.RemoveListener(Messages.OnWaveComplete, this.onWaveComplete);
     }
 
     public Player GetHeroPlayer() {
@@ -79,91 +68,7 @@ public class FieldState : MonoBehaviour
         return entities;
     }
 
-
-
-    // TODO: This should be done in turncontroller.
-    private void onEntityDeath(DeathResult result) {
-        FightingEntity deadFighter = result.deadEntity.fighter;
-        // TODO: Play death animation
-
-        bool isEnemy = deadFighter.isEnemy();
-        if (isEnemy) {
-            enemyParty.members[deadFighter.targetId] = null;
-            Destroy(deadFighter.gameObject);
-
-            bool stillHasEnemies = false;
-            for (int i = 0; i < enemyParty.members.Length; i++) {
-                if (enemyParty.members[i] != null) {
-                    stillHasEnemies = true;
-                    break;
-                }
-            }
-
-            if (!stillHasEnemies) {
-                this.onWaveComplete();
-            }
-        } else {
-
-            if (deadFighter.targetId == 0) {
-                this.onHeroDeath(result);
-                return;
-            }
-
-            GameManager.Instance.party.EvictPlayer(deadFighter.targetId);
-            Destroy(deadFighter.gameObject);
-        }
-
-    }
-
-    private void onHeroDeath(DeathResult result) {
-        SceneManager.LoadScene("GameOverScreen");
-    }
-
-    private void onWaveComplete() {
-        StageInfoContainer stageInfo = GameManager.Instance.GetCurrentStage();
-        WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.currentWaveIndex);
-
-        this.currentWaveIndex++;
-        if (this.currentWaveIndex >= stageInfo.numWaves) {
-            GameManager.Instance.SetNextStageIndex(GameManager.Instance.currentStageIndex + 1); // May want to change logic in the future
-            SceneManager.LoadScene("WorldMap");
-
-        } else {
-            this.GenerateEnemyList(this.currentWaveIndex);
-        }
-    }
-
-
-    private void InitializePlayers() {
-        Player instantiatedHeroPlayer = this.InstantiatePlayer(0);
-        instantiatedHeroPlayer.transform.SetParent(heroSlot, false);
-        instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
-
-        for (int i = 1; i < PartyCreationData.numPlayers; i++) {
-            this.InstantiatePlayerIfExists(i);
-        }
-
-        _heroPlayer = playerParty.members[0];
-    }
-
-    private Player InstantiatePlayerIfExists(int index) {
-        Player instantiatedPlayer = this.InstantiatePlayer(index);
-        if (instantiatedPlayer != null) {
-            instantiatedPlayer.transform.SetParent(mookSlots[index-1].transform, false);
-            instantiatedPlayer.transform.localPosition = Vector3.zero;
-            Debug.Log("Instantiated player " + instantiatedPlayer.Name + " in slot: " + index);
-        } else {
-            Debug.Log("Failed to instantiate player in slot: " + index);
-        }
-
-        return instantiatedPlayer;
-    }
-
-    private void InitializeEnemies() {
-        this.GenerateEnemyList(0);
-    }
-
-    private void GenerateEnemyList(int waveIndex) {
+    public void GenerateEnemyList(int waveIndex) {
         this.currentWaveIndex = waveIndex;
 
         StageInfoContainer stageInfo = GameManager.Instance.GetCurrentStage();
@@ -193,6 +98,33 @@ public class FieldState : MonoBehaviour
 
             enemyParty.members[i] = instantiatedEnemy;
         }
+    }
+
+    private void InitializePlayers() {
+        Player instantiatedHeroPlayer = this.InstantiatePlayer(0);
+        instantiatedHeroPlayer.transform.SetParent(heroSlot, false);
+        instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
+
+        for (int i = 1; i < PartyCreationData.numPlayers; i++) {
+            this.InstantiatePlayerIfExists(i);
+        }
+    }
+
+    private Player InstantiatePlayerIfExists(int index) {
+        Player instantiatedPlayer = this.InstantiatePlayer(index);
+        if (instantiatedPlayer != null) {
+            instantiatedPlayer.transform.SetParent(mookSlots[index-1].transform, false);
+            instantiatedPlayer.transform.localPosition = Vector3.zero;
+            Debug.Log("Instantiated player " + instantiatedPlayer.Name + " in slot: " + index);
+        } else {
+            Debug.Log("Failed to instantiate player in slot: " + index);
+        }
+
+        return instantiatedPlayer;
+    }
+
+    private void InitializeEnemies() {
+        this.GenerateEnemyList(0);
     }
 
     private Player InstantiatePlayer(int index) {
