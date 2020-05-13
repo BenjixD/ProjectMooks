@@ -2363,7 +2363,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSelectionColor: {r: 1, g: 0.91147983, b: 0, a: 1}
-  targetSelectionOutlineWidth: 5
 --- !u!1 &2132595313
 GameObject:
   m_ObjectHideFlags: 0
