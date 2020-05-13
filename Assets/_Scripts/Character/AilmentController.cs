@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 [System.Serializable]
 public class AilmentController {
@@ -10,6 +11,23 @@ public class AilmentController {
 
 	public AilmentController(FightingEntity fe) {
 		_entity = fe;
+	}
+
+	public StatusAilment GetAilment(string name) {
+		if(_ailments.ContainsKey(name)) {
+			return _ailments[name];	
+		} else {
+			return null;
+		}
+	}
+
+	public ReadOnlyDictionary<string, StatusAilment> GetAllAilments() {
+		return new ReadOnlyDictionary<string, StatusAilment>(_ailments);
+	}
+
+	public ReadOnlyDictionary<string, StatusAilment> GetAilmentsOfPhase(BattlePhase bp) {
+		return new ReadOnlyDictionary<string, StatusAilment>(
+			_ailments.Where(kvp => kvp.Value.phase == bp).ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
 	}
 
 	public void AddStatusAilment(StatusAilment ailment) {

@@ -151,7 +151,7 @@ public class TurnController : MonoBehaviour
             }
         }
 
-        this.ApplyStatusAilments();
+        this.ApplyStatusAilments(this.battlePhase);
         this.BroadcastPartySetup();
     }
 
@@ -164,7 +164,7 @@ public class TurnController : MonoBehaviour
 
     private void onMoveSelection() {
         this.battlePhase = BattlePhase.MOVE_SELECTION;
-        this.ApplyStatusAilments();
+        this.ApplyStatusAilments(this.battlePhase);
     }
 
     private void onBattleEnd(BattleResult result) {
@@ -172,7 +172,7 @@ public class TurnController : MonoBehaviour
     }
 
     private void onTurnEnd() {
-        this.ApplyStatusAilments();
+        this.ApplyStatusAilments(this.battlePhase);
         this.DecrementStatusAilmentDuration();
         this.BroadcastOnStartTurn();
     }
@@ -299,9 +299,9 @@ public class TurnController : MonoBehaviour
     }
 
     // Triggers status ailments
-    private void ApplyStatusAilments() {
+    private void ApplyStatusAilments(BattlePhase bp) {
         foreach (var entity in field.GetAllFightingEntities()) {
-            entity.GetAilmentController().TickAilmentEffects(battlePhase);
+            entity.GetAilmentController().TickAilmentEffects(bp);
         }
     }
 
