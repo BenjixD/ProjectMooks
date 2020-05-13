@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 
 public class GameManager : Singleton<GameManager> {
-    public Party party;
+    public PartyCreationData party;
     public TurnController turnController{get; set;}
 
     public TwitchChatBroadcaster chatBroadcaster;
@@ -37,7 +37,7 @@ public class GameManager : Singleton<GameManager> {
         // Initialize with the field for debugging purposes
         if (SceneManager.GetActiveScene().name != "_MainMenu") {
             chatBroadcaster.ConnectToChannel(chatBroadcaster._channelToConnectTo);
-            party.CreateHeroPlayer();
+            party.Initialize(chatBroadcaster._channelToConnectTo);
         }
 
 

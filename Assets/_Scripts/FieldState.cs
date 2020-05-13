@@ -6,8 +6,8 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class FieldState : MonoBehaviour
-{   private Player[] _players = new Player[Party.numPlayers];
-    private Enemy[] _enemies = new Enemy[Party.numPlayers];
+{   private Player[] _players = new Player[PartyCreationData.numPlayers];
+    private Enemy[] _enemies = new Enemy[PartyCreationData.numPlayers];
 
 
     [Header("Slots")]
@@ -33,6 +33,8 @@ public class FieldState : MonoBehaviour
         Messenger.RemoveListener(Messages.OnWaveComplete, this.onWaveComplete);
     }
 
+
+    // HELPERS for field info ==================
     public Player GetHeroPlayer() {
         return _heroPlayer;
     }
@@ -93,6 +95,8 @@ public class FieldState : MonoBehaviour
         List<Player> players = GetActivePlayers();
         return players[Random.Range(0, players.Count)].targetId;
     }
+
+    //  ==================
 
     public void RequestRecruitNewParty() {
         List<int> emptySlots = new List<int>();
@@ -176,7 +180,7 @@ public class FieldState : MonoBehaviour
         instantiatedHeroPlayer.transform.SetParent(heroSlot, false);
         instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
 
-        for (int i = 1; i < Party.numPlayers; i++) {
+        for (int i = 1; i < PartyCreationData.numPlayers; i++) {
             this.InstantiatePlayerIfExists(i);
         }
 

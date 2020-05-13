@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Party : MonoBehaviour {
+public class PartyCreationData : MonoBehaviour {
     public const int numPlayers = 4;
     public PlayerQueue playerQueue;
     private PlayerCreationData[] playerPos = new PlayerCreationData[numPlayers];
@@ -12,20 +12,19 @@ public class Party : MonoBehaviour {
         return playerPos;
     }
 
-    public void CreatePlayer(PlayerCreationData data, int index) {
-        playerPos[index] = data;
-    }
-
-    public void CreateHeroPlayer() {
-        // Optional TODO: If streamer name is special, then give them a special hero
+    public void Initialize(string heroName) {
+        // Creates the hero player
         JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(Job.HERO);
         FightingEntity heroPrefab = jobActionsList.prefab;
         PlayerStats stats = new PlayerStats(heroPrefab.stats);
-        PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
+        PlayerCreationData heroData = new PlayerCreationData(heroName, stats, Job.HERO);
         CreatePlayer(heroData, 0);
     }
 
-
+    public void CreatePlayer(PlayerCreationData data, int index) {
+        playerPos[index] = data;
+    }
+    
     public void TryFillPartySlot(int index) {
         if(playerPos[index] != null) {
             return;
@@ -65,7 +64,7 @@ public class Party : MonoBehaviour {
         }
     }
 
-    List<PlayerCreationData> GetNPlayers(int n) {
+    private List<PlayerCreationData> GetNPlayers(int n) {
         List<PlayerCreationData> players = new List<PlayerCreationData>();
         for(int i = 0; i < n; i++) {
             PlayerCreationData data = playerQueue.Dequeue();
