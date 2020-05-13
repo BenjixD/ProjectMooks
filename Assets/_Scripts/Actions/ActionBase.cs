@@ -94,8 +94,8 @@ public abstract class ActionBase : ScriptableObject {
             return GameManager.Instance.turnController.field.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetActiveEnemies());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetActivePlayers());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.enemyParty.GetActiveMembers());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.playerParty.GetActiveMembers());
 
         if (user.isEnemy()) {
             potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
@@ -111,8 +111,8 @@ public abstract class ActionBase : ScriptableObject {
             return GameManager.Instance.turnController.field.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetEnemies());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetPlayers());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.enemyParty.members);
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.playerParty.members);
 
         if (user.isEnemy()) {
             potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;

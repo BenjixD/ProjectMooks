@@ -38,8 +38,8 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     public void UpdateStatusBars() {
-        List<Player> players = _controller.field.GetActivePlayers();
-        List<Enemy> enemies = _controller.field.GetActiveEnemies();
+        List<Player> players = _controller.field.playerParty.GetActiveMembers();
+        List<Enemy> enemies = _controller.field.enemyParty.GetActiveMembers();
 
         if (statusBars == null || enemyStatusBars == null || players.Count != statusBars.Count || enemies.Count != enemyStatusBars.Count) {
             this.rebuildStatusBars();
@@ -50,7 +50,7 @@ public class StatusBarsUI : MonoBehaviour
 
     private void rebuildStatusBars() {
         this.DestroyCurrentStatusBars();
-        int playerCount = _controller.field.GetActivePlayers().Count;
+        int playerCount = _controller.field.playerParty.GetActiveMembers().Count;
 
         statusBars = new List<StatusBarUI>();
 
@@ -62,7 +62,7 @@ public class StatusBarsUI : MonoBehaviour
 
         enemyStatusBars = new List<StatusBarUI>();
 
-        int enemyCount = _controller.field.GetActiveEnemies().Count;
+        int enemyCount = _controller.field.enemyParty.GetActiveMembers().Count;
 
         for (int i = 0; i < enemyCount; i++) {
             StatusBarUI statusBarForPlayer = Instantiate(statusBarPrefab);
@@ -72,13 +72,13 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     private void setStatusBarUI() {
-        List<Player> players = _controller.field.GetActivePlayers();
+        List<Player> players = _controller.field.playerParty.GetActiveMembers();
         for (int i = 0; i < players.Count; i++) {
             statusBars[i].SetName(players[i].Name);
             statusBars[i].SetHP(players[i].stats.GetHp(), players[i].stats.maxHp);
         }
 
-        List<Enemy> enemies = _controller.field.GetActiveEnemies();
+        List<Enemy> enemies = _controller.field.enemyParty.GetActiveMembers();
 
         for (int i = 0; i < enemies.Count; i++) {
             enemyStatusBars[i].SetName(enemies[i].Name);

@@ -6,8 +6,9 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class FieldState : MonoBehaviour
-{   private Player[] _players = new Player[PartyCreationData.numPlayers];
-    private Enemy[] _enemies = new Enemy[PartyCreationData.numPlayers];
+{   
+    public Party<Player> playerParty = new Party<Player>();
+    public Party<Enemy> enemyParty = new Party<Enemy>(); 
 
 
     [Header("Slots")]
@@ -33,74 +34,13 @@ public class FieldState : MonoBehaviour
         Messenger.RemoveListener(Messages.OnWaveComplete, this.onWaveComplete);
     }
 
-
-    // HELPERS for field info ==================
     public Player GetHeroPlayer() {
-        return _heroPlayer;
+        return playerParty.members[0];
     }
-    public Enemy[] GetEnemies() {
-        return _enemies;
-    }
-
-    public Player[] GetPlayers() {
-        return _players;
-    }
-
-    public List<Player> GetActivePlayers() {
-        List<Player> activePlayers = new List<Player>();
-        Player[] players = GetPlayers();
-        for (int i = 0; i < players.Length; i++) {
-            if (players[i] != null) {
-                activePlayers.Add(players[i]);
-            }
-        }
-
-        return activePlayers;
-    }
-
-    public List<Enemy> GetActiveEnemies() {
-        List<Enemy> activeEnemies = new List<Enemy>();
-        Enemy[] enemies = GetEnemies();
-        for (int i = 0; i < enemies.Length; i++) {
-            if (enemies[i] != null) {
-                activeEnemies.Add(enemies[i]);
-            }
-        }
-
-        return activeEnemies;
-    }
-
-    public List<FightingEntity> GetAllFightingEntities() {
-        List<Player> players = GetActivePlayers();
-        List<FightingEntity> entities = new List<FightingEntity>();
-        foreach (var player in players) {
-            entities.Add(player);
-        }
-
-        List<Enemy> enemies = GetActiveEnemies();
-
-        foreach (var enemy in enemies) {
-            entities.Add(enemy);
-        }
-
-        return entities;
-    }
-
-    public int GetRandomEnemyIndex() {
-        List<Enemy> enemies = GetActiveEnemies();
-        return enemies[Random.Range(0, enemies.Count)].targetId;
-    }
-
-    public int GetRandomPlayerIndex() {
-        List<Player> players = GetActivePlayers();
-        return players[Random.Range(0, players.Count)].targetId;
-    }
-
-    //  ==================
 
     public void RequestRecruitNewParty() {
         List<int> emptySlots = new List<int>();
-        Player[] players = GetPlayers();
+        Player[] players = playerParty.members;
         for (int i = 1; i < players.Length; i++) {
             if (players[i] == null) {
                 emptySlots.Add(i);
@@ -123,18 +63,37 @@ public class FieldState : MonoBehaviour
 
     }
 
+    public List<FightingEntity> GetAllFightingEntities() {
+        List<Player> players = playerParty.GetActiveMembers();
+        List<FightingEntity> entities = new List<FightingEntity>();
+        foreach (var player in players) {
+            entities.Add(player);
+        }
+
+        List<Enemy> enemies = enemyParty.GetActiveMembers();
+
+        foreach (var enemy in enemies) {
+            entities.Add(enemy);
+        }
+
+        return entities;
+    }
+
+
+
+    // TODO: This should be done in turncontroller.
     private void onEntityDeath(DeathResult result) {
         FightingEntity deadFighter = result.deadEntity.fighter;
         // TODO: Play death animation
 
         bool isEnemy = deadFighter.isEnemy();
         if (isEnemy) {
-            _enemies[deadFighter.targetId] = null;
+            enemyParty.members[deadFighter.targetId] = null;
             Destroy(deadFighter.gameObject);
 
             bool stillHasEnemies = false;
-            for (int i = 0; i < _enemies.Length; i++) {
-                if (_enemies[i] != null) {
+            for (int i = 0; i < enemyParty.members.Length; i++) {
+                if (enemyParty.members[i] != null) {
                     stillHasEnemies = true;
                     break;
                 }
@@ -184,7 +143,7 @@ public class FieldState : MonoBehaviour
             this.InstantiatePlayerIfExists(i);
         }
 
-        _heroPlayer = GetPlayers()[0];
+        _heroPlayer = playerParty.members[0];
     }
 
     private Player InstantiatePlayerIfExists(int index) {
@@ -232,7 +191,7 @@ public class FieldState : MonoBehaviour
             instantiatedEnemy.transform.SetParent(enemySlots[i]);
             instantiatedEnemy.transform.localPosition = Vector3.zero;
 
-            _enemies[i] = instantiatedEnemy;
+            enemyParty.members[i] = instantiatedEnemy;
         }
     }
 
@@ -246,7 +205,7 @@ public class FieldState : MonoBehaviour
         FightingEntity prefab = jobActionsList.prefab;
         Player player = Instantiate(prefab).GetComponent<Player>();
         player.Initialize(index, data);
-        _players[index] = player;
+        playerParty.members[index] = player;
 
         Debug.Log("Created player: " + data.name);
         Debug.Log("Player actions: " + player.actions);
