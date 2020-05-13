@@ -64,6 +64,9 @@ public class Battle
                 continue;
             }
 
+            // Apply Status Ailment
+            fighters[i].GetAilmentController().TickAilmentEffects(_controller.battlePhase);
+
             if (fighters[i].GetQueuedAction() == null) {
                 // This sets the enemy's action
                 // TODO: Will be moved after AI is merged.
