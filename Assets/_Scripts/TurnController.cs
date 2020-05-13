@@ -214,7 +214,6 @@ public class TurnController : MonoBehaviour
             this.initializeCommandCardActionUI(ActionType.MAGIC);
         } else {
             ActionBase heroAction = choice.action;
-            // TODO: Differentiate between ALL and single target.
             if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
                 List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(field.GetHeroPlayer());
                 switch (heroAction.targetInfo.targetType) {

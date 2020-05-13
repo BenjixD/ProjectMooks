@@ -10,7 +10,6 @@ public class StatusBarUI : MonoBehaviour
     public Text hpText;
     public Text energyText;
 
-    //TODO: Progress bar
 
     public void SetName(string name) {
         if (nameText == null) {

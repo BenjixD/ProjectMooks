@@ -75,7 +75,7 @@ public class FieldState : MonoBehaviour
         WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.currentWaveIndex);
         waveInfo.InitializeEnemyList(); // Does random generation
 
-        int numberOfEnemiesToGenerate = waveInfo.numEnemies; // TODO: Make this dependent on stage.
+        int numberOfEnemiesToGenerate = waveInfo.numEnemies;
         List<JobActionsList> enemyList = waveInfo.GetEnemyList();
 
         for (int i = 0; i < enemyList.Count; i++) {
@@ -144,8 +144,4 @@ public class FieldState : MonoBehaviour
 
         return player;
     }
-
-
-
-
 }
