@@ -3,12 +3,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-interface TestInterface {
-    FightingEntity GetPlayer();
-}
-
-
-// T should be one of Player, enemy
+// A party holds an array of FightingEntities
+// T should be one of Player, Enemy
 public class Party<T> where T : FightingEntity
 {
     public const int maxPlayers = 4;

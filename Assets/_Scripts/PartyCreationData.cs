@@ -4,9 +4,8 @@ using System;
 using UnityEngine;
 
 public class PartyCreationData : MonoBehaviour {
-    public const int numPlayers = 4;
     public PlayerQueue playerQueue;
-    private PlayerCreationData[] playerPos = new PlayerCreationData[numPlayers];
+    private PlayerCreationData[] playerPos = new PlayerCreationData[Party<Player>.maxPlayers];
 
     public PlayerCreationData[] GetPlayerCreationData() {
         return playerPos;
@@ -14,7 +13,7 @@ public class PartyCreationData : MonoBehaviour {
 
     public void Initialize(string heroName) {
         // Creates the hero player
-        JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(Job.HERO);
+        JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(Job.HERO);
         FightingEntity heroPrefab = jobActionsList.prefab;
         PlayerStats stats = new PlayerStats(heroPrefab.stats);
         PlayerCreationData heroData = new PlayerCreationData(heroName, stats, Job.HERO);

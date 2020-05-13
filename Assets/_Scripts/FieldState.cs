@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+// Class that holds field information / helper functions
 public class FieldState : MonoBehaviour
 {   
     public Party<Player> playerParty = new Party<Player>();
@@ -71,7 +72,7 @@ public class FieldState : MonoBehaviour
     public void GenerateEnemyList(int waveIndex) {
         this.currentWaveIndex = waveIndex;
 
-        StageInfoContainer stageInfo = GameManager.Instance.GetCurrentStage();
+        StageInfoContainer stageInfo = GameManager.Instance.gameState.GetCurrentStage();
         WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.currentWaveIndex);
         waveInfo.InitializeEnemyList(); // Does random generation
 
@@ -105,7 +106,7 @@ public class FieldState : MonoBehaviour
         instantiatedHeroPlayer.transform.SetParent(heroSlot, false);
         instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
 
-        for (int i = 1; i < PartyCreationData.numPlayers; i++) {
+        for (int i = 1; i < Party<Player>.maxPlayers; i++) {
             this.InstantiatePlayerIfExists(i);
         }
     }
@@ -133,7 +134,7 @@ public class FieldState : MonoBehaviour
             return null;
         }
 
-        JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(data.job);
+        JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(data.job);
         FightingEntity prefab = jobActionsList.prefab;
         Player player = Instantiate(prefab).GetComponent<Player>();
         player.Initialize(index, data);

@@ -25,7 +25,7 @@ public class HeroActionChoice {
     }
 }
 
-
+// The main controller/manager for a battle
 [RequireComponent(typeof(BattleUI))]
 [RequireComponent(typeof(FieldState))]
 public class TurnController : MonoBehaviour
@@ -294,12 +294,12 @@ public class TurnController : MonoBehaviour
     }
 
     private void onWaveComplete() {
-        StageInfoContainer stageInfo = GameManager.Instance.GetCurrentStage();
+        StageInfoContainer stageInfo = GameManager.Instance.gameState.GetCurrentStage();
         WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.field.currentWaveIndex);
 
         this.field.currentWaveIndex++;
         if (this.field.currentWaveIndex >= stageInfo.numWaves) {
-            GameManager.Instance.SetNextStageIndex(GameManager.Instance.currentStageIndex + 1); // May want to change logic in the future
+            GameManager.Instance.gameState.SetNextStageIndex(GameManager.Instance.gameState.progressData.currentStageIndex + 1); // May want to change logic in the future
             SceneManager.LoadScene("WorldMap");
 
         } else {

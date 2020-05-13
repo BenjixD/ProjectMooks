@@ -32,7 +32,7 @@ public class PlayerCreationData {
 		} else if(stats.maxDefense > template.maxDefense && stats.maxResistance > template.maxResistance) {
 			return Job.CLERIC;
 		} else {
-            List<Job> jobsList = GameManager.Instance.getMookJobs();
+            List<Job> jobsList = GameManager.Instance.models.getMookJobs();
 
 			return jobsList[UnityEngine.Random.Range(0, jobsList.Count)];
 		}
