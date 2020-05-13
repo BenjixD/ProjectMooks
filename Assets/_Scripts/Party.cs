@@ -6,16 +6,10 @@ using UnityEngine;
 public class Party : MonoBehaviour {
     public const int numPlayers = 4;
     public PlayerQueue playerQueue;
-
-    // (Name, (position, player obj)) mapping
-    // TODO: Move this to FieldState. I don't think that Players should be stored in this class.
-    private Dictionary<string, Tuple<int, Player>> players = new Dictionary<string, Tuple<int, Player>>();
     private PlayerCreationData[] playerPos = new PlayerCreationData[numPlayers];
 
-
-    // TODO: Remove this. I don't think that Players should be stored in this class.
-    public void Initialize() {
-        players.Clear();
+    public PlayerCreationData[] GetPlayerCreationData() {
+        return playerPos;
     }
 
     public void CreatePlayer(PlayerCreationData data, int index) {
@@ -29,28 +23,6 @@ public class Party : MonoBehaviour {
         PlayerStats stats = new PlayerStats(heroPrefab.stats);
         PlayerCreationData heroData = new PlayerCreationData(GameManager.Instance.chatBroadcaster._channelToConnectTo, stats, Job.HERO);
         CreatePlayer(heroData, 0);
-    }
-
-    public Player InstantiatePlayer(int index) {
-        PlayerCreationData data = playerPos[index];
-        if (data == null) {
-            return null;
-        }
-
-        JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(data.job);
-        FightingEntity prefab = jobActionsList.prefab;
-        Player player = Instantiate(prefab).GetComponent<Player>();
-        player.Initialize(index, data);
-        if (!players.ContainsKey(data.name)) {
-            players.Add(data.name, new Tuple<int, Player>(index, player));
-        } else {
-            players[data.name] = new Tuple<int, Player>(index, player);
-        }
-
-        Debug.Log("Created player: " + data.name);
-        Debug.Log("Player actions: " + player.actions);
-
-        return player;
     }
 
 
@@ -69,40 +41,11 @@ public class Party : MonoBehaviour {
             }
         }
     }
-
-    public int GetNumPlayersInParty() {
-        int numPlayers = 0;
-        for(int i = 0; i < playerPos.Length; i++) {
-            if (playerPos[i] != null) {
-                numPlayers++;
-            }
-        }
-
-        return numPlayers;
-    }
     
-    public void EvictPlayer(string username) {
-        Tuple<int, Player> player = players[username];
-        playerPos[player.Item1] = null;
-        players.Remove(username);
-        playerQueue.Remove(username);
-    }
-
-    public Tuple<int, Player> GetPlayer(string username) {
-        return players[username];
-    }
-
-    public Tuple<int, Player> GetPlayer(int index) {
-        if (playerPos[index] == null) {
-            return null;
-        }
-
-        string username = playerPos[index].name;
-        if (username == "") {
-            return null;
-        }
-
-        return players[username];
+    public void EvictPlayer(int index) {
+        PlayerCreationData playerData = playerPos[index];
+        playerPos[index] = null;
+        playerQueue.Remove(playerData.name);
     }
 
     public List<PlayerCreationData> GetPlayersPosition() {
@@ -113,20 +56,6 @@ public class Party : MonoBehaviour {
             }
         }
     
-        return pos;
-    }
-
-    public Player[] GetPlayersInPosition() {
-        Player[] pos = new Player[numPlayers];
-        for(int i = 0; i < pos.Length; i++) {
-            Tuple<int, Player> player = GetPlayer(i);
-            if (player != null) {
-                pos[i] = player.Item2;
-            } else {
-                pos[i] = null;
-            }
-        }
-
         return pos;
     }
 
@@ -145,20 +74,5 @@ public class Party : MonoBehaviour {
             }
         }
         return players;
-    }
-
-    void Start() {
-        // StartCoroutine(TestPlayers());
-    }
-
-    IEnumerator TestPlayers() {
-        List<PlayerCreationData> players = GetNPlayers(2);
-        for(int i = 0; i < players.Count; i++) {
-            Debug.Log("Deploying Player: " + players[i].name + " - " + players[i].job.ToString());
-            players[i].stats.LogStats();
-            playerQueue.Remove(players[i].name);
-        }
-        yield return new WaitForSeconds(5f);
-        yield return StartCoroutine(TestPlayers());
     }
 }

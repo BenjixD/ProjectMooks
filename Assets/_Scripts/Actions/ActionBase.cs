@@ -112,7 +112,7 @@ public abstract class ActionBase : ScriptableObject {
         }
         List<FightingEntity> potentialTargets;
         List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetEnemies());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetPartyPlayers());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetPlayers());
 
         if (user.isEnemy()) {
             potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;

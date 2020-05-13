@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class FieldState : MonoBehaviour
-{
+{   private Player[] _players = new Player[Party.numPlayers];
     private Enemy[] _enemies = new Enemy[Party.numPlayers];
 
 
@@ -23,7 +23,6 @@ public class FieldState : MonoBehaviour
     public void Initialize() {
         Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
         Messenger.AddListener(Messages.OnWaveComplete, this.onWaveComplete);
-        GameManager.Instance.party.Initialize();
 
         this.InitializePlayers();
         this.InitializeEnemies();
@@ -41,13 +40,13 @@ public class FieldState : MonoBehaviour
         return _enemies;
     }
 
-    public Player[] GetPartyPlayers() {
-        return GameManager.Instance.party.GetPlayersInPosition();
+    public Player[] GetPlayers() {
+        return _players;
     }
 
     public List<Player> GetActivePlayers() {
         List<Player> activePlayers = new List<Player>();
-        Player[] players = GetPartyPlayers();
+        Player[] players = GetPlayers();
         for (int i = 0; i < players.Length; i++) {
             if (players[i] != null) {
                 activePlayers.Add(players[i]);
@@ -97,7 +96,7 @@ public class FieldState : MonoBehaviour
 
     public void RequestRecruitNewParty() {
         List<int> emptySlots = new List<int>();
-        Player[] players = GetPartyPlayers();
+        Player[] players = GetPlayers();
         for (int i = 1; i < players.Length; i++) {
             if (players[i] == null) {
                 emptySlots.Add(i);
@@ -147,7 +146,7 @@ public class FieldState : MonoBehaviour
                 return;
             }
 
-            GameManager.Instance.party.EvictPlayer(deadFighter.Name);
+            GameManager.Instance.party.EvictPlayer(deadFighter.targetId);
             Destroy(deadFighter.gameObject);
         }
 
@@ -173,19 +172,19 @@ public class FieldState : MonoBehaviour
 
 
     private void InitializePlayers() {
-        Player instantiatedHeroPlayer = GameManager.Instance.party.InstantiatePlayer(0);
+        Player instantiatedHeroPlayer = this.InstantiatePlayer(0);
         instantiatedHeroPlayer.transform.SetParent(heroSlot, false);
         instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
 
         for (int i = 1; i < Party.numPlayers; i++) {
-            this.InstantiatePlayer(i);
+            this.InstantiatePlayerIfExists(i);
         }
 
-        _heroPlayer = GetPartyPlayers()[0];
+        _heroPlayer = GetPlayers()[0];
     }
 
-    private Player InstantiatePlayer(int index) {
-        Player instantiatedPlayer = GameManager.Instance.party.InstantiatePlayer(index);
+    private Player InstantiatePlayerIfExists(int index) {
+        Player instantiatedPlayer = this.InstantiatePlayer(index);
         if (instantiatedPlayer != null) {
             instantiatedPlayer.transform.SetParent(mookSlots[index-1].transform, false);
             instantiatedPlayer.transform.localPosition = Vector3.zero;
@@ -232,6 +231,26 @@ public class FieldState : MonoBehaviour
             _enemies[i] = instantiatedEnemy;
         }
     }
+
+    private Player InstantiatePlayer(int index) {
+        PlayerCreationData data = GameManager.Instance.party.GetPlayerCreationData()[index];
+        if (data == null) {
+            return null;
+        }
+
+        JobActionsList jobActionsList = GameManager.Instance.GetPlayerJobActionsList(data.job);
+        FightingEntity prefab = jobActionsList.prefab;
+        Player player = Instantiate(prefab).GetComponent<Player>();
+        player.Initialize(index, data);
+        _players[index] = player;
+
+        Debug.Log("Created player: " + data.name);
+        Debug.Log("Player actions: " + player.actions);
+
+        return player;
+    }
+
+
 
 
 }
