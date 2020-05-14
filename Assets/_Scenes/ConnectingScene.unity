@@ -1325,7 +1325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d25e599ee87f3264bb6df9d00a714344, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleScene: AT_Scene
+  battleScene: Battle
   partyContainer: {fileID: 18740454}
   commandOptionTexts:
   - {fileID: 1054031797}
