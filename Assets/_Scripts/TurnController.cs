@@ -27,14 +27,14 @@ public class HeroActionChoice {
 
 // The main controller/manager for a battle
 [RequireComponent(typeof(BattleUI))]
-[RequireComponent(typeof(FieldState))]
+[RequireComponent(typeof(BattleField))]
 [RequireComponent(typeof(StageController))]
 public class TurnController : MonoBehaviour
 {
 
     public BattleUI ui {get; set; }
 
-    public FieldState field {get; set; }
+    public BattleField field {get; set; }
     public Battle battle {get; set; }
     public StageController stageController {get; set;}
 
@@ -59,7 +59,7 @@ public class TurnController : MonoBehaviour
 
     void Awake() {
         ui = GetComponent<BattleUI>();
-        field = GetComponent<FieldState>();
+        field = GetComponent<BattleField>();
         stageController = GetComponent<StageController>();
     }
 

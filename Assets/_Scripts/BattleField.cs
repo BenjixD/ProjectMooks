@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 
 // Class that holds field information / helper functions
-public class FieldState : MonoBehaviour
+public class BattleField : MonoBehaviour
 {   
     public Party<Player> playerParty = new Party<Player>();
     public Party<Enemy> enemyParty = new Party<Enemy>(); 
