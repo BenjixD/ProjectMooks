@@ -25,6 +25,7 @@ public class FightingEntity : MonoBehaviour
 	protected QueuedAction _queuedAction;
 	protected AnimationController _animController;
 	protected FightingEntityAI _ai;
+	protected AilmentController _ailmentController;
 
 	protected virtual void Awake() {
 		_animController = GetComponent<AnimationController>();
@@ -42,6 +43,7 @@ public class FightingEntity : MonoBehaviour
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.turnController.field.GetTargetNameFromIndex(index);
+		_ailmentController = new AilmentController(this);
 	}
 
 	public void SetStats(PlayerStats stats) {
@@ -63,6 +65,9 @@ public class FightingEntity : MonoBehaviour
         }
 	}
 
+	public AilmentController GetAilmentController() {
+		return _ailmentController;
+	}
 
 	public void TryActionCommand(string message) {
 		string[] splitCommand = message.Split(' ');
