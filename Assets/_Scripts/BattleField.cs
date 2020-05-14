@@ -43,7 +43,7 @@ public class BattleField : MonoBehaviour
         foreach (int emptySlot in emptySlots) {
             Player player = this.InstantiatePlayer(emptySlot);
             if (player != null) {
-                player.InitializePosition(this.mookSlots[emptySlot-1]);
+                this.mookSlots[emptySlot-1].InitializePosition(player);
                 joinedPlayers.Add(player);
             }
         }
@@ -96,7 +96,7 @@ public class BattleField : MonoBehaviour
             
             instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
             FighterSlot slot = enemySlots[i];
-            instantiatedEnemy.InitializePosition(slot);
+            slot.InitializePosition(instantiatedEnemy);
 
             enemyParty.members[i] = instantiatedEnemy;
         }
@@ -111,7 +111,7 @@ public class BattleField : MonoBehaviour
 
     private void InitializePlayers() {
         Player instantiatedHeroPlayer = this.InstantiatePlayer(0);
-        instantiatedHeroPlayer.InitializePosition(this.heroSlot);
+        this.heroSlot.InitializePosition(instantiatedHeroPlayer);
 
         for (int i = 1; i < Party<Player>.maxPlayers; i++) {
             this.InstantiatePlayerIfExists(i);
@@ -127,8 +127,8 @@ public class BattleField : MonoBehaviour
             } else {
                 slot = mookSlots[index-1];
             }
-            
-            instantiatedPlayer.InitializePosition(slot);
+
+            slot.InitializePosition(instantiatedPlayer);
             Debug.Log("Instantiated player " + instantiatedPlayer.Name + " in slot: " + index);
         } else {
             Debug.Log("Failed to instantiate player in slot: " + index);
