@@ -17,6 +17,8 @@ public class FightingEntity : MonoBehaviour
 
     public int targetId;
 
+    public FighterSlot slot;
+
 	protected QueuedAction _queuedAction;
 	protected AnimationController _animController;
 	protected FightingEntityAI _ai;
@@ -37,6 +39,12 @@ public class FightingEntity : MonoBehaviour
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);
 	}
+
+    public void InitializePosition(FighterSlot slot) {
+        this.transform.SetParent(slot.instantiationTransform.transform, false);
+        this.slot = slot;
+        this.transform.localPosition = Vector3.zero;
+    }
 
 	public void SetStats(PlayerStats stats) {
 		this.stats = stats;
