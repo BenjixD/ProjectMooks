@@ -4,17 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ActionListener : TwitchChatListenerBase {
-    public Canvas speechCanvas; 
-    public Text speechCanvasText;
 
     [SerializeField]
     private Player _player;
-
-
-    public float _chatBubbleAnimationTime = 5f;
-    private float _textCounter = 0;
-    private bool _isTextAnimating = false;
-    private string _textMessage = "";
 
     public override void Awake() {
         base.Awake();
@@ -36,41 +28,8 @@ public class ActionListener : TwitchChatListenerBase {
 
 
     public void HandleMessage(string message) {
-        if (speechCanvas == null || speechCanvasText == null ) {
-            return;
-        }
-
-        _textCounter = 0;
-        _textMessage = message;
-
-        if (_isTextAnimating == true) {
-            // Do nothing
-        } else {
-            StartCoroutine(displayChatBubble());
+        if (_player.fighterMessageBox != null) {
+            this._player.fighterMessageBox.HandleMessage(message);
         }
     }
-
-    IEnumerator displayChatBubble() {
-        _isTextAnimating = true;
-        speechCanvasText.text = _textMessage;
-        speechCanvas.gameObject.SetActive(true);
-
-        if (_player != null && speechCanvas != null && speechCanvasText != null) {
-            // This is a hacky fix for the text direction
-            // TODO: Should restructure the Player gameObject so we don't have to do this
-            speechCanvas.transform.localScale = _player.transform.parent.transform.localScale;
-        }
-
-
-        while (_textCounter < _chatBubbleAnimationTime) {
-            speechCanvasText.text = _textMessage;
-            _textCounter += Time.deltaTime;
-            yield return null;
-        }
-
-        speechCanvas.gameObject.SetActive(false);
-        _isTextAnimating = false;
-    }
-
-
 }

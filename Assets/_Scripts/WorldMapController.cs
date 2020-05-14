@@ -33,11 +33,11 @@ public class WorldMapController : MonoBehaviour
             Vector3 slerp = Vector3.Slerp(pos1, pos2, counter);
             mainCamera.transform.position = new Vector3(slerp.x, slerp.y, mainCamera.transform.position.z);
 
-            counter += Time.deltaTime * transitionSpeed;
+            counter += GameManager.Instance.time.deltaTime * transitionSpeed;
             yield return null;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return GameManager.Instance.time.WaitForSeconds(1.0f);
 
         GameManager.Instance.gameState.progressData.currentStageIndex = GameManager.Instance.gameState.progressData.nextStageIndex;
         SceneManager.LoadScene(battleScene);

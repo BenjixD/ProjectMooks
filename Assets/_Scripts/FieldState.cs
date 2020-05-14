@@ -12,9 +12,9 @@ public class FieldState : MonoBehaviour
 
 
     [Header("Slots")]
-    public Transform heroSlot;
-    public List<Transform> mookSlots;
-    public List<Transform> enemySlots;
+    public FighterSlot heroSlot;
+    public List<FighterSlot> mookSlots;
+    public List<FighterSlot> enemySlots;
 
     public int currentWaveIndex {get; set;}
 
@@ -43,6 +43,7 @@ public class FieldState : MonoBehaviour
         foreach (int emptySlot in emptySlots) {
             Player player = this.InstantiatePlayer(emptySlot);
             if (player != null) {
+                player.InitializePosition(this.mookSlots[emptySlot-1]);
                 joinedPlayers.Add(player);
             }
         }
@@ -88,23 +89,29 @@ public class FieldState : MonoBehaviour
             PlayerStats stats = new PlayerStats(enemyPrefab.stats);
             stats.RandomizeStats();
             stats.ResetStats();
-            PlayerCreationData creationData = new PlayerCreationData(enemyPrefab.Name + " (" + i + ")", stats, Job.BASIC_ENEMY);
+            PlayerCreationData creationData = new PlayerCreationData(enemyPrefab.Name + " (" + GetTargetNameFromIndex(i) + ")", stats, Job.BASIC_ENEMY);
             instantiatedEnemy.Initialize(i, creationData);
 
             // TODO: Some sort of entrance animation
             
             instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
-            instantiatedEnemy.transform.SetParent(enemySlots[i]);
-            instantiatedEnemy.transform.localPosition = Vector3.zero;
+            FighterSlot slot = enemySlots[i];
+            instantiatedEnemy.InitializePosition(slot);
 
             enemyParty.members[i] = instantiatedEnemy;
         }
     }
 
+    public string GetTargetNameFromIndex(int index) {
+        char letter = (char) ('A' + index);
+        string targetName = letter.ToString().ToUpper();
+
+        return targetName;
+    }
+
     private void InitializePlayers() {
         Player instantiatedHeroPlayer = this.InstantiatePlayer(0);
-        instantiatedHeroPlayer.transform.SetParent(heroSlot, false);
-        instantiatedHeroPlayer.transform.localPosition = Vector3.zero;
+        instantiatedHeroPlayer.InitializePosition(this.heroSlot);
 
         for (int i = 1; i < Party<Player>.maxPlayers; i++) {
             this.InstantiatePlayerIfExists(i);
@@ -114,8 +121,8 @@ public class FieldState : MonoBehaviour
     private Player InstantiatePlayerIfExists(int index) {
         Player instantiatedPlayer = this.InstantiatePlayer(index);
         if (instantiatedPlayer != null) {
-            instantiatedPlayer.transform.SetParent(mookSlots[index-1].transform, false);
-            instantiatedPlayer.transform.localPosition = Vector3.zero;
+            FighterSlot slot = mookSlots[index-1];
+            instantiatedPlayer.InitializePosition(slot);
             Debug.Log("Instantiated player " + instantiatedPlayer.Name + " in slot: " + index);
         } else {
             Debug.Log("Failed to instantiate player in slot: " + index);

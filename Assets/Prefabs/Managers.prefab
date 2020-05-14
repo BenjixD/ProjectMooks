@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1133189570}
   - component: {fileID: 1133189571}
   - component: {fileID: 1133189572}
+  - component: {fileID: 3191040276140247181}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -66,6 +67,7 @@ MonoBehaviour:
   chatBroadcaster: {fileID: 5902595311601403730}
   models: {fileID: 1133189570}
   gameState: {fileID: 1133189571}
+  time: {fileID: 3191040276140247181}
 --- !u!114 &5902595311601403742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,3 +167,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStageIndex: 0
   nextStageIndex: 0
+--- !u!114 &3191040276140247181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5902595311601403729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfdc886bf3c6bfe47b3d03a05fba3e97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  deltaTime: 0

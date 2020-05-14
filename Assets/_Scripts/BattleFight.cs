@@ -108,7 +108,7 @@ public class BattleFight
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {
         // TODO: Put animation here
-        yield return new WaitForSeconds(1.5f);
+        yield return GameManager.Instance.time.WaitForSeconds(1.5f);
     }
 
 }
