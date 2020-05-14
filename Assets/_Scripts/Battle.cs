@@ -41,7 +41,8 @@ public class Battle
         List<FightingEntity> orderedPlayers = new List<FightingEntity>(_controller.field.GetAllFightingEntities());
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
-        Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, new BattleResult(orderedPlayers));
+        // TODO: Raise another message - specifically for battle order
+        //Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, new BattleResult(orderedPlayers));
         result = new BattleResult(orderedPlayers);
 
         _controller.StartCoroutine(handleBattle(orderedPlayers));
@@ -90,8 +91,7 @@ public class Battle
 
     private void endBattle() {
         this.currentFight = null;
-
-        Messenger.Broadcast<BattleResult>(Messages.OnBattleEnd, result);
+        this._controller.BroadcastOnBattleEnd(result);
     }
 
     private void setUnsetMookCommands() {

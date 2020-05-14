@@ -7,11 +7,16 @@ public enum BattlePhase{
     TURN_START,
     PARTY_SETUP,
     MOVE_SELECTION,
-    MAGIC_SELECTION,
-    TARGET_SELECTION,
-    WAITING_FOR_CHAT,
-    BATTLE
+    BATTLE,
+    TURN_END
 };
+
+public enum MenuState {
+    MOVE,
+    MAGIC,
+    TARGET,
+    WAITING
+}
 
 [System.Serializable]
 public class HeroActionChoice {
@@ -44,6 +49,7 @@ public class TurnController : MonoBehaviour
     [Header ("Other")]
     public float maxTimeBeforeAction = 15;
     public BattlePhase battlePhase = BattlePhase.PARTY_SETUP;
+    public MenuState menuState = MenuState.MOVE;
 
     private float playerActionCounter {get; set;}
 
@@ -69,6 +75,7 @@ public class TurnController : MonoBehaviour
         Messenger.AddListener(Messages.OnTurnEnd, this.onTurnEnd);
         Messenger.AddListener(Messages.OnPartySetup, this.onPartySetup);
         Messenger.AddListener(Messages.OnMoveSelection, this.onMoveSelection);
+        Messenger.AddListener(Messages.OnBattleStart, this.onBattleStart);
 
         Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
 
@@ -86,9 +93,16 @@ public class TurnController : MonoBehaviour
         Messenger.Broadcast(Messages.OnMoveSelection);
     }    
 
-
     public void BroadcastOnStartTurn() {
         Messenger.Broadcast(Messages.OnTurnStart);
+    }
+
+    public void BroadcastOnBattleStart() {
+        Messenger.Broadcast(Messages.OnBattleStart);
+    }
+
+    public void BroadcastOnBattleEnd(BattleResult result) {
+        Messenger.Broadcast<BattleResult>(Messages.OnBattleEnd, result);
     }
 
     public void BroadcastOnTurnEnd() {
@@ -96,40 +110,8 @@ public class TurnController : MonoBehaviour
     }
 
     public bool CanInputActions() {
-        return this.battlePhase != BattlePhase.BATTLE;
+        return this.battlePhase == BattlePhase.MOVE_SELECTION;
     }
-
-    void Update()
-    {   
-        if (this.CanInputActions()) {
-
-            switch (battlePhase) {
-                case BattlePhase.MOVE_SELECTION:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroAction();
-                    }
-                    break;
-
-                case BattlePhase.TARGET_SELECTION:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroTarget();
-                    }
-                    break;
-                case BattlePhase.MAGIC_SELECTION:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroAction();
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-            playerActionCounter += Time.deltaTime;
-            this.checkExecuteTurn();
-        }
-    }
-
-
 
     private void onTurnStart() {
 
@@ -165,6 +147,14 @@ public class TurnController : MonoBehaviour
     private void onMoveSelection() {
         this.battlePhase = BattlePhase.MOVE_SELECTION;
         this.ApplyStatusAilments(this.battlePhase);
+        Debug.Log("Starting move selection");
+        StartCoroutine(HeroMoveSelection());
+    }
+
+    private void onBattleStart() {
+        this.battlePhase = BattlePhase.BATTLE;
+        this.battle = new Battle(this);
+        this.battle.StartBattle();
     }
 
     private void onBattleEnd(BattleResult result) {
@@ -172,12 +162,13 @@ public class TurnController : MonoBehaviour
     }
 
     private void onTurnEnd() {
+        this.battlePhase = BattlePhase.TURN_END;
         this.ApplyStatusAilments(this.battlePhase);
         this.DecrementStatusAilmentDuration();
         this.BroadcastOnStartTurn();
     }
 
-    private void checkExecuteTurn() {
+    private bool checkExecuteTurn() {
         List<Player> players = field.GetActivePlayers();
 
         //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
@@ -186,17 +177,10 @@ public class TurnController : MonoBehaviour
         if (startTurn) {
             playerActionCounter = 0;
             this.ui.SetStateText("");
-            this.executePlayerTurn();
         } else {
             this.UpdateStateText();
-
         }
-    }
-
-    private void executePlayerTurn() {
-        this.battlePhase = BattlePhase.BATTLE;
-        this.battle = new Battle(this);
-        this.battle.StartBattle();
+        return startTurn;
     }
 
     private void UpdateStateText() {
@@ -214,7 +198,7 @@ public class TurnController : MonoBehaviour
         HeroActionChoice choice = this.currentHeroChoices[_heroActionIndex];
 
         if (choice.choiceName == "Magic" && choice.action == null) {
-            this.battlePhase = BattlePhase.MAGIC_SELECTION;
+            this.menuState = MenuState.MAGIC;
             this.initializeCommandCardActionUI(ActionType.MAGIC);
         } else {
             ActionBase heroAction = choice.action;
@@ -234,7 +218,7 @@ public class TurnController : MonoBehaviour
 
                     break;
                 }
-                this.battlePhase = BattlePhase.TARGET_SELECTION;
+                this.menuState = MenuState.TARGET;
             } else {
                 field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>()));
                 this.checkExecuteTurn();
@@ -243,7 +227,7 @@ public class TurnController : MonoBehaviour
     }
 
     private void setHeroTarget() {
-        this.battlePhase = BattlePhase.WAITING_FOR_CHAT;
+        this.menuState = MenuState.WAITING;
         this._heroTargetIndex = this.commandSelector.GetChoice();
         this.ui.targetSelectionUI.ClearSelection();
         ActionBase heroAction = this.currentHeroChoices[_heroActionIndex].action;
@@ -316,7 +300,41 @@ public class TurnController : MonoBehaviour
         Messenger.RemoveListener(Messages.OnTurnEnd, this.onTurnEnd);
         Messenger.RemoveListener(Messages.OnPartySetup, this.onPartySetup);
         Messenger.RemoveListener(Messages.OnMoveSelection, this.onMoveSelection);
+        Messenger.RemoveListener(Messages.OnBattleStart, this.onBattleStart);
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
     }
 
+    // Coroutines
+    IEnumerator HeroMoveSelection() {
+        menuState = MenuState.MOVE;
+        while(true) {
+            switch (menuState) {
+                case MenuState.MOVE:
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.setHeroAction();
+                    }
+                    break;
+
+                case MenuState.TARGET:
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.setHeroTarget();
+                    }
+                    break;
+                case MenuState.MAGIC:
+                    if (Input.GetKeyDown(KeyCode.Z)) {
+                        this.setHeroAction();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            playerActionCounter += Time.deltaTime;
+            if(this.checkExecuteTurn()) {
+                this.BroadcastOnBattleStart();
+                break;
+            }
+            yield return null;
+        }
+    }
 }

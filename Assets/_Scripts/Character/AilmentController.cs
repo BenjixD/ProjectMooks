@@ -45,6 +45,10 @@ public class AilmentController {
 		status.Recover(_entity);
 	}
 
+	public void RemoveAllStatusAilments() {
+		_ailments.Clear();
+	}
+
 	public void DecrementAllAilmentsDuration() {
 		List<string> timeout = new List<string>();
 		foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
