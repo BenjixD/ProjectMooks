@@ -215,7 +215,7 @@ public class TurnController : MonoBehaviour
         } else {
             ActionBase heroAction = choice.action;
             if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
-                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(field.GetHeroPlayer());
+                List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(field.GetHeroPlayer());
                 switch (heroAction.targetInfo.targetType) {
                     case TargetType.SINGLE:
                         this.ui.targetSelectionUI.InitializeTargetSelectionSingle(possibleTargets, 0, this.commandSelector);
@@ -246,7 +246,7 @@ public class TurnController : MonoBehaviour
 
         switch (heroAction.targetInfo.targetType) {
             case TargetType.SINGLE:
-                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(field.GetHeroPlayer());
+                List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(field.GetHeroPlayer());
                 FightingEntity target = possibleTargets[this._heroTargetIndex];
                 field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>{target.targetId}  ));
                 break;
@@ -307,8 +307,6 @@ public class TurnController : MonoBehaviour
         }
     }
 
-
-    // TODO: This should be done in turncontroller.
     private void onEntityDeath(DeathResult result) {
         FightingEntity deadFighter = result.deadEntity.fighter;
         // TODO: Play death animation

@@ -16,6 +16,7 @@ public class FightingEntity : MonoBehaviour
 	public List<ActionBase> actions = new List<ActionBase>();
 
     public int targetId;
+    public string targetName;
 
     public FighterSlot slot {get; set;}
 
@@ -42,6 +43,7 @@ public class FightingEntity : MonoBehaviour
 		SetStats(data.stats);
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);
+        this.targetName = GameManager.Instance.turnController.field.GetTargetNameFromIndex(index);
 	}
 
     public void InitializePosition(FighterSlot slot) {
@@ -125,5 +127,6 @@ public class FightingEntity : MonoBehaviour
     	List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
     	_ai.ReviewFightResult(myFights);
     }
+
 }
 

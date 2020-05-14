@@ -78,7 +78,6 @@ public abstract class ActionBase : ScriptableObject {
         return true;
     }
 
-
     public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
     
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
@@ -89,24 +88,11 @@ public abstract class ActionBase : ScriptableObject {
         return result;
     }
 
-    public List<FightingEntity> GetPotentialActiveTargets(FightingEntity user) {
-        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
-            return GameManager.Instance.turnController.field.GetAllFightingEntities();
-        }
-        List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.enemyParty.GetActiveMembers());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.playerParty.GetActiveMembers());
-
-        if (user.isEnemy()) {
-            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
-        } else {
-            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? players : enemies;
-        }
-
-        return potentialTargets;
+    public List<FightingEntity> GetAllPossibleActiveTargets(FightingEntity user) {
+        return this.GetAllPossibleTargets(user).Filter( (FightingEntity entity) => entity != null );
     }
 
-    public List<FightingEntity> GetAllPotentialTargets(FightingEntity user) {
+    public List<FightingEntity> GetAllPossibleTargets(FightingEntity user) {
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
             return GameManager.Instance.turnController.field.GetAllFightingEntities();
         }
@@ -124,7 +110,7 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
-        List<FightingEntity> potentialTargets = GetAllPotentialTargets(user);
+        List<FightingEntity> potentialTargets = GetAllPossibleTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
             if (target < potentialTargets.Count && potentialTargets[target] != null) {
@@ -144,27 +130,15 @@ public abstract class ActionBase : ScriptableObject {
 
 
     protected int GetTargetIdFromString(string str, FightingEntity user) {
-        int targetId;
-        if (!int.TryParse(str, out targetId)) {
+        str = str.ToUpper();
+        List<FightingEntity> targets = GetAllPossibleActiveTargets(user);
+
+        FightingEntity target = targets.Find((FightingEntity t) => t.targetName == str );
+        if (target == null) {
             return -1;
         }
-
-        List<FightingEntity> targets = GetPotentialActiveTargets(user);
-
-        bool foundTargetId = false;
-
-        foreach (FightingEntity target in targets) {
-            if (target.targetId == targetId) {
-                foundTargetId = true;
-                break;
-            }
-        }
-
-        if (!foundTargetId) {
-            return -1;
-        }
-
-        return targetId;
+ 
+        return target.targetId;
     }
 
     public abstract FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets);

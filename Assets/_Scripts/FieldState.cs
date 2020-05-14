@@ -89,7 +89,7 @@ public class FieldState : MonoBehaviour
             PlayerStats stats = new PlayerStats(enemyPrefab.stats);
             stats.RandomizeStats();
             stats.ResetStats();
-            PlayerCreationData creationData = new PlayerCreationData(enemyPrefab.Name + " (" + i + ")", stats, Job.BASIC_ENEMY);
+            PlayerCreationData creationData = new PlayerCreationData(enemyPrefab.Name + " (" + GetTargetNameFromIndex(i) + ")", stats, Job.BASIC_ENEMY);
             instantiatedEnemy.Initialize(i, creationData);
 
             // TODO: Some sort of entrance animation
@@ -100,6 +100,13 @@ public class FieldState : MonoBehaviour
 
             enemyParty.members[i] = instantiatedEnemy;
         }
+    }
+
+    public string GetTargetNameFromIndex(int index) {
+        char letter = (char) ('A' + index);
+        string targetName = letter.ToString().ToUpper();
+
+        return targetName;
     }
 
     private void InitializePlayers() {
