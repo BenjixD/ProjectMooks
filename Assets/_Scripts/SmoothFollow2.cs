@@ -11,6 +11,6 @@ public class SmoothFollow : MonoBehaviour {
                 return;
             }
             
-            transform.position = Vector3.Slerp (from.transform.position, to.transform.position, Time.deltaTime * damping);
+            transform.position = Vector3.Slerp (from.transform.position, to.transform.position, GameManager.Instance.time.deltaTime * damping);
         }
 }

@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager> {
     public ScriptableObjectDictionary models;
 
     public GameState gameState;
+    public TimeManager time;
 
     // Note: This field is null if not in battle
     public TurnController turnController{get; set;}

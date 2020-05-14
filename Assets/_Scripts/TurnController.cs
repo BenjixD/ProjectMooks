@@ -124,7 +124,7 @@ public class TurnController : MonoBehaviour
                     break;
             }
 
-            playerActionCounter += Time.deltaTime;
+            playerActionCounter += GameManager.Instance.time.deltaTime;
             this.checkExecuteTurn();
         }
     }

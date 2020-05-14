@@ -46,7 +46,7 @@ public class FighterMessageBox : MonoBehaviour
 
         while (_textCounter < _chatBubbleAnimationTime) {
             speechCanvasText.text = _textMessage;
-            _textCounter += Time.deltaTime;
+            _textCounter += GameManager.Instance.time.deltaTime;
             yield return null;
         }
 
