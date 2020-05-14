@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+// Controller for the UI in battle
 [RequireComponent (typeof(CommandCardUI))]
 public class BattleUI : MonoBehaviour
 {

@@ -10,13 +10,9 @@ public class TargetSelectionUI : MonoBehaviour
 {
 
     public Color targetSelectionColor;
-    public float targetSelectionOutlineWidth = 3.5f;
-
 
     private List<FightingEntity> potentialTargets;
     private CommandSelector _commandSelector {get; set;}
-
-    List<Material[]> outlinedMaterials;
 
     
     public void InitializeTargetSelectionSingle(List<FightingEntity> possibleTargets, int initialChoice, CommandSelector selector) {
@@ -48,21 +44,8 @@ public class TargetSelectionUI : MonoBehaviour
     private void CommonInitialization(List<FightingEntity> possibleTargets) {
         this.ClearSelection();
         this.potentialTargets = possibleTargets;
-        this.CreateOutlinedMaterials(possibleTargets);
-
     }
 
-    private void CreateOutlinedMaterials(List<FightingEntity> possibleTargets) {
-        outlinedMaterials = new List<Material[]>();
-        foreach (var target in possibleTargets) {
-            Material[] materials = target.GetComponent<MeshRenderer>().materials;
-            foreach (var material in materials) {
-                material.SetFloat("_OutlineWidth", targetSelectionOutlineWidth);
-                material.SetColor("_OutlineColor", targetSelectionColor);
-            }
-            outlinedMaterials.Add(materials);
-        }
-    }
 
     private void UpdateTargetSelectionUI() {
         if (potentialTargets == null) {
@@ -88,15 +71,12 @@ public class TargetSelectionUI : MonoBehaviour
     }
 
     private void SetMaterialOutline(int targetIndex, bool enabled) {
-
-
         FightingEntity target = potentialTargets[targetIndex];
-        SkeletonMaterialReplacer materialReplacer = target.GetComponent<SkeletonMaterialReplacer>();
+        SkeletonMaterialOutliner materialOutliner = target.GetComponent<SkeletonMaterialOutliner>();
         if (enabled) {
-            materialReplacer.UseMaterialOverride();
-            materialReplacer.SetMaterialOverride(outlinedMaterials[targetIndex]);
+            materialOutliner.SetOutlineColor(this.targetSelectionColor);
         } else {
-            materialReplacer.UseOriginal();
+            materialOutliner.UnsetOutline();
         }
 
     }

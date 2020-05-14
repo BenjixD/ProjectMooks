@@ -15,12 +15,12 @@ public class WorldMapController : MonoBehaviour
     void Start() {
         Vector3 pos1;
         Vector3 pos2;
-        if (GameManager.Instance.nextStageIndex == 0) {
+        if (GameManager.Instance.gameState.progressData.nextStageIndex == 0) {
             pos1 = locations[0].position;
             pos2 = locations[1].position;
         } else {
-            pos1 = locations[GameManager.Instance.currentStageIndex+1].position;
-            pos2 = locations[GameManager.Instance.nextStageIndex+1].position;
+            pos1 = locations[GameManager.Instance.gameState.progressData.currentStageIndex+1].position;
+            pos2 = locations[GameManager.Instance.gameState.progressData.nextStageIndex+1].position;
         }
 
         StartCoroutine(doTransitionAnimation(pos1, pos2));
@@ -33,13 +33,13 @@ public class WorldMapController : MonoBehaviour
             Vector3 slerp = Vector3.Slerp(pos1, pos2, counter);
             mainCamera.transform.position = new Vector3(slerp.x, slerp.y, mainCamera.transform.position.z);
 
-            counter += Time.deltaTime * transitionSpeed;
+            counter += GameManager.Instance.time.deltaTime * transitionSpeed;
             yield return null;
         }
 
-        yield return new WaitForSeconds(1.0f);
+        yield return GameManager.Instance.time.WaitForSeconds(1.0f);
 
-        GameManager.Instance.currentStageIndex = GameManager.Instance.nextStageIndex;
+        GameManager.Instance.gameState.progressData.currentStageIndex = GameManager.Instance.gameState.progressData.nextStageIndex;
         SceneManager.LoadScene(battleScene);
     }
 

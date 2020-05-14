@@ -3,6 +3,7 @@ using TwitchLib.Unity;
 using UnityEngine;
 using System.Collections.Generic;
 
+// The singleton broadcaster for Twitch-related messages
 public class TwitchChatBroadcaster : Singleton<TwitchChatBroadcaster>
 {
 	[SerializeField]

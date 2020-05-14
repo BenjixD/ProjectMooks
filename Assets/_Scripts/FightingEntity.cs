@@ -16,6 +16,11 @@ public class FightingEntity : MonoBehaviour
 	public List<ActionBase> actions = new List<ActionBase>();
 
     public int targetId;
+    public string targetName;
+
+    // Message box to display messages. Leave null if you don't want it to be used.
+    [Header("Nullable")]
+    public FighterMessageBox fighterMessageBox;
 
 	protected QueuedAction _queuedAction;
 	protected AnimationController _animController;
@@ -37,6 +42,7 @@ public class FightingEntity : MonoBehaviour
 		SetStats(data.stats);
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);
+        this.targetName = GameManager.Instance.turnController.field.GetTargetNameFromIndex(index);
 		_ailmentController = new AilmentController(this);
 	}
 
@@ -53,9 +59,9 @@ public class FightingEntity : MonoBehaviour
 	public void SetJob(Job job) {
 		this.job = job;
         if (this.isEnemy()) {
-            actions = GameManager.Instance.GetEnemyJobActions(job);
+            actions = GameManager.Instance.models.GetEnemyJobActions(job);
         } else {
-		    actions =  GameManager.Instance.GetPlayerJobActions(job);
+		    actions =  GameManager.Instance.models.GetPlayerJobActions(job);
         }
 	}
 
@@ -115,5 +121,6 @@ public class FightingEntity : MonoBehaviour
     	List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
     	_ai.ReviewFightResult(myFights);
     }
+
 }
 

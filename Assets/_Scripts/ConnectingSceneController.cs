@@ -34,7 +34,7 @@ public class ConnectingSceneController : MonoBehaviour
     }
 
     IEnumerator changeSceneAfterSeconds(float seconds) {
-        yield return new WaitForSeconds(seconds);
+        yield return GameManager.Instance.time.WaitForSeconds(seconds);
         SceneManager.LoadScene(battleScene);
     }
 }

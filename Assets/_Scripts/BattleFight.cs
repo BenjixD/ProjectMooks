@@ -103,12 +103,12 @@ public class BattleFight
 
     private void getEnemyAction() {
         // TODO: Aggro targetting
-        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRecommendedAction(), new List<int>{_controller.field.GetRandomPlayerIndex()}  ));
+        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRecommendedAction(), new List<int>{_controller.field.playerParty.GetRandomActiveIndex()}  ));
     }
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {
         // TODO: Put animation here
-        yield return new WaitForSeconds(1.5f);
+        yield return GameManager.Instance.time.WaitForSeconds(1.5f);
     }
 
 }

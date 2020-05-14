@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum BattlePhase{
     TURN_START,
@@ -29,16 +30,18 @@ public class HeroActionChoice {
     }
 }
 
-
+// The main controller/manager for a battle
 [RequireComponent(typeof(BattleUI))]
-[RequireComponent(typeof(FieldState))]
+[RequireComponent(typeof(BattleField))]
+[RequireComponent(typeof(StageController))]
 public class TurnController : MonoBehaviour
 {
 
     public BattleUI ui {get; set; }
 
-    public FieldState field {get; set; }
+    public BattleField field {get; set; }
     public Battle battle {get; set; }
+    public StageController stageController {get; set;}
 
 
     [Header ("References")]
@@ -62,7 +65,8 @@ public class TurnController : MonoBehaviour
 
     void Awake() {
         ui = GetComponent<BattleUI>();
-        field = GetComponent<FieldState>();
+        field = GetComponent<BattleField>();
+        stageController = GetComponent<StageController>();
     }
 
     void Start() {
@@ -71,18 +75,16 @@ public class TurnController : MonoBehaviour
     }
 
     private void Initialize() {
-        Messenger.AddListener(Messages.OnTurnStart, this.onTurnStart);
-        Messenger.AddListener(Messages.OnTurnEnd, this.onTurnEnd);
-        Messenger.AddListener(Messages.OnPartySetup, this.onPartySetup);
-        Messenger.AddListener(Messages.OnMoveSelection, this.onMoveSelection);
-        Messenger.AddListener(Messages.OnBattleStart, this.onBattleStart);
-
-        Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
+        this.AddListeners();
 
         this.field.Initialize();
         this.ui.statusBarsUI.Initialize();
 
         this.BroadcastOnStartTurn();
+    }
+
+    void OnDestroy() {
+        this.RemoveListeners();
     }
 
     public void BroadcastPartySetup() {
@@ -169,7 +171,7 @@ public class TurnController : MonoBehaviour
     }
 
     private bool checkExecuteTurn() {
-        List<Player> players = field.GetActivePlayers();
+        List<Player> players = field.playerParty.GetActiveMembers();
 
         //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
         bool timeOutIfChatTooSlow = false;
@@ -202,9 +204,8 @@ public class TurnController : MonoBehaviour
             this.initializeCommandCardActionUI(ActionType.MAGIC);
         } else {
             ActionBase heroAction = choice.action;
-            // TODO: Differentiate between ALL and single target.
             if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
-                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(field.GetHeroPlayer());
+                List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(field.GetHeroPlayer());
                 switch (heroAction.targetInfo.targetType) {
                     case TargetType.SINGLE:
                         this.ui.targetSelectionUI.InitializeTargetSelectionSingle(possibleTargets, 0, this.commandSelector);
@@ -235,13 +236,13 @@ public class TurnController : MonoBehaviour
 
         switch (heroAction.targetInfo.targetType) {
             case TargetType.SINGLE:
-                List<FightingEntity> possibleTargets = heroAction.GetPotentialActiveTargets(field.GetHeroPlayer());
+                List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(field.GetHeroPlayer());
                 FightingEntity target = possibleTargets[this._heroTargetIndex];
                 field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>{target.targetId}  ));
                 break;
 
             case TargetType.ALL:
-                List<int> allEnemies = field.GetActiveEnemies().Map((Enemy enemy) => enemy.targetId);
+                List<int> allEnemies = field.enemyParty.GetActiveMembers().Map((Enemy enemy) => enemy.targetId);
                 field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, allEnemies ));
             break;
 
@@ -273,7 +274,7 @@ public class TurnController : MonoBehaviour
     }
 
     private bool hasEveryoneEnteredActions() {
-        foreach (var player in field.GetActivePlayers()) {
+        foreach (var player in field.playerParty.GetActiveMembers()) {
             if (player.HasSetCommand() == false) {
                 return false;
             }
@@ -281,6 +282,83 @@ public class TurnController : MonoBehaviour
 
         return true;
     }
+
+    private void onWaveComplete() {
+        StageInfoContainer stageInfo = GameManager.Instance.gameState.GetCurrentStage();
+        WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.field.currentWaveIndex);
+
+        this.field.currentWaveIndex++;
+        if (this.field.currentWaveIndex >= stageInfo.numWaves) {
+            this.stageController.LoadNextStage();
+        } else {
+            this.field.GenerateEnemyList(this.field.currentWaveIndex);
+        }
+    }
+
+    private void onEntityDeath(DeathResult result) {
+        FightingEntity deadFighter = result.deadEntity.fighter;
+        // TODO: Play death animation
+
+        bool isEnemy = deadFighter.isEnemy();
+        if (isEnemy) {
+            this.field.enemyParty.members[deadFighter.targetId] = null;
+            Destroy(deadFighter.gameObject);
+
+            bool stillHasEnemies = false;
+            for (int i = 0; i < this.field.enemyParty.members.Length; i++) {
+                if (this.field.enemyParty.members[i] != null) {
+                    stillHasEnemies = true;
+                    break;
+                }
+            }
+
+            if (!stillHasEnemies) {
+                this.onWaveComplete();
+            }
+        } else {
+
+            if (deadFighter.targetId == 0) {
+                this.onHeroDeath(result);
+                return;
+            }
+
+            GameManager.Instance.party.EvictPlayer(deadFighter.targetId);
+            Destroy(deadFighter.gameObject);
+        }
+
+    }
+
+    private void onHeroDeath(DeathResult result) {
+        this.stageController.LoadDeathScene();
+    }
+
+
+    private void AddListeners() {
+        Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
+        Messenger.AddListener(Messages.OnWaveComplete, this.onWaveComplete);
+
+        Messenger.AddListener(Messages.OnTurnStart, this.onTurnStart);
+        Messenger.AddListener(Messages.OnTurnEnd, this.onTurnEnd);
+        Messenger.AddListener(Messages.OnPartySetup, this.onPartySetup);
+        Messenger.AddListener(Messages.OnMoveSelection, this.onMoveSelection);
+        Messenger.AddListener(Messages.OnBattleStart, this.onBattleStart);
+
+        Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
+    }
+
+    private void RemoveListeners() {
+        Messenger.RemoveListener<DeathResult>(Messages.OnEntityDeath, this.onEntityDeath);
+        Messenger.RemoveListener(Messages.OnWaveComplete, this.onWaveComplete);
+
+        Messenger.RemoveListener(Messages.OnTurnStart, this.onTurnStart);
+        Messenger.RemoveListener(Messages.OnTurnEnd, this.onTurnEnd);
+        Messenger.RemoveListener(Messages.OnPartySetup, this.onPartySetup);
+        Messenger.RemoveListener(Messages.OnMoveSelection, this.onMoveSelection);
+        Messenger.RemoveListener(Messages.OnBattleStart, this.onBattleStart);
+
+        Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
+    }
+
 
     // Triggers status ailments
     private void ApplyStatusAilments(BattlePhase bp) {
@@ -293,15 +371,6 @@ public class TurnController : MonoBehaviour
         foreach(var entity in field.GetAllFightingEntities()) {
             entity.GetAilmentController().DecrementAllAilmentsDuration();
         }
-    }
-
-    void OnDestroy() {
-        Messenger.RemoveListener(Messages.OnTurnStart, this.onTurnStart);
-        Messenger.RemoveListener(Messages.OnTurnEnd, this.onTurnEnd);
-        Messenger.RemoveListener(Messages.OnPartySetup, this.onPartySetup);
-        Messenger.RemoveListener(Messages.OnMoveSelection, this.onMoveSelection);
-        Messenger.RemoveListener(Messages.OnBattleStart, this.onBattleStart);
-        Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.onBattleEnd);
     }
 
     // Coroutines
