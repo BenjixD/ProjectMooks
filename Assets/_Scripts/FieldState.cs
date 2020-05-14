@@ -121,7 +121,13 @@ public class FieldState : MonoBehaviour
     private Player InstantiatePlayerIfExists(int index) {
         Player instantiatedPlayer = this.InstantiatePlayer(index);
         if (instantiatedPlayer != null) {
-            FighterSlot slot = mookSlots[index-1];
+            FighterSlot slot;
+            if (index == 0) {
+                slot = heroSlot;
+            } else {
+                slot = mookSlots[index-1];
+            }
+            
             instantiatedPlayer.InitializePosition(slot);
             Debug.Log("Instantiated player " + instantiatedPlayer.Name + " in slot: " + index);
         } else {

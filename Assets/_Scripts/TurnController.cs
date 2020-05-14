@@ -28,6 +28,7 @@ public class HeroActionChoice {
 // The main controller/manager for a battle
 [RequireComponent(typeof(BattleUI))]
 [RequireComponent(typeof(FieldState))]
+[RequireComponent(typeof(StageController))]
 public class TurnController : MonoBehaviour
 {
 
@@ -35,6 +36,7 @@ public class TurnController : MonoBehaviour
 
     public FieldState field {get; set; }
     public Battle battle {get; set; }
+    public StageController stageController {get; set;}
 
 
     [Header ("References")]
@@ -58,6 +60,7 @@ public class TurnController : MonoBehaviour
     void Awake() {
         ui = GetComponent<BattleUI>();
         field = GetComponent<FieldState>();
+        stageController = GetComponent<StageController>();
     }
 
     void Start() {
@@ -299,9 +302,7 @@ public class TurnController : MonoBehaviour
 
         this.field.currentWaveIndex++;
         if (this.field.currentWaveIndex >= stageInfo.numWaves) {
-            GameManager.Instance.gameState.SetNextStageIndex(GameManager.Instance.gameState.progressData.currentStageIndex + 1); // May want to change logic in the future
-            SceneManager.LoadScene("WorldMap");
-
+            this.stageController.LoadNextStage();
         } else {
             this.field.GenerateEnemyList(this.field.currentWaveIndex);
         }
@@ -341,7 +342,7 @@ public class TurnController : MonoBehaviour
     }
 
     private void onHeroDeath(DeathResult result) {
-        SceneManager.LoadScene("GameOverScreen");
+        this.stageController.LoadDeathScene();
     }
 
 

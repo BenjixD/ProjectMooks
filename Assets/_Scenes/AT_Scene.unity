@@ -2173,6 +2173,7 @@ GameObject:
   - component: {fileID: 2026179248}
   - component: {fileID: 2026179249}
   - component: {fileID: 2026179250}
+  - component: {fileID: 2026179251}
   m_Layer: 0
   m_Name: StageController
   m_TagString: Untagged
@@ -2312,6 +2313,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSelectionColor: {r: 1, g: 0.91147983, b: 0, a: 1}
+--- !u!114 &2026179251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026179242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ffc45f9c89fdda43b121cf59be696be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2086931089
 PrefabInstance:
   m_ObjectHideFlags: 0
