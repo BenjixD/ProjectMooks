@@ -17,7 +17,11 @@ public class FightingEntity : MonoBehaviour
 
     public int targetId;
 
-    public FighterSlot slot;
+    public FighterSlot slot {get; set;}
+
+    // Message box to display messages. Leave null if you don't want it to be used.
+    [Header("Nullable")]
+    public FighterMessageBox fighterMessageBox;
 
 	protected QueuedAction _queuedAction;
 	protected AnimationController _animController;
@@ -44,6 +48,9 @@ public class FightingEntity : MonoBehaviour
         this.transform.SetParent(slot.instantiationTransform.transform, false);
         this.slot = slot;
         this.transform.localPosition = Vector3.zero;
+        if (this.fighterMessageBox != null) {
+            this.fighterMessageBox.Initialize(this.slot.IsXFlipped());
+        }
     }
 
 	public void SetStats(PlayerStats stats) {
