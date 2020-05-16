@@ -8,7 +8,7 @@ public class StatusBarUI : MonoBehaviour
 
     public Text nameText;
     public Text hpText;
-    public Text energyText;
+    public Slider hpBar;
 
 
     public void SetName(string name) {
@@ -21,18 +21,19 @@ public class StatusBarUI : MonoBehaviour
 
 
     public void SetHP(int hp, int maxHP) {
-        if (hpText == null) {
-            return;
-        }
-
-        hpText.text = hp + "/" + maxHP;
+        this.SetTextValueFraction(hpText, hp, maxHP);
+        this.SetSliderValue(this.hpBar, hp, maxHP);
     }
 
-    public void SetEnergy(int energy, int maxEnergy) {
-        if (energyText == null) {
-            return;
+    protected void SetSliderValue(Slider slider, float curValue, float maxValue) {
+        if (slider != null) {
+            slider.value = curValue / maxValue;
         }
+    }
 
-        energyText.text = energy + "/" + maxEnergy;
+    protected void SetTextValueFraction(Text text, float curValue, float maxValue) {
+        if (text != null) {
+            text.text = curValue + "/" + maxValue;
+        }
     }
 }
