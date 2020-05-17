@@ -39,6 +39,14 @@ public class FightingEntity : MonoBehaviour
 	public void Initialize(int index, PlayerCreationData data) {
         this.targetId = index;
 		Name = data.name;
+        
+        // Sets the default energy for mooks to be always a constant
+        // TODO: Do this a more cleaner way
+        if (!this.isEnemy() && index != 0) {
+            data.stats.SetMana(9);
+            data.stats.maxMana = 9;
+        }
+
 		SetStats(data.stats);
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);

@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class StatusBarUI : MonoBehaviour
 {
 
-    public Text nameText;
-    public Text hpText;
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI hpText;
     public Slider hpBar;
 
-
+    // TODO: Instead of setting the max amount each time, maybe consider making an initialize function instead
     public void SetName(string name) {
         if (nameText == null) {
             return;
         }
 
-        nameText.text = name;
+        nameText.SetText(name);
     }
 
 
@@ -31,9 +32,9 @@ public class StatusBarUI : MonoBehaviour
         }
     }
 
-    protected void SetTextValueFraction(Text text, float curValue, float maxValue) {
+    protected void SetTextValueFraction(TextMeshProUGUI text, float curValue, float maxValue) {
         if (text != null) {
-            text.text = curValue + "/" + maxValue;
+            text.SetText(curValue + "/" + maxValue);
         }
     }
 }

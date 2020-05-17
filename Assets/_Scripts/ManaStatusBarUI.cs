@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class HeroStatusBar : StatusBarUI
+public class ManaStatusBarUI : StatusBarUI
 {
 
     public Slider manaBar;
-    public Text manaText;
+    public TextMeshProUGUI manaText;
 
     public void SetMana(int mana, int maxMana) {
         this.SetSliderValue(this.manaBar, mana, maxMana);
