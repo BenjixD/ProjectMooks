@@ -10,9 +10,15 @@ public class MookStatusBarUI : StatusBarUI
 
     public GameObject energyTokenPrefab;
     public GameObject emptyEnergyTokenPrefab;
+
+    public MookActionMenuUI actionMenuUI;
     
     private List<GameObject> energyBarTokens = new List<GameObject>();
 
+    public override void SetFighter(FightingEntity fighter) {
+        base.SetFighter(fighter);
+        this.actionMenuUI.SetActions(fighter.actions);
+    }
 
     public void SetEnergy(int energy, int maxEnergy) {
         this.ClearTokens();

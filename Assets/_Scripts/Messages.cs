@@ -25,6 +25,8 @@ public class Messages {
     public static string OnJoinChannel = "OnJoinChannel"; // void
     public static string OnFailedJoinChannel = "OnFailJoinedChannel"; // void
 
+    public static string OnSetQueuedAction = "OnSetQueuedAction"; // QueuedAction
+
 }
 
 

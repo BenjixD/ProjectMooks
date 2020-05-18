@@ -10,6 +10,12 @@ public class StatusBarUI : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI hpText;
     public Slider hpBar;
+    
+    protected FightingEntity fighter;
+
+    public virtual void SetFighter(FightingEntity fighter) {
+        this.fighter = fighter;
+    }
 
     // TODO: Instead of setting the max amount each time, maybe consider making an initialize function instead
     public void SetName(string name) {
@@ -20,6 +26,13 @@ public class StatusBarUI : MonoBehaviour
         nameText.SetText(name);
     }
 
+    public string GetName() {
+        if (nameText == null) {
+            return "";
+        }
+
+        return nameText.text;
+    }
 
     public void SetHP(int hp, int maxHP) {
         this.SetTextValueFraction(hpText, hp, maxHP);
