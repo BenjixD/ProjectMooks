@@ -21,12 +21,15 @@ public class MookActionMenuUI : MonoBehaviour
             Debug.LogError("Mooks should have no more than 4 actions");
         } else {
 
-            for (int i = 0; i < 4; i++) {
-                this.InstantiateEmptyItem(i);
-            }
+ 
 
             for (int i = 0; i < actions.Count; i++) {
+                this.InstantiateEmptyItem(i);
                 this.InstantiateActionItem(actions[i], i);
+            }
+
+            for (int i = actions.Count; i < 4; i++) {
+                this.InstantiateEmptyItem(i);
             }
         }
     }

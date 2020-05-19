@@ -17,6 +17,7 @@ public class MookStatusBarUI : StatusBarUI
 
     public override void SetFighter(FightingEntity fighter) {
         base.SetFighter(fighter);
+        Debug.Log("Actions set: " + fighter.Name + " " + fighter.job + " " + fighter.actions.Count);
         this.actionMenuUI.SetActions(fighter.actions);
     }
 
@@ -34,7 +35,7 @@ public class MookStatusBarUI : StatusBarUI
     }
 
     private void InstantiateToken(GameObject prefab) {
-        GameObject instantiatedObject = Instantiate(emptyEnergyTokenPrefab);
+        GameObject instantiatedObject = Instantiate(prefab);
         instantiatedObject.transform.SetParent(energyParent);
         this.energyBarTokens.Add(instantiatedObject);
     }

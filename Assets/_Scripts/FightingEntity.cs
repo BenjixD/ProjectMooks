@@ -52,6 +52,7 @@ public class FightingEntity : MonoBehaviour
 		_ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.turnController.field.GetTargetNameFromIndex(index);
 		_ailmentController = new AilmentController(this);
+        Debug.Log("Initialize: " + Name);
 	}
 
 	public void SetStats(PlayerStats stats) {
