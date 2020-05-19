@@ -326,10 +326,12 @@ public class TurnController : MonoBehaviour
                 return;
             }
 
+            this.field.playerParty.members[deadFighter.targetId] = null;
             GameManager.Instance.party.EvictPlayer(deadFighter.targetId);
             Destroy(deadFighter.gameObject);
         }
 
+        this.ui.statusBarsUI.UpdateStatusBars();
     }
 
     private void onHeroDeath(DeathResult result) {

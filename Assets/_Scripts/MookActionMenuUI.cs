@@ -24,12 +24,20 @@ public class MookActionMenuUI : MonoBehaviour
  
 
             for (int i = 0; i < actions.Count; i++) {
-                this.InstantiateEmptyItem(i);
-                this.InstantiateActionItem(actions[i], i);
+                if (emptyActions[i] == null) {
+                    this.InstantiateEmptyItem(i);
+                }
+                if (this.actions[i] == null) {
+                    this.InstantiateActionItem(actions[i], i);
+                } else {
+                    this.actions[i].Initialize(actions[i], i);
+                }
             }
 
             for (int i = actions.Count; i < 4; i++) {
-                this.InstantiateEmptyItem(i);
+                if (emptyActions[i] == null) {
+                    this.InstantiateEmptyItem(i);
+                }
             }
         }
     }
@@ -46,6 +54,15 @@ public class MookActionMenuUI : MonoBehaviour
                     emptyActions[i].SetActive(true);
 
                 }
+            }
+        }
+    }
+
+    public void UnsetActions() {
+        for (int i = 0; i < actions.Length; i++) {
+            if (actions[i] != null) {
+                emptyActions[i].SetActive(false);
+                actions[i].gameObject.SetActive(true);
             }
         }
     }

@@ -63,6 +63,7 @@ public class StatusBarsUI : MonoBehaviour
             } else {
                 // Mooks have energy
                 MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
+                mookStatusBar.actionMenuUI.UnsetActions();
                 mookStatusBar.SetFighter(player);
                 mookStatusBar.SetName(player.Name);
                 mookStatusBar.SetHP(player.stats.GetHp(), player.stats.maxHp);
