@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4704207684276755385}
   - component: {fileID: 4704207684276755387}
   - component: {fileID: 4704207684276755384}
+  - component: {fileID: 6507765818431734940}
   m_Layer: 0
   m_Name: HeroAction
   m_TagString: Untagged
@@ -77,6 +78,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6507765818431734940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4704207684276755334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16d1970bad416f4e92b6548bc8a1dc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedColor: {r: 0.8396226, g: 0.8396226, b: 0.8396226, a: 0.5019608}
+  unselectedColor: {r: 0, g: 0, b: 0, a: 0.5019608}
+  confirmedColor: {r: 0.52156866, g: 0.90196085, b: 0.36078432, a: 0.5176471}
+  text: {fileID: 4704207686029980979}
+  backgroundImage: {fileID: 4704207685931349858}
 --- !u!1 &4704207684319226789
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +307,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ATTACK
+  m_text: Specials
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a866c818d91c1e947801912ae87123e7, type: 2}
   m_sharedMaterial: {fileID: 159153669253002632, guid: a866c818d91c1e947801912ae87123e7,
@@ -359,7 +377,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 4704207686029980979}
-    characterCount: 6
+    characterCount: 8
     spriteCount: 0
     spaceCount: 0
     wordCount: 1

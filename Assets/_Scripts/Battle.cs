@@ -54,7 +54,6 @@ public class Battle
 
     private void initialize() {
         this.setUnsetMookCommands();
-        this._controller.ui.commandCardUI.InitializeCommantaryUI();
     }
 
     private IEnumerator handleBattle(List<FightingEntity> fighters) {

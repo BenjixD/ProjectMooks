@@ -178,7 +178,6 @@ public class TurnController : MonoBehaviour
         bool startTurn = timeOutIfChatTooSlow || hasEveryoneEnteredActions();
         if (startTurn) {
             playerActionCounter = 0;
-            this.ui.SetStateText("");
         } else {
             this.UpdateStateText();
         }
@@ -186,16 +185,20 @@ public class TurnController : MonoBehaviour
     }
 
     private void UpdateStateText() {
+        // Currently not in the UI, but may add something similar later
+        /*
         if (!field.GetHeroPlayer().HasSetCommand()) {
             this.ui.SetStateText("Waiting on streamer input");
         } else {
             int timer = (int)(this.maxTimeBeforeAction - playerActionCounter);
             this.ui.SetStateText("Waiting on Chat: " + timer);
         }
+        */
     }
 
     private void setHeroAction() {
         _heroActionIndex = this.commandSelector.GetChoice();
+        this.ui.commandCardUI.SetConfirmed();
 
         HeroActionChoice choice = this.currentHeroChoices[_heroActionIndex];
 
@@ -231,6 +234,7 @@ public class TurnController : MonoBehaviour
         this.menuState = MenuState.WAITING;
         this._heroTargetIndex = this.commandSelector.GetChoice();
         this.ui.targetSelectionUI.ClearSelection();
+        this.ui.commandCardUI.SetCommandCardUI(CommandCardUIMode.CLOSED);
         ActionBase heroAction = this.currentHeroChoices[_heroActionIndex].action;
     
 

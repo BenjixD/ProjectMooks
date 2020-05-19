@@ -72,6 +72,8 @@ MonoBehaviour:
   job: 0
   actions: []
   targetId: 0
+  targetName: 
+  fighterMessageBox: {fileID: 0}
 --- !u!33 &5907855612439490822
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -206,5 +208,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 6258014410280954371}
-  targetSelectionOutlineWidth: 3.5
+  targetSelectionOutlineWidth: 5
   materialReplacer: {fileID: 620964168174642243}

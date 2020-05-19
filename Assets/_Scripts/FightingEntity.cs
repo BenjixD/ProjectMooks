@@ -128,6 +128,7 @@ public class FightingEntity : MonoBehaviour
     }
 
     private void OnBattleEnd(BattleResult result) {
+        Debug.Log("AI: " + Name + " " + _ai);
     	List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
     	_ai.ReviewFightResult(myFights);
     }
