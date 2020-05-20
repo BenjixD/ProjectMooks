@@ -79,6 +79,7 @@ public class TurnController : MonoBehaviour
 
         this.field.Initialize();
         this.ui.statusBarsUI.Initialize();
+        this.ui.playerQueueUI.Initialize();
 
         this.BroadcastOnStartTurn();
     }
@@ -89,6 +90,7 @@ public class TurnController : MonoBehaviour
 
     public void BroadcastPartySetup() {
         Messenger.Broadcast(Messages.OnPartySetup);
+        this.ui.playerQueueUI.RefreshUI();
     }
 
     public void BroadcastMoveSelection() {

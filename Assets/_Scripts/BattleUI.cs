@@ -15,4 +15,6 @@ public class BattleUI : MonoBehaviour
     public TargetSelectionUI targetSelectionUI;
 
     public BattleOrderUI battleOrderUI;
+
+    public PlayerQueueUI playerQueueUI;
 }

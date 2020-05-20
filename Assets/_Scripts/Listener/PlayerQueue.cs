@@ -62,6 +62,7 @@ public class PlayerQueue : TwitchChatListenerBase {
 		switch(message) {
 			case "join":
 				Enqueue(username);
+                Messenger.Broadcast(Messages.OnPlayerJoinQueue, username);
 				break;
 			default:
 				Debug.Log("Unknown command: " + message);

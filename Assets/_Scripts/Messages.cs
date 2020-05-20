@@ -27,6 +27,8 @@ public class Messages {
 
     public static string OnSetQueuedAction = "OnSetQueuedAction"; // QueuedAction
 
+    public static string OnPlayerJoinQueue = "OnPlayerJoinQueue"; // string
+
 }
 
 

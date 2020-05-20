@@ -109,6 +109,7 @@ public class BattleField : MonoBehaviour
         return targetName;
     }
 
+
     private void InitializePlayers() {
         Player instantiatedHeroPlayer = this.InstantiatePlayer(0);
         this.heroSlot.InitializePosition(instantiatedHeroPlayer);
@@ -158,4 +159,5 @@ public class BattleField : MonoBehaviour
 
         return player;
     }
+
 }
