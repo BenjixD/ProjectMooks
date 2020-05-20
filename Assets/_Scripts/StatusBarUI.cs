@@ -40,6 +40,14 @@ public class StatusBarUI : MonoBehaviour
         return nameText.text;
     }
 
+    public void SetNameColor(Color color) {
+        if (nameText == null) {
+            return;
+        }
+
+        nameText.color = color;
+    }
+
     public void SetHP(int hp, int maxHP) {
         this.SetTextValueFraction(hpText, hp, maxHP);
         this.SetSliderValue(this.hpBar, hp, maxHP);

@@ -17,4 +17,15 @@ public class BattleUI : MonoBehaviour
     public BattleOrderUI battleOrderUI;
 
     public PlayerQueueUI playerQueueUI;
+
+    public TargetIconsUI targetIconsUI;
+
+    public void Initialize() {
+        this.commandCardUI.Initialize();
+        this.statusBarsUI.Initialize();
+        this.targetSelectionUI.Initialize();
+        this.battleOrderUI.Initialize();
+        this.playerQueueUI.Initialize();
+        this.targetIconsUI.Initialize();
+    }
 }

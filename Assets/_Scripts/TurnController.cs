@@ -78,8 +78,7 @@ public class TurnController : MonoBehaviour
         this.AddListeners();
 
         this.field.Initialize();
-        this.ui.statusBarsUI.Initialize();
-        this.ui.playerQueueUI.Initialize();
+        this.ui.Initialize();
 
         this.BroadcastOnStartTurn();
     }

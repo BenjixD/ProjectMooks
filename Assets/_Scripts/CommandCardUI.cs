@@ -38,6 +38,9 @@ public class CommandCardUI : MonoBehaviour
 
     private CommandCardUIMode cardUIMode;
 
+    public void Initialize() {
+        
+    }
 
     public void InitializeCommandSelection(List<string> options, int startChoice, CommandSelector selector) {
         this.options = options;

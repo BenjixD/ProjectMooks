@@ -14,6 +14,9 @@ public class TargetSelectionUI : MonoBehaviour
     private List<FightingEntity> potentialTargets;
     private CommandSelector _commandSelector {get; set;}
 
+    public void Initialize() {
+        
+    }
     
     public void InitializeTargetSelectionSingle(List<FightingEntity> possibleTargets, int initialChoice, CommandSelector selector) {
         this.CommonInitialization(possibleTargets);

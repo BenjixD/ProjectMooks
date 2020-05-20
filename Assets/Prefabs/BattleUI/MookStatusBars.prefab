@@ -210,6 +210,7 @@ MonoBehaviour:
   nameText: {fileID: 5797996385341446516}
   hpText: {fileID: 2075911164903723062}
   hpBar: {fileID: 8559110805508094210}
+  statusConditionParent: {fileID: 8559110804984364640}
   energyParent: {fileID: 1010138800613031240}
   energyTokenPrefab: {fileID: 4179385565063920462, guid: 6e6dc215a5818b84aa5089f7bbb35cb9,
     type: 3}
@@ -1313,22 +1314,22 @@ PrefabInstance:
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 131.42407
       objectReference: {fileID: 0}
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -14.120846
       objectReference: {fileID: 0}
     - target: {fileID: 1591593228911105160, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
@@ -1441,3 +1442,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8559110804984364640 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 836360442208103899, guid: ab4a606cccccb3241b9f60b54c15edd9,
+    type: 3}
+  m_PrefabInstance: {fileID: 9030641434315477947}
+  m_PrefabAsset: {fileID: 0}

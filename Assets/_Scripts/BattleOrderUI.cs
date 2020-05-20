@@ -18,7 +18,7 @@ public class BattleOrderUI : MonoBehaviour
 
     private int index = 0;
 
-    void Start() {
+    public void Initialize() {
         this.turnOrderHeaderText.gameObject.SetActive(false);
     }
 
@@ -32,6 +32,12 @@ public class BattleOrderUI : MonoBehaviour
             FightingEntity fighter = fighters[i];
             BasicText instantiatedText = Instantiate<BasicText>(turnTextPrefab);
             instantiatedText.text.SetText(fighter.Name);
+            if (fighter.isEnemy()) {
+                instantiatedText.text.color = GameManager.Instance.party.enemyColor;
+            } else {
+                instantiatedText.text.color = GameManager.Instance.party.IndexToColor(fighter.targetId);
+            }
+           
             instantiatedText.transform.SetParent(turnOrderParent);
             turnTexts.Add(instantiatedText);
 
@@ -52,8 +58,19 @@ public class BattleOrderUI : MonoBehaviour
         index++;
 
         if (index == this.turnTexts.Count) {
+            this.ClearList();
             this.turnOrderHeaderText.gameObject.SetActive(false);
         }
-    }   
+    }
+
+    private void ClearList() {
+        foreach (var arrow in this.arrows) {
+            if (arrow != null) {
+                Destroy(arrow.gameObject);
+            }
+        }
+
+        this.arrows.Clear();
+    }
 
 }

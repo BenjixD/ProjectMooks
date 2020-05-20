@@ -43,6 +43,7 @@ public class Battle
 
         // TODO: Raise another message - specifically for battle order
         //Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, new BattleResult(orderedPlayers));
+        this._controller.ui.targetIconsUI.ClearTargetArrows();
         this._controller.ui.battleOrderUI.SetTurnOrder(orderedPlayers);
         result = new BattleResult(orderedPlayers);
 

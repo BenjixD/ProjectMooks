@@ -60,6 +60,7 @@ public class StatusBarsUI : MonoBehaviour
                 heroStatusBar.SetName(player.Name);
                 heroStatusBar.SetHP(player.stats.GetHp(), players[i].stats.maxHp);
                 heroStatusBar.SetMana(player.stats.GetMana(), player.stats.maxMana);
+                heroStatusBar.SetNameColor(GameManager.Instance.party.IndexToColor(i));
             } else {
                 // Mooks have energy
                 MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
@@ -69,6 +70,7 @@ public class StatusBarsUI : MonoBehaviour
                 mookStatusBar.SetHP(player.stats.GetHp(), player.stats.maxHp);
                 // Note: Energy might be its own thing later, but for now, lets just use mana
                 mookStatusBar.SetEnergy(player.stats.GetMana(), player.stats.maxMana);
+                mookStatusBar.SetNameColor(GameManager.Instance.party.IndexToColor(i));
             }
 
             this.statusBars[i].gameObject.SetActive(true);
