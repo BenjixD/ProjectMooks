@@ -43,8 +43,7 @@ public class Battle
 
         // TODO: Raise another message - specifically for battle order
         //Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, new BattleResult(orderedPlayers));
-        this._controller.ui.targetIconsUI.ClearTargetArrows();
-        this._controller.ui.battleOrderUI.SetTurnOrder(orderedPlayers);
+
         result = new BattleResult(orderedPlayers);
 
         _controller.StartCoroutine(handleBattle(orderedPlayers));
@@ -59,6 +58,14 @@ public class Battle
     }
 
     private IEnumerator handleBattle(List<FightingEntity> fighters) {
+
+        this._controller.ui.battleOrderUI.SetTurnOrder(fighters);
+
+        yield return GameManager.Instance.time.WaitForSeconds(0.5f);
+
+        this._controller.ui.targetIconsUI.ClearTargetArrows();
+
+
         for (int i = 0; i < fighters.Count; i++) {
 
             if (fighters[i] == null) {
