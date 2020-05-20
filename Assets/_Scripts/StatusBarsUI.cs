@@ -84,7 +84,7 @@ public class StatusBarsUI : MonoBehaviour
             }
 
             enemyStatusBars[i].SetFighter(enemy);
-            enemyStatusBars[i].SetName(enemies[i].Name);
+            enemyStatusBars[i].SetName(enemies[i].targetName);
             enemyStatusBars[i].SetHP(enemies[i].stats.GetHp(), enemies[i].stats.maxHp);
 
             this.enemyStatusBars[i].gameObject.SetActive(true);
@@ -109,8 +109,7 @@ public class StatusBarsUI : MonoBehaviour
 
 
         for (int i = 0; i < Party<Enemy>.maxPlayers; i++) {
-            EnemyStatusBarUI statusBarForEnemy = Instantiate(enemyStatusBarPrefab);
-            statusBarForEnemy.transform.SetParent(enemyStatusBarParent[i]);
+            EnemyStatusBarUI statusBarForEnemy = Instantiate(enemyStatusBarPrefab, enemyStatusBarParent[i]);
             statusBarForEnemy.gameObject.SetActive(false);
             enemyStatusBars[i] = statusBarForEnemy;
         }
