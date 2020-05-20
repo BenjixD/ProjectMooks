@@ -43,6 +43,7 @@ public class Battle
 
         // TODO: Raise another message - specifically for battle order
         //Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, new BattleResult(orderedPlayers));
+        this._controller.ui.battleOrderUI.SetTurnOrder(orderedPlayers);
         result = new BattleResult(orderedPlayers);
 
         _controller.StartCoroutine(handleBattle(orderedPlayers));
@@ -83,6 +84,8 @@ public class Battle
             BattleFight fight = new BattleFight(_controller, fighters[i]);
             this.currentFight = fight;
             yield return _controller.StartCoroutine(fight.DoFight());
+
+            this._controller.ui.battleOrderUI.PopFighter();
         }
 
         this.endBattle();

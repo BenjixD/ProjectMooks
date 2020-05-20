@@ -13,4 +13,6 @@ public class BattleUI : MonoBehaviour
     public StatusBarsUI statusBarsUI;
     
     public TargetSelectionUI targetSelectionUI;
+
+    public BattleOrderUI battleOrderUI;
 }
