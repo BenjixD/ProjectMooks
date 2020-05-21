@@ -62,6 +62,12 @@ public class BattleOrderUI : MonoBehaviour
     }
 
     private void ClearList() {
+        foreach (var turnText in this.turnTexts) {
+            if (turnText != null) {
+                Destroy(turnText.gameObject);
+            }
+        }
+
         foreach (var arrow in this.arrows) {
             if (arrow != null) {
                 Destroy(arrow.gameObject);
@@ -69,6 +75,7 @@ public class BattleOrderUI : MonoBehaviour
         }
 
         this.arrows.Clear();
+        this.turnTexts.Clear();
     }
 
 }
