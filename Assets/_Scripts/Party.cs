@@ -25,5 +25,13 @@ public class Party<T> where T : FightingEntity
         List<T> castedMembers = GetActiveMembers();
         return members[Random.Range(0, castedMembers.Count)].targetId;
     }
-    
+
+
+    public static Color IndexToColor(int index) {
+        if (typeof(T) == typeof(Enemy)) {
+            return GameManager.Instance.party.enemyColor;
+        }  else {
+            return GameManager.Instance.party.IndexToColor(index);
+        }
+    }
 }

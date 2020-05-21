@@ -18,6 +18,8 @@ public class FightingEntity : MonoBehaviour
     public int targetId;
     public string targetName;
 
+    public FighterSlot fighterSlot {get; set;}
+
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
@@ -125,6 +127,14 @@ public class FightingEntity : MonoBehaviour
 
     public List<ActionBase> GetFilteredActions(ActionType actionType) {
         return this.actions.Filter( (ActionBase action) => action.actionType == actionType );
+    }
+
+    public Color GetOrderColor() {
+        if (this.isEnemy()) {
+            return Party<Enemy>.IndexToColor(this.targetId);
+        } else {
+            return Party<Player>.IndexToColor(this.targetId);
+        }
     }
 
     private void OnBattleEnd(BattleResult result) {

@@ -7,7 +7,10 @@ public class ArrowUI : MonoBehaviour
 {
     public Image arrowImage;
 
+    public Color curArrowColor;
+
     public void SetColor(Color color) {
+        this.curArrowColor = color;
         arrowImage.color = color;
     }
 }

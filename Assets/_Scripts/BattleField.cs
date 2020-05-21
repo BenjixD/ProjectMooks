@@ -109,6 +109,20 @@ public class BattleField : MonoBehaviour
         return targetName;
     }
 
+    public List<FighterSlot> GetFighterSlots() {
+        List<FighterSlot> slots = new List<FighterSlot>();
+        slots.Add(heroSlot);
+        foreach (var slot in mookSlots) {
+            slots.Add(slot);
+        }
+
+        foreach (var slot in enemySlots) {
+            slots.Add(slot);
+        }
+        
+        return slots;
+    }
+
 
     private void InitializePlayers() {
         Player instantiatedHeroPlayer = this.InstantiatePlayer(0);

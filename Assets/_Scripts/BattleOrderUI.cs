@@ -32,11 +32,9 @@ public class BattleOrderUI : MonoBehaviour
             FightingEntity fighter = fighters[i];
             BasicText instantiatedText = Instantiate<BasicText>(turnTextPrefab);
             instantiatedText.text.SetText(fighter.Name);
-            if (fighter.isEnemy()) {
-                instantiatedText.text.color = GameManager.Instance.party.enemyColor;
-            } else {
-                instantiatedText.text.color = GameManager.Instance.party.IndexToColor(fighter.targetId);
-            }
+            instantiatedText.text.color = fighter.GetOrderColor();
+
+            
            
             instantiatedText.transform.SetParent(turnOrderParent);
             turnTexts.Add(instantiatedText);
