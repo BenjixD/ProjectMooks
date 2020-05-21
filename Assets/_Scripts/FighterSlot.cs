@@ -47,7 +47,13 @@ public class FighterSlot : MonoBehaviour
             }
         }
 
-        this.targetArrows.Filter((ArrowUI arrowUI) => arrowUI.curArrowColor != arrowColor);
+        for (int i = this.targetArrows.Count-1; i >= 0; i--) {
+            ArrowUI arrow = this.targetArrows[i];
+            if (arrow.curArrowColor == arrowColor) {
+                Destroy(arrow.gameObject);
+                this.targetArrows.RemoveAt(i);
+            }
+        }
     }
 
 

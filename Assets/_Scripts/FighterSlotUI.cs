@@ -17,39 +17,34 @@ public class FighterSlotUI : MonoBehaviour {
 
     public void Initialize() {
         Messenger.AddListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
-
-        List<FighterSlot> slots = GameManager.Instance.turnController.field.GetFighterSlots();
-        foreach (var slot in slots) {
-            fighterToActionMap[slot] = null;
-        }
+        this.ClearTargetArrows();
     }
 
     void OnDestroy() {
         Messenger.RemoveListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
     }
 
-    public void SetSlotUIForAction(QueuedAction action) {
-        FightingEntity user = action.user;
-
-        List<FightingEntity> targets = action.GetTargets();
-        foreach (FightingEntity target in targets) {
-            target.fighterSlot.AddTargetArrowUI(user.GetOrderColor());
-        }
-
-    }
 
     public void ClearTargetArrows() {
         List<FighterSlot> slots = GameManager.Instance.turnController.field.GetFighterSlots();
         foreach (var slot in slots) {
             slot.ClearAllArrowsUI();
         }
+
+        foreach (var slot in slots) {
+            fighterToActionMap[slot] = null;
+        }
+    }
+
+    public void ClearTargetsForFighter(FightingEntity fighter) {
+        this.ClearTargetsForSlot(fighter.fighterSlot);
     }
 
     private void ClearTargetsForSlot(FighterSlot slot) {
         List<FighterSlot> targets = this.fighterToActionMap[slot];
         foreach (FighterSlot targetSlot in targets) {
             if (targetSlot.fighter != null) {
-                targetSlot.ClearArrowsUIOfColor(targetSlot.fighter.GetOrderColor());
+                targetSlot.ClearArrowsUIOfColor(slot.fighter.GetOrderColor());
             }
         }
     }
@@ -71,10 +66,20 @@ public class FighterSlotUI : MonoBehaviour {
         if (this.fighterToActionMap[slot] != null) {
             this.ClearTargetsForSlot(slot);
         } else {
+            Debug.Log("Action targets count: " + action.GetTargets().Count);
             this.fighterToActionMap[slot] = action.GetTargets().Map((FightingEntity fighter) => fighter.fighterSlot);
         }
 
         this.SetSlotUIForAction(action);
     }
 
+    private void SetSlotUIForAction(QueuedAction action) {
+        FightingEntity user = action.user;
+
+        List<FightingEntity> targets = action.GetTargets();
+        foreach (FightingEntity target in targets) {
+            target.fighterSlot.AddTargetArrowUI(user.GetOrderColor());
+        }
+
+    }
 }

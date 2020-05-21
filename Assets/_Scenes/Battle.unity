@@ -9628,8 +9628,6 @@ MonoBehaviour:
   commandSelector: {fileID: 2026179245}
   maxTimeBeforeAction: 15
   battlePhase: 1
-  menuState: 0
-  currentHeroChoices: []
 --- !u!114 &2026179245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10532,26 +10530,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5902595311601403742, guid: 7901b6c10faa1124a8204c4dbf1e348c,
-        type: 3}
-      propertyPath: enemyColor.r
-      value: 0.31764707
-      objectReference: {fileID: 0}
-    - target: {fileID: 5902595311601403742, guid: 7901b6c10faa1124a8204c4dbf1e348c,
-        type: 3}
-      propertyPath: enemyColor.g
-      value: 0.31764707
-      objectReference: {fileID: 0}
-    - target: {fileID: 5902595311601403742, guid: 7901b6c10faa1124a8204c4dbf1e348c,
-        type: 3}
-      propertyPath: enemyColor.b
-      value: 0.31764707
-      objectReference: {fileID: 0}
-    - target: {fileID: 5902595311601403742, guid: 7901b6c10faa1124a8204c4dbf1e348c,
-        type: 3}
-      propertyPath: enemyColor.a
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7901b6c10faa1124a8204c4dbf1e348c, type: 3}

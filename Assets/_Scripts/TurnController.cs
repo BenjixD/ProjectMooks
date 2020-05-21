@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public enum BattlePhase{
     TURN_START,
@@ -35,6 +34,8 @@ public class HeroMenuAction {
     public MenuState menuState = MenuState.MOVE;
     public int targetIndex;
     public List<HeroActionChoice> currentHeroChoices;
+
+    public UnityAction onBackCallback = null;
 
     public HeroMenuAction(MenuState state) {
         this.menuState = state;
@@ -129,7 +130,6 @@ public class TurnController : MonoBehaviour
 
         this.battlePhase = BattlePhase.TURN_START;
         this.battle = null;
-        Debug.Log("Hero menu actions count: " + this.heroMenuActions.Count);
         this.heroMenuActions.Clear();
 
         this.playerActionCounter = 0;
@@ -209,12 +209,13 @@ public class TurnController : MonoBehaviour
         HeroMenuAction menuAction = this.GetHeroMenuAction();
         menuAction.targetIndex = this.commandSelector.GetChoice();
         this.ui.commandCardUI.SetConfirmed();
+        menuAction.onBackCallback = this.OnActionChooseBackCallback;
 
         HeroActionChoice choice = menuAction.currentHeroChoices[menuAction.targetIndex];
 
         if (choice.choiceName == "Magic" && choice.action == null) {
             this.heroMenuActions.Push(new HeroMenuAction(MenuState.MAGIC));
-            this.initializeCommandCardActionUI(ActionType.MAGIC);
+            this.initializeCommandCardActionUI(this.getHeroActionChoices(ActionType.MAGIC));
         } else {
             ActionBase heroAction = choice.action;
             if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
@@ -233,22 +234,32 @@ public class TurnController : MonoBehaviour
                     break;
                 }
 
+
                 this.heroMenuActions.Push(new HeroMenuAction(MenuState.TARGET));
             } else {
+                this.HeroActionConfirmed();
+                this.GetHeroMenuAction().onBackCallback = this.OnActionChooseBackCallback;
                 field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>()));
                 this.checkExecuteTurn();
+                this.heroMenuActions.Push(new HeroMenuAction(MenuState.WAITING));
             }
         }
     }
 
+    private void HeroActionConfirmed() {
+        this.ui.targetSelectionUI.ClearSelection();
+        this.ui.commandCardUI.SetCommandCardUI(CommandCardUIMode.CLOSED);
+    }
+
     private void setHeroTarget() {
+        this.HeroActionConfirmed();
+
         HeroMenuAction menuAction = this.GetHeroMenuAction();
         menuAction.targetIndex = this.commandSelector.GetChoice();
+        menuAction.onBackCallback = this.OnTargetChooseBackCallback;
 
         HeroMenuAction moveMenuAction = this.GetPreviousHeroMenuAction();
 
-        this.ui.targetSelectionUI.ClearSelection();
-        this.ui.commandCardUI.SetCommandCardUI(CommandCardUIMode.CLOSED);
 
         ActionBase heroAction = moveMenuAction.currentHeroChoices[moveMenuAction.targetIndex].action;
     
@@ -289,17 +300,17 @@ public class TurnController : MonoBehaviour
             }
         }
 
-        return currentHeroChoices;
-    }
-
-    // Initializes the command card to display the hero's actions
-    private void initializeCommandCardActionUI(ActionType type) {
-        List<HeroActionChoice> currentHeroChoices = this.getHeroActionChoices(type);
-
         HeroMenuAction menuAction = this.GetHeroMenuAction();
         menuAction.targetIndex = 0;
         menuAction.currentHeroChoices = currentHeroChoices;
 
+        return currentHeroChoices;
+    }
+
+    
+
+    // Initializes the command card to display the hero's actions
+    private void initializeCommandCardActionUI(List<HeroActionChoice> currentHeroChoices) {
         List<string> actionNames = currentHeroChoices.Map((HeroActionChoice choice) => { return choice.choiceName; });
         this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
     }
@@ -420,10 +431,20 @@ public class TurnController : MonoBehaviour
         }
     }
 
+    private void OnActionChooseBackCallback() {
+        this.ui.targetSelectionUI.ClearSelection();
+        this.initializeCommandCardActionUI(this.GetHeroMenuAction().currentHeroChoices);
+    }
+
+    private void OnTargetChooseBackCallback() {
+        this.ui.targetIconsUI.ClearTargetsForFighter(this.field.GetHeroPlayer());
+        this.goBackToLastHeroAction();
+    }
+
     // Coroutines
     IEnumerator HeroMoveSelection() {
         this.heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
-        this.initializeCommandCardActionUI(ActionType.BASIC);
+        this.initializeCommandCardActionUI(this.getHeroActionChoices(ActionType.BASIC));
 
         while(true) {
             HeroMenuAction menuAction = this.GetHeroMenuAction();
@@ -449,12 +470,28 @@ public class TurnController : MonoBehaviour
                     break;
             }
 
+            if (heroMenuActions.Count > 1) {
+                // Go back a menu
+                if (Input.GetKeyDown(KeyCode.X)) {
+                    this.goBackToLastHeroAction();
+                }            
+            }
+
+
             playerActionCounter += Time.deltaTime;
             if(this.checkExecuteTurn()) {
                 this.BroadcastOnBattleStart();
                 break;
             }
             yield return null;
+        }
+    }
+
+    private void goBackToLastHeroAction() {
+        this.heroMenuActions.Pop();
+        HeroMenuAction menuAction = this.GetHeroMenuAction();
+        if (menuAction.onBackCallback != null) {
+            menuAction.onBackCallback();
         }
     }
 }
