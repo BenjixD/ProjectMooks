@@ -52,6 +52,8 @@ public class DeathResult {
 
 public abstract class ActionBase : ScriptableObject {
     public string name;
+    [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
+    public int PP;
     [TextArea]
     public string description;
     [Tooltip("The main command word, e.g., \"a\".")]

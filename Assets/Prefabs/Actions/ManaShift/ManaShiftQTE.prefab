@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5498650744045303134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4508311684232641130}
+  - component: {fileID: 1052195422476982689}
+  - component: {fileID: 1391621302659802525}
+  m_Layer: 0
+  m_Name: ManaShiftQTE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4508311684232641130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5498650744045303134}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1052195422476982689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5498650744045303134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32002b0ed07f3a42a675c1701da31cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputDuration: 10
+  _guidance: Enter "give mana" to give the hero mana!
+  _qteCommonCanvasPrefab: {fileID: 1689741904029012617, guid: c0aa9e4c5bcaa72429ba01323afd21a4,
+    type: 3}
+  _increaseString: give mana
+  _increaseValue: 1
+  _manaShiftCanvasPrefab: {fileID: 9169086173929758023, guid: 6b08a13ca72257547aadbdb2f7c801f1,
+    type: 3}
+--- !u!114 &1391621302659802525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5498650744045303134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8328485bc4839d84e966b13e3b19bfea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
