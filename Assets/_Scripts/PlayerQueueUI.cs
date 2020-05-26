@@ -29,7 +29,7 @@ public class PlayerQueueUI : MonoBehaviour
     }
 
     public void RefreshUI() {
-        List<PlayerCreationData> playersInQueue = GameManager.Instance.party.playerQueue.Peek(maxInstantiatedTexts);
+        List<PlayerCreationData> playersInQueue = GameManager.Instance.gameState.playerParty.playerQueue.Peek(maxInstantiatedTexts);
         int len = Mathf.Min(playersInQueue.Count, maxInstantiatedTexts);
 
         for (int i = 0; i < len; i++) {

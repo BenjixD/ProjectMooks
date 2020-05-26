@@ -21,8 +21,8 @@ public class StatusBarsUI : MonoBehaviour
 
 
 
-    private StatusBarUI[] statusBars = new StatusBarUI[Party<Player>.maxPlayers];
-    private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[Party<Enemy>.maxPlayers];
+    private StatusBarUI[] statusBars = new StatusBarUI[PlayerParty.maxPlayers];
+    private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[EnemyParty.maxPlayers];
 
     void Awake() {
         _controller = GetComponent<TurnController>();
@@ -94,7 +94,7 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     private void buildStatusBars() {
-        for (int i = 0; i < Party<Player>.maxPlayers; i++) { 
+        for (int i = 0; i < PlayerParty.maxPlayers; i++) { 
             StatusBarUI statusBarForPlayer;
             
             if (i == 0) {
@@ -110,7 +110,7 @@ public class StatusBarsUI : MonoBehaviour
         }
 
 
-        for (int i = 0; i < Party<Enemy>.maxPlayers; i++) {
+        for (int i = 0; i < EnemyParty.maxPlayers; i++) {
             EnemyStatusBarUI statusBarForEnemy = Instantiate(enemyStatusBarPrefab, enemyStatusBarParent[i]);
             statusBarForEnemy.gameObject.SetActive(false);
             enemyStatusBars[i] = statusBarForEnemy;

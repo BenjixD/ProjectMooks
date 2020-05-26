@@ -344,7 +344,7 @@ public class TurnController : MonoBehaviour
 
         bool isEnemy = deadFighter.isEnemy();
         if (isEnemy) {
-            GameManager.Instance.gameState.SetEnemyParty(deadFighter.targetId, null);
+            GameManager.Instance.gameState.enemyParty.SetFighter(deadFighter.targetId, null);
             Destroy(deadFighter.gameObject);
 
             bool stillHasEnemies = false;
@@ -366,8 +366,8 @@ public class TurnController : MonoBehaviour
                 return;
             }
 
-            GameManager.Instance.gameState.SetPlayerParty(deadFighter.targetId, null);
-            GameManager.Instance.party.EvictPlayer(deadFighter.targetId);
+            GameManager.Instance.gameState.playerParty.SetFighter(deadFighter.targetId, null);
+            GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId);
             Destroy(deadFighter.gameObject);
         }
 

@@ -131,9 +131,9 @@ public class FightingEntity : MonoBehaviour
 
     public Color GetOrderColor() {
         if (this.isEnemy()) {
-            return Party<Enemy>.IndexToColor(this.targetId);
+            return GameManager.Instance.gameState.playerParty.IndexToColor(this.targetId);
         } else {
-            return Party<Player>.IndexToColor(this.targetId);
+            return GameManager.Instance.gameState.enemyParty.IndexToColor(this.targetId);
         }
     }
 

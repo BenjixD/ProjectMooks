@@ -7,8 +7,8 @@ using System.Collections.Generic;
 [RequireComponent (typeof(ProgressData))]
 public class GameState : MonoBehaviour {
 
-    public Party<Player> playerParty = new Party<Player>();
-    public Party<Enemy> enemyParty = new Party<Enemy>(); 
+    public PlayerParty playerParty;
+    public EnemyParty enemyParty;
 
 
     public ProgressData progressData;
@@ -41,14 +41,4 @@ public class GameState : MonoBehaviour {
             this.stages.Add(stageInfo);
         }
     }
-
-
-    public void SetPlayerParty(int index, Player player) {
-        this.playerParty.SetMember(index, player);
-    }
-
-    public void SetEnemyParty(int index, Enemy enemy) {
-        this.enemyParty.SetMember(index, enemy);
-    }
-
 }

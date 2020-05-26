@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 // A Singleton bridge to access data from across the application
 public class GameManager : Singleton<GameManager> {
-    public PartyCreationData party;
     public TwitchChatBroadcaster chatBroadcaster;
 
     public ScriptableObjectDictionary models;
@@ -26,11 +25,14 @@ public class GameManager : Singleton<GameManager> {
         DontDestroyOnLoad(gameObject);
 
         this.models.Initialize();
+        gameState.playerParty.Initialize();
+        gameState.enemyParty.Initialize();
+
 
         // Initialize with the field for debugging purposes
         if (SceneManager.GetActiveScene().name != "_MainMenu") {
             chatBroadcaster.ConnectToChannel(chatBroadcaster._channelToConnectTo);
-            party.Initialize(chatBroadcaster._channelToConnectTo);
+            gameState.playerParty.CreateHero(chatBroadcaster._channelToConnectTo);
         }
 
         this.gameState.Initialize();
