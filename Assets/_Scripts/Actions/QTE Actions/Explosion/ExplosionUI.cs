@@ -7,10 +7,10 @@ using TMPro;
 public class ExplosionUI : MonoBehaviour {
     [Header("References")]
     [SerializeField] private Image _meterContent;
-    [SerializeField] private TextMeshProUGUI _powerText;
+    [SerializeField] private TextMeshProUGUI _damageText;
 
-    public void UpdatePower(float power) {
-        _meterContent.fillAmount = power;
-        _powerText.text = (power * 100) + "%";
+    public void UpdatePower(float powerPercent, int damage) {
+        _meterContent.fillAmount = powerPercent;
+        _damageText.text = damage.ToString();
     }
 }

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputDuration: 10
-  _guidance: Enter "give mana" to give the hero mana!
+  _guidance: enter "give mana" to give the hero mana!
   _qteCommonCanvasPrefab: {fileID: 1689741904029012617, guid: c0aa9e4c5bcaa72429ba01323afd21a4,
     type: 3}
   _increaseString: give mana

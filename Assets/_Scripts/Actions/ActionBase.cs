@@ -53,7 +53,9 @@ public class DeathResult {
 public abstract class ActionBase : ScriptableObject {
     public string name;
     [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
-    public int PP;
+    public int maxPP;
+    private int _currPP;
+    private bool _infiniteUses = false;
     [TextArea]
     public string description;
     [Tooltip("The main command word, e.g., \"a\".")]
@@ -66,6 +68,14 @@ public abstract class ActionBase : ScriptableObject {
     public TargetInfo targetInfo;
     public ActionType actionType;
 
+    private void Awake() {
+        if (maxPP == 0) {
+            _infiniteUses = true;
+        } else {
+            _currPP = maxPP;
+        }
+    }
+
     private bool CheckKeyword(string keyword) {
         return keyword == commandKeyword;
     }
@@ -77,7 +87,21 @@ public abstract class ActionBase : ScriptableObject {
         if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() ) {
             return false;
         }
+        if (!TrySpendPP()) {
+            return false;
+        }
         return true;
+    }
+
+    private bool TrySpendPP() {
+        if (_infiniteUses) {
+            return true;
+        }
+        if (_currPP > 0) {
+            _currPP--;
+            return true;
+        }
+        return false;
     }
 
     public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);

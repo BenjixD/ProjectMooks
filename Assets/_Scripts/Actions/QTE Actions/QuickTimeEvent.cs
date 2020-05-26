@@ -8,6 +8,10 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     [SerializeField] protected float _inputDuration;
     [Tooltip("Instructional text for this QTE that is displayed to the players.")]
     [TextArea] [SerializeField] private string _guidance;
+    [Tooltip("Duration during which players can see the instructional text and prepare to give input.")]
+    private float _warmupDuration = 3;
+    [Tooltip("Duration to wait after input is closed before executing action, so that players can see the results of the QTE.")]
+    private float _windDownDuration = 1;
 
     [Header("References (QuickTimeEvent)")]
     [Tooltip("Reference to the QteCommonCanvas prefab.")]
@@ -16,9 +20,8 @@ public abstract class QuickTimeEvent : MonoBehaviour {
 
     protected bool _acceptingInput;
     
-    protected virtual void Start() {
-        // TODO: move to later
-        OpenInput();
+    private void Start() {
+        StartCoroutine(StartQTE());
     }
 
     public void ReceiveMessage(string message) {
@@ -29,26 +32,49 @@ public abstract class QuickTimeEvent : MonoBehaviour {
 
     protected abstract void ProcessMessage(string message);
 
-    protected IEnumerator BeginTimer() { 
-        float remaining = _inputDuration;
+    private IEnumerator StartQTE() {
         _qteUI = Instantiate(_qteCommonCanvasPrefab).GetComponent<QteCommonUI>();
         _qteUI.SetGuidance(_guidance);
+        StartCoroutine(Countdown());
+        yield return new WaitForSeconds(_warmupDuration);
+        OpenInput();
+    }
+
+    private IEnumerator Countdown() {
+        float remaining = _warmupDuration;
+        while (remaining > 0) {
+            _qteUI.UpdateCountdown((int) remaining);
+            yield return new WaitForSeconds(1f);
+            remaining -= 1;
+        }
+        _qteUI.EndWarmup();
+    }
+
+    protected virtual void OpenInput() {
+        _acceptingInput = true;
+        StartCoroutine(BeginTimer());
+    }
+
+    private IEnumerator BeginTimer() {
+        float remaining = _inputDuration;
         while (remaining > 0) {
             _qteUI.UpdateTimer((int) remaining);
             yield return new WaitForSeconds(1f);
             remaining -= 1;
         }
-        CloseInput();
+        StartCoroutine(EndQTE());
     }
 
-    protected void OpenInput() {
-        _acceptingInput = true;
-        StartCoroutine(BeginTimer());
-    }
-
-    protected virtual void CloseInput() {
+    private IEnumerator EndQTE() {
         _acceptingInput = false;
-        Destroy(_qteUI.gameObject);
+        _qteUI.DeactivateTimer();
+        yield return new WaitForSeconds(_windDownDuration);
+        DestroyUI();
+        Destroy(gameObject);
         // TODO: execute move
+    }
+
+    protected virtual void DestroyUI() {
+        Destroy(_qteUI.gameObject);
     }
 }

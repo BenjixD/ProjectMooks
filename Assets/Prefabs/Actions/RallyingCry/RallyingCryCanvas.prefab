@@ -115,7 +115,7 @@ MonoBehaviour:
   _rallyingCryMessagePrefab: {fileID: 1817018686674728630, guid: d070e2ec1b5074444a9ec8e272b6a1e7,
     type: 3}
   _powerText: {fileID: 1995915803187390335}
-  _maxConcurrentMessages: 50
+  _maxConcurrentMessages: 20
 --- !u!1 &5419728858629208324
 GameObject:
   m_ObjectHideFlags: 0

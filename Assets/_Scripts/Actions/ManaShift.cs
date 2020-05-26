@@ -17,16 +17,18 @@ public class ManaShift : ActionBase {
     }
 
     public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
-        ManaShiftQTE qte = Instantiate(_manaShiftQTE).GetComponent<ManaShiftQTE>();
-        // qte.SetCallback(FinishQTE(user.stats.GetSpecial()));
-        // TODO: process QTE + execute effect
-        // TODO: pause battle controller
+        Instantiate(_manaShiftQTE);
 
+        // TODO: integration with battle controller
+        FinishQTE(user, targets, 0);
         
-        int manaRestored = user.stats.GetSpecial();
+        return new FightResult(user, this);
+    }
+
+    public FightResult FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
+        int manaRestored = (int) (user.stats.GetSpecial() * power);
         Player hero = (Player) targets[0];
         hero.stats.SetMana(hero.stats.GetMana() + manaRestored);
-
         return new FightResult(user, this);
     }
 }

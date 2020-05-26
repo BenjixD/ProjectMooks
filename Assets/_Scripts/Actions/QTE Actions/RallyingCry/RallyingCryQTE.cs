@@ -22,17 +22,15 @@ public class RallyingCryQTE : QuickTimeEvent {
 
     private float _totalPower = 0;
 
-    protected override void Start() {
-        base.Start();
-        _rallyingCryUI = Instantiate(_rallyingCryCanvasPrefab).GetComponent<RallyingCryUI>();
-        UpdatePower();
-
-    }
-
     protected override void ProcessMessage(string message) {
         _totalPower += GetMessageValue(message);
         _rallyingCryUI.DisplayMessage(message);
-        Debug.Log("processed " + message);
+        UpdatePower();
+    }
+
+    protected override void OpenInput() {
+        base.OpenInput();
+        _rallyingCryUI = Instantiate(_rallyingCryCanvasPrefab).GetComponent<RallyingCryUI>();
         UpdatePower();
     }
 
@@ -62,9 +60,8 @@ public class RallyingCryQTE : QuickTimeEvent {
         return percentPower * _maxCryValue;
     }
 
-    protected override void CloseInput() {
-        base.CloseInput();
-        // TODO: destroy at appropriate time
+    protected override void DestroyUI() {
+        base.DestroyUI();
         Destroy(_rallyingCryUI.gameObject);
     }
 }

@@ -13,27 +13,16 @@ public class ManaShiftQTE : QuickTimeEvent {
     private ManaShiftUI _manaShiftUI;
     private float _totalPower = 0;
 
-    // TODO
-    // private System.Action<float> _executionCallback;
-
-    protected override void Start() {
-
-        // TODO: temp
-        base.Start();
-
-        _manaShiftUI = Instantiate(_manaShiftCanvasPrefab).GetComponent<ManaShiftUI>();
-        UpdatePower();
-    }
-
-    // TODO
-    // public void SetCallback(System.Action<float> callback) {
-    //     _executionCallback = callback;
-    // }
-
     protected override void ProcessMessage(string message) {
         if (message == _increaseString) {
             _totalPower += _increaseValue;
         }
+        UpdatePower();
+    }
+    
+    protected override void OpenInput() {
+        base.OpenInput();
+        _manaShiftUI = Instantiate(_manaShiftCanvasPrefab).GetComponent<ManaShiftUI>();
         UpdatePower();
     }
 
@@ -41,10 +30,8 @@ public class ManaShiftQTE : QuickTimeEvent {
         _manaShiftUI.UpdatePower(_totalPower);
     }
 
-    protected override void CloseInput() {
-        base.CloseInput();
-        // TODO: destroy at appropriate time
+    protected override void DestroyUI() {
+        base.DestroyUI();
         Destroy(_manaShiftUI.gameObject);
-        // _executionCallback(_totalPower);
     }
 }

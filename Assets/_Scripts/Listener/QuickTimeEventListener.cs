@@ -6,7 +6,6 @@ public class QuickTimeEventListener : TwitchChatListenerBase {
     private QuickTimeEvent _qte;
 
     private void Start() {
-        // TODO: temp
         _qte = GetComponent<QuickTimeEvent>();
     }
 

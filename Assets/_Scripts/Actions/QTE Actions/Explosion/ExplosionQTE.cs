@@ -21,16 +21,11 @@ public class ExplosionQTE : QuickTimeEvent {
     private ExplosionUI _explosionUI;
 
     private PlayerStats _userStats;
+    private Explosion _explosionAction;
 
-    protected override void Start() {
-        base.Start();
-        _explosionUI = Instantiate(_explosionCanvasPrefab).GetComponent<ExplosionUI>();
-        _explosionPower = _startingPower;
-        UpdatePowerMeter();
-    }
-
-    public void SetUserStats(PlayerStats userStats) {
+    public void Initialize(PlayerStats userStats, Explosion action) {
         _userStats = userStats;
+        _explosionAction = action;
     }
 
     protected override void ProcessMessage(string message) {
@@ -43,24 +38,25 @@ public class ExplosionQTE : QuickTimeEvent {
         UpdatePowerMeter();
     }
 
+    protected override void OpenInput() {
+        base.OpenInput();
+        _explosionUI = Instantiate(_explosionCanvasPrefab).GetComponent<ExplosionUI>();
+        _explosionPower = _startingPower;
+        UpdatePowerMeter();
+    }
+
     private void UpdatePowerMeter() {
-        _explosionUI.UpdatePower(_explosionPower);
-    }
-
-    // Return damage based on explosion power and user's stats (without accounting for the targets' resistances)
-    private float GetRawDamage() {        
-        if (_userStats == null) {
+        int rawDamage = 0;
+        if (_explosionAction == null) {
             Debug.LogWarning("Explosion damage can't be approximated as user stats are missng.");
-            return 0;
+        } else {
+            rawDamage = _explosionAction.GetRawDamage(_userStats, _explosionPower);
         }
-
-        // TODO: damage calculation
-        return _explosionPower * _userStats.GetSpecial();
+        _explosionUI.UpdatePower(_explosionPower, rawDamage);
     }
-    
-    protected override void CloseInput() {
-        base.CloseInput();
-        // TODO: destroy at appropriate time
+
+    protected override void DestroyUI() {
+        base.DestroyUI();
         Destroy(_explosionUI.gameObject);
     }
 }

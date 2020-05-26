@@ -8,33 +8,42 @@ public class RallyingCryUI : MonoBehaviour {
     [Tooltip("Reference to the RallyingCryMessage prefab.")]
     [SerializeField] private GameObject _rallyingCryMessagePrefab;
     [SerializeField] private TextMeshProUGUI _powerText;
-    [Tooltip("The max number of messages displayed at once. Any further messages sent won't be displayed until quantity drops below this threshold again.")]
-    [SerializeField] private int _maxConcurrentMessages;
 
+    [Space]
+    
+    [Tooltip("The max number of messages displayed at once. Any further messages will replace oldest messages.")]
+    [SerializeField] private int _maxConcurrentMessages;
+    private List<RallyingCryMessage> _currMessages = new List<RallyingCryMessage>();
+    private int _oldestMessageIndex;
     private float _screenHalfWidth;
     private float _screenHalfHeight;
 
     private void Start() {
         _screenHalfWidth = Screen.width / 2;
         _screenHalfHeight = Screen.height / 2;
-        Debug.Log("half screen: " + _screenHalfWidth + ", " + _screenHalfHeight);
+        _oldestMessageIndex = 0;
     }
 
     public void DisplayMessage(string message) {
-        // TODO: object pooling/count
-        if (0 < _maxConcurrentMessages) {
-            Vector2 randomPosition = Random.insideUnitCircle * new Vector2(_screenHalfWidth, _screenHalfHeight);
-            GameObject msg = Instantiate(_rallyingCryMessagePrefab,
-                                        randomPosition,
-                                        Quaternion.identity,
-                                        transform);
-            msg.GetComponent<RallyingCryMessage>().SetText(message);
-            msg.GetComponent<RectTransform>().anchoredPosition = randomPosition;
+        if (_currMessages.Count < _maxConcurrentMessages) {
+            // Create a new message for the object pool
+            RallyingCryMessage msg = Instantiate(_rallyingCryMessagePrefab, transform).GetComponent<RallyingCryMessage>();
+            InitializeMessage(msg, message);
+            _currMessages.Add(msg);
+        } else {
+            // If message limit has been reached, change the oldest one instead of making a new one
+            InitializeMessage(_currMessages[_oldestMessageIndex], message);
+            _oldestMessageIndex = (_oldestMessageIndex + 1) % _maxConcurrentMessages;
         }
+    }
+
+    private void InitializeMessage(RallyingCryMessage rallyingCryMessage, string message) {
+        Vector2 randomPosition = Random.insideUnitCircle * new Vector2(_screenHalfWidth, _screenHalfHeight);
+        rallyingCryMessage.GetComponent<RectTransform>().anchoredPosition = randomPosition;
+        rallyingCryMessage.SetText(message);
     }
 
     public void UpdatePower(float power) {
         _powerText.text = "Power:\n" + power;
-        Debug.Log("power is now at " + power);
     }
 }
