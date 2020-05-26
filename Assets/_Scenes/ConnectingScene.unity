@@ -695,14 +695,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1133189571, guid: 7901b6c10faa1124a8204c4dbf1e348c, type: 3}
-      propertyPath: playerParty
-      value: 
-      objectReference: {fileID: 948505452}
-    - target: {fileID: 1133189571, guid: 7901b6c10faa1124a8204c4dbf1e348c, type: 3}
-      propertyPath: enemyParty
-      value: 
-      objectReference: {fileID: 948505451}
     - target: {fileID: 5902595311601403729, guid: 7901b6c10faa1124a8204c4dbf1e348c,
         type: 3}
       propertyPath: m_Name
@@ -763,62 +755,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5902595311601403742, guid: 7901b6c10faa1124a8204c4dbf1e348c, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7901b6c10faa1124a8204c4dbf1e348c, type: 3}
---- !u!1 &948505450 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5902595311601403729, guid: 7901b6c10faa1124a8204c4dbf1e348c,
-    type: 3}
-  m_PrefabInstance: {fileID: 927263195}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &948505451
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948505450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 869fe27365c584a478a9da9ccfc63915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetColors:
-  - {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 1}
-  - {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 1}
-  - {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 1}
-  - {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 1}
---- !u!114 &948505452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948505450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d003aa2053d855241a6f7c27ff0c71b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetColors:
-  - {r: 0.8705883, g: 0.050980397, b: 0.050980397, a: 1}
-  - {r: 0, g: 0.2392157, b: 0.74509805, a: 1}
-  - {r: 0, g: 0.7568628, b: 0.14901961, a: 1}
-  - {r: 0.8941177, g: 0.9450981, b: 0, a: 1}
-  playerQueue: {fileID: 948505455}
---- !u!114 &948505455 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5902595311601403740, guid: 7901b6c10faa1124a8204c4dbf1e348c,
-    type: 3}
-  m_PrefabInstance: {fileID: 927263195}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948505450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 023c0ddb947787d4294570012677de51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1026005996
 GameObject:
   m_ObjectHideFlags: 0

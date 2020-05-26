@@ -55,4 +55,10 @@ public abstract class Party : MonoBehaviour {
     public Color IndexToColor(int index) {
         return targetColors[index];
     }
+
+    public void ClearFighters() {
+        for (int i = 0; i < this.fighters.Length; i++) {
+            this.fighters[i] = null;
+        }
+    }
 }

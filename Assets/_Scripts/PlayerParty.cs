@@ -43,8 +43,8 @@ public class PlayerParty : Party {
     
     public void EvictPlayer(int index) {
         Player player = this.GetFighters<Player>()[index];
-        this.SetFighter(index, null);
         playerQueue.Remove(player.playerCreationData.name);
+        this.SetFighter(index, null);
     }
 
     public List<Player> GetPlayersPosition() {

@@ -366,8 +366,8 @@ public class TurnController : MonoBehaviour
                 return;
             }
 
-            GameManager.Instance.gameState.playerParty.SetFighter(deadFighter.targetId, null);
             GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId);
+
             Destroy(deadFighter.gameObject);
         }
 
