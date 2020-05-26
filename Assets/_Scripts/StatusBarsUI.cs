@@ -31,6 +31,7 @@ public class StatusBarsUI : MonoBehaviour
     public void Initialize() {
         Messenger.AddListener<List<PlayerObject>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
         Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
+        Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         Messenger.AddListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
 
         this.buildStatusBars();
@@ -64,7 +65,6 @@ public class StatusBarsUI : MonoBehaviour
             } else {
                 // Mooks have energy
                 MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
-                mookStatusBar.actionMenuUI.UnsetActions();
                 mookStatusBar.SetFighter(player);
                 mookStatusBar.SetName(player.Name);
                 mookStatusBar.SetHP(player.stats.GetHp(), player.stats.maxHp);
@@ -122,6 +122,17 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     private void onFightEnd(FightResult result) {
+        this.UpdateStatusBars();
+    }
+
+    private void OnBattleEnd(BattleResult result) {
+        PlayerObject[] players = _controller.field.GetPlayerObjects();
+        for (int i = 1; i < players.Length; i++) {
+            // Mooks have energy
+            MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
+            mookStatusBar.actionMenuUI.UnsetActions();
+        }
+
         this.UpdateStatusBars();
     }
 
