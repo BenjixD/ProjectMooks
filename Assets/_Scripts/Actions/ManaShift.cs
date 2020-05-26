@@ -7,7 +7,7 @@ public class ManaShift : ActionBase {
     [SerializeField] private GameObject _manaShiftQTE;
 
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Defend command format: !shift
+        // Command format: !shift
         if (!BasicValidation(splitCommand)) {
             return false;
         }

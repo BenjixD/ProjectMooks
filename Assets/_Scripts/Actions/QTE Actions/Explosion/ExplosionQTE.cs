@@ -47,8 +47,8 @@ public class ExplosionQTE : QuickTimeEvent {
 
     private void UpdatePowerMeter() {
         int rawDamage = 0;
-        if (_explosionAction == null) {
-            Debug.LogWarning("Explosion damage can't be approximated as user stats are missng.");
+        if (_userStats == null || _explosionAction == null) {
+            Debug.LogWarning("Explosion damage can't be approximated as user stats or the Explosion action are missng.");
         } else {
             rawDamage = _explosionAction.GetRawDamage(_userStats, _explosionPower);
         }

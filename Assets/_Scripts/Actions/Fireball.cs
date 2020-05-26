@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Fireball", menuName = "Actions/Fireball", order = 2)]
 public class Fireball : ActionBase {
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Fire All command format: !m fire2
+        // Fireball command format: !m fireball
         if (!BasicValidation(splitCommand)) {
             return false;
         }
