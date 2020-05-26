@@ -112,7 +112,7 @@ public class FightingEntity : MonoBehaviour
     }
 
     public bool isEnemy() {
-        return this.GetType() == typeof(Enemy);
+        return this.GetType() == typeof(EnemyObject);
     }
 
     public ActionBase GetRandomAction() {
@@ -131,9 +131,9 @@ public class FightingEntity : MonoBehaviour
 
     public Color GetOrderColor() {
         if (this.isEnemy()) {
-            return Party<Enemy>.IndexToColor(this.targetId);
+            return Party<EnemyObject>.IndexToColor(this.targetId);
         } else {
-            return Party<Player>.IndexToColor(this.targetId);
+            return Party<PlayerObject>.IndexToColor(this.targetId);
         }
     }
 

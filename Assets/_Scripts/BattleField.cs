@@ -7,8 +7,8 @@ using System.Linq;
 // Class that holds field information / helper functions
 public class BattleField : MonoBehaviour
 {   
-    public Party<Player> playerParty = new Party<Player>();
-    public Party<Enemy> enemyParty = new Party<Enemy>(); 
+    public Party<PlayerObject> playerParty = new Party<PlayerObject>();
+    public Party<EnemyObject> enemyParty = new Party<EnemyObject>(); 
 
 
     [Header("Slots")]
@@ -24,13 +24,13 @@ public class BattleField : MonoBehaviour
         this.InitializeEnemies();
     }
 
-    public Player GetHeroPlayer() {
+    public PlayerObject GetHeroPlayer() {
         return playerParty.members[0];
     }
 
     public void RequestRecruitNewParty() {
         List<int> emptySlots = new List<int>();
-        Player[] players = playerParty.members;
+        PlayerObject[] players = playerParty.members;
         for (int i = 1; i < players.Length; i++) {
             if (players[i] == null) {
                 emptySlots.Add(i);
@@ -38,10 +38,10 @@ public class BattleField : MonoBehaviour
         }
 
         GameManager.Instance.party.TryFillAllPartySlots();
-        List<Player> joinedPlayers = new List<Player>();
+        List<PlayerObject> joinedPlayers = new List<PlayerObject>();
 
         foreach (int emptySlot in emptySlots) {
-            Player player = this.InstantiatePlayer(emptySlot);
+            PlayerObject player = this.InstantiatePlayer(emptySlot);
             if (player != null) {
                 this.mookSlots[emptySlot-1].InitializePosition(player);
                 joinedPlayers.Add(player);
@@ -49,19 +49,19 @@ public class BattleField : MonoBehaviour
         }
 
         if (joinedPlayers.Count > 0) {
-            Messenger.Broadcast<List<Player>>(Messages.OnPlayersJoinBattle, joinedPlayers);
+            Messenger.Broadcast<List<PlayerObject>>(Messages.OnPlayersJoinBattle, joinedPlayers);
         }
 
     }
 
     public List<FightingEntity> GetAllFightingEntities() {
-        List<Player> players = playerParty.GetActiveMembers();
+        List<PlayerObject> players = playerParty.GetActiveMembers();
         List<FightingEntity> entities = new List<FightingEntity>();
         foreach (var player in players) {
             entities.Add(player);
         }
 
-        List<Enemy> enemies = enemyParty.GetActiveMembers();
+        List<EnemyObject> enemies = enemyParty.GetActiveMembers();
 
         foreach (var enemy in enemies) {
             entities.Add(enemy);
@@ -84,7 +84,7 @@ public class BattleField : MonoBehaviour
             JobActionsList jobList = enemyList[i];
 
             FightingEntity enemyPrefab = jobList.prefab;
-            Enemy instantiatedEnemy = Instantiate(enemyPrefab) as Enemy;
+            EnemyObject instantiatedEnemy = Instantiate(enemyPrefab) as EnemyObject;
 
             PlayerStats stats = new PlayerStats(enemyPrefab.stats);
             stats.RandomizeStats();
@@ -125,16 +125,16 @@ public class BattleField : MonoBehaviour
 
 
     private void InitializePlayers() {
-        Player instantiatedHeroPlayer = this.InstantiatePlayer(0);
+        PlayerObject instantiatedHeroPlayer = this.InstantiatePlayer(0);
         this.heroSlot.InitializePosition(instantiatedHeroPlayer);
 
-        for (int i = 1; i < Party<Player>.maxPlayers; i++) {
+        for (int i = 1; i < Party<PlayerObject>.maxPlayers; i++) {
             this.InstantiatePlayerIfExists(i);
         }
     }
 
-    private Player InstantiatePlayerIfExists(int index) {
-        Player instantiatedPlayer = this.InstantiatePlayer(index);
+    private PlayerObject InstantiatePlayerIfExists(int index) {
+        PlayerObject instantiatedPlayer = this.InstantiatePlayer(index);
         if (instantiatedPlayer != null) {
             FighterSlot slot;
             if (index == 0) {
@@ -156,7 +156,7 @@ public class BattleField : MonoBehaviour
         this.GenerateEnemyList(0);
     }
 
-    private Player InstantiatePlayer(int index) {
+    private PlayerObject InstantiatePlayer(int index) {
         PlayerCreationData data = GameManager.Instance.party.GetPlayerCreationData()[index];
         if (data == null) {
             return null;
@@ -164,7 +164,7 @@ public class BattleField : MonoBehaviour
 
         JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(data.job);
         FightingEntity prefab = jobActionsList.prefab;
-        Player player = Instantiate(prefab).GetComponent<Player>();
+        PlayerObject player = Instantiate(prefab).GetComponent<PlayerObject>();
         player.Initialize(index, data);
         playerParty.members[index] = player;
 

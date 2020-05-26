@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TestAI : Player {
+public class TestAI : PlayerObject {
 	void Start() {
 		_ai = new FightingEntityAI(this, 100f, 0.5f);
 		StartCoroutine(Attack());

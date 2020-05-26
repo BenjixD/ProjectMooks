@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class ActionListener : TwitchChatListenerBase {
 
     [SerializeField]
-    private Player _player;
+    private PlayerObject _player;
 
     public override void Awake() {
         base.Awake();
-        _player = GetComponent<Player>();
+        _player = GetComponent<PlayerObject>();
     }
 
     public override void OnMessageReceived(string username, string message) {

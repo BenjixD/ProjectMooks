@@ -180,7 +180,7 @@ public class TurnController : MonoBehaviour
     }
 
     private bool checkExecuteTurn() {
-        List<Player> players = field.playerParty.GetActiveMembers();
+        List<PlayerObject> players = field.playerParty.GetActiveMembers();
 
         //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
         bool timeOutIfChatTooSlow = false;
@@ -271,7 +271,7 @@ public class TurnController : MonoBehaviour
                 break;
 
             case TargetType.ALL:
-                List<int> allEnemies = field.enemyParty.GetActiveMembers().Map((Enemy enemy) => enemy.targetId);
+                List<int> allEnemies = field.enemyParty.GetActiveMembers().Map((EnemyObject enemy) => enemy.targetId);
                 field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, allEnemies ));
             break;
 

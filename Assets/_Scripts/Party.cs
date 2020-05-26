@@ -28,7 +28,7 @@ public class Party<T> where T : FightingEntity
 
 
     public static Color IndexToColor(int index) {
-        if (typeof(T) == typeof(Enemy)) {
+        if (typeof(T) == typeof(EnemyObject)) {
             return GameManager.Instance.party.enemyColor;
         }  else {
             return GameManager.Instance.party.IndexToColor(index);
