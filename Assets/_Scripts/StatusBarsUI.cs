@@ -21,8 +21,8 @@ public class StatusBarsUI : MonoBehaviour
 
 
 
-    private StatusBarUI[] statusBars = new StatusBarUI[Party<PlayerObject>.maxPlayers];
-    private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[Party<EnemyObject>.maxPlayers];
+    private StatusBarUI[] statusBars = new StatusBarUI[Party<Player>.maxPlayers];
+    private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[Party<Enemy>.maxPlayers];
 
     void Awake() {
         _controller = GetComponent<TurnController>();
@@ -44,7 +44,7 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     public void UpdateStatusBars() {
-        PlayerObject[] players = _controller.field.playerParty.members;
+        PlayerObject[] players = _controller.field.GetPlayerObjects();
 
         for (int i = 0; i < players.Length; i++) {
             PlayerObject player = players[i];
@@ -76,7 +76,7 @@ public class StatusBarsUI : MonoBehaviour
             this.statusBars[i].gameObject.SetActive(true);
         }
 
-        EnemyObject[] enemies = _controller.field.enemyParty.members;
+        EnemyObject[] enemies = _controller.field.GetEnemyObjects();
 
         for (int i = 0; i < enemies.Length; i++) {
             EnemyObject enemy = enemies[i];
@@ -94,7 +94,7 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     private void buildStatusBars() {
-        for (int i = 0; i < Party<PlayerObject>.maxPlayers; i++) { 
+        for (int i = 0; i < Party<Player>.maxPlayers; i++) { 
             StatusBarUI statusBarForPlayer;
             
             if (i == 0) {
@@ -110,7 +110,7 @@ public class StatusBarsUI : MonoBehaviour
         }
 
 
-        for (int i = 0; i < Party<EnemyObject>.maxPlayers; i++) {
+        for (int i = 0; i < Party<Enemy>.maxPlayers; i++) {
             EnemyStatusBarUI statusBarForEnemy = Instantiate(enemyStatusBarPrefab, enemyStatusBarParent[i]);
             statusBarForEnemy.gameObject.SetActive(false);
             enemyStatusBars[i] = statusBarForEnemy;

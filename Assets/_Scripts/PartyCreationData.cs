@@ -7,7 +7,7 @@ public class PartyCreationData : MonoBehaviour {
     public PlayerQueue playerQueue;
     public List<Color> playerColors;
     public Color enemyColor;
-    private PlayerCreationData[] playerPos = new PlayerCreationData[Party<PlayerObject>.maxPlayers];
+    private PlayerCreationData[] playerPos = new PlayerCreationData[Party<Player>.maxPlayers];
 
     public PlayerCreationData[] GetPlayerCreationData() {
         return playerPos;

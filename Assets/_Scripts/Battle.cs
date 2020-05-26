@@ -81,7 +81,7 @@ public class Battle
             if (fighters[i].GetQueuedAction() == null) {
                 // This sets the enemy's action
                 // TODO: Will be moved after AI is merged.
-                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], fighters[i].GetRandomAction(), new List<int>{_controller.field.playerParty.GetRandomActiveIndex()}  ));
+                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], fighters[i].GetRandomAction(), new List<int>{_controller.field.GetRandomPlayerObjectIndex()}  ));
             }
 
             QueuedAction attackerAction = fighters[i].GetQueuedAction();
@@ -109,9 +109,10 @@ public class Battle
     }
 
     private void setUnsetMookCommands() {
-        foreach (var player in _controller.field.playerParty.GetActiveMembers()) {
+        List<PlayerObject> activeFighters = _controller.field.GetActivePlayerObjects();
+        foreach (var player in activeFighters) {
             if (player.HasSetCommand() == false) {
-                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{_controller.field.enemyParty.GetRandomActiveIndex()}  ));
+                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{_controller.field.GetRandomEnemyObjectIndex()}  ));
             }
         }
     }

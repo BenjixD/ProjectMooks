@@ -97,8 +97,8 @@ public abstract class ActionBase : ScriptableObject {
             return GameManager.Instance.turnController.field.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.enemyParty.members);
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.playerParty.members);
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetEnemyObjects());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetPlayerObjects());
 
         if (user.isEnemy()) {
             potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;

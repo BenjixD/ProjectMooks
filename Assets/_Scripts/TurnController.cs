@@ -180,7 +180,7 @@ public class TurnController : MonoBehaviour
     }
 
     private bool checkExecuteTurn() {
-        List<PlayerObject> players = field.playerParty.GetActiveMembers();
+        List<PlayerObject> players = field.GetActivePlayerObjects();
 
         //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
         bool timeOutIfChatTooSlow = false;
@@ -271,7 +271,7 @@ public class TurnController : MonoBehaviour
                 break;
 
             case TargetType.ALL:
-                List<int> allEnemies = field.enemyParty.GetActiveMembers().Map((EnemyObject enemy) => enemy.targetId);
+                List<int> allEnemies = field.GetActiveEnemyObjects().Map((EnemyObject enemy) => enemy.targetId);
                 field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, allEnemies ));
             break;
 
@@ -316,7 +316,8 @@ public class TurnController : MonoBehaviour
     }
 
     private bool hasEveryoneEnteredActions() {
-        foreach (var player in field.playerParty.GetActiveMembers()) {
+        List<PlayerObject> activeMembers = field.GetActivePlayerObjects();
+        foreach (var player in activeMembers) {
             if (player.HasSetCommand() == false) {
                 return false;
             }
@@ -343,12 +344,13 @@ public class TurnController : MonoBehaviour
 
         bool isEnemy = deadFighter.isEnemy();
         if (isEnemy) {
-            this.field.enemyParty.members[deadFighter.targetId] = null;
+            GameManager.Instance.gameState.SetEnemyParty(deadFighter.targetId, null);
             Destroy(deadFighter.gameObject);
 
             bool stillHasEnemies = false;
-            for (int i = 0; i < this.field.enemyParty.members.Length; i++) {
-                if (this.field.enemyParty.members[i] != null) {
+            EnemyObject[] enemies = this.field.GetEnemyObjects();
+            for (int i = 0; i < enemies.Length; i++) {
+                if (enemies[i] != null) {
                     stillHasEnemies = true;
                     break;
                 }
@@ -364,7 +366,7 @@ public class TurnController : MonoBehaviour
                 return;
             }
 
-            this.field.playerParty.members[deadFighter.targetId] = null;
+            GameManager.Instance.gameState.SetPlayerParty(deadFighter.targetId, null);
             GameManager.Instance.party.EvictPlayer(deadFighter.targetId);
             Destroy(deadFighter.gameObject);
         }
