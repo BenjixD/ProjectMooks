@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PartyCreationData : MonoBehaviour {
     public PlayerQueue playerQueue;
+    public List<Color> playerColors;
+    public Color enemyColor;
     private PlayerCreationData[] playerPos = new PlayerCreationData[Party<Player>.maxPlayers];
 
     public PlayerCreationData[] GetPlayerCreationData() {
@@ -61,6 +63,10 @@ public class PartyCreationData : MonoBehaviour {
         for(int i = 0; i < playerPos.Length; i++) {
             TryFillPartySlot(i);
         }
+    }
+
+    public Color IndexToColor(int index) {
+        return playerColors[index];
     }
 
     private List<PlayerCreationData> GetNPlayers(int n) {

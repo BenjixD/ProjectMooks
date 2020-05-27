@@ -14,11 +14,18 @@ public class BattleUI : MonoBehaviour
     
     public TargetSelectionUI targetSelectionUI;
 
-    [SerializeField]
-    private Text stateText;
+    public BattleOrderUI battleOrderUI;
 
-    public void SetStateText(string text) {
-        this.stateText.text = text;
+    public PlayerQueueUI playerQueueUI;
+
+    public FighterSlotUI targetIconsUI;
+
+    public void Initialize() {
+        this.commandCardUI.Initialize();
+        this.statusBarsUI.Initialize();
+        this.targetSelectionUI.Initialize();
+        this.battleOrderUI.Initialize();
+        this.playerQueueUI.Initialize();
+        this.targetIconsUI.Initialize();
     }
-
 }

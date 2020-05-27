@@ -16,7 +16,7 @@ MonoBehaviour:
   minAmountWaves: 2
   maxAmountWaves: 3
   waveInfos:
-  - minAmountOfEnemies: 1
+  - minAmountOfEnemies: 3
     maxAmountOfEnemies: 3
     possibleEnemies:
     - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}

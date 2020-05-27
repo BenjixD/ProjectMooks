@@ -68,17 +68,6 @@ public class BattleFight
         string attackName = attackerAction._action.name;
         List<FightingEntity> targets = attackerAction._action.GetTargets(this.fighter, attackerAction.GetTargetIds());
 
-        // Set commentary text
-        string commentaryText;
-        if (targets.Count == 1) {
-            commentaryText = "" + attackerName + " used " + attackName + " on " + targets[0].Name;
-        } else {
-            commentaryText = "" + attackerName + " used " + attackName;
-        }
-
-        this._controller.ui.commandCardUI.SetCommentaryUIText(commentaryText);
-
-
         yield return this._controller.StartCoroutine(doAnimation(this.fighter, attackerAction, targets));
 
         FightResult fightResult = attackerAction.ExecuteAction();
@@ -108,7 +97,7 @@ public class BattleFight
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {
         // TODO: Put animation here
-        yield return GameManager.Instance.time.WaitForSeconds(1.5f);
+        yield return GameManager.Instance.time.WaitForSeconds(1.0f);
     }
 
 }

@@ -18,6 +18,8 @@ public class FightingEntity : MonoBehaviour
     public int targetId;
     public string targetName;
 
+    public FighterSlot fighterSlot {get; set;}
+
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
@@ -39,11 +41,20 @@ public class FightingEntity : MonoBehaviour
 	public void Initialize(int index, PlayerCreationData data) {
         this.targetId = index;
 		Name = data.name;
+        
+        // Sets the default energy for mooks to be always a constant
+        // TODO: Do this a more cleaner way
+        if (!this.isEnemy() && index != 0) {
+            data.stats.SetMana(9);
+            data.stats.maxMana = 9;
+        }
+
 		SetStats(data.stats);
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.turnController.field.GetTargetNameFromIndex(index);
 		_ailmentController = new AilmentController(this);
+        Debug.Log("Initialize: " + Name);
 	}
 
 	public void SetStats(PlayerStats stats) {
@@ -85,6 +96,7 @@ public class FightingEntity : MonoBehaviour
 
 	public void SetQueuedAction(QueuedAction queuedAction) {
 		_queuedAction = queuedAction;
+        Messenger.Broadcast<QueuedAction>(Messages.OnSetQueuedAction, _queuedAction);
 	}
 
     public QueuedAction GetQueuedAction() {
@@ -117,7 +129,16 @@ public class FightingEntity : MonoBehaviour
         return this.actions.Filter( (ActionBase action) => action.actionType == actionType );
     }
 
+    public Color GetOrderColor() {
+        if (this.isEnemy()) {
+            return Party<Enemy>.IndexToColor(this.targetId);
+        } else {
+            return Party<Player>.IndexToColor(this.targetId);
+        }
+    }
+
     private void OnBattleEnd(BattleResult result) {
+        Debug.Log("AI: " + Name + " " + _ai);
     	List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
     	_ai.ReviewFightResult(myFights);
     }

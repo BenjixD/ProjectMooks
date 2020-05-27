@@ -10,7 +10,7 @@ public class ConnectingSceneController : MonoBehaviour
 
     public RectTransform partyContainer;
 
-    public List<CommandOptionText> commandOptionTexts;
+    public List<BasicText> commandOptionTexts;
 
     // Update is called once per frame
     void Update()
@@ -19,7 +19,7 @@ public class ConnectingSceneController : MonoBehaviour
         List<PlayerCreationData> curPartyMembers = GameManager.Instance.party.GetPlayersPosition();
 
         for (int i = 0; i < curPartyMembers.Count; i++) {
-            commandOptionTexts[i].text.text = curPartyMembers[i].name;
+            commandOptionTexts[i].text.SetText(curPartyMembers[i].name);
             commandOptionTexts[i].gameObject.SetActive(true);
         }
 

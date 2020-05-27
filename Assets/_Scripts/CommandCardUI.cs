@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-enum CommandCardUIMode {
+public enum CommandCardUIMode {
     SELECT_COMMAND,
-    TEXT_ONLY
+    CLOSED
 };
 
 [RequireComponent (typeof(TurnController))]
@@ -28,35 +28,23 @@ public class CommandCardUI : MonoBehaviour
     private CommandOptionText _commandTextPrefab;
 
     // The list of text objects if mode is SELECT_COMMAND
-    [SerializeField]
-    private List<CommandOptionText> _battleOptionsUI {get ; set; }
-
-    // Selection cursor to display user's current selection
-    [SerializeField]
-    private RectTransform _selectionCursor;
-    [SerializeField]
-    private Vector2 _selectionCursorOffset = new Vector2(0, 0);
+    private List<CommandOptionText> _battleOptionsUI {get; set;}
 
     private CommandSelector _commandSelector {get; set;}
 
-    // TEXT_ONLY variables ===
-    // The parent object if mode is TEXT_ONLY
-    [Header("TEXT ONLY")]
-    [SerializeField]
-    private RectTransform _commentaryMenu;
-
-    // The text if mode is TEXT_ONLY
-    [SerializeField]
-    private Text _commentaryText;
-
     private List<string> options;
 
+    private int curIndex = 0;
+
+    private CommandCardUIMode cardUIMode;
+
+    public void Initialize() {
+        
+    }
 
     public void InitializeCommandSelection(List<string> options, int startChoice, CommandSelector selector) {
         this.options = options;
         this.clearExistingCommands();
-
-        this.SetCommandCardUIActive(CommandCardUIMode.SELECT_COMMAND);
 
         foreach (var option in options) {
             CommandOptionText  commandText = Instantiate(_commandTextPrefab) as CommandOptionText;
@@ -66,54 +54,49 @@ public class CommandCardUI : MonoBehaviour
         }
 
         _commandSelector = selector;
-        _commandSelector.Initialize(0, options.Count - 1, this.SetSelectionCursorFromCommandSelector, true);
-        this.SetSelectionCursor(startChoice);
+        _commandSelector.Initialize(0, options.Count - 1, this.SetSelectionFromCommandSelector, true);
+        this.curIndex = startChoice;
+        this.SetSelection(startChoice);
+        this.SetCommandCardUI(CommandCardUIMode.SELECT_COMMAND);
     }
 
-    public void InitializeCommantaryUI() {
-        this.SetCommandCardUIActive(CommandCardUIMode.TEXT_ONLY);
-    }
-
-    public void SetCommentaryUIText(string msg) {
-        _commentaryText.text = msg;
-    }
-
-    public void SetSelectionCursor(int index) {
-        if (index < 0 || index >= _battleOptionsUI.Count) {
-            return;
-        }
-
-        this._selectionCursor.gameObject.SetActive(true);
-
-        _selectionCursor.transform.SetParent(_battleOptionsUI[index].transform);
-        _selectionCursor.anchoredPosition = _selectionCursorOffset;
-    }
-
-    private void SetSelectionCursorFromCommandSelector() {
-        int index = _commandSelector.GetChoice();
-        SetSelectionCursor( index );
-    }
-
-    private void SetCommandCardUIActive(CommandCardUIMode mode) {
+    public void SetCommandCardUI(CommandCardUIMode mode) {
         switch (mode) {
             case CommandCardUIMode.SELECT_COMMAND:
+                _battleOptionsUI[curIndex].SetSelected();
                 _actionMenu.gameObject.SetActive(true);
-                _commentaryMenu.gameObject.SetActive(false);
+                
                 break;
-
-            case CommandCardUIMode.TEXT_ONLY:
+            case CommandCardUIMode.CLOSED:
                 _actionMenu.gameObject.SetActive(false);
-                _commentaryMenu.gameObject.SetActive(true);
                 break;
             default:
                 break;
         }
+
+        this.cardUIMode = mode;
+    }
+
+    public void SetSelection(int index) {
+        if (index < 0 || index >= _battleOptionsUI.Count) {
+            return;
+        }
+
+        _battleOptionsUI[curIndex].SetUnSelected();
+        _battleOptionsUI[index].SetSelected();
+        this.curIndex = index;
+    }
+
+    public void SetConfirmed() {
+        _battleOptionsUI[curIndex].SetConfirmed();
+    }
+
+    private void SetSelectionFromCommandSelector() {
+        int index = _commandSelector.GetChoice();
+        SetSelection( index );
     }
 
     private void clearExistingCommands() {
-        _selectionCursor.transform.SetParent(_actionMenu.transform);
-        _selectionCursor.gameObject.SetActive(false);
-
         if (_battleOptionsUI != null) {
             for (int i = 0; i < _battleOptionsUI.Count; i++) {
                 Destroy(_battleOptionsUI[i].gameObject);
@@ -121,10 +104,5 @@ public class CommandCardUI : MonoBehaviour
         }
 
         _battleOptionsUI = new List<CommandOptionText>();
-        
     }
-
-
-  
-
 }

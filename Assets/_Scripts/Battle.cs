@@ -43,6 +43,7 @@ public class Battle
 
         // TODO: Raise another message - specifically for battle order
         //Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, new BattleResult(orderedPlayers));
+
         result = new BattleResult(orderedPlayers);
 
         _controller.StartCoroutine(handleBattle(orderedPlayers));
@@ -54,14 +55,23 @@ public class Battle
 
     private void initialize() {
         this.setUnsetMookCommands();
-        this._controller.ui.commandCardUI.InitializeCommantaryUI();
     }
 
     private IEnumerator handleBattle(List<FightingEntity> fighters) {
+
+        this._controller.ui.battleOrderUI.SetTurnOrder(fighters);
+
+        yield return GameManager.Instance.time.WaitForSeconds(0.5f);
+
+        this._controller.ui.targetIconsUI.ClearTargetArrows();
+
+
         for (int i = 0; i < fighters.Count; i++) {
 
             if (fighters[i] == null) {
                 // This can happen if the fighter dies mid-battle
+                this._controller.ui.battleOrderUI.PopFighter();
+                yield return GameManager.Instance.time.WaitForSeconds(1.0f);
                 continue;
             }
 
@@ -78,12 +88,16 @@ public class Battle
 
             // This can happen if target dies mid-battle
             if (attackerAction._action.GetTargets(fighters[i], attackerAction.GetTargetIds()).Count == 0) {
+                this._controller.ui.battleOrderUI.PopFighter();
+                yield return GameManager.Instance.time.WaitForSeconds(1.0f);
                 continue;
             }
             
             BattleFight fight = new BattleFight(_controller, fighters[i]);
             this.currentFight = fight;
             yield return _controller.StartCoroutine(fight.DoFight());
+
+            this._controller.ui.battleOrderUI.PopFighter();
         }
 
         this.endBattle();
