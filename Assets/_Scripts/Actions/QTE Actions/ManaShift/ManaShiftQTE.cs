@@ -8,8 +8,8 @@ public class ManaShiftQTE : QuickTimeEvent {
     [SerializeField] private float _increaseValue;
 
     [Header("References (ManaShiftQTE)")]
-    [Tooltip("Reference to the ManaShiftCanvas prefab.")]
-    [SerializeField] private GameObject _manaShiftCanvasPrefab;
+    [SerializeField, Tooltip("Reference to the ManaShiftCanvas prefab.")]
+    private GameObject _manaShiftCanvasPrefab;
     private ManaShiftUI _manaShiftUI;
     private float _totalPower = 0;
 

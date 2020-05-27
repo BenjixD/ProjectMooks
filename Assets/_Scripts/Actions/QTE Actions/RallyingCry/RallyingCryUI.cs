@@ -5,14 +5,14 @@ using TMPro;
 
 public class RallyingCryUI : MonoBehaviour {
     [Header("References")]
-    [Tooltip("Reference to the RallyingCryMessage prefab.")]
-    [SerializeField] private GameObject _rallyingCryMessagePrefab;
+    [SerializeField, Tooltip("Reference to the RallyingCryMessage prefab.")]
+    private GameObject _rallyingCryMessagePrefab;
     [SerializeField] private TextMeshProUGUI _powerText;
 
     [Space]
-    
-    [Tooltip("The max number of messages displayed at once. Any further messages will replace oldest messages.")]
-    [SerializeField] private int _maxConcurrentMessages;
+
+    [SerializeField, Tooltip("The max number of messages displayed at once. Any further messages will replace oldest messages.")]
+    private int _maxConcurrentMessages;
     private List<RallyingCryMessage> _currMessages = new List<RallyingCryMessage>();
     private int _oldestMessageIndex;
     private float _screenHalfWidth;

@@ -5,19 +5,18 @@ using UnityEngine;
 public class ExplosionQTE : QuickTimeEvent {
     [Header("Explosion Parameters")]
     [SerializeField] private string _increaseString;
-    [Tooltip("Flat percent increase in power per increase message.")]
-    [SerializeField] private float _increaseValue;
-    [SerializeField] private string _decreaseString;
-    [Tooltip("Flat percent decrease in power per decrease message.")]
+    [SerializeField, Tooltip("Flat percent increase in power per increase message.")]
+    private float _increaseValue;
+    [SerializeField, Tooltip("Flat percent decrease in power per decrease message.")]
+    private string _decreaseString;
     [SerializeField] private float _decreaseValue;
-    [Tooltip("Starting power of the explosion measured in percent.")]
-    [Range(0, 1)]
-    [SerializeField] private float _startingPower;
+    [SerializeField, Range(0, 1), Tooltip("Starting power of the explosion measured in percent.")]
+    private float _startingPower;
     private float _explosionPower = 0;
 
     [Header("References (ExplosionQTE)")]
-    [Tooltip("Reference to the ExplosionQTECanvas prefab.")]
-    [SerializeField] private GameObject _explosionCanvasPrefab;
+    [SerializeField, Tooltip("Reference to the ExplosionQTECanvas prefab.")]
+    private GameObject _explosionCanvasPrefab;
     private ExplosionUI _explosionUI;
 
     private PlayerStats _userStats;

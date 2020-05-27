@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class RallyingCryQTE : QuickTimeEvent {
     [Header("Rallying Cry Parameters")]
-    [Tooltip("Maximum value a message can add.")]
-    [SerializeField] private float _maxCryValue;
-    [Tooltip("The minimum message length that uses the messageValue curve to determine value. Shorter messages are special cases.")]
-    [SerializeField] private int _properCryMinLength;
-    [Tooltip("Value of each character in a message shorter than properCryMinLength in length.")]
-    [SerializeField] private float _shortCryCharValue;
-    [Tooltip("Message length beyond which characters offer no additional value.")]
-    [SerializeField] private int _cutoffLength;
-    [Tooltip("Function returning message value percentages given their lengths. Normalized for messages of length 2 to cutoffLength.")]
-    [SerializeField] private AnimationCurve _messageValue;
+    [SerializeField, Tooltip("Maximum value a message can add.")]
+    private float _maxCryValue;
+    [SerializeField, Tooltip("The minimum message length that uses the messageValue curve to determine value. Shorter messages are special cases.")]
+    private int _properCryMinLength;
+    [SerializeField, Tooltip("Value of each character in a message shorter than properCryMinLength in length.")]
+    private float _shortCryCharValue;
+    [SerializeField, Tooltip("Message length beyond which characters offer no additional value.")]
+    private int _cutoffLength;
+    [SerializeField, Tooltip("Function returning message value percentages given their lengths. Normalized for messages of length 2 to cutoffLength.")]
+    private AnimationCurve _messageValue;
 
     [Header("References (RallyingCryQTE)")]
-    [Tooltip("Reference to the RallyingCryCanvas prefab.")]
-    [SerializeField] private GameObject _rallyingCryCanvasPrefab;
+    [SerializeField, Tooltip("Reference to the RallyingCryCanvas prefab.")]
+    private GameObject _rallyingCryCanvasPrefab;
     private RallyingCryUI _rallyingCryUI;
 
     private float _totalPower = 0;

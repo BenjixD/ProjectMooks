@@ -4,18 +4,18 @@ using UnityEngine;
 
 public abstract class QuickTimeEvent : MonoBehaviour {
     [Header("Quick Time Event Parameters")]
-    [Tooltip("Duration for which this QTE accepts chat input.")]
-    [SerializeField] protected float _inputDuration;
-    [Tooltip("Instructional text for this QTE that is displayed to the players.")]
-    [TextArea] [SerializeField] private string _guidance;
+    [SerializeField, Tooltip("Duration for which this QTE accepts chat input.")]
+    protected float _inputDuration;
+    [SerializeField, TextArea, Tooltip("Instructional text for this QTE that is displayed to the players.")]
+    private string _guidance;
     [Tooltip("Duration during which players can see the instructional text and prepare to give input.")]
     private float _warmupDuration = 3;
     [Tooltip("Duration to wait after input is closed before executing action, so that players can see the results of the QTE.")]
     private float _windDownDuration = 1;
 
     [Header("References (QuickTimeEvent)")]
-    [Tooltip("Reference to the QteCommonCanvas prefab.")]
-    [SerializeField] protected GameObject _qteCommonCanvasPrefab;
+    [SerializeField, Tooltip("Reference to the QteCommonCanvas prefab.")]
+    protected GameObject _qteCommonCanvasPrefab;
     private QteCommonUI _qteUI;
 
     protected bool _acceptingInput;
