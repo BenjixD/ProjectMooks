@@ -41,6 +41,7 @@ public class DefenseStatusAilment : StatusAilment {
 
 	public override void Recover(FightingEntity p) {
 		//TODO: Possible Animation Modifications
+		Debug.Log("Recovering: " + _defenseGrowth + " defense");
 		p.stats.SetDefense(p.stats.GetDefense() - _defenseGrowth);
 	}
 
