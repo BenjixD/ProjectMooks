@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74adf3ab3903b4a5fbd7c657925cac51, type: 3}
+  m_Name: ParalyzeStatusAilment
+  m_EditorClassIdentifier: 
+  name: Paralysis
+  duration: 5
+  level: 1
+  phase: 3
+  chance: 0.3
+  action: {fileID: 11400000, guid: e3e0d5d0ee9a94410ad206d7e2750bed, type: 2}
