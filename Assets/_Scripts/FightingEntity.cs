@@ -9,8 +9,6 @@ public class FightingEntity : MonoBehaviour
     public string Name;
     public PlayerStats stats;
 
-    public HashSet<string> modifiers = new HashSet<string>();
-
 	public Job job;
 
 	public List<ActionBase> actions = new List<ActionBase>();
