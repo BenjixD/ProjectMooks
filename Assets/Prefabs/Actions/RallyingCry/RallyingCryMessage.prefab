@@ -57,7 +57,7 @@ Animator:
   m_GameObject: {fileID: 1817018686674728630}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 87bb52e3a41014b48ac38c5cf7c23114, type: 2}
+  m_Controller: {fileID: 9100000, guid: 794b553008d9e3f4495c538cf13b08f6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -79,7 +79,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _text: {fileID: 2181741154814173816}
-  _lifetime: 3
 --- !u!1 &8569854519755760805
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,8 +145,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: rallying cry message
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 75428027099ee0e418ef4f577f340a56, type: 2}
+  m_sharedMaterial: {fileID: 159153669253002632, guid: 75428027099ee0e418ef4f577f340a56,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -172,8 +172,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

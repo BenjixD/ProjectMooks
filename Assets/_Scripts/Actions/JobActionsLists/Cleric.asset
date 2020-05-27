@@ -15,8 +15,7 @@ MonoBehaviour:
   job: 3
   _actions:
   - {fileID: 11400000, guid: 45f018787ba0632428d557234669d7f5, type: 2}
-  - {fileID: 11400000, guid: 46a449bf53492cb41b829822dd2515ea, type: 2}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 00daf4114e14ebb4db0b71725274ef9e, type: 2}
-  - {fileID: 11400000, guid: b84da737d7115e64b88bdfbfd10101d6, type: 2}
+  - {fileID: 0}
   prefab: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882, type: 3}
-  defaultName: Cleric

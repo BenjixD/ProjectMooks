@@ -9,6 +9,6 @@ public class ManaShiftUI : MonoBehaviour {
     private TextMeshProUGUI _powerText;
 
     public void UpdatePower(float power) {
-        _powerText.text = "Mana Gathered:\n" + power;
+        _powerText.text = power.ToString();
     }
 }
