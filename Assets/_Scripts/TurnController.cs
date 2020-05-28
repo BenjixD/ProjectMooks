@@ -311,6 +311,10 @@ public class TurnController : MonoBehaviour
 
     // Initializes the command card to display the hero's actions
     private void initializeCommandCardActionUI(List<HeroActionChoice> currentHeroChoices) {
+        if (this.field.GetHeroPlayer() == null) {
+            return;
+        }
+
         List<string> actionNames = currentHeroChoices.Map((HeroActionChoice choice) => { return choice.choiceName; });
         this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
     }
@@ -375,7 +379,8 @@ public class TurnController : MonoBehaviour
     }
 
     private void onHeroDeath(DeathResult result) {
-        this.stageController.LoadDeathScene();
+        Destroy(this.field.GetHeroPlayer().gameObject);
+        //this.stageController.LoadDeathScene();
     }
 
 
@@ -445,40 +450,46 @@ public class TurnController : MonoBehaviour
 
     // Coroutines
     IEnumerator HeroMoveSelection() {
-        this.heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
-        this.initializeCommandCardActionUI(this.getHeroActionChoices(ActionType.BASIC));
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
+
+        if (heroPlayer != null) {
+            this.heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
+            this.initializeCommandCardActionUI(this.getHeroActionChoices(ActionType.BASIC));
+        }
+
 
         while(true) {
-            HeroMenuAction menuAction = this.GetHeroMenuAction();
-            MenuState menuState = menuAction.menuState;
-            switch (menuState) {
-                case MenuState.MOVE:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroAction();
-                    }
-                    break;
+            if (heroPlayer != null) {
+                HeroMenuAction menuAction = this.GetHeroMenuAction();
+                MenuState menuState = menuAction.menuState;
+                switch (menuState) {
+                    case MenuState.MOVE:
+                        if (Input.GetKeyDown(KeyCode.Z)) {
+                            this.setHeroAction();
+                        }
+                        break;
 
-                case MenuState.TARGET:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroTarget();
-                    }
-                    break;
-                case MenuState.MAGIC:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroAction();
-                    }
-                    break;
-                default:
-                    break;
+                    case MenuState.TARGET:
+                        if (Input.GetKeyDown(KeyCode.Z)) {
+                            this.setHeroTarget();
+                        }
+                        break;
+                    case MenuState.MAGIC:
+                        if (Input.GetKeyDown(KeyCode.Z)) {
+                            this.setHeroAction();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if (heroMenuActions.Count > 1) {
+                    // Go back a menu
+                    if (Input.GetKeyDown(KeyCode.X)) {
+                        this.goBackToLastHeroAction();
+                    }            
+                }
             }
-
-            if (heroMenuActions.Count > 1) {
-                // Go back a menu
-                if (Input.GetKeyDown(KeyCode.X)) {
-                    this.goBackToLastHeroAction();
-                }            
-            }
-
 
             playerActionCounter += Time.deltaTime;
             if(this.checkExecuteTurn()) {
