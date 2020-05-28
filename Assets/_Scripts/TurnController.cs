@@ -311,7 +311,7 @@ public class TurnController : MonoBehaviour
 
     // Initializes the command card to display the hero's actions
     private void initializeCommandCardActionUI(List<HeroActionChoice> currentHeroChoices) {
-        if (this.field.GetHeroPlayer() == null) {
+        if (!CanDoHeroAction()) {
             return;
         }
 
@@ -379,7 +379,11 @@ public class TurnController : MonoBehaviour
     }
 
     private void onHeroDeath(DeathResult result) {
-        Destroy(this.field.GetHeroPlayer().gameObject);
+        //Destroy(this.field.GetHeroPlayer().gameObject);
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
+        heroPlayer.targetable = false;
+        heroPlayer.DoDeathAnimation();
+        
         //this.stageController.LoadDeathScene();
     }
 
@@ -448,6 +452,11 @@ public class TurnController : MonoBehaviour
         this.goBackToLastHeroAction();
     }
 
+    private bool CanDoHeroAction() {
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
+        return heroPlayer != null && heroPlayer.targetable;
+    }
+
     // Coroutines
     IEnumerator HeroMoveSelection() {
         PlayerObject heroPlayer = this.field.GetHeroPlayer();
@@ -459,7 +468,7 @@ public class TurnController : MonoBehaviour
 
 
         while(true) {
-            if (heroPlayer != null) {
+            if (CanDoHeroAction()) {
                 HeroMenuAction menuAction = this.GetHeroMenuAction();
                 MenuState menuState = menuAction.menuState;
                 switch (menuState) {

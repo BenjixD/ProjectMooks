@@ -20,6 +20,8 @@ public class FightingEntity : MonoBehaviour
 
     public FighterSlot fighterSlot {get; set;}
 
+    public bool targetable = true;
+
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
@@ -135,6 +137,13 @@ public class FightingEntity : MonoBehaviour
         } else {
             return GameManager.Instance.gameState.playerParty.IndexToColor(this.targetId);
         }
+    }
+
+    public void DoDeathAnimation() {
+        // TODO: Death animation
+
+        // Important for Hero death
+        this.gameObject.SetActive(false);
     }
 
     private void OnBattleEnd(BattleResult result) {

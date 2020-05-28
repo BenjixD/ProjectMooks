@@ -113,7 +113,7 @@ public abstract class ActionBase : ScriptableObject {
         List<FightingEntity> potentialTargets = GetAllPossibleTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
-            if (target < potentialTargets.Count && potentialTargets[target] != null) {
+            if (target < potentialTargets.Count && potentialTargets[target] != null && potentialTargets[target].targetable == true) {
                 targets.Add(potentialTargets[target]);
             }
         }

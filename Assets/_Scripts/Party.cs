@@ -47,8 +47,11 @@ public abstract class Party : MonoBehaviour {
         return activeFighters;
     }
 
-    public int GetRandomActiveIndex() {
+    public int GetRandomActiveIndex(bool getTargetableOnly = true) {
         List<Fighter> fighters = GetActiveFighters<Fighter>();
+        if (getTargetableOnly) {
+            fighters.Filter( fighter => fighter.fighter.targetable );
+        }
         return this.fighters[Random.Range(0, fighters.Count)].fighter.targetId;
     }
 
