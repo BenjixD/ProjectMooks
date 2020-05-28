@@ -9,7 +9,7 @@ public class FireOneTest : ActionBase {
             return false;
         }
 
-        int targetId = this.GetTargetIdFromString(splitCommand[2], user);
+        int targetId = this.GetTargetIdFromString(splitCommand[1], user);
         if (targetId == -1) {
             return false;
         }

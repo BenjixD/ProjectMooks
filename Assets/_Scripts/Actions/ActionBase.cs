@@ -28,6 +28,14 @@ public class TargetInfo {
     }
 }
 
+[System.Serializable]
+public class ActionCost {
+    public int HP;
+    public int mana;
+    public int PP;
+    public int stamina;
+}
+
 // BASIC = get its own command in the command line (i.e. attack/defend/run)
 // MAGIC = magic
 // ITEM = item
@@ -91,7 +99,7 @@ public abstract class ActionBase : ScriptableObject {
         return true;
     }
 
-    protected bool CheckCost(FightingEntity user) {
+    private bool CheckCost(FightingEntity user) {
         if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
             return false;
         }
@@ -102,7 +110,7 @@ public abstract class ActionBase : ScriptableObject {
         return stats.GetHp() > actionCost.HP && stats.GetMana() >= actionCost.mana;
     }
 
-    protected void PayCost(FightingEntity user) {
+    private void PayCost(FightingEntity user) {
         PlayerStats stats = user.stats;
         stats.SetHp(stats.GetHp() - actionCost.HP);
         stats.SetMana(stats.GetMana() - actionCost.mana);
