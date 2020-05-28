@@ -100,14 +100,17 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     private bool CheckCost(FightingEntity user) {
-        if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
+        PlayerStats stats = user.stats;
+        if (stats.GetHp() <= actionCost.HP || stats.GetMana() < actionCost.mana) {
             return false;
         }
         if (!_infiniteUses && _currPP < actionCost.PP) {
             return false;
         }
-        PlayerStats stats = user.stats;
-        return stats.GetHp() > actionCost.HP && stats.GetMana() >= actionCost.mana;
+        if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
+            return false;
+        }
+        return true;
     }
 
     private void PayCost(FightingEntity user) {
