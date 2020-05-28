@@ -28,6 +28,14 @@ public class TargetInfo {
     }
 }
 
+[System.Serializable]
+public class ActionCost {
+    public int HP;
+    public int mana;
+    public int PP;
+    public int stamina;
+}
+
 // BASIC = get its own command in the command line (i.e. attack/defend/run)
 // MAGIC = magic
 // ITEM = item
@@ -52,6 +60,11 @@ public class DeathResult {
 
 public abstract class ActionBase : ScriptableObject {
     public string name;
+    [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
+    public int maxPP;
+    private int _currPP;
+    private bool _infiniteUses = false;
+    public ActionCost actionCost;
     [TextArea]
     public string description;
     [Tooltip("The main command word, e.g., \"a\".")]
@@ -64,6 +77,14 @@ public abstract class ActionBase : ScriptableObject {
     public TargetInfo targetInfo;
     public ActionType actionType;
 
+    private void Awake() {
+        if (maxPP == 0) {
+            _infiniteUses = true;
+        } else {
+            _currPP = maxPP;
+        }
+    }
+
     private bool CheckKeyword(string keyword) {
         return keyword == commandKeyword;
     }
@@ -71,17 +92,48 @@ public abstract class ActionBase : ScriptableObject {
         return argQuantity == commandArgs;
     }
 
-    protected bool BasicValidation(string[] splitCommand) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() ) {
+    protected bool BasicValidation(string[] splitCommand, FightingEntity user) {
+        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() || !CheckCost(user) ) {
             return false;
         }
         return true;
     }
 
-    public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
+    private bool CheckCost(FightingEntity user) {
+        PlayerStats stats = user.stats;
+        if (stats.GetHp() <= actionCost.HP || stats.GetMana() < actionCost.mana) {
+            return false;
+        }
+        if (!_infiniteUses && _currPP < actionCost.PP) {
+            return false;
+        }
+        if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
+            return false;
+        }
+        return true;
+    }
+
+    private void PayCost(FightingEntity user) {
+        PlayerStats stats = user.stats;
+        stats.SetHp(stats.GetHp() - actionCost.HP);
+        stats.SetMana(stats.GetMana() - actionCost.mana);
+        _currPP -= actionCost.PP;
+        if (user is Mook) {
+            Mook mook = (Mook) user;
+            mook.stamina.SetStamina(mook.stamina.GetStamina() - actionCost.stamina);
+        }
+    }
+
+    public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
+        return BasicValidation(splitCommand, user);
+    }
     
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+        if (!CheckCost(user)) {
+            return new FightResult(user, this);
+        }
         user.Animate(userAnimName, false);
+        PayCost(user);
         FightResult result = ApplyEffect(user, targets);
         this.OnPostEffect(result);
 

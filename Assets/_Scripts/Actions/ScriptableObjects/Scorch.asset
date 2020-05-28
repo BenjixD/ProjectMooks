@@ -9,21 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18fb1f0751b5b4a46aac102abbd71c4a, type: 3}
-  m_Name: FireOne
+  m_Script: {fileID: 11500000, guid: 1618f68f6a0703245a37284c93b4ef77, type: 3}
+  m_Name: Scorch
   m_EditorClassIdentifier: 
-  name: Fire One
-  maxPP: 0
-  actionCost:
-    HP: 0
-    mana: 8
-    PP: 0
-    stamina: 0
+  name: Scorch
+  PP: 0
   description: 
-  commandKeyword: fire1
+  commandKeyword: scorch
   commandArgs: 1
-  userAnimName: 
+  userAnimName: attack
   targetInfo:
     targetTeam: 1
     targetType: 0
-  actionType: 1
+  actionType: 0
