@@ -5,8 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FireOne", menuName = "Actions/Fire One", order = 2)]
 public class FireOneTest : ActionBase {
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Fire One command format: !m fire [target number]
-        if (!BasicValidation(splitCommand)) {
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
 

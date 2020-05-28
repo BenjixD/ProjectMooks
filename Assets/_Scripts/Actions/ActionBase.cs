@@ -56,6 +56,7 @@ public abstract class ActionBase : ScriptableObject {
     public int maxPP;
     private int _currPP;
     private bool _infiniteUses = false;
+    public ActionCost actionCost;
     [TextArea]
     public string description;
     [Tooltip("The main command word, e.g., \"a\".")]
@@ -83,31 +84,45 @@ public abstract class ActionBase : ScriptableObject {
         return argQuantity == commandArgs;
     }
 
-    protected bool BasicValidation(string[] splitCommand) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() ) {
-            return false;
-        }
-        if (!TrySpendPP()) {
+    protected bool BasicValidation(string[] splitCommand, FightingEntity user) {
+        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() || !CheckCost(userStats) ) {
             return false;
         }
         return true;
     }
 
-    private bool TrySpendPP() {
-        if (_infiniteUses) {
-            return true;
+    protected bool CheckCost(FightingEntity user) {
+        if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
+            return false;
         }
-        if (_currPP > 0) {
-            _currPP--;
-            return true;
+        if (!_infiniteUses && _currPP < actionCost.PP) {
+            return false;
         }
-        return false;
+        PlayerStats stats = user.stats;
+        return stats.GetHp() > actionCost.HP && stats.GetMana() >= actionCost.mana;
     }
 
-    public abstract bool TryChooseAction(FightingEntity user, string[] splitCommand);
+    protected void PayCost(FightingEntity user) {
+        PlayerStats stats = user.stats;
+        stats.SetHp(stats.GetHp() - actionCost.HP);
+        stats.SetMana(stats.GetMana() - actionCost.mana);
+        _currPP -= actionCost.PP;
+        if (user is Mook) {
+            Mook mook = (Mook) user;
+            mook.stamina.SetStamina(mook.stamina.GetStamina() - actionCost.stamina);
+        }
+    }
+
+    public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
+        return BasicValidation(splitCommand, user);
+    }
     
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+        if (!CheckCost(user)) {
+            return new FightResult(user, this);
+        }
         user.Animate(userAnimName, false);
+        PayCost(user);
         FightResult result = ApplyEffect(user, targets);
         this.OnPostEffect(result);
 

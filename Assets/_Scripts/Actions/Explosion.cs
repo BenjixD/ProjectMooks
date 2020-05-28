@@ -7,8 +7,7 @@ public class Explosion : ActionBase {
     [SerializeField] private GameObject _explosionQTE;
 
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Command format: !explosion
-        if (!BasicValidation(splitCommand)) {
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
 

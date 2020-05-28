@@ -7,8 +7,7 @@ public class RallyingCry : ActionBase {
     [SerializeField] private GameObject _rallyingCryQTE;
 
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Command format: !rally
-        if (!BasicValidation(splitCommand)) {
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
 

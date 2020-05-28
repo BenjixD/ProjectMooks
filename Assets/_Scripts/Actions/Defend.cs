@@ -5,8 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Defend", menuName = "Actions/Defend", order = 2)]
 public class Defend : ActionBase {
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Defend command format: !d
-        if (!BasicValidation(splitCommand)) {
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
 
