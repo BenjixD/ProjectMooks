@@ -18,5 +18,7 @@ MonoBehaviour:
   commandArgs: 0
   userAnimName: 
   targetInfo:
-    targetTeam: 3
-    targetType: 2
+    targetTeam: 0
+    targetType: 0
+  actionType: 0
+  _buff: {fileID: 11400000, guid: 537fd95d4c3ba49bc84c861a32c4eea9, type: 2}

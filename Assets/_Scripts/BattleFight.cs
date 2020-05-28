@@ -8,11 +8,20 @@ public class DamageReceiver {
     public FightingEntity fighter;
     public PlayerStats before;
     public PlayerStats after;
+    public List<StatusAilment> ailments;
 
     public DamageReceiver(FightingEntity fighter, PlayerStats before, PlayerStats after) {
         this.fighter = fighter;
         this.before = before;
         this.after = after;
+        ailments = new List<StatusAilment>();
+    }
+
+    public DamageReceiver(FightingEntity fighter, PlayerStats before, PlayerStats after, List<StatusAilment> ailments) {
+        this.fighter = fighter;
+        this.before = before;
+        this.after = after;
+        this.ailments = ailments;
     }
 }
 
@@ -53,9 +62,9 @@ public class BattleFight
     }
 
     public IEnumerator DoFight() {
-        if (this.fighter.isEnemy()) {
-            this.getEnemyAction();
-        }
+        // if (this.fighter.isEnemy()) {
+        //     this.getEnemyAction();
+        // }
 
         Messenger.Broadcast<FightResult>(Messages.OnFightStart, new FightResult(this.fighter, this.fighter.GetQueuedAction().GetAction()));
 

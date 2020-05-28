@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,6 @@ public class FightingEntity : MonoBehaviour
 {
     public string Name;
     public PlayerStats stats;
-
-    public HashSet<string> modifiers = new HashSet<string>();
 
 	public Job job;
 
