@@ -62,3 +62,6 @@ crashlytics-build.properties
 Assets/Resources/secrets.json
 
 .vscode/
+
+# DS Store (MAC Temp Files)
+.DS_Store
