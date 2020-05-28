@@ -52,10 +52,9 @@ public class AilmentController {
 	public void DecrementAllAilmentsDuration() {
 		List<string> timeout = new List<string>();
 		foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
+			entry.Value.DecrementDuration();
 			if(entry.Value.duration <= 0) {
 				timeout.Add(entry.Key);
-			} else {
-				entry.Value.DecrementDuration();
 			}
 		}
 

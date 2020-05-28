@@ -137,11 +137,6 @@ public class TurnController : MonoBehaviour
         // Reset defence state
         foreach (var player in field.GetAllFightingEntities()) {
             player.ResetCommand();
-
-            // TODO: Make defense a status buff
-            if (player.modifiers.Contains("defend")) {
-                player.modifiers.Remove("defend");
-            }
         }
 
         this.ApplyStatusAilments(this.battlePhase);

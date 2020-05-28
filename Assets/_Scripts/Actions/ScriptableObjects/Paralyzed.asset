@@ -9,16 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba7470dbe4525d24fa6d48a4f5ea7eb9, type: 3}
-  m_Name: Defend
+  m_Script: {fileID: 11500000, guid: 8a2ce6a0fe8ad4b1d9b0909fb4f98666, type: 3}
+  m_Name: Paralyzed
   m_EditorClassIdentifier: 
-  name: Defend
-  description: 
-  commandKeyword: d
+  name: Paralyzed
+  description: Can't move
+  commandKeyword: 
   commandArgs: 0
   userAnimName: 
   targetInfo:
-    targetTeam: 0
+    targetTeam: 3
     targetType: 0
   actionType: 0
-  _buff: {fileID: 11400000, guid: 537fd95d4c3ba49bc84c861a32c4eea9, type: 2}
