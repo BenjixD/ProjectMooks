@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: RallyingCry
   m_EditorClassIdentifier: 
   name: Rallying Cry
-  PP: 1
+  maxPP: 1
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 1
+    stamina: 0
   description: 
   commandKeyword: cry
   commandArgs: 0

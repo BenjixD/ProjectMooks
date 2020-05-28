@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b6ef2f870480a54bb2fb5883be7363e, type: 3}
   m_Name: ManaShift
   m_EditorClassIdentifier: 
-  name: 
-  PP: 0
+  name: Mana Shift
+  maxPP: 2
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 1
+    stamina: 0
   description: 
-  commandKeyword: 
+  commandKeyword: shift
   commandArgs: 0
   userAnimName: 
   targetInfo:

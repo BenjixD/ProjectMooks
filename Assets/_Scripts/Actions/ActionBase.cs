@@ -85,7 +85,7 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected bool BasicValidation(string[] splitCommand, FightingEntity user) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() || !CheckCost(userStats) ) {
+        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() || !CheckCost(user) ) {
             return false;
         }
         return true;

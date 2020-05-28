@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Explosion
   m_EditorClassIdentifier: 
   name: Explosion
-  PP: 1
+  maxPP: 1
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 1
+    stamina: 0
   description: 
   commandKeyword: explosion
   commandArgs: 0

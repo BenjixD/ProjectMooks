@@ -18,6 +18,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 46a449bf53492cb41b829822dd2515ea, type: 2}
   - {fileID: 11400000, guid: 00daf4114e14ebb4db0b71725274ef9e, type: 2}
   - {fileID: 11400000, guid: b84da737d7115e64b88bdfbfd10101d6, type: 2}
-  - {fileID: 11400000, guid: 66e0ad1453e067149bfb7874e1e4bac0, type: 2}
-  - {fileID: 11400000, guid: 82bb13a1d0e05dd4b8df78733c3824e4, type: 2}
   prefab: {fileID: 5101897393938031089, guid: 9ebd1c8bac4282a4eb1722906e3d6253, type: 3}
