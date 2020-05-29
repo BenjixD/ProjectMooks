@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: Defend
   m_EditorClassIdentifier: 
   name: Defend
+  maxPP: 0
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 0
+    stamina: 0
   description: 
   commandKeyword: d
   commandArgs: 0
