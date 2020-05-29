@@ -27,19 +27,6 @@ public class FightingEntity : MonoBehaviour
 	protected FightingEntityAI _ai;
 	protected AilmentController _ailmentController;
 
-
-    // TODO: move this to somewhere more appropriate
-    public const string MODIFIER_DEATH = "death";
-    public const string MODIFIER_UNTARGETTABLE = "untargetable";
-    public const string MODIFIER_CANNOT_USE_ACTION = "cannot move";
-
-
-    // State of the entity that are not necessarily status ailments, but we would still like to know
-    // e.g. untargettable, cannot do actions, death
-    protected HashSet<string> modifiers = new HashSet<string>();
-    
-
-
 	protected virtual void Awake() {
 		_animController = GetComponent<AnimationController>();
 		Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
@@ -150,9 +137,9 @@ public class FightingEntity : MonoBehaviour
 
     public void DoDeathAnimation() {
 
-        this.AddModifier(MODIFIER_DEATH);
-        this.AddModifier(MODIFIER_UNTARGETTABLE);
-        this.AddModifier(MODIFIER_CANNOT_USE_ACTION);
+        this.AddModifier(ModifierAilment.MODIFIER_DEATH);
+        this.AddModifier(ModifierAilment.MODIFIER_UNTARGETTABLE);
+        this.AddModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
 
         // TODO: Death animation
 
@@ -160,20 +147,24 @@ public class FightingEntity : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    // Modifer helpers
     public bool HasModifier(string modifier) {
-        return this.modifiers.Contains(modifier);
+        return this._ailmentController.GetAilment(modifier) != null;
     }
 
+    // Adds a text-only ailment
     public void AddModifier(string modifier) {
-        this.modifiers.Add(modifier);
+        ModifierAilment ailment = (ModifierAilment)GameManager.Instance.models.GetCommonStatusAilment("ModifierAilment");
+        this._ailmentController.AddStatusAilment(Instantiate(ailment).SetName(modifier));
     }
 
     public void RemoveModifier(string modifier) {
-        if (!this.modifiers.Contains(modifier)) {
+        if (!this.HasModifier(modifier)) {
             return;
         }
 
-        this.modifiers.Remove(modifier);
+
+        this._ailmentController.RemoveStatusAilment(modifier);
     }
 
     private void OnBattleEnd(BattleResult result) {

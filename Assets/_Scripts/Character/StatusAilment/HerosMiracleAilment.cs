@@ -24,9 +24,9 @@ public class HerosMiracleStatusAilment : StatusAilment {
 	public override void TickEffect(FightingEntity p) {
 
         if (this.duration <= 1) {
-            p.RemoveModifier(FightingEntity.MODIFIER_CANNOT_USE_ACTION);
-            p.RemoveModifier(FightingEntity.MODIFIER_DEATH);
-            p.RemoveModifier(FightingEntity.MODIFIER_UNTARGETTABLE);
+            p.RemoveModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
+            p.RemoveModifier(ModifierAilment.MODIFIER_DEATH);
+            p.RemoveModifier(ModifierAilment.MODIFIER_UNTARGETTABLE);
             //TODO: Play Animation
             // Temp animation will be to just set gameObject active 
             p.stats.SetHp(reviveHP);

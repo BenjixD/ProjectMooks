@@ -8,7 +8,8 @@ public enum BattlePhase{
     PARTY_SETUP,
     MOVE_SELECTION,
     BATTLE,
-    TURN_END
+    TURN_END,
+    NONE
 };
 
 public enum MenuState {
@@ -147,7 +148,7 @@ public class TurnController : MonoBehaviour
     private void onPartySetup() {
         this.battlePhase = BattlePhase.PARTY_SETUP;
         PlayerObject heroPlayer = this.field.GetHeroPlayer();
-        if (!heroPlayer.HasModifier(FightingEntity.MODIFIER_DEATH)) {
+        if (!heroPlayer.HasModifier(ModifierAilment.MODIFIER_DEATH)) {
             this.field.RequestRecruitNewParty();
         }
 
@@ -378,7 +379,7 @@ public class TurnController : MonoBehaviour
 
          // Note: How we determine this part may change depending on how we do Mook deaths:
         List<PlayerObject> allPlayers = this.field.GetActivePlayerObjects();
-        if (allPlayers.Count == 1 && this.field.GetHeroPlayer().HasModifier(FightingEntity.MODIFIER_DEATH)) {
+        if (allPlayers.Count == 1 && this.field.GetHeroPlayer().HasModifier(ModifierAilment.MODIFIER_DEATH)) {
             this.stageController.LoadDeathScene();
         }
     }
@@ -462,7 +463,7 @@ public class TurnController : MonoBehaviour
 
     private bool CanDoHeroAction() {
         PlayerObject heroPlayer = this.field.GetHeroPlayer();
-        return heroPlayer != null && !heroPlayer.HasModifier(FightingEntity.MODIFIER_CANNOT_USE_ACTION);
+        return heroPlayer != null && !heroPlayer.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
     }
 
     // Coroutines

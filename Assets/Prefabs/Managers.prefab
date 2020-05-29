@@ -82,7 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _template:
     level: 1
-    maxHp: 10
+    maxHp: 100
     maxMana: 100
     maxPhysical: 25
     maxSpecial: 25
@@ -130,6 +130,7 @@ MonoBehaviour:
   commonActions: []
   commonStatusAilments:
   - {fileID: 11400000, guid: b56333e27ec995e4197fb96a32fd64d4, type: 2}
+  - {fileID: 11400000, guid: 7ecf282388724c845bf917928408b9e7, type: 2}
 --- !u!114 &1133189571
 MonoBehaviour:
   m_ObjectHideFlags: 0
