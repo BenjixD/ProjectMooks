@@ -146,7 +146,11 @@ public class TurnController : MonoBehaviour
 
     private void onPartySetup() {
         this.battlePhase = BattlePhase.PARTY_SETUP;
-        this.field.RequestRecruitNewParty();
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
+        if (!heroPlayer.HasModifier(FightingEntity.MODIFIER_DEATH)) {
+            this.field.RequestRecruitNewParty();
+        }
+
         this.BroadcastMoveSelection();
     }
 
@@ -362,31 +366,33 @@ public class TurnController : MonoBehaviour
 
             if (deadFighter.targetId == 0) {
                 this.onHeroDeath(result);
-                return;
+            } else {
+                GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId);
+
+                Destroy(deadFighter.gameObject);
             }
-
-            GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId);
-
-            Destroy(deadFighter.gameObject);
         }
 
         this.ui.statusBarsUI.UpdateStatusBars();
+
+
+         // Note: How we determine this part may change depending on how we do Mook deaths:
+        List<PlayerObject> allPlayers = this.field.GetActivePlayerObjects();
+        if (allPlayers.Count == 1 && this.field.GetHeroPlayer().HasModifier(FightingEntity.MODIFIER_DEATH)) {
+            this.stageController.LoadDeathScene();
+        }
     }
 
     private void onHeroDeath(DeathResult result) {
         List<PlayerObject> allPlayers = this.field.GetActivePlayerObjects();
-        // Note: How we determine this part may change depending on how we do Mook deaths:
 
-        if (allPlayers.Count == 1) {
-            PlayerObject heroPlayer = this.field.GetHeroPlayer();
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
 
-            heroPlayer.DoDeathAnimation();
+        heroPlayer.DoDeathAnimation();
 
-            StatusAilment reviveStatusAilmentPrefab = GameManager.Instance.models.GetCommonStatusAilment("Hero's Miracle");
-            heroPlayer.GetAilmentController().AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
-        } else {
-            // this.stageController.LoadDeathScene();
-        }
+        StatusAilment reviveStatusAilmentPrefab = GameManager.Instance.models.GetCommonStatusAilment("Hero's Miracle");
+        heroPlayer.GetAilmentController().AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
+    
     }
 
 

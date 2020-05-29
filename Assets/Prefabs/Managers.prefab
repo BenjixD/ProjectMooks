@@ -82,7 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _template:
     level: 1
-    maxHp: 50
+    maxHp: 10
     maxMana: 100
     maxPhysical: 25
     maxSpecial: 25

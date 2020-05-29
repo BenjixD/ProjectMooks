@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HerosMiracleStatusAilment
   m_EditorClassIdentifier: Assembly-CSharp::HerosMiracleStatusAilment
   name: Hero's Miracle
-  duration: 4
+  duration: 6
   level: 0
   phase: 0
   nothingAction: {fileID: 11400000, guid: 95f3a662e37fbb54694506171fc9112c, type: 2}
