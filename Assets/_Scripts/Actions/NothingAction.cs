@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +9,6 @@ public class NothingAction : ActionBase {
     }
 
     public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
-        return new FightResult(user, this);
+		return new FightResult(user, this);	
     }
 }

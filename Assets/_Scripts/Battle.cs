@@ -39,6 +39,8 @@ public class Battle
         this.initialize();
         // Sort by player speed
         List<FightingEntity> orderedPlayers = new List<FightingEntity>(_controller.field.GetAllFightingEntities());
+        orderedPlayers = orderedPlayers.Filter( fighter => !fighter.HasModifier(FightingEntity.MODIFIER_CANNOT_USE_ACTION));
+
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
         // TODO: Raise another message - specifically for battle order

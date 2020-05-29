@@ -127,6 +127,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
   - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
   - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  commonActions: []
+  commonStatusAilments:
+  - {fileID: 11400000, guid: b56333e27ec995e4197fb96a32fd64d4, type: 2}
 --- !u!114 &1133189571
 MonoBehaviour:
   m_ObjectHideFlags: 0

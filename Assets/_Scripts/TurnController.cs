@@ -374,12 +374,19 @@ public class TurnController : MonoBehaviour
     }
 
     private void onHeroDeath(DeathResult result) {
-        //Destroy(this.field.GetHeroPlayer().gameObject);
-        PlayerObject heroPlayer = this.field.GetHeroPlayer();
-        heroPlayer.targetable = false;
-        heroPlayer.DoDeathAnimation();
-        
-        //this.stageController.LoadDeathScene();
+        List<PlayerObject> allPlayers = this.field.GetActivePlayerObjects();
+        // Note: How we determine this part may change depending on how we do Mook deaths:
+
+        if (allPlayers.Count == 1) {
+            PlayerObject heroPlayer = this.field.GetHeroPlayer();
+
+            heroPlayer.DoDeathAnimation();
+
+            StatusAilment reviveStatusAilmentPrefab = GameManager.Instance.models.GetCommonStatusAilment("Hero's Miracle");
+            heroPlayer.GetAilmentController().AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
+        } else {
+            // this.stageController.LoadDeathScene();
+        }
     }
 
 
@@ -449,7 +456,7 @@ public class TurnController : MonoBehaviour
 
     private bool CanDoHeroAction() {
         PlayerObject heroPlayer = this.field.GetHeroPlayer();
-        return heroPlayer != null && heroPlayer.targetable;
+        return heroPlayer != null && !heroPlayer.HasModifier(FightingEntity.MODIFIER_CANNOT_USE_ACTION);
     }
 
     // Coroutines

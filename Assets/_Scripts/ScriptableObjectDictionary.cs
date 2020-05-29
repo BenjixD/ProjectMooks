@@ -5,9 +5,14 @@ using System.Collections.Generic;
 
 public class ScriptableObjectDictionary : MonoBehaviour {
 
+
+
+
     public Dictionary<Job, List<ActionBase>> playerJobActions = new Dictionary<Job, List<ActionBase>>();
 
     public Dictionary<Job, List<ActionBase>> enemyJobActions = new Dictionary<Job, List<ActionBase>>();
+
+
 
     [SerializeField] private JobActionsList[] _playerJobActionsLists;
     [SerializeField] private JobActionsList[] _enemyJobActionsLists;
@@ -15,6 +20,9 @@ public class ScriptableObjectDictionary : MonoBehaviour {
 
     [SerializeField]
     private List<StageInfo> stageInfo;
+
+    [SerializeField] private List<ActionBase> commonActions;
+    [SerializeField] private List<StatusAilment> commonStatusAilments;
 
     public void Initialize() {
         foreach(JobActionsList jobActionsList in _playerJobActionsLists) {
@@ -71,5 +79,13 @@ public class ScriptableObjectDictionary : MonoBehaviour {
 
     public List<StageInfo> GetStageInfos() {
         return this.stageInfo;
+    }
+
+    public ActionBase GetCommonAction(string name) {
+        return this.commonActions.Find(action => action.name == name);
+    }
+
+    public StatusAilment GetCommonStatusAilment(string name) {
+        return this.commonStatusAilments.Find(ailment => ailment.name == name);
     }
 }

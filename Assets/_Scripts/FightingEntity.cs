@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
+
 public class FightingEntity : MonoBehaviour
 {
     public string Name;
@@ -17,8 +18,6 @@ public class FightingEntity : MonoBehaviour
 
     public FighterSlot fighterSlot {get; set;}
 
-    public bool targetable = true;
-
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
@@ -27,6 +26,19 @@ public class FightingEntity : MonoBehaviour
 	protected AnimationController _animController;
 	protected FightingEntityAI _ai;
 	protected AilmentController _ailmentController;
+
+
+    // TODO: move this to somewhere more appropriate
+    public const string MODIFIER_DEATH = "death";
+    public const string MODIFIER_UNTARGETTABLE = "untargetable";
+    public const string MODIFIER_CANNOT_USE_ACTION = "cannot move";
+
+
+    // State of the entity that are not necessarily status ailments, but we would still like to know
+    // e.g. untargettable, cannot do actions, death
+    protected HashSet<string> modifiers = new HashSet<string>();
+    
+
 
 	protected virtual void Awake() {
 		_animController = GetComponent<AnimationController>();
@@ -137,10 +149,31 @@ public class FightingEntity : MonoBehaviour
     }
 
     public void DoDeathAnimation() {
+
+        this.AddModifier(MODIFIER_DEATH);
+        this.AddModifier(MODIFIER_UNTARGETTABLE);
+        this.AddModifier(MODIFIER_CANNOT_USE_ACTION);
+
         // TODO: Death animation
 
         // Important for Hero death
         this.gameObject.SetActive(false);
+    }
+
+    public bool HasModifier(string modifier) {
+        return this.modifiers.Contains(modifier);
+    }
+
+    public void AddModifier(string modifier) {
+        this.modifiers.Add(modifier);
+    }
+
+    public void RemoveModifier(string modifier) {
+        if (!this.modifiers.Contains(modifier)) {
+            return;
+        }
+
+        this.modifiers.Remove(modifier);
     }
 
     private void OnBattleEnd(BattleResult result) {
