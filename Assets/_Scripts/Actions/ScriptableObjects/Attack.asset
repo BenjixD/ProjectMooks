@@ -13,10 +13,23 @@ MonoBehaviour:
   m_Name: Attack
   m_EditorClassIdentifier: 
   name: Attack
+  actionType: 0
   description: 
-  commandKeyword: a
-  commandArgs: 1
-  userAnimName: attack
+  maxPP: 0
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 0
+    stamina: 0
   targetInfo:
     targetTeam: 1
     targetType: 0
+  effects:
+    physicalScaling: 1
+    specialScaling: 0
+    defenseType: 0
+    element: 0
+    statusAilments: []
+  commandKeyword: a
+  commandArgs: 1
+  userAnimName: attack

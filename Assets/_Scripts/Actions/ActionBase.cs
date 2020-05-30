@@ -60,22 +60,30 @@ public class DeathResult {
 
 public abstract class ActionBase : ScriptableObject {
     public new string name;
+    public ActionType actionType;
+    [TextArea] public string description;
+
+    [Header("Resources")]
     [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
     public int maxPP;
     private int _currPP;
     private bool _infiniteUses = false;
     public ActionCost actionCost;
-    [TextArea]
-    public string description;
+
+    [Header("Effect Properties")]
+    public TargetInfo targetInfo;
+    [Tooltip("Basic action effects. Override ApplyEffect for more control over effects.")]
+    public ActionEffects effects;
+
+    [Header("Command")]
     [Tooltip("The main command word, e.g., \"a\".")]
     public string commandKeyword;
     [Tooltip("The number of arguments following the keyword.")]
     public int commandArgs;
+
+    [Header("Animations")]
     [Tooltip("The name of the animation played for the user of the attack.")]
     public string userAnimName;
-
-    public TargetInfo targetInfo;
-    public ActionType actionType;
 
     private void Awake() {
         if (maxPP == 0) {
@@ -198,5 +206,52 @@ public abstract class ActionBase : ScriptableObject {
         return target.targetId;
     }
 
-    public abstract FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets);
+    private int GetTargetDefence(PlayerStats targetStats) {
+        int defence = 0;
+        if (effects.defenseType == DefenseType.AUTOMATIC) {
+            if (effects.physicalScaling > 0 && effects.specialScaling == 0) {
+                defence = targetStats.GetDefense();
+            } else if (effects.specialScaling > 0 && effects.physicalScaling == 0) {
+                defence = targetStats.GetResistance();
+            } else {
+                Debug.LogWarning("Could not automatically determine defensive stat for action " + name);
+            }
+        }
+        else if (effects.defenseType == DefenseType.DEFENSE) {
+            defence = targetStats.GetDefense();
+        } else if (effects.defenseType == DefenseType.RESISTANCE) {
+            defence = targetStats.GetResistance();
+        }
+        return defence;
+    }
+
+    public virtual FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
+        PlayerStats before, after;
+        List<DamageReceiver> receivers = new List<DamageReceiver>();
+        int attackDamage = (int) (user.stats.GetPhysical() * effects.physicalScaling + user.stats.GetSpecial() * effects.specialScaling);
+        
+        foreach (FightingEntity target in targets) {
+            int defence = GetTargetDefence(target.stats);
+            int damage =  Mathf.Max(attackDamage - defence, 0);
+
+            before = (PlayerStats)target.stats.Clone();
+            target.stats.SetHp(target.stats.GetHp() - damage);
+            after = (PlayerStats)target.stats.Clone();
+
+            foreach(StatusAilment sa in effects.statusAilments) {
+                target.GetAilmentController().AddStatusAilment(Instantiate(sa));
+            }
+
+            receivers.Add(new DamageReceiver(target, before, after, effects.statusAilments));
+        }
+            Debug.Log("attack: " + name);
+
+        foreach (DamageReceiver dr in receivers) {
+            Debug.Log(dr.before.GetHp());
+            Debug.Log(dr.after.GetHp());
+
+        }
+
+        return new FightResult(user, this, receivers);
+    }
 }
