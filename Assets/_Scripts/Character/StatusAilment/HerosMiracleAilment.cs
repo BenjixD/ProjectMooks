@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "HerosMiracleStatusAilment", menuName = "StatusAilment/Hero's Miracle")]
-public class HerosMiracleStatusAilment : StatusAilment {
+[CreateAssetMenu(fileName = "HerosMiracleAilment", menuName = "StatusAilment/Hero's Miracle")]
+public class HerosMiracleAilment : StatusAilment {
 
     [SerializeField] private NothingAction nothingAction;
     [SerializeField] private int reviveHP = 1;
