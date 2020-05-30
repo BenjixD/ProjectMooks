@@ -18,6 +18,11 @@ public class FightingEntity : MonoBehaviour
 
     public FighterSlot fighterSlot {get; set;}
 
+    public bool isRare = false;
+
+    [SerializeField]
+    protected float rareRate = 0.01f;
+
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
@@ -39,6 +44,7 @@ public class FightingEntity : MonoBehaviour
 	public void Initialize(int index, PlayerCreationData data) {
         this.targetId = index;
 		Name = data.name;
+
 		SetStats(data.stats);
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);
@@ -71,12 +77,18 @@ public class FightingEntity : MonoBehaviour
 		this.job = job;
 
 
-
         if (this.isEnemy()) {
             actions = new List<ActionBase>(GameManager.Instance.models.GetEnemyJobActions(job));
         } else if (this.IsHero()) {
             actions = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
         } else {
+            
+            float randomSeed = Random.value;
+
+            if (randomSeed <= this.rareRate) {
+                this.isRare = true; // TODO: Modify Mook based on rare status
+            }
+
             // Mooks have more specific logic regarding skills because they can only have at most 3 specific, 1 general.
             List<ActionBase> actionPool = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
             if (actionPool.Count <= 3) {
