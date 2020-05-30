@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Explosion", menuName = "Actions/Explosion", order = 2)]
+[CreateAssetMenu(fileName = "Explosion", menuName = "Actions/Quick Time Events/Explosion", order = 3)]
 public class Explosion : ActionBase {
     [SerializeField] private GameObject _explosionQTE;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ManaShift", menuName = "Actions/Mana Shift", order = 2)]
+[CreateAssetMenu(fileName = "ManaShift", menuName = "Actions/Quick Time Events/Mana Shift", order = 3)]
 public class ManaShift : ActionBase {
     [SerializeField] private GameObject _manaShiftQTE;
 
