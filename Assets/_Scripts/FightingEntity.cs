@@ -39,20 +39,22 @@ public class FightingEntity : MonoBehaviour
 	public void Initialize(int index, PlayerCreationData data) {
         this.targetId = index;
 		Name = data.name;
-        
-        // Sets the default energy for mooks to be always a constant
-        // TODO: Do this a more cleaner way
-        if (!this.isEnemy() && index != 0) {
-            data.stats.SetMana(9);
-            data.stats.maxMana = 9;
-        }
-
 		SetStats(data.stats);
 		SetJob(data.job);
 		_ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.turnController.field.GetTargetNameFromIndex(index);
 		_ailmentController = new AilmentController(this);
         Debug.Log("Initialize: " + Name);
+
+        // Sets the default energy for mooks to be always a constant
+        // TODO: Do this a more cleaner way
+        if (!this.isEnemy() && index != 0) {
+            OutOfJuiceAilment outOfJuicePrefab = (OutOfJuiceAilment)GameManager.Instance.models.GetCommonStatusAilment("Out of Juice");
+            this._ailmentController.AddStatusAilment(Instantiate(outOfJuicePrefab));
+            data.stats.SetMana(outOfJuicePrefab.duration);
+            data.stats.maxMana = outOfJuicePrefab.duration;
+        }
+
 	}
 
 	public void SetStats(PlayerStats stats) {
@@ -81,7 +83,7 @@ public class FightingEntity : MonoBehaviour
                 actions = actionPool;
             } else {
                 actions = new List<ActionBase>();
-                while (actions.Count <= 3) {
+                while (actions.Count < 3) {
                     int randIndex = Random.Range(0, actionPool.Count);
                     actions.Add( actionPool[randIndex] );
                     actionPool.RemoveAt(randIndex);
