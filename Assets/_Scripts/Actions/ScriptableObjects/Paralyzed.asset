@@ -13,11 +13,22 @@ MonoBehaviour:
   m_Name: Paralyzed
   m_EditorClassIdentifier: 
   name: Paralyzed
+  actionType: 0
   description: Can't move
-  commandKeyword: 
-  commandArgs: 0
-  userAnimName: 
+  maxPP: 0
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 0
+    stamina: 0
   targetInfo:
     targetTeam: 3
     targetType: 0
-  actionType: 0
+  effects:
+    physicalScaling: 0
+    specialScaling: 0
+    element: 0
+    statusAilments: []
+  commandKeyword: 
+  commandArgs: 0
+  userAnimName: 

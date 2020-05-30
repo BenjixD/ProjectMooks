@@ -13,13 +13,23 @@ MonoBehaviour:
   m_Name: PoisonAll
   m_EditorClassIdentifier: 
   name: Poison All
+  actionType: 1
   description: 
-  commandKeyword: poison2
-  commandArgs: 0
-  userAnimName: 
+  maxPP: 0
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 0
+    stamina: 0
   targetInfo:
     targetTeam: 1
     targetType: 1
-  actionType: 1
-  _status:
-  - {fileID: 11400000, guid: 39465e0db9a49467d80a72f0ea5db283, type: 2}
+  effects:
+    physicalScaling: 0
+    specialScaling: 1
+    element: 0
+    statusAilments:
+    - {fileID: 11400000, guid: 39465e0db9a49467d80a72f0ea5db283, type: 2}
+  commandKeyword: poison2
+  commandArgs: 0
+  userAnimName: 
