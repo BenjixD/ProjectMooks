@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc178b3d09f94c44f8f38d8d2d963d44, type: 3}
+  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
   m_Name: Ice
   m_EditorClassIdentifier: 
   name: Ice
@@ -25,10 +25,11 @@ MonoBehaviour:
     targetTeam: 1
     targetType: 0
   effects:
+    element: 2
     physicalScaling: 0
     specialScaling: 1.25
-    element: 2
+    heals: 0
     statusAilments: []
   commandKeyword: ice
   commandArgs: 1
-  userAnimName: 
+  userAnimName: attack

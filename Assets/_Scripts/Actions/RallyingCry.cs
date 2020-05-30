@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RallyingCry", menuName = "Actions/Rallying Cry", order = 2)]
+[CreateAssetMenu(fileName = "RallyingCry", menuName = "Actions/Quick Time Events/Rallying Cry", order = 3)]
 public class RallyingCry : ActionBase {
     [SerializeField] private GameObject _rallyingCryQTE;
 

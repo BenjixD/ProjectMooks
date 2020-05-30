@@ -58,7 +58,8 @@ public class DeathResult {
     }
 }
 
-public abstract class ActionBase : ScriptableObject {
+[CreateAssetMenu(fileName = "NewAction", menuName = "Actions/ActionBase", order = 1)]
+public class ActionBase : ScriptableObject {
     public new string name;
     public ActionType actionType;
     [TextArea] public string description;
@@ -138,7 +139,20 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        return BasicValidation(splitCommand, user);
+        if (!BasicValidation(splitCommand, user)) {
+            return false;
+        }
+        if (targetInfo.targetType == TargetType.SINGLE) {
+            int targetId = this.GetTargetIdFromString(splitCommand[1], user);
+            if (targetId == -1) {
+                return false;
+            }
+            user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
+        } else if (targetInfo.targetType == TargetType.ALL) {
+            List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
+            user.SetQueuedAction(new QueuedAction(user, this, targetIds));
+        }
+        return true;
     }
     
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 675839bf776724b84bd949010c5d1466, type: 3}
+  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
   m_Name: Thunder
   m_EditorClassIdentifier: 
   name: Thunder
@@ -25,11 +25,12 @@ MonoBehaviour:
     targetTeam: 1
     targetType: 0
   effects:
+    element: 3
     physicalScaling: 0
     specialScaling: 0.75
-    element: 3
+    heals: 0
     statusAilments:
     - {fileID: 11400000, guid: b1474899134994879b06bd74bd935c73, type: 2}
   commandKeyword: thunder
   commandArgs: 1
-  userAnimName: 
+  userAnimName: attack

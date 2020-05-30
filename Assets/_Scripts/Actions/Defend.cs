@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Defend", menuName = "Actions/Defend", order = 2)]
+[CreateAssetMenu(fileName = "Defend", menuName = "Actions/Defend", order = 5)]
 public class Defend : ActionBase {
     [Header("Defend Values")]
     [SerializeField]
