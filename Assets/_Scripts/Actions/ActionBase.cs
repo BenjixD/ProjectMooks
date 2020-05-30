@@ -206,32 +206,14 @@ public abstract class ActionBase : ScriptableObject {
         return target.targetId;
     }
 
-    private int GetTargetDefence(PlayerStats targetStats) {
-        int defence = 0;
-        if (effects.defenseType == DefenseType.AUTOMATIC) {
-            if (effects.physicalScaling > 0 && effects.specialScaling == 0) {
-                defence = targetStats.GetDefense();
-            } else if (effects.specialScaling > 0 && effects.physicalScaling == 0) {
-                defence = targetStats.GetResistance();
-            } else {
-                Debug.LogWarning("Could not automatically determine defensive stat for action " + name);
-            }
-        }
-        else if (effects.defenseType == DefenseType.DEFENSE) {
-            defence = targetStats.GetDefense();
-        } else if (effects.defenseType == DefenseType.RESISTANCE) {
-            defence = targetStats.GetResistance();
-        }
-        return defence;
-    }
-
     public virtual FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
         int attackDamage = (int) (user.stats.GetPhysical() * effects.physicalScaling + user.stats.GetSpecial() * effects.specialScaling);
         
         foreach (FightingEntity target in targets) {
-            int defence = GetTargetDefence(target.stats);
+            // Default damage mitigation: defense and resistance with half the scaling ratios
+            int defence = (int) ((target.stats.GetDefense() * effects.physicalScaling + target.stats.GetResistance() * effects.specialScaling) / 2);
             int damage =  Mathf.Max(attackDamage - defence, 0);
 
             before = (PlayerStats)target.stats.Clone();
@@ -244,14 +226,6 @@ public abstract class ActionBase : ScriptableObject {
 
             receivers.Add(new DamageReceiver(target, before, after, effects.statusAilments));
         }
-            Debug.Log("attack: " + name);
-
-        foreach (DamageReceiver dr in receivers) {
-            Debug.Log(dr.before.GetHp());
-            Debug.Log(dr.after.GetHp());
-
-        }
-
         return new FightResult(user, this, receivers);
     }
 }
