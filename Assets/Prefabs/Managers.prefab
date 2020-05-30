@@ -128,6 +128,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
   - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
   commonActions: []
+  commonMookActionPool:
+  - {fileID: 11400000, guid: 978ab0ca05277fd439c5257c4a925014, type: 2}
+  - {fileID: 11400000, guid: 87ecb072cac21214cac72e8a6961b514, type: 2}
+  - {fileID: 11400000, guid: 46a449bf53492cb41b829822dd2515ea, type: 2}
   commonStatusAilments:
   - {fileID: 11400000, guid: eae875e142889274eb9f8267b7307a56, type: 2}
   - {fileID: 11400000, guid: 7ecf282388724c845bf917928408b9e7, type: 2}
