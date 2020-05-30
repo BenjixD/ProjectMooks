@@ -13,12 +13,22 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: 
   name: Fireball
-  maxPP: 0
+  actionType: 1
   description: 
-  commandKeyword: fireball
-  commandArgs: 0
-  userAnimName: 
+  maxPP: 0
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 0
+    stamina: 0
   targetInfo:
     targetTeam: 1
     targetType: 1
-  actionType: 1
+  effects:
+    physicalScaling: 0
+    specialScaling: 0.8
+    element: 1
+    statusAilments: []
+  commandKeyword: fireball
+  commandArgs: 0
+  userAnimName: 

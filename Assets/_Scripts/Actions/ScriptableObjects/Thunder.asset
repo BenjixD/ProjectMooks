@@ -10,16 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 675839bf776724b84bd949010c5d1466, type: 3}
-  m_Name: ThunderOne
+  m_Name: Thunder
   m_EditorClassIdentifier: 
-  name: Thunder One
+  name: Thunder
+  actionType: 1
   description: 
-  commandKeyword: thunder1
-  commandArgs: 1
-  userAnimName: 
+  maxPP: 0
+  actionCost:
+    HP: 0
+    mana: 8
+    PP: 0
+    stamina: 0
   targetInfo:
     targetTeam: 1
     targetType: 0
-  actionType: 1
-  _status:
-  - {fileID: 11400000, guid: b1474899134994879b06bd74bd935c73, type: 2}
+  effects:
+    physicalScaling: 0
+    specialScaling: 0.75
+    element: 3
+    statusAilments:
+    - {fileID: 11400000, guid: b1474899134994879b06bd74bd935c73, type: 2}
+  commandKeyword: thunder
+  commandArgs: 1
+  userAnimName: 

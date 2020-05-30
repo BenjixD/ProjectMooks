@@ -13,12 +13,22 @@ MonoBehaviour:
   m_Name: Skewer
   m_EditorClassIdentifier: 
   name: Skewer
-  PP: 0
+  actionType: 0
   description: 
-  commandKeyword: skewer
-  commandArgs: 1
-  userAnimName: attack
+  maxPP: 0
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 0
+    stamina: 0
   targetInfo:
     targetTeam: 1
     targetType: 0
-  actionType: 0
+  effects:
+    physicalScaling: 1
+    specialScaling: 0
+    element: 0
+    statusAilments: []
+  commandKeyword: skewer
+  commandArgs: 1
+  userAnimName: attack

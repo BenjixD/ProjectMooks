@@ -10,20 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18fb1f0751b5b4a46aac102abbd71c4a, type: 3}
-  m_Name: FireOne
+  m_Name: Fire
   m_EditorClassIdentifier: 
-  name: Fire One
+  name: Fire
+  actionType: 1
+  description: 
   maxPP: 0
   actionCost:
     HP: 0
     mana: 8
     PP: 0
     stamina: 0
-  description: 
-  commandKeyword: fire1
-  commandArgs: 1
-  userAnimName: 
   targetInfo:
     targetTeam: 1
     targetType: 0
-  actionType: 1
+  effects:
+    physicalScaling: 0
+    specialScaling: 1
+    element: 1
+    statusAilments: []
+  commandKeyword: fire
+  commandArgs: 1
+  userAnimName: 
