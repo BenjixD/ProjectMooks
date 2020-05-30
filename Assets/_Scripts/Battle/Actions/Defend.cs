@@ -4,6 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "Defend", menuName = "Actions/Defend", order = 2)]
 public class Defend : ActionBase {
+    [Header("Defend Values")]
     [SerializeField]
     private DefenseStatusAilment _buff;
 

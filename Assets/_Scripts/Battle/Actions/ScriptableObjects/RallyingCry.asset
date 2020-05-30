@@ -13,19 +13,25 @@ MonoBehaviour:
   m_Name: RallyingCry
   m_EditorClassIdentifier: 
   name: Rallying Cry
+  actionType: 0
+  description: 
   maxPP: 1
   actionCost:
     HP: 0
     mana: 0
-    PP: 1
+    PP: 0
     stamina: 0
-  description: 
-  commandKeyword: cry
-  commandArgs: 0
-  userAnimName: 
   targetInfo:
     targetTeam: 0
     targetType: 1
-  actionType: 0
+  effects:
+    physicalScaling: 0
+    specialScaling: 0
+    defenseType: 0
+    element: 0
+    statusAilments: []
+  commandKeyword: rally
+  commandArgs: 0
+  userAnimName: 
   _rallyingCryQTE: {fileID: 1867265765112976025, guid: 041fbdba7d0c55848a8832ff621ff6f8,
     type: 3}
