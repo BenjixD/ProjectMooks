@@ -67,10 +67,32 @@ public class FightingEntity : MonoBehaviour
 
 	public void SetJob(Job job) {
 		this.job = job;
+
+
+
         if (this.isEnemy()) {
-            actions = GameManager.Instance.models.GetEnemyJobActions(job);
+            actions = new List<ActionBase>(GameManager.Instance.models.GetEnemyJobActions(job));
+        } else if (this.IsHero()) {
+            actions = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
         } else {
-		    actions =  GameManager.Instance.models.GetPlayerJobActions(job);
+            // Mooks have more specific logic regarding skills because they can only have at most 3 specific, 1 general.
+            List<ActionBase> actionPool = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
+            if (actionPool.Count <= 3) {
+                actions = actionPool;
+            } else {
+                actions = new List<ActionBase>();
+                while (actions.Count <= 3) {
+                    int randIndex = Random.Range(0, actionPool.Count);
+                    actions.Add( actionPool[randIndex] );
+                    actionPool.RemoveAt(randIndex);
+                }
+
+                
+            }
+
+            List<ActionBase> commonMookActionPool = GameManager.Instance.models.GetCommonMookActionPool();
+            int commonActionIndex = Random.Range(0, commonMookActionPool.Count);
+            actions.Add(commonMookActionPool[commonActionIndex]);
         }
 	}
 
@@ -111,6 +133,10 @@ public class FightingEntity : MonoBehaviour
 
     public bool isEnemy() {
         return this.GetType() == typeof(EnemyObject);
+    }
+
+    public bool IsHero() {
+        return !this.isEnemy() && this.targetId == 0;
     }
 
     public ActionBase GetRandomAction() {

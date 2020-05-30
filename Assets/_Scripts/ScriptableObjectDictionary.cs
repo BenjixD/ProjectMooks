@@ -22,6 +22,9 @@ public class ScriptableObjectDictionary : MonoBehaviour {
     private List<StageInfo> stageInfo;
 
     [SerializeField] private List<ActionBase> commonActions;
+
+    [SerializeField] private List<ActionBase> commonMookActionPool;
+
     [SerializeField] private List<StatusAilment> commonStatusAilments;
 
     public void Initialize() {
@@ -87,5 +90,9 @@ public class ScriptableObjectDictionary : MonoBehaviour {
 
     public StatusAilment GetCommonStatusAilment(string name) {
         return this.commonStatusAilments.Find(ailment => ailment.name == name);
+    }
+
+    public List<ActionBase> GetCommonMookActionPool() {
+        return this.commonMookActionPool;
     }
 }
