@@ -6,7 +6,7 @@ using UnityEngine;
 public class HealthPotAction : ActionBase {
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
         // Fire One command format: !m fire [target number]
-        if (!BasicValidation(splitCommand)) {
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
 
