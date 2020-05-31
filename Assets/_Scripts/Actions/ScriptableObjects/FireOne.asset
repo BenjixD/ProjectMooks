@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: FireOne
   m_EditorClassIdentifier: 
   name: Fire One
+  maxPP: 0
+  actionCost:
+    HP: 0
+    mana: 8
+    PP: 0
+    stamina: 0
   description: 
   commandKeyword: fire1
   commandArgs: 1
