@@ -6,7 +6,7 @@ using UnityEngine;
 public class Defend : ActionBase {
     [Header("Defend Values")]
     [SerializeField]
-    private DefenseStatusAilment _buff;
+    private StatusAilment _buff;
 
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
         if (!base.TryChooseAction(user, splitCommand)) {

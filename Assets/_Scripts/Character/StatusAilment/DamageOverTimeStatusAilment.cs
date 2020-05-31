@@ -1,16 +1,17 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PoisonStatusAilment", menuName = "StatusAilment/Poison")]
-public class PoisonStatusAilment : StatusAilment {
+[CreateAssetMenu(fileName = "DamageOverTimeStatusAilment", menuName = "StatusAilment/Damage Over Time")]
+public class DamageOverTimeStatusAilment : StatusAilment {
 	public enum Type {
 		PERCENTAGE,
 		FLAT
 	}
-	[Header("Poison Damage Type")]
+
+	[Tooltip("Damage Type")]
 	public Type damageType;
-	[Header("[0f, 1f] Percentage OR [0f,) Flat truncated to whole number")]
+	[Tooltip("[0f, 1f] Percentage OR [0f,) Flat truncated to whole number")]
 	public float val;
 
 	public override void StackWith(FightingEntity p, StatusAilment other) {
@@ -31,7 +32,7 @@ public class PoisonStatusAilment : StatusAilment {
 	}
 
 	public override void TickEffect(FightingEntity p) {
-		Debug.Log("Taking Poison Damage");
+		Debug.Log("Taking Damage Over Time");
 		switch(this.damageType) {
 			case Type.PERCENTAGE:
 				p.stats.SetHp(p.stats.GetHp() - (int)(p.stats.GetHp() * this.val / 100));

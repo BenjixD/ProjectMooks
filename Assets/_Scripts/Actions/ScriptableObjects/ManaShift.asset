@@ -13,18 +13,25 @@ MonoBehaviour:
   m_Name: ManaShift
   m_EditorClassIdentifier: 
   name: Mana Shift
+  actionType: 0
+  description: 
   maxPP: 2
   actionCost:
     HP: 0
     mana: 0
     PP: 1
     stamina: 0
-  description: 
-  commandKeyword: shift
-  commandArgs: 0
-  userAnimName: 
   targetInfo:
     targetTeam: 0
     targetType: 0
-  actionType: 0
-  _manaShiftQTE: {fileID: 0}
+  effects:
+    element: 0
+    physicalScaling: 0
+    specialScaling: 0
+    heals: 0
+    statusAilments: []
+  commandKeyword: shift
+  commandArgs: 0
+  userAnimName: 
+  _manaShiftQTE: {fileID: 5498650744045303134, guid: 611ec3a2aff306b45893529da2226e01,
+    type: 3}
