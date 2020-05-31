@@ -6,11 +6,7 @@ using UnityEngine;
 public class Explosion : ActionBase {
     [SerializeField] private GameObject _explosionQTE;
 
-    public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        if (!base.TryChooseAction(user, splitCommand)) {
-            return false;
-        }
-
+    protected override bool QueueAction(FightingEntity user, string[] splitCommand) {
         List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
         user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         return true;
