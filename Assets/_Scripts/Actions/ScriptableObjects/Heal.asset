@@ -30,6 +30,6 @@ MonoBehaviour:
     specialScaling: 0.5
     heals: 1
     statusAilments: []
-  commandKeyword: 
-  commandArgs: 0
-  userAnimName: 
+  commandKeyword: heal
+  commandArgs: 1
+  userAnimName: attack

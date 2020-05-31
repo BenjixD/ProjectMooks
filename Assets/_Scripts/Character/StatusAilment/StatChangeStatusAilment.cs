@@ -9,6 +9,8 @@ public class StatChangeStatusAilment : StatusAilment {
 		FLAT
 	}
 
+	[Tooltip("Stat to change.")]
+	public Stat stat;
 	[Tooltip("Bonus Type")]
 	public Type type;
 	[Tooltip("[0,1] Percentage Bonus, or [0,) Flat Bonus")]
@@ -28,12 +30,12 @@ public class StatChangeStatusAilment : StatusAilment {
 		//TODO: Possible Animation Modifications
 		switch(type) {
 			case Type.PERCENTAGE:
-				_flatChange = (int)Mathf.Ceil(p.stats.GetDefense() * modifier);
-				p.stats.SetDefense(p.stats.GetDefense() + _flatChange);
+				_flatChange = (int)Mathf.Ceil(p.stats.GetStat(stat) * modifier);
+				p.stats.ModifyStat(stat, _flatChange);
 				break;
 			case Type.FLAT:
-				_flatChange = (int) modifier;
-				p.stats.SetDefense(p.stats.GetDefense() + _flatChange);
+				_flatChange = (int)modifier;
+				p.stats.ModifyStat(stat, _flatChange);
 				break;
 		}
 		Debug.Log("Defending: " + _flatChange + " damage");
@@ -41,8 +43,8 @@ public class StatChangeStatusAilment : StatusAilment {
 
 	public override void Recover(FightingEntity p) {
 		//TODO: Possible Animation Modifications
-		Debug.Log("Recovering: " + _flatChange + " defense");
-		p.stats.SetDefense(p.stats.GetDefense() - _flatChange);
+		Debug.Log("Recovering: " + _flatChange + " " + stat);
+		p.stats.ModifyStat(stat, -_flatChange);
 	}
 
 	public override void TickEffect(FightingEntity p) {

@@ -26,8 +26,8 @@ public class ManaShift : ActionBase {
 
     public FightResult FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
         int manaRestored = (int) (user.stats.GetSpecial() * power);
-        PlayerObject hero = (PlayerObject) targets[0];
-        hero.stats.SetMana(hero.stats.GetMana() + manaRestored);
+        PlayerStats heroStats = targets[0].stats;
+        heroStats.SetMana(heroStats.GetMana() + manaRestored);
         return new FightResult(user, this);
     }
 }
