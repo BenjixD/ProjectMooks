@@ -7,8 +7,6 @@ using System.Linq;
 // Class that holds field information / helper functions
 public class BattleField : MonoBehaviour
 {   
-    public Party<Player> playerParty = new Party<Player>();
-    public Party<Enemy> enemyParty = new Party<Enemy>(); 
 
 
     [Header("Slots")]
@@ -24,44 +22,36 @@ public class BattleField : MonoBehaviour
         this.InitializeEnemies();
     }
 
-    public Player GetHeroPlayer() {
-        return playerParty.members[0];
+
+    // Field helper functions ===
+    public PlayerObject GetHeroPlayer() {
+        return GameManager.Instance.gameState.playerParty.GetFighterObjects<PlayerObject>()[0];
     }
 
-    public void RequestRecruitNewParty() {
-        List<int> emptySlots = new List<int>();
-        Player[] players = playerParty.members;
-        for (int i = 1; i < players.Length; i++) {
-            if (players[i] == null) {
-                emptySlots.Add(i);
-            }
-        }
+    public PlayerObject[] GetPlayerObjects() {
+        return GameManager.Instance.gameState.playerParty.GetFighterObjects<PlayerObject>();
+    }
 
-        GameManager.Instance.party.TryFillAllPartySlots();
-        List<Player> joinedPlayers = new List<Player>();
+    public List<PlayerObject> GetActivePlayerObjects() {
+        return GameManager.Instance.gameState.playerParty.GetActiveFighterObjects<PlayerObject>();
+    }
 
-        foreach (int emptySlot in emptySlots) {
-            Player player = this.InstantiatePlayer(emptySlot);
-            if (player != null) {
-                this.mookSlots[emptySlot-1].InitializePosition(player);
-                joinedPlayers.Add(player);
-            }
-        }
+    public EnemyObject[] GetEnemyObjects() {
+        return GameManager.Instance.gameState.enemyParty.GetFighterObjects<EnemyObject>();
+    }
 
-        if (joinedPlayers.Count > 0) {
-            Messenger.Broadcast<List<Player>>(Messages.OnPlayersJoinBattle, joinedPlayers);
-        }
-
+    public List<EnemyObject> GetActiveEnemyObjects() {
+        return GameManager.Instance.gameState.enemyParty.GetActiveFighterObjects<EnemyObject>();
     }
 
     public List<FightingEntity> GetAllFightingEntities() {
-        List<Player> players = playerParty.GetActiveMembers();
+        List<PlayerObject> players = GetActivePlayerObjects();
         List<FightingEntity> entities = new List<FightingEntity>();
         foreach (var player in players) {
             entities.Add(player);
         }
 
-        List<Enemy> enemies = enemyParty.GetActiveMembers();
+        List<EnemyObject> enemies = GetActiveEnemyObjects();
 
         foreach (var enemy in enemies) {
             entities.Add(enemy);
@@ -69,6 +59,44 @@ public class BattleField : MonoBehaviour
 
         return entities;
     }
+
+    public int GetRandomPlayerObjectIndex() {
+        return GameManager.Instance.gameState.playerParty.GetRandomActiveIndex();
+    }
+
+    public int GetRandomEnemyObjectIndex() {
+        return GameManager.Instance.gameState.enemyParty.GetRandomActiveIndex();
+    }
+
+    // ===
+
+
+    public void RequestRecruitNewParty() {
+        List<int> emptySlots = new List<int>();
+        PlayerObject[] players = GetPlayerObjects();
+        for (int i = 1; i < players.Length; i++) {
+            if (players[i] == null) {
+                emptySlots.Add(i);
+            }
+        }
+
+        GameManager.Instance.gameState.playerParty.TryFillAllPartySlots();
+        List<PlayerObject> joinedPlayers = new List<PlayerObject>();
+
+        foreach (int emptySlot in emptySlots) {
+            PlayerObject player = this.InstantiatePlayer(emptySlot);
+            if (player != null) {
+                this.mookSlots[emptySlot-1].InitializePosition(player);
+                joinedPlayers.Add(player);
+            }
+        }
+
+        if (joinedPlayers.Count > 0) {
+            Messenger.Broadcast<List<PlayerObject>>(Messages.OnPlayersJoinBattle, joinedPlayers);
+        }
+
+    }
+
 
     public void GenerateEnemyList(int waveIndex) {
         this.currentWaveIndex = waveIndex;
@@ -82,15 +110,12 @@ public class BattleField : MonoBehaviour
 
         for (int i = 0; i < enemyList.Count; i++) {
             JobActionsList jobList = enemyList[i];
+            string name = jobList.prefab.Name + " (" + GetTargetNameFromIndex(i) + ")";
+            int index = i;
 
-            FightingEntity enemyPrefab = jobList.prefab;
-            Enemy instantiatedEnemy = Instantiate(enemyPrefab) as Enemy;
 
-            PlayerStats stats = new PlayerStats(enemyPrefab.stats);
-            stats.RandomizeStats();
-            stats.ResetStats();
-            PlayerCreationData creationData = new PlayerCreationData(enemyPrefab.Name + " (" + GetTargetNameFromIndex(i) + ")", stats, Job.BASIC_ENEMY);
-            instantiatedEnemy.Initialize(i, creationData);
+            Enemy enemy = new Enemy();
+            EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
 
             // TODO: Some sort of entrance animation
             
@@ -98,7 +123,7 @@ public class BattleField : MonoBehaviour
             FighterSlot slot = enemySlots[i];
             slot.InitializePosition(instantiatedEnemy);
 
-            enemyParty.members[i] = instantiatedEnemy;
+            GameManager.Instance.gameState.enemyParty.SetFighter(i, enemy);
         }
     }
 
@@ -125,16 +150,16 @@ public class BattleField : MonoBehaviour
 
 
     private void InitializePlayers() {
-        Player instantiatedHeroPlayer = this.InstantiatePlayer(0);
+        PlayerObject instantiatedHeroPlayer = this.InstantiatePlayer(0);
         this.heroSlot.InitializePosition(instantiatedHeroPlayer);
 
-        for (int i = 1; i < Party<Player>.maxPlayers; i++) {
+        for (int i = 1; i < PlayerParty.maxPlayers; i++) {
             this.InstantiatePlayerIfExists(i);
         }
     }
 
-    private Player InstantiatePlayerIfExists(int index) {
-        Player instantiatedPlayer = this.InstantiatePlayer(index);
+    private PlayerObject InstantiatePlayerIfExists(int index) {
+        PlayerObject instantiatedPlayer = this.InstantiatePlayer(index);
         if (instantiatedPlayer != null) {
             FighterSlot slot;
             if (index == 0) {
@@ -156,22 +181,16 @@ public class BattleField : MonoBehaviour
         this.GenerateEnemyList(0);
     }
 
-    private Player InstantiatePlayer(int index) {
-        PlayerCreationData data = GameManager.Instance.party.GetPlayerCreationData()[index];
-        if (data == null) {
+    private PlayerObject InstantiatePlayer(int index) {
+        Player player = GameManager.Instance.gameState.playerParty.GetFighters<Player>()[index];
+        if (player == null) {
             return null;
         }
 
-        JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(data.job);
-        FightingEntity prefab = jobActionsList.prefab;
-        Player player = Instantiate(prefab).GetComponent<Player>();
-        player.Initialize(index, data);
-        playerParty.members[index] = player;
+        JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(player.playerCreationData.job);
+        PlayerObject playerObject = player.InstantiateFromJob<PlayerObject>(jobActionsList, player.playerCreationData.name, index);
 
-        Debug.Log("Created player: " + data.name);
-        Debug.Log("Player actions: " + player.actions);
-
-        return player;
+        return playerObject;
     }
 
 }

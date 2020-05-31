@@ -17,7 +17,6 @@ public class MookActionItemUI : MonoBehaviour
 
     public void Initialize(ActionBase action, int index) {
         this.action = action;
-        this.SetSelected(false);
         this.SetText(this.action.name);
         this.moveNumberText.SetText("!move" + (index+1));
     }

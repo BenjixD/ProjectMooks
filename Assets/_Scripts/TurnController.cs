@@ -8,7 +8,8 @@ public enum BattlePhase{
     PARTY_SETUP,
     MOVE_SELECTION,
     BATTLE,
-    TURN_END
+    TURN_END,
+    NONE
 };
 
 public enum MenuState {
@@ -146,7 +147,11 @@ public class TurnController : MonoBehaviour
 
     private void onPartySetup() {
         this.battlePhase = BattlePhase.PARTY_SETUP;
-        this.field.RequestRecruitNewParty();
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
+        if (!heroPlayer.HasModifier(ModifierAilment.MODIFIER_DEATH)) {
+            this.field.RequestRecruitNewParty();
+        }
+
         this.BroadcastMoveSelection();
     }
 
@@ -175,7 +180,7 @@ public class TurnController : MonoBehaviour
     }
 
     private bool checkExecuteTurn() {
-        List<Player> players = field.playerParty.GetActiveMembers();
+        List<PlayerObject> players = field.GetActivePlayerObjects();
 
         //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
         bool timeOutIfChatTooSlow = false;
@@ -266,7 +271,7 @@ public class TurnController : MonoBehaviour
                 break;
 
             case TargetType.ALL:
-                List<int> allEnemies = field.enemyParty.GetActiveMembers().Map((Enemy enemy) => enemy.targetId);
+                List<int> allEnemies = field.GetActiveEnemyObjects().Map((EnemyObject enemy) => enemy.targetId);
                 field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, allEnemies ));
             break;
 
@@ -306,12 +311,17 @@ public class TurnController : MonoBehaviour
 
     // Initializes the command card to display the hero's actions
     private void initializeCommandCardActionUI(List<HeroActionChoice> currentHeroChoices) {
+        if (!CanDoHeroAction()) {
+            return;
+        }
+
         List<string> actionNames = currentHeroChoices.Map((HeroActionChoice choice) => { return choice.choiceName; });
         this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this.commandSelector);
     }
 
     private bool hasEveryoneEnteredActions() {
-        foreach (var player in field.playerParty.GetActiveMembers()) {
+        List<PlayerObject> activeMembers = field.GetActivePlayerObjects();
+        foreach (var player in activeMembers) {
             if (player.HasSetCommand() == false) {
                 return false;
             }
@@ -338,12 +348,13 @@ public class TurnController : MonoBehaviour
 
         bool isEnemy = deadFighter.isEnemy();
         if (isEnemy) {
-            this.field.enemyParty.members[deadFighter.targetId] = null;
+            GameManager.Instance.gameState.enemyParty.SetFighter(deadFighter.targetId, null);
             Destroy(deadFighter.gameObject);
 
             bool stillHasEnemies = false;
-            for (int i = 0; i < this.field.enemyParty.members.Length; i++) {
-                if (this.field.enemyParty.members[i] != null) {
+            EnemyObject[] enemies = this.field.GetEnemyObjects();
+            for (int i = 0; i < enemies.Length; i++) {
+                if (enemies[i] != null) {
                     stillHasEnemies = true;
                     break;
                 }
@@ -356,19 +367,33 @@ public class TurnController : MonoBehaviour
 
             if (deadFighter.targetId == 0) {
                 this.onHeroDeath(result);
-                return;
-            }
+            } else {
+                GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId);
 
-            this.field.playerParty.members[deadFighter.targetId] = null;
-            GameManager.Instance.party.EvictPlayer(deadFighter.targetId);
-            Destroy(deadFighter.gameObject);
+                Destroy(deadFighter.gameObject);
+            }
         }
 
         this.ui.statusBarsUI.UpdateStatusBars();
+
+
+         // Note: How we determine this part may change depending on how we do Mook deaths:
+        List<PlayerObject> allPlayers = this.field.GetActivePlayerObjects();
+        if (allPlayers.Count == 1 && this.field.GetHeroPlayer().HasModifier(ModifierAilment.MODIFIER_DEATH)) {
+            this.stageController.LoadDeathScene();
+        }
     }
 
     private void onHeroDeath(DeathResult result) {
-        this.stageController.LoadDeathScene();
+        List<PlayerObject> allPlayers = this.field.GetActivePlayerObjects();
+
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
+
+        heroPlayer.DoDeathAnimation();
+
+        StatusAilment reviveStatusAilmentPrefab = GameManager.Instance.models.GetCommonStatusAilment("Hero's Miracle");
+        heroPlayer.GetAilmentController().AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
+    
     }
 
 
@@ -436,42 +461,53 @@ public class TurnController : MonoBehaviour
         this.goBackToLastHeroAction();
     }
 
+    private bool CanDoHeroAction() {
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
+        return heroPlayer != null && !heroPlayer.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
+    }
+
     // Coroutines
     IEnumerator HeroMoveSelection() {
-        this.heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
-        this.initializeCommandCardActionUI(this.getHeroActionChoices(ActionType.BASIC));
+        PlayerObject heroPlayer = this.field.GetHeroPlayer();
+
+        if (heroPlayer != null) {
+            this.heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
+            this.initializeCommandCardActionUI(this.getHeroActionChoices(ActionType.BASIC));
+        }
+
 
         while(true) {
-            HeroMenuAction menuAction = this.GetHeroMenuAction();
-            MenuState menuState = menuAction.menuState;
-            switch (menuState) {
-                case MenuState.MOVE:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroAction();
-                    }
-                    break;
+            if (CanDoHeroAction()) {
+                HeroMenuAction menuAction = this.GetHeroMenuAction();
+                MenuState menuState = menuAction.menuState;
+                switch (menuState) {
+                    case MenuState.MOVE:
+                        if (Input.GetKeyDown(KeyCode.Z)) {
+                            this.setHeroAction();
+                        }
+                        break;
 
-                case MenuState.TARGET:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroTarget();
-                    }
-                    break;
-                case MenuState.MAGIC:
-                    if (Input.GetKeyDown(KeyCode.Z)) {
-                        this.setHeroAction();
-                    }
-                    break;
-                default:
-                    break;
+                    case MenuState.TARGET:
+                        if (Input.GetKeyDown(KeyCode.Z)) {
+                            this.setHeroTarget();
+                        }
+                        break;
+                    case MenuState.MAGIC:
+                        if (Input.GetKeyDown(KeyCode.Z)) {
+                            this.setHeroAction();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if (heroMenuActions.Count > 1) {
+                    // Go back a menu
+                    if (Input.GetKeyDown(KeyCode.X)) {
+                        this.goBackToLastHeroAction();
+                    }            
+                }
             }
-
-            if (heroMenuActions.Count > 1) {
-                // Go back a menu
-                if (Input.GetKeyDown(KeyCode.X)) {
-                    this.goBackToLastHeroAction();
-                }            
-            }
-
 
             playerActionCounter += Time.deltaTime;
             if(this.checkExecuteTurn()) {

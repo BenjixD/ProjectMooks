@@ -15,11 +15,11 @@ public class ConnectingSceneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameManager.Instance.party.TryFillAllPartySlots();
-        List<PlayerCreationData> curPartyMembers = GameManager.Instance.party.GetPlayersPosition();
+        GameManager.Instance.gameState.playerParty.TryFillAllPartySlots();
+        List<Player> curPartyMembers = GameManager.Instance.gameState.playerParty.GetPlayersPosition();
 
         for (int i = 0; i < curPartyMembers.Count; i++) {
-            commandOptionTexts[i].text.SetText(curPartyMembers[i].name);
+            commandOptionTexts[i].text.SetText(curPartyMembers[i].playerCreationData.name);
             commandOptionTexts[i].gameObject.SetActive(true);
         }
 

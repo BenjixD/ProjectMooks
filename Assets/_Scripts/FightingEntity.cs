@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
+
 public class FightingEntity : MonoBehaviour
 {
     public string Name;
@@ -109,7 +110,7 @@ public class FightingEntity : MonoBehaviour
     }
 
     public bool isEnemy() {
-        return this.GetType() == typeof(Enemy);
+        return this.GetType() == typeof(EnemyObject);
     }
 
     public ActionBase GetRandomAction() {
@@ -128,10 +129,42 @@ public class FightingEntity : MonoBehaviour
 
     public Color GetOrderColor() {
         if (this.isEnemy()) {
-            return Party<Enemy>.IndexToColor(this.targetId);
+            return GameManager.Instance.gameState.enemyParty.IndexToColor(this.targetId);
         } else {
-            return Party<Player>.IndexToColor(this.targetId);
+            return GameManager.Instance.gameState.playerParty.IndexToColor(this.targetId);
         }
+    }
+
+    public void DoDeathAnimation() {
+
+        this.AddModifier(ModifierAilment.MODIFIER_DEATH);
+        this.AddModifier(ModifierAilment.MODIFIER_UNTARGETTABLE);
+        this.AddModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
+
+        // TODO: Death animation
+
+        // Important for Hero death
+        this.gameObject.SetActive(false);
+    }
+
+    // Modifer helpers
+    public bool HasModifier(string modifier) {
+        return this._ailmentController.GetAilment(modifier) != null;
+    }
+
+    // Adds a text-only ailment
+    public void AddModifier(string modifier) {
+        ModifierAilment ailment = (ModifierAilment)GameManager.Instance.models.GetCommonStatusAilment("ModifierAilment");
+        this._ailmentController.AddStatusAilment(Instantiate(ailment).SetName(modifier));
+    }
+
+    public void RemoveModifier(string modifier) {
+        if (!this.HasModifier(modifier)) {
+            return;
+        }
+
+
+        this._ailmentController.RemoveStatusAilment(modifier);
     }
 
     private void OnBattleEnd(BattleResult result) {

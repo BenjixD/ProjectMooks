@@ -20,9 +20,6 @@ public class MookActionMenuUI : MonoBehaviour
         if (actions.Count > 4) {
             Debug.LogError("Mooks should have no more than 4 actions");
         } else {
-
- 
-
             for (int i = 0; i < actions.Count; i++) {
                 if (emptyActions[i] == null) {
                     this.InstantiateEmptyItem(i);
@@ -63,6 +60,7 @@ public class MookActionMenuUI : MonoBehaviour
             if (actions[i] != null) {
                 emptyActions[i].SetActive(false);
                 actions[i].gameObject.SetActive(true);
+                actions[i].SetSelected(false);
             }
         }
     }

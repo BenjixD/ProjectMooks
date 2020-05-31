@@ -39,6 +39,8 @@ public class Battle
         this.initialize();
         // Sort by player speed
         List<FightingEntity> orderedPlayers = new List<FightingEntity>(_controller.field.GetAllFightingEntities());
+        orderedPlayers = orderedPlayers.Filter( fighter => !fighter.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION));
+
         orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
 
         // TODO: Raise another message - specifically for battle order
@@ -81,7 +83,7 @@ public class Battle
             if (fighters[i].GetQueuedAction() == null) {
                 // This sets the enemy's action
                 // TODO: Will be moved after AI is merged.
-                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], fighters[i].GetRandomAction(), new List<int>{_controller.field.playerParty.GetRandomActiveIndex()}  ));
+                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], fighters[i].GetRandomAction(), new List<int>{_controller.field.GetRandomPlayerObjectIndex()}  ));
             }
 
             QueuedAction attackerAction = fighters[i].GetQueuedAction();
@@ -109,9 +111,10 @@ public class Battle
     }
 
     private void setUnsetMookCommands() {
-        foreach (var player in _controller.field.playerParty.GetActiveMembers()) {
+        List<PlayerObject> activeFighters = _controller.field.GetActivePlayerObjects();
+        foreach (var player in activeFighters) {
             if (player.HasSetCommand() == false) {
-                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{_controller.field.enemyParty.GetRandomActiveIndex()}  ));
+                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{_controller.field.GetRandomEnemyObjectIndex()}  ));
             }
         }
     }

@@ -6,6 +6,11 @@ using System.Collections.Generic;
 // Might not need to be MonoBehaviour, but I'll leave it open for now
 [RequireComponent (typeof(ProgressData))]
 public class GameState : MonoBehaviour {
+
+    public PlayerParty playerParty;
+    public EnemyParty enemyParty;
+
+
     public ProgressData progressData;
 
     public List<StageInfoContainer> stages {get; set;}
@@ -36,5 +41,4 @@ public class GameState : MonoBehaviour {
             this.stages.Add(stageInfo);
         }
     }
-
 }

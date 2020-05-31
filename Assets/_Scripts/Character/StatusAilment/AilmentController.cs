@@ -51,7 +51,7 @@ public class AilmentController {
 
 	public void DecrementAllAilmentsDuration() {
 		List<string> timeout = new List<string>();
-		foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
+		foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
 			entry.Value.DecrementDuration();
 			if(entry.Value.duration <= 0) {
 				timeout.Add(entry.Key);
@@ -81,7 +81,7 @@ public class AilmentController {
 	}
 
 	public void TickAilmentEffects(BattlePhase bp) {
-		foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
+		foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
 			if(entry.Value.phase == bp) {
 				entry.Value.TickEffect(_entity);	
 			}
@@ -89,7 +89,7 @@ public class AilmentController {
 	}
 
 	public void TickAllAilmentEffects() {
-		foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
+		foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
 			entry.Value.TickEffect(_entity);
 		}
 	}

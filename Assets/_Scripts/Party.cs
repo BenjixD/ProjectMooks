@@ -1,37 +1,67 @@
-
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
 
-// A party holds an array of FightingEntities
-// T should be one of Player, Enemy
-public class Party<T> where T : FightingEntity
-{
-    public const int maxPlayers = 4;
-    public T[] members = new T[maxPlayers]; 
 
-    public List<T> GetActiveMembers() {
-        List<T> activeMembers = new List<T>();
-        for (int i = 0; i < members.Length; i++) {
-            if (members[i] != null) {
-                activeMembers.Add(members[i]);
+public abstract class Party : MonoBehaviour {
+    public List<Color> targetColors;
+    protected Fighter[] fighters;
+
+    // Initialize fighters array
+    public abstract void Initialize();
+
+    public void SetFighter(int index, Fighter fighter) {
+        this.fighters[index] = fighter;
+    }
+
+    public T[] GetFighters<T>() where T : Fighter {
+        return fighters.Cast<T>().ToArray();
+    } 
+
+    public List<U> GetActiveFighters<U>() where U : Fighter {
+        U[] fighters = this.GetFighters<U>();
+        List<U> activeFighters = new List<U>();
+        for (int i = 0; i < fighters.Length; i++) {
+            if (fighters[i] != null) {
+                activeFighters.Add(fighters[i]);
             }
         }
 
-        return activeMembers;
+        return activeFighters;
     }
 
-    public int GetRandomActiveIndex() {
-        List<T> castedMembers = GetActiveMembers();
-        return members[Random.Range(0, castedMembers.Count)].targetId;
+    public U[] GetFighterObjects<U>() where U : FightingEntity {
+        return fighters.Select( fighter => fighter != null ? fighter.fighter : null ).ToArray().Cast<U>().ToArray();
     }
 
+    public List<U> GetActiveFighterObjects<U>() where U : FightingEntity {
+        U[] fighters = this.GetFighterObjects<U>();
+        List<U> activeFighters = new List<U>();
+        for (int i = 0; i < fighters.Length; i++) {
+            if (fighters[i] != null) {
+                activeFighters.Add(fighters[i]);
+            }
+        }
 
-    public static Color IndexToColor(int index) {
-        if (typeof(T) == typeof(Enemy)) {
-            return GameManager.Instance.party.enemyColor;
-        }  else {
-            return GameManager.Instance.party.IndexToColor(index);
+        return activeFighters;
+    }
+
+    public int GetRandomActiveIndex(bool getTargetableOnly = true) {
+        List<Fighter> fighters = GetActiveFighters<Fighter>();
+        if (getTargetableOnly) {
+            fighters.Filter( fighter => !fighter.fighter.HasModifier(ModifierAilment.MODIFIER_UNTARGETTABLE) );
+        }
+        return this.fighters[Random.Range(0, fighters.Count)].fighter.targetId;
+    }
+
+    public Color IndexToColor(int index) {
+        return targetColors[index];
+    }
+
+    public void ClearFighters() {
+        for (int i = 0; i < this.fighters.Length; i++) {
+            this.fighters[i] = null;
         }
     }
 }

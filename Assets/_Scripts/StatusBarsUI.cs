@@ -21,16 +21,17 @@ public class StatusBarsUI : MonoBehaviour
 
 
 
-    private StatusBarUI[] statusBars = new StatusBarUI[Party<Player>.maxPlayers];
-    private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[Party<Enemy>.maxPlayers];
+    private StatusBarUI[] statusBars = new StatusBarUI[PlayerParty.maxPlayers];
+    private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[EnemyParty.maxPlayers];
 
     void Awake() {
         _controller = GetComponent<TurnController>();
     }
 
     public void Initialize() {
-        Messenger.AddListener<List<Player>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
+        Messenger.AddListener<List<PlayerObject>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
         Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
+        Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         Messenger.AddListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
 
         this.buildStatusBars();
@@ -38,16 +39,16 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     void OnDestroy() {
-        Messenger.RemoveListener<List<Player>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
+        Messenger.RemoveListener<List<PlayerObject>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
         Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
         Messenger.RemoveListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
     }
 
     public void UpdateStatusBars() {
-        Player[] players = _controller.field.playerParty.members;
+        PlayerObject[] players = _controller.field.GetPlayerObjects();
 
         for (int i = 0; i < players.Length; i++) {
-            Player player = players[i];
+            PlayerObject player = players[i];
             if (player == null) {
                 this.statusBars[i].gameObject.SetActive(false);
                 continue;
@@ -64,7 +65,6 @@ public class StatusBarsUI : MonoBehaviour
             } else {
                 // Mooks have energy
                 MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
-                mookStatusBar.actionMenuUI.UnsetActions();
                 mookStatusBar.SetFighter(player);
                 mookStatusBar.SetName(player.Name);
                 mookStatusBar.SetHP(player.stats.GetHp(), player.stats.maxHp);
@@ -76,10 +76,10 @@ public class StatusBarsUI : MonoBehaviour
             this.statusBars[i].gameObject.SetActive(true);
         }
 
-        Enemy[] enemies = _controller.field.enemyParty.members;
+        EnemyObject[] enemies = _controller.field.GetEnemyObjects();
 
         for (int i = 0; i < enemies.Length; i++) {
-            Enemy enemy = enemies[i];
+            EnemyObject enemy = enemies[i];
             if (enemy == null) {
                 this.enemyStatusBars[i].gameObject.SetActive(false);
                 continue;
@@ -94,7 +94,7 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     private void buildStatusBars() {
-        for (int i = 0; i < Party<Player>.maxPlayers; i++) { 
+        for (int i = 0; i < PlayerParty.maxPlayers; i++) { 
             StatusBarUI statusBarForPlayer;
             
             if (i == 0) {
@@ -110,18 +110,29 @@ public class StatusBarsUI : MonoBehaviour
         }
 
 
-        for (int i = 0; i < Party<Enemy>.maxPlayers; i++) {
+        for (int i = 0; i < EnemyParty.maxPlayers; i++) {
             EnemyStatusBarUI statusBarForEnemy = Instantiate(enemyStatusBarPrefab, enemyStatusBarParent[i]);
             statusBarForEnemy.gameObject.SetActive(false);
             enemyStatusBars[i] = statusBarForEnemy;
         }
     }
 
-    private void onPlayerJoin(List<Player> players) {
+    private void onPlayerJoin(List<PlayerObject> players) {
         this.UpdateStatusBars();
     }
 
     private void onFightEnd(FightResult result) {
+        this.UpdateStatusBars();
+    }
+
+    private void OnBattleEnd(BattleResult result) {
+        PlayerObject[] players = _controller.field.GetPlayerObjects();
+        for (int i = 1; i < players.Length; i++) {
+            // Mooks have energy
+            MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
+            mookStatusBar.actionMenuUI.UnsetActions();
+        }
+
         this.UpdateStatusBars();
     }
 
