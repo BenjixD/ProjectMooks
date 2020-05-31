@@ -116,12 +116,15 @@ public class ActionBase : ScriptableObject {
     private bool CheckCost(FightingEntity user) {
         PlayerStats stats = user.stats;
         if (stats.GetHp() <= actionCost.HP || stats.GetMana() < actionCost.mana) {
+            Debug.Log(user + " has insufficient HP and/or mana to use " + name);
             return false;
         }
         if (!_infiniteUses && _currPP < actionCost.PP) {
+            Debug.Log(user + " has insufficient PP to use " + name);
             return false;
         }
         if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
+            Debug.Log(user + " has insufficient stamina to use " + name);
             return false;
         }
         return true;
@@ -142,6 +145,10 @@ public class ActionBase : ScriptableObject {
         if (!BasicValidation(splitCommand, user)) {
             return false;
         }
+        return QueueAction(user, splitCommand);
+    }
+
+    protected virtual bool QueueAction(FightingEntity user, string[] splitCommand) {
         if (targetInfo.targetType == TargetType.SINGLE) {
             int targetId = this.GetTargetIdFromString(splitCommand[1], user);
             if (targetId == -1) {

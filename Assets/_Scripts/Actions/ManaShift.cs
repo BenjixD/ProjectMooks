@@ -6,11 +6,7 @@ using UnityEngine;
 public class ManaShift : ActionBase {
     [SerializeField] private GameObject _manaShiftQTE;
 
-    public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        if (!base.TryChooseAction(user, splitCommand)) {
-            return false;
-        }
-
+    protected override bool QueueAction(FightingEntity user, string[] splitCommand) {
         user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ GameManager.Instance.turnController.field.GetHeroPlayer().targetId } ));
         return true;
     }

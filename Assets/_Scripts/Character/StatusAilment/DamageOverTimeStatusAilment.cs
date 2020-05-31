@@ -32,14 +32,18 @@ public class DamageOverTimeStatusAilment : StatusAilment {
 	}
 
 	public override void TickEffect(FightingEntity p) {
-		Debug.Log("Taking Damage Over Time");
+		int damage = 0;
 		switch(this.damageType) {
 			case Type.PERCENTAGE:
-				p.stats.SetHp(p.stats.GetHp() - (int)(p.stats.GetHp() * this.val / 100));
+				damage = (int)(p.stats.GetHp() * this.val);
+				// Minimum % damage is 1
+				damage = Mathf.Max(damage, 1);
 				break;
 			case Type.FLAT:
-				p.stats.SetHp(p.stats.GetHp() - (int)val);
+				damage = (int)val;
 				break;
 		}
+		Debug.Log("Taking Damage Over Time: " + damage);
+		p.stats.SetHp(p.stats.GetHp() - damage);
 	}
 }

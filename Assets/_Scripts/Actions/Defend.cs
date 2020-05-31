@@ -8,11 +8,7 @@ public class Defend : ActionBase {
     [SerializeField]
     private StatusAilment _buff;
 
-    public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        if (!base.TryChooseAction(user, splitCommand)) {
-            return false;
-        }
-
+    protected override bool QueueAction(FightingEntity user, string[] splitCommand) {
         user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ user.targetId }));
         return true;
     }
