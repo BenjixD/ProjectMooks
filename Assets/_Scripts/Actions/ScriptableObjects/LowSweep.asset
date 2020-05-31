@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Fire
+  m_Name: LowSweep
   m_EditorClassIdentifier: 
-  name: Fire
-  actionType: 1
+  name: Low Sweep
+  actionType: 0
   description: 
   maxPP: 0
   actionCost:
     HP: 0
-    mana: 8
+    mana: 0
     PP: 0
     stamina: 0
   targetInfo:
     targetTeam: 1
     targetType: 0
   effects:
-    element: 1
-    physicalScaling: 0
-    specialScaling: 1
+    element: 0
+    physicalScaling: 0.75
+    specialScaling: 0
     heals: 0
     statusAilments:
-    - {fileID: 11400000, guid: 39465e0db9a49467d80a72f0ea5db283, type: 2}
-  commandKeyword: fire
+    - {fileID: 0}
+  commandKeyword: sweep
   commandArgs: 1
   userAnimName: attack
