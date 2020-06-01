@@ -78,7 +78,7 @@ public class Battle
             }
 
             // Apply Status Ailment
-            fighters[i].GetAilmentController().TickAilmentEffects(_controller.battlePhase);
+            fighters[i].GetAilmentController().TickAilmentEffects(_controller.turnPhase);
 
             if (fighters[i].GetQueuedAction() == null) {
                 // This sets the enemy's action

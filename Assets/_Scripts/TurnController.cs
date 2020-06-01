@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum BattlePhase{
+public enum TurnPhase{
     TURN_START,
     PARTY_SETUP,
     MOVE_SELECTION,
@@ -64,7 +64,7 @@ public class TurnController : MonoBehaviour
 
     [Header ("Other")]
     public float maxTimeBeforeAction = 15;
-    public BattlePhase battlePhase = BattlePhase.PARTY_SETUP;
+    public TurnPhase turnPhase = TurnPhase.PARTY_SETUP;
 
     private float playerActionCounter {get; set;}
 
@@ -124,12 +124,12 @@ public class TurnController : MonoBehaviour
     }
 
     public bool CanInputActions() {
-        return this.battlePhase == BattlePhase.MOVE_SELECTION;
+        return this.turnPhase == TurnPhase.MOVE_SELECTION;
     }
 
     private void onTurnStart() {
 
-        this.battlePhase = BattlePhase.TURN_START;
+        this.turnPhase = TurnPhase.TURN_START;
         this.battle = null;
         this.heroMenuActions.Clear();
 
@@ -140,30 +140,29 @@ public class TurnController : MonoBehaviour
             player.ResetCommand();
         }
 
-        this.ApplyStatusAilments(this.battlePhase);
+        this.ApplyStatusAilments(this.turnPhase);
         this.BroadcastPartySetup();
     }
 
 
     private void onPartySetup() {
-        this.battlePhase = BattlePhase.PARTY_SETUP;
+        this.battlePhase = TurnPhase.PARTY_SETUP;
         PlayerObject heroPlayer = this.field.GetHeroPlayer();
         if (!heroPlayer.HasModifier(ModifierAilment.MODIFIER_DEATH)) {
             this.field.RequestRecruitNewParty();
         }
-
         this.BroadcastMoveSelection();
     }
 
     private void onMoveSelection() {
-        this.battlePhase = BattlePhase.MOVE_SELECTION;
-        this.ApplyStatusAilments(this.battlePhase);
+        this.turnPhase = TurnPhase.MOVE_SELECTION;
+        this.ApplyStatusAilments(this.turnPhase);
         Debug.Log("Starting move selection");
         StartCoroutine(HeroMoveSelection());
     }
 
     private void onBattleStart() {
-        this.battlePhase = BattlePhase.BATTLE;
+        this.turnPhase = TurnPhase.BATTLE;
         this.battle = new Battle(this);
         this.battle.StartBattle();
     }
@@ -173,8 +172,8 @@ public class TurnController : MonoBehaviour
     }
 
     private void onTurnEnd() {
-        this.battlePhase = BattlePhase.TURN_END;
-        this.ApplyStatusAilments(this.battlePhase);
+        this.turnPhase = TurnPhase.TURN_END;
+        this.ApplyStatusAilments(this.turnPhase);
         this.DecrementStatusAilmentDuration();
         this.BroadcastOnStartTurn();
     }
@@ -439,7 +438,7 @@ public class TurnController : MonoBehaviour
 
 
     // Triggers status ailments
-    private void ApplyStatusAilments(BattlePhase bp) {
+    private void ApplyStatusAilments(TurnPhase bp) {
         foreach (var entity in field.GetAllFightingEntities()) {
             entity.GetAilmentController().TickAilmentEffects(bp);
         }

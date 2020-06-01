@@ -25,7 +25,7 @@ public class AilmentController {
 		return new ReadOnlyDictionary<string, StatusAilment>(_ailments);
 	}
 
-	public ReadOnlyDictionary<string, StatusAilment> GetAilmentsOfPhase(BattlePhase bp) {
+	public ReadOnlyDictionary<string, StatusAilment> GetAilmentsOfPhase(TurnPhase bp) {
 		return new ReadOnlyDictionary<string, StatusAilment>(
 			_ailments.Where(kvp => kvp.Value.phase == bp).ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
 	}
@@ -80,8 +80,8 @@ public class AilmentController {
 		}
 	}
 
-	public void TickAilmentEffects(BattlePhase bp) {
-		foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
+	public void TickAilmentEffects(TurnPhase bp) {
+		foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
 			if(entry.Value.phase == bp) {
 				entry.Value.TickEffect(_entity);	
 			}
