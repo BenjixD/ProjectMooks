@@ -227,6 +227,25 @@ public class ActionBase : ScriptableObject {
         return target.targetId;
     }
 
+    protected void InflictStatus(FightingEntity target, AilmentInfliction infliction) {
+        StatusAilment ailment = Instantiate(infliction.statusAilment);
+        if (infliction.duration != 0) {
+            ailment.SetDuration(infliction.duration);
+        }
+        target.GetAilmentController().AddStatusAilment(ailment);
+    }
+
+    protected List<StatusAilment> InflictStatuses(FightingEntity target) {
+        List<StatusAilment> inflicted = new List<StatusAilment>();
+        foreach(AilmentInfliction infliction in effects.statusAilments) {
+            if (Random.value <= infliction.chance) {
+                InflictStatus(target, infliction);
+                inflicted.Add(infliction.statusAilment);
+            }
+        }
+        return inflicted;
+    }
+
     public virtual FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
@@ -245,11 +264,9 @@ public class ActionBase : ScriptableObject {
             target.stats.SetHp(target.stats.GetHp() - damage);
             after = (PlayerStats)target.stats.Clone();
 
-            foreach(StatusAilment sa in effects.statusAilments) {
-                target.GetAilmentController().AddStatusAilment(Instantiate(sa));
-            }
+            List<StatusAilment> inflicted = InflictStatuses(target);
 
-            receivers.Add(new DamageReceiver(target, before, after, effects.statusAilments));
+            receivers.Add(new DamageReceiver(target, before, after, inflicted));
         }
         return new FightResult(user, this, receivers);
     }

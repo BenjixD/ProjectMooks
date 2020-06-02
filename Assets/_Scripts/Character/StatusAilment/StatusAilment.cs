@@ -4,10 +4,23 @@ using UnityEngine;
 
 public abstract class StatusAilment : ScriptableObject {
 	public new string name;
-	public int duration;
+	[Tooltip("Duration used if the action inflicting this status ailment doesn't specify duration. Can leave this at 0.")]
+	public int defaultDuration;
+	[HideInInspector] public int duration;
 	public int level;
 	[Tooltip("Phase to trigger Status Ailment")]
 	public BattlePhase phase;
+
+	private void Awake() {
+		// Set duration to default if one is not set
+		if (duration == 0 && defaultDuration != 0) {
+			duration = defaultDuration;
+		}
+	}
+
+	public void SetDuration(int duration) {
+		this.duration = duration;
+	}
 
 	public virtual void DecrementDuration() {
 		duration--;

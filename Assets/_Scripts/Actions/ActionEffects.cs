@@ -13,5 +13,5 @@ public class ActionEffects {
     [Tooltip("Set to true if this effect can heal the target.")]
     public bool heals = false;
     [Tooltip("Status ailments that may be inflicted.")]
-    public List<StatusAilment> statusAilments;
+    public List<AilmentInfliction> statusAilments;
 }

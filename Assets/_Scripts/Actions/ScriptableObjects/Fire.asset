@@ -30,7 +30,9 @@ MonoBehaviour:
     specialScaling: 1
     heals: 0
     statusAilments:
-    - {fileID: 11400000, guid: 4859a5e1b4883ac43b16090a253a5df4, type: 2}
+    - statusAilment: {fileID: 11400000, guid: 4859a5e1b4883ac43b16090a253a5df4, type: 2}
+      duration: 5
+      chance: 0.4
   commandKeyword: fire
   commandArgs: 1
   userAnimName: attack
