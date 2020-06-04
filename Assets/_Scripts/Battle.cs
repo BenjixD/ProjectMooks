@@ -95,7 +95,7 @@ public class Battle
                 continue;
             }
             
-            BattleFight fight = new BattleFight(_controller, fighters[i]);
+            BattleFight fight = new BattleFight(_controller.field, fighters[i]);
             this.currentFight = fight;
             yield return _controller.StartCoroutine(fight.DoFight());
 

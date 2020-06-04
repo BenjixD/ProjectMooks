@@ -8,9 +8,14 @@ public class BattlePhase : Phase {
 
 	public List<FightingEntity> fighters;
     public BattleFight currentFight{get; set;}
+
+    protected BattleUI _ui {get; set; }
+    protected BattleField _field {get; set;}
     private BattleResult result;
 
-    public BattlePhase(TurnController controller, string callback) : base(controller, callback) {
+    public BattlePhase(BattleUI ui, BattleField field, string callback) : base(TurnPhase.BATTLE, callback) {
+        this._ui = ui;
+        this._field = field;
         Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.OnFightEnd);
     }
 
@@ -23,7 +28,7 @@ public class BattlePhase : Phase {
     	this.SetUnsetMookCommands();
 
     	// Order Players
-    	fighters = new List<FightingEntity>(_controller.field.GetAllFightingEntities());
+    	fighters = new List<FightingEntity>(this._field.GetAllFightingEntities());
         fighters.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
         result = new BattleResult(fighters);
 
@@ -39,15 +44,15 @@ public class BattlePhase : Phase {
     }
 
     protected override IEnumerator Run() {
-        this._controller.ui.battleOrderUI.SetTurnOrder(fighters);
+        this._ui.battleOrderUI.SetTurnOrder(fighters);
         yield return GameManager.Instance.time.WaitForSeconds(0.5f);
-        this._controller.ui.targetIconsUI.ClearTargetArrows();
+        this._ui.targetIconsUI.ClearTargetArrows();
 
         for (int i = 0; i < fighters.Count; i++) {
 
             if (fighters[i] == null) {
                 // This can happen if the fighter dies mid-battle
-                this._controller.ui.battleOrderUI.PopFighter();
+                this._ui.battleOrderUI.PopFighter();
                 yield return GameManager.Instance.time.WaitForSeconds(1.0f);
                 continue;
             }
@@ -58,34 +63,35 @@ public class BattlePhase : Phase {
             if (fighters[i].GetQueuedAction() == null) {
                 // This sets the enemy's action
                 // TODO: Will be moved after AI is merged.
-                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], fighters[i].GetRandomAction(), new List<int>{_controller.field.playerParty.GetRandomActiveIndex()}  ));
+                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], fighters[i].GetRandomAction(), new List<int>{this._field.GetRandomPlayerObjectIndex()}  ));
             }
 
             QueuedAction attackerAction = fighters[i].GetQueuedAction();
 
             // This can happen if target dies mid-battle
             if (attackerAction._action.GetTargets(fighters[i], attackerAction.GetTargetIds()).Count == 0) {
-                this._controller.ui.battleOrderUI.PopFighter();
+                this._ui.battleOrderUI.PopFighter();
                 yield return GameManager.Instance.time.WaitForSeconds(1.0f);
                 continue;
             }
             
-            BattleFight fight = new BattleFight(_controller, fighters[i]);
+            BattleFight fight = new BattleFight(_field, fighters[i]);
             this.currentFight = fight;
-            yield return _controller.StartCoroutine(fight.DoFight());
+            yield return GameManager.Instance.StartCoroutine(fight.DoFight());
 
-            this._controller.ui.battleOrderUI.PopFighter();
+            this._ui.battleOrderUI.PopFighter();
         }
     }
 
     private void OnFightEnd(FightResult result) {
     	this.result.results.Add(result);
+        this.currentFight = null;
     }
 
     private void SetUnsetMookCommands() {
-        foreach (var player in _controller.field.playerParty.GetActiveMembers()) {
-            if (player.HasSetCommand() == false) {
-                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{_controller.field.enemyParty.GetRandomActiveIndex()}  ));
+        foreach (var player in this._field.GetActivePlayerObjects()) {
+            if (!player.HasSetCommand()) {
+                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{this._field.GetRandomEnemyObjectIndex()}  ));
             }
         }
     }

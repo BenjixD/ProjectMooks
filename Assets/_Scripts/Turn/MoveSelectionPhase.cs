@@ -4,14 +4,50 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+public enum MenuState {
+    MOVE,
+    MAGIC,
+    TARGET,
+    WAITING
+}
+
+[System.Serializable]
+public class HeroActionChoice {
+    public string choiceName = "";
+    public ActionBase action = null;
+
+    public HeroActionChoice(string actionName, ActionBase action) {
+        this.choiceName = actionName;
+        this.action = action;
+    }
+}
+
+public class HeroMenuAction {
+
+    public MenuState menuState = MenuState.MOVE;
+    public int targetIndex;
+    public List<HeroActionChoice> currentHeroChoices;
+
+    public UnityAction onBackCallback = null;
+
+    public HeroMenuAction(MenuState state) {
+        this.menuState = state;
+    }
+}
+
+[System.Serializable]
 public class MoveSelectionPhase : Phase {
+    public float maxTimeBeforeAction = 15f;
+
+    protected BattleUI _ui {get; set; }
     protected BattleField _field {get; set;}
 
     private float _playerActionCounter;
     private Stack<HeroMenuAction> _heroMenuActions;
     private CommandSelector _commandSelector;
 
-    public MoveSelectionPhase(BattleField field, CommandSelector selector, TurnController controller, string callback) : base(controller, callback) {
+    public MoveSelectionPhase(BattleUI ui, BattleField field, CommandSelector selector, string callback) : base(TurnPhase.MOVE_SELECTION, callback) {
+        this._ui = ui;
         this._field = field;
     	this._playerActionCounter = 0;
         this._heroMenuActions = new Stack<HeroMenuAction>();
@@ -22,14 +58,18 @@ public class MoveSelectionPhase : Phase {
     	this._playerActionCounter = 0;
         this._heroMenuActions.Clear();
         // Reset Player Commands
-        foreach (var player in _field.GetAllFightingEntities()) {
+        foreach (var player in this._field.GetAllFightingEntities()) {
             player.ResetCommand();
         }
     }
 
     protected override IEnumerator Run() {
-        this.ApplyStatusAilments();
-        yield return _controller.StartCoroutine(HeroMoveSelection());
+        this.ApplyStatusAilments(this._field.GetAllFightingEntities());
+        yield return GameManager.Instance.StartCoroutine(HeroMoveSelection());
+    }
+
+    public virtual bool CanInputActions() {
+        return true;
     }
 
     // Helper Coroutines
@@ -70,7 +110,7 @@ public class MoveSelectionPhase : Phase {
 
 
             _playerActionCounter += Time.deltaTime;
-            if(this.checkExecuteTurn()) {
+            if(this.CheckExecuteTurn()) {
                 break;
             }
             yield return null;
@@ -79,7 +119,7 @@ public class MoveSelectionPhase : Phase {
 
     private void InitializeCommandCardActionUI(List<HeroActionChoice> currentHeroChoices) {
         List<string> actionNames = currentHeroChoices.Map((HeroActionChoice choice) => { return choice.choiceName; });
-        this.ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this._commandSelector);
+        this._ui.commandCardUI.InitializeCommandSelection(actionNames, 0, this._commandSelector);
     }
 
     private List<HeroActionChoice> GetHeroActionChoices(ActionType type) {
@@ -111,7 +151,7 @@ public class MoveSelectionPhase : Phase {
     private void SetHeroAction() {
         HeroMenuAction menuAction = GetHeroMenuAction();
         menuAction.targetIndex = this._commandSelector.GetChoice();
-        this.ui.commandCardUI.SetConfirmed();
+        this._ui.commandCardUI.SetConfirmed();
         menuAction.onBackCallback = this.OnActionChooseBackCallback;
 
         HeroActionChoice choice = menuAction.currentHeroChoices[menuAction.targetIndex];
@@ -125,11 +165,11 @@ public class MoveSelectionPhase : Phase {
                 List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(_field.GetHeroPlayer());
                 switch (heroAction.targetInfo.targetType) {
                     case TargetType.SINGLE:
-                        this.ui.targetSelectionUI.InitializeTargetSelectionSingle(possibleTargets, 0, this._commandSelector);
+                        this._ui.targetSelectionUI.InitializeTargetSelectionSingle(possibleTargets, 0, this._commandSelector);
                         break;
 
                     case TargetType.ALL:
-                        this.ui.targetSelectionUI.InitializeTargetSelectionAll(possibleTargets);
+                        this._ui.targetSelectionUI.InitializeTargetSelectionAll(possibleTargets);
                     break;
 
                     default:
@@ -150,7 +190,7 @@ public class MoveSelectionPhase : Phase {
     }
 
     private void SetHeroTarget() {
-        this.HeroActionConfirmed();
+        HeroActionConfirmed();
 
         HeroMenuAction menuAction = GetHeroMenuAction();
         menuAction.targetIndex = this._commandSelector.GetChoice();
@@ -162,14 +202,14 @@ public class MoveSelectionPhase : Phase {
     
         switch (heroAction.targetInfo.targetType) {
             case TargetType.SINGLE:
-                List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(field.GetHeroPlayer());
+                List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(this._field.GetHeroPlayer());
                 FightingEntity target = possibleTargets[menuAction.targetIndex];
-                field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, new List<int>{target.targetId}  ));
+                this._field.GetHeroPlayer().SetQueuedAction(new QueuedAction(this._field.GetHeroPlayer(), heroAction, new List<int>{target.targetId}  ));
                 break;
 
             case TargetType.ALL:
-                List<int> allEnemies = field.enemyParty.GetActiveMembers().Map((Enemy enemy) => enemy.targetId);
-                field.GetHeroPlayer().SetQueuedAction(new QueuedAction(field.GetHeroPlayer(), heroAction, allEnemies ));
+                List<int> allEnemies = this._field.GetActiveEnemyObjects().Map((EnemyObject enemy) => enemy.targetId);
+                this._field.GetHeroPlayer().SetQueuedAction(new QueuedAction(this._field.GetHeroPlayer(), heroAction, allEnemies ));
             break;
 
             default:
@@ -181,18 +221,18 @@ public class MoveSelectionPhase : Phase {
     }
 
     private void HeroActionConfirmed() {
-        this.ui.targetSelectionUI.ClearSelection();
-        this.ui.commandCardUI.SetCommandCardUI(CommandCardUIMode.CLOSED);
+        this._ui.targetSelectionUI.ClearSelection();
+        this._ui.commandCardUI.SetCommandCardUI(CommandCardUIMode.CLOSED);
     }
 
     private bool CheckExecuteTurn() {
-        List<Player> players = _field.playerParty.GetActiveMembers();
+        List<PlayerObject> players = this._field.GetActivePlayerObjects();
 
         //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
         bool timeOutIfChatTooSlow = false;
         bool startTurn = timeOutIfChatTooSlow || HasEveryoneEnteredActions();
         if (startTurn) {
-            playerActionCounter = 0;
+            this._playerActionCounter = 0;
         } else {
             UpdateStateText();
         }
@@ -203,21 +243,20 @@ public class MoveSelectionPhase : Phase {
         // Currently not in the UI, but may add something similar later
         /*
         if (!field.GetHeroPlayer().HasSetCommand()) {
-            this.ui.SetStateText("Waiting on streamer input");
+            this._ui.SetStateText("Waiting on streamer input");
         } else {
             int timer = (int)(this.maxTimeBeforeAction - playerActionCounter);
-            this.ui.SetStateText("Waiting on Chat: " + timer);
+            this._ui.SetStateText("Waiting on Chat: " + timer);
         }
         */
     }
 
-    private bool hasEveryoneEnteredActions() {
-        foreach (var player in _field.playerParty.GetActiveMembers()) {
+    private bool HasEveryoneEnteredActions() {
+        foreach (var player in this._field.GetActivePlayerObjects()) {
             if (player.HasSetCommand() == false) {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -227,5 +266,28 @@ public class MoveSelectionPhase : Phase {
         if (menuAction.onBackCallback != null) {
             menuAction.onBackCallback();
         }
+    }
+
+    public HeroMenuAction GetPreviousHeroMenuAction() {
+        HeroMenuAction top = GetHeroMenuAction();
+        this._heroMenuActions.Pop();
+
+        HeroMenuAction previousHeroAction = GetHeroMenuAction();
+        this._heroMenuActions.Push(top);
+
+        return previousHeroAction;
+    }
+
+    //
+    // UI Callback
+    //
+    private void OnActionChooseBackCallback() {
+        this._ui.targetSelectionUI.ClearSelection();
+        InitializeCommandCardActionUI(GetHeroMenuAction().currentHeroChoices);
+    }
+
+    private void OnTargetChooseBackCallback() {
+        this._ui.targetIconsUI.ClearTargetsForFighter(this._field.GetHeroPlayer());
+        GoBackToLastHeroAction();
     }
 }

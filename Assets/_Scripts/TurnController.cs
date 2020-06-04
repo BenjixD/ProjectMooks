@@ -3,49 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum TurnPhase{
-    TURN_START,
-    PARTY_SETUP,
-    MOVE_SELECTION,
-    BATTLE,
-    TURN_END,
-    NONE
-};
-
-public enum MenuState {
-    MOVE,
-    MAGIC,
-    TARGET,
-    WAITING
-}
-
-[System.Serializable]
-public class HeroActionChoice {
-    public string choiceName = "";
-    public ActionBase action = null;
-
-    public HeroActionChoice(string actionName, ActionBase action) {
-        this.choiceName = actionName;
-        this.action = action;
-    }
-}
-
-public class HeroMenuAction {
-
-    public MenuState menuState = MenuState.MOVE;
-    public int targetIndex;
-    public List<HeroActionChoice> currentHeroChoices;
-
-    public UnityAction onBackCallback = null;
-
-    public HeroMenuAction(MenuState state) {
-        this.menuState = state;
-    }
-}
-
 // The main controller/manager for a battle
 [RequireComponent(typeof(BattleUI))]
 [RequireComponent(typeof(BattleField))]
+[RequireComponent(typeof(CommandSelector))]
 [RequireComponent(typeof(StageController))]
 public class TurnController : MonoBehaviour
 {
@@ -68,10 +29,8 @@ public class TurnController : MonoBehaviour
 
     private float playerActionCounter {get; set;}
 
-
     // Selection
     Stack<HeroMenuAction> heroMenuActions = new Stack<HeroMenuAction>();
-
 
     void Awake() {
         ui = GetComponent<BattleUI>();
@@ -146,7 +105,7 @@ public class TurnController : MonoBehaviour
 
 
     private void onPartySetup() {
-        this.battlePhase = TurnPhase.PARTY_SETUP;
+        this.turnPhase = TurnPhase.PARTY_SETUP;
         PlayerObject heroPlayer = this.field.GetHeroPlayer();
         if (!heroPlayer.HasModifier(ModifierAilment.MODIFIER_DEATH)) {
             this.field.RequestRecruitNewParty();

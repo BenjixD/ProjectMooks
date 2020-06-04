@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent (typeof(TurnController))]
 public class StatusBarsUI : MonoBehaviour
 {
-    // TODO: Might be useful to use array instead of Lists
-    private TurnController _controller{get; set;}
-
     [Header("References")]
     public RectTransform playerStatusBarParent;
 
@@ -25,7 +21,7 @@ public class StatusBarsUI : MonoBehaviour
     private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[EnemyParty.maxPlayers];
 
     void Awake() {
-        _controller = GetComponent<TurnController>();
+        
     }
 
     public void Initialize() {
@@ -45,7 +41,7 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     public void UpdateStatusBars() {
-        PlayerObject[] players = _controller.field.GetPlayerObjects();
+        PlayerObject[] players = GameManager.Instance.battleComponents.field.GetPlayerObjects();
 
         for (int i = 0; i < players.Length; i++) {
             PlayerObject player = players[i];
@@ -76,7 +72,7 @@ public class StatusBarsUI : MonoBehaviour
             this.statusBars[i].gameObject.SetActive(true);
         }
 
-        EnemyObject[] enemies = _controller.field.GetEnemyObjects();
+        EnemyObject[] enemies = GameManager.Instance.battleComponents.field.GetEnemyObjects();
 
         for (int i = 0; i < enemies.Length; i++) {
             EnemyObject enemy = enemies[i];
@@ -126,7 +122,7 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     private void OnBattleEnd(BattleResult result) {
-        PlayerObject[] players = _controller.field.GetPlayerObjects();
+        PlayerObject[] players = GameManager.Instance.battleComponents.field.GetPlayerObjects();
         for (int i = 1; i < players.Length; i++) {
             // Mooks have energy
             MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];

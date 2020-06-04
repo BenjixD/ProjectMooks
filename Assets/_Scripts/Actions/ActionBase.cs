@@ -59,7 +59,7 @@ public class DeathResult {
 }
 
 public abstract class ActionBase : ScriptableObject {
-    public string name;
+    public new string name;
     [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
     public int maxPP;
     private int _currPP;
@@ -93,7 +93,11 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected bool BasicValidation(string[] splitCommand, FightingEntity user) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() || !CheckCost(user) ) {
+        if (splitCommand.Length == 0 || 
+            !CheckKeyword(splitCommand[0]) || 
+            !CheckArgQuantity(splitCommand.Length - 1) || 
+            !GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions() || 
+            !CheckCost(user) ) {
             return false;
         }
         return true;
@@ -146,11 +150,11 @@ public abstract class ActionBase : ScriptableObject {
 
     public List<FightingEntity> GetAllPossibleTargets(FightingEntity user) {
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
-            return GameManager.Instance.turnController.field.GetAllFightingEntities();
+            return GameManager.Instance.battleComponents.field.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetEnemyObjects());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetPlayerObjects());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetEnemyObjects());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetPlayerObjects());
 
         if (user.isEnemy()) {
             potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;

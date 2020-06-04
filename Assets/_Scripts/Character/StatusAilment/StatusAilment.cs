@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class StatusAilment : ScriptableObject {
-	public string name;
+	public new string name;
 	public int duration;
 	public int level;
 	[Header("Phase to trigger Status Ailment")]

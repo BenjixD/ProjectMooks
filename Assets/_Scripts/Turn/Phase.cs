@@ -5,21 +5,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+public enum TurnPhase{
+    TURN_START,
+    PARTY_SETUP,
+    MOVE_SELECTION,
+    BATTLE,
+    TURN_END,
+    NONE
+};
+
 [System.Serializable]
 public abstract class Phase {
     public TurnPhase _phase;
-
-    protected TurnController _controller;
     protected string _callback;
 
-    public Phase(TurnController controller, string callback) {
-        _controller = controller;
+    public Phase(string callback) {
+        _phase = TurnPhase.NONE;
+        _callback = callback;
+    }
+
+    public Phase(TurnPhase phase, string callback) {
+        _phase = phase;
         _callback = callback;
     }
 
     public IEnumerator RunPhase() {
         OnPhaseStart();
-        yield return _controller.StartCoroutine(Run());
+        yield return GameManager.Instance.StartCoroutine(Run());
         OnPhaseEnd();
     }
 
@@ -36,9 +48,19 @@ public abstract class Phase {
     //
     // Generic Methods for Phases
     //
-    protected void ApplyStatusAilments() {
-        foreach (var entity in _controller.field.GetAllFightingEntities()) {
+    public virtual bool CanInputActions() {
+        return false;
+    }
+
+    protected void ApplyStatusAilments(List<FightingEntity> entities) {
+        foreach (var entity in entities) {
             entity.GetAilmentController().TickAilmentEffects(_phase);
+        }
+    }
+
+    protected void DecrementStatusAilmentDuration(List<FightingEntity> entities) {
+        foreach(var entity in entities) {
+            entity.GetAilmentController().DecrementAllAilmentsDuration();
         }
     }
 }
