@@ -1,5 +1,7 @@
 
 using UnityEngine;
+using System.Collections.Generic;
+
 
 public class Fighter
 {
@@ -7,6 +9,7 @@ public class Fighter
 
     // Player object (null if not on player scene)
     public FightingEntity fighter;
+    private List<PlayerReward> permanentBuffs = new List<PlayerReward>();
 
 
     public void SetPlayerCreationData(PlayerCreationData data) {
@@ -31,5 +34,13 @@ public class Fighter
 
         return instantiatedFighter;
 
+    }
+
+    public List<PlayerReward> getPermanentBuffs() {
+        return this.permanentBuffs;
+    }
+
+    public void setPermanentBuff(PlayerReward reward) {
+        this.permanentBuffs.Add(reward);
     }
 }
