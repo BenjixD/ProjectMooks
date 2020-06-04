@@ -98,6 +98,7 @@ public abstract class ActionBase : ScriptableObject {
             !CheckArgQuantity(splitCommand.Length - 1) || 
             !GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions() || 
             !CheckCost(user) ) {
+            Debug.Log(GameManager.Instance.battleComponents.turnManager.GetPhase().GetType().Name);
             return false;
         }
         return true;

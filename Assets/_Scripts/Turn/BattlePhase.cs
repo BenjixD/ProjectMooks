@@ -3,6 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class BattleResult {
+
+    public List<FightingEntity> fighters = new List<FightingEntity>();
+    public List<FightResult> results = new List<FightResult>();
+
+    public BattleResult(){ }
+    public BattleResult(List<FightingEntity> fighters) {
+        this.fighters = new List<FightingEntity>(fighters);
+    }
+}
+
+
 [System.Serializable]
 public class BattlePhase : Phase {
 

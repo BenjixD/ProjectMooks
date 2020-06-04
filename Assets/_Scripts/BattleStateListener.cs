@@ -5,15 +5,16 @@ using UnityEngine.UI;
 
 // TODO: May want to store these listeners with the Game Manager
 public class BattleStateListener : MonoBehaviour {
-	void Awake() {
-		Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.OnEntityDeath);
+    void Awake() {
+        Debug.LogWarning("CALLING START HERE");
+        Messenger.AddListener<DeathResult>(Messages.OnEntityDeath, this.OnEntityDeath);
         Messenger.AddListener(Messages.OnWaveComplete, this.OnWaveComplete);
-	}
+    }
 
-	void OnDestroy() {
-		Messenger.RemoveListener<DeathResult>(Messages.OnEntityDeath, this.OnEntityDeath);
+    void OnDestroy() {
+        Messenger.RemoveListener<DeathResult>(Messages.OnEntityDeath, this.OnEntityDeath);
         Messenger.AddListener(Messages.OnWaveComplete, this.OnWaveComplete);
-	}
+    }
 
     private void OnEntityDeath(DeathResult result) {
         FightingEntity deadFighter = result.deadEntity.fighter;

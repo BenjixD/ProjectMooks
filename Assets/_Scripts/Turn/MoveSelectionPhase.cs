@@ -68,7 +68,7 @@ public class MoveSelectionPhase : Phase {
         yield return GameManager.Instance.StartCoroutine(HeroMoveSelection());
     }
 
-    public virtual bool CanInputActions() {
+    public override bool CanInputActions() {
         return true;
     }
 

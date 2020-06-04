@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 
 // The main controller/manager for a battle
 [RequireComponent(typeof(BattleUI))]
 [RequireComponent(typeof(BattleField))]
 [RequireComponent(typeof(CommandSelector))]
 [RequireComponent(typeof(StageController))]
+[Obsolete("Please use TurnManager")]
 public class TurnController : MonoBehaviour
 {
 

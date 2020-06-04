@@ -30,6 +30,7 @@ public abstract class Phase {
     }
 
     public IEnumerator RunPhase() {
+        Debug.Log("Starting Phase: " + this.GetType().Name);
         OnPhaseStart();
         yield return GameManager.Instance.StartCoroutine(Run());
         OnPhaseEnd();

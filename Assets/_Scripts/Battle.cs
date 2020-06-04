@@ -2,21 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
-
-
-public class BattleResult {
-
-    public List<FightingEntity> fighters = new List<FightingEntity>();
-    public List<FightResult> results = new List<FightResult>();
-
-    public BattleResult(){ }
-    public BattleResult(List<FightingEntity> fighters) {
-        this.fighters = new List<FightingEntity>(fighters);
-    }
-}
-
-
+[Obsolete("Moved to BattlePhase")]
 public class Battle
 {
     private TurnController _controller {get; set;}
