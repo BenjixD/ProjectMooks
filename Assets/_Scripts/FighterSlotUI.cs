@@ -4,21 +4,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(BattleField))]
 public class FighterSlotUI : MonoBehaviour {
     
     public List<RectTransform> targetParents;
     public ArrowUI targetPrefab;
 
     private List<ArrowUI> targetArrows = new List<ArrowUI>();
-    private BattleField _field;
-
 
     // Mapping from each fighter slot to its current targets
     private Dictionary<FighterSlot, List<FighterSlot>> fighterToActionMap = new Dictionary<FighterSlot, List<FighterSlot>>();
 
     public void Initialize() {
-        this._field = GetComponent<BattleField>();
         Messenger.AddListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
         this.ClearTargetArrows();
     }
@@ -29,7 +25,7 @@ public class FighterSlotUI : MonoBehaviour {
 
 
     public void ClearTargetArrows() {
-        List<FighterSlot> slots = this._field.GetFighterSlots();
+        List<FighterSlot> slots = GameManager.Instance.battleComponents.field.GetFighterSlots();
         foreach (var slot in slots) {
             slot.ClearAllArrowsUI();
         }

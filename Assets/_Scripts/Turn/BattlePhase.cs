@@ -18,7 +18,7 @@ public class BattleResult {
 [System.Serializable]
 public class BattlePhase : Phase {
 
-	public List<FightingEntity> fighters;
+    public List<FightingEntity> fighters;
     public BattleFight currentFight{get; set;}
 
     protected BattleUI _ui {get; set; }
@@ -36,24 +36,24 @@ public class BattlePhase : Phase {
     }
 
     protected override void OnPhaseStart() {
-    	// Set Mook Commands
-    	this.SetUnsetMookCommands();
+        // Set Mook Commands
+        this.SetUnsetMookCommands();
 
-    	// Order Players
-    	fighters = new List<FightingEntity>(this._field.GetAllFightingEntities());
+        // Order Players
+        fighters = new List<FightingEntity>(this._field.GetAllFightingEntities());
         fighters.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
         result = new BattleResult(fighters);
 
         // Call Base Implementation
-    	base.OnPhaseStart();
+        base.OnPhaseStart();
     }
 
     protected override void OnPhaseEnd() {
         Messenger.Broadcast<BattleResult>(Messages.OnBattleEnd, this.result);
-    	this.currentFight = null;
+        this.currentFight = null;
 
-    	// Call Base Implementation
-    	base.OnPhaseEnd();
+        // Call Base Implementation
+        base.OnPhaseEnd();
     }
 
     protected override IEnumerator Run() {
@@ -97,7 +97,7 @@ public class BattlePhase : Phase {
     }
 
     private void OnFightEnd(FightResult result) {
-    	this.result.results.Add(result);
+        this.result.results.Add(result);
         this.currentFight = null;
     }
 

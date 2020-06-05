@@ -49,13 +49,13 @@ public class MoveSelectionPhase : Phase {
     public MoveSelectionPhase(BattleUI ui, BattleField field, CommandSelector selector, string callback) : base(TurnPhase.MOVE_SELECTION, callback) {
         this._ui = ui;
         this._field = field;
-    	this._playerActionCounter = 0;
+        this._playerActionCounter = 0;
         this._heroMenuActions = new Stack<HeroMenuAction>();
         this._commandSelector = selector;
     }
 
     protected override void OnPhaseStart() {
-    	this._playerActionCounter = 0;
+        this._playerActionCounter = 0;
         this._heroMenuActions.Clear();
         // Reset Player Commands
         foreach (var player in this._field.GetAllFightingEntities()) {
