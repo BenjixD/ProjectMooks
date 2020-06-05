@@ -8,12 +8,15 @@ using System.Linq;
 public class PartySetupPhase : Phase {
 
     protected BattleField _field {get; set;}
+    protected BattleUI _ui {get; set;}
 
-    public PartySetupPhase(BattleField field, string callback) : base(TurnPhase.PARTY_SETUP, callback) {
+    public PartySetupPhase(BattleUI ui, BattleField field, string callback) : base(TurnPhase.PARTY_SETUP, callback) {
         this._field = field;
+        this._ui = ui;
     }
 
     protected override void OnPhaseStart() {
+        this._ui.playerQueueUI.RefreshUI();
         PlayerObject heroPlayer = this._field.GetHeroPlayer();
         if (!heroPlayer.HasModifier(ModifierAilment.MODIFIER_DEATH)) {
             this._field.RequestRecruitNewParty();

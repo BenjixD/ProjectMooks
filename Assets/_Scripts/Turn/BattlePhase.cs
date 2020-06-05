@@ -49,6 +49,7 @@ public class BattlePhase : Phase {
     }
 
     protected override void OnPhaseEnd() {
+        Messenger.Broadcast<BattleResult>(Messages.OnBattleEnd, this.result);
     	this.currentFight = null;
 
     	// Call Base Implementation

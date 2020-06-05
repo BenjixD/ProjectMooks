@@ -26,7 +26,7 @@ public class TurnManager : MonoBehaviour {
 
 		// Add the Phases in Order
 		phases.Add(new TurnStartPhase(field, callback));
-		phases.Add(new PartySetupPhase(field, callback));
+		phases.Add(new PartySetupPhase(ui, field, callback));
 		phases.Add(new MoveSelectionPhase(ui, field, commandSelector, callback));
 		phases.Add(new BattlePhase(ui, field, callback));
 		phases.Add(new TurnEndPhase(field, callback));
