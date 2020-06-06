@@ -25,11 +25,16 @@ public class RewardSceneController : MonoBehaviour
     }
 
     public void InitializeRewards() {
-        this.currentRewards = currentRewards.CreateNRandom(numRewards);
+        this.currentRewards = new List<PlayerReward>();
+        List<PlayerReward> rewards = rewardPool.CreateNRandom(numRewards);
+        foreach (PlayerReward reward in rewards) {
+            PlayerReward rewardInstance = Instantiate(reward);
+            rewardInstance.Initialize();
+            this.currentRewards.Add(rewardInstance);
+        }
+
         this.ui.InitializeRewards(this.currentRewards);
     }
-
-
 
     public void ApplyBuff(int index) {
         PlayerReward chosenReward = this.currentRewards[index];

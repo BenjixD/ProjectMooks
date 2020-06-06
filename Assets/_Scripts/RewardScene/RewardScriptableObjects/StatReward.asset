@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09746b0a9aed7c049a78107521b592f4, type: 3}
-  m_Name: StatBuffAilment
+  m_Script: {fileID: 11500000, guid: daa775381906dad40906893caf97f9ba, type: 3}
+  m_Name: StatReward
   m_EditorClassIdentifier: 
-  name: StatBuff
-  duration: 5
-  level: 0
-  phase: 0
-  damageType: 0
-  val: 10
-  statType: 0
+  name: <dynamically generated>
+  description: <dynamically generated>
+  ailment: {fileID: 0}
+  minPercentage: 0
+  maxPercentage: 200

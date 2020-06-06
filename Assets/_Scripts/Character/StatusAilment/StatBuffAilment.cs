@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Add other stats, use in Player...
+[System.Serializable]
+public enum StatType {
+    PHYSICAL
+}
 [CreateAssetMenu(fileName = "StatBuffAilment", menuName = "StatusAilment/StatBuffAilment")]
 public class StatBuffAilment : StatusAilment {
 	public enum Type {
@@ -9,10 +14,6 @@ public class StatBuffAilment : StatusAilment {
 		FLAT
 	}
 
-    public enum StatType {
-        PHYSICAL
-        // TODO: Other stat types, may require refactoring Player...
-    }
 
 	public Type damageType;
 	public float val;
@@ -24,12 +25,6 @@ public class StatBuffAilment : StatusAilment {
 	}
 
 	public override void ApplyTo(FightingEntity p) {
-        this.name = this.statType.ToString() + " " + "Buff " + this.val;
-
-        if (damageType == Type.PERCENTAGE) {
-            this.name += "%";
-        }
-
 		//TODO: Possible Animation Modifications
 		switch(this.damageType) {
 			case Type.PERCENTAGE:

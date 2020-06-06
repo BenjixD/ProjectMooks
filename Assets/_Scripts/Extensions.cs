@@ -21,16 +21,29 @@ public static class Extension
     }
 
     public static List<T> CreateNRandom<T>(this List<T> self, int n) {
-        if (n >= self.Count) {
-            Debug.LogError("ERROR: n is greater than list count!");
-            return new List<T>();
+        if (self.Count == 0) {
+            Debug.LogError("ERROR: No elements in list");
         }
+
+        List<T> refernece = new List<T>(self);
+
+        int ogCount = refernece.Count;
+        bool repeats = n >= ogCount;
 
         List<T> newList = new List<T>();
         for (int i = 0; i < n; i++) {
-            int randomIndex = UnityEngine.Random.Range(0, self.Count);
-            newList.Add(self[randomIndex]);
-            self.RemoveAt(randomIndex);
+            int randomIndex;
+            
+            if (!repeats) {
+                randomIndex = UnityEngine.Random.Range(0, refernece.Count);
+            } else {
+                randomIndex = UnityEngine.Random.Range(0, ogCount);
+            }
+
+            newList.Add(refernece[randomIndex]);
+            if (!repeats) {
+                refernece.RemoveAt(randomIndex);
+            }
         }
 
         return newList;
