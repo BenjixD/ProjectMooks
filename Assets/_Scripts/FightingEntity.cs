@@ -9,9 +9,9 @@ public class FightingEntity : MonoBehaviour
     public string Name;
     public PlayerStats stats;
 
-	public Job job;
+    public Job job;
 
-	public List<ActionBase> actions = new List<ActionBase>();
+    public List<ActionBase> actions = new List<ActionBase>();
 
     public int targetId;
     public string targetName;
@@ -22,23 +22,23 @@ public class FightingEntity : MonoBehaviour
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
 
-	protected QueuedAction _queuedAction;
-	protected AnimationController _animController;
-	protected FightingEntityAI _ai;
-	protected AilmentController _ailmentController;
+    protected QueuedAction _queuedAction;
+    protected AnimationController _animController;
+    protected FightingEntityAI _ai;
+    protected AilmentController _ailmentController;
 
-	protected virtual void Awake() {
-		_animController = GetComponent<AnimationController>();
-		Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
-	}
+    protected virtual void Awake() {
+        _animController = GetComponent<AnimationController>();
+        Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
+    }
 
-	protected virtual void OnDestroy() {
-		Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
-	}
-	
-	public void Initialize(int index, PlayerCreationData data) {
+    protected virtual void OnDestroy() {
+        Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
+    }
+    
+    public void Initialize(int index, PlayerCreationData data) {
         this.targetId = index;
-		Name = data.name;
+        Name = data.name;
         
         // Sets the default energy for mooks to be always a constant
         // TODO: Do this a more cleaner way
@@ -47,55 +47,55 @@ public class FightingEntity : MonoBehaviour
             data.stats.maxMana = 9;
         }
 
-		SetStats(data.stats);
-		SetJob(data.job);
-		_ai = new FightingEntityAI(this);
-        this.targetName = GameManager.Instance.turnController.field.GetTargetNameFromIndex(index);
-		_ailmentController = new AilmentController(this);
+        SetStats(data.stats);
+        SetJob(data.job);
+        _ai = new FightingEntityAI(this);
+        this.targetName = GameManager.Instance.battleComponents.field.GetTargetNameFromIndex(index);
+        _ailmentController = new AilmentController(this);
         Debug.Log("Initialize: " + Name);
-	}
+    }
 
-	public void SetStats(PlayerStats stats) {
-		this.stats = stats;
-	}
+    public void SetStats(PlayerStats stats) {
+        this.stats = stats;
+    }
 
-	// Getters / Setters 
-	public string GetJobName() {
-		return job.ToString();
-	}
+    // Getters / Setters 
+    public string GetJobName() {
+        return job.ToString();
+    }
 
 
-	public void SetJob(Job job) {
-		this.job = job;
+    public void SetJob(Job job) {
+        this.job = job;
         if (this.isEnemy()) {
             actions = GameManager.Instance.models.GetEnemyJobActions(job);
         } else {
-		    actions =  GameManager.Instance.models.GetPlayerJobActions(job);
+            actions =  GameManager.Instance.models.GetPlayerJobActions(job);
         }
-	}
+    }
 
-	public AilmentController GetAilmentController() {
-		return _ailmentController;
-	}
+    public AilmentController GetAilmentController() {
+        return _ailmentController;
+    }
 
-	public void TryActionCommand(string message) {
-		string[] splitCommand = message.Split(' ');
-		foreach (ActionBase action in actions) {
-			if (action.TryChooseAction(this, splitCommand)) {
-				return;
-			}
-		}
-		Debug.Log("Invalid action command for player " + Name + ": " + message);
-	}
+    public void TryActionCommand(string message) {
+        string[] splitCommand = message.Split(' ');
+        foreach (ActionBase action in actions) {
+            if (action.TryChooseAction(this, splitCommand)) {
+                return;
+            }
+        }
+        Debug.Log("Invalid action command for player " + Name + ": " + message);
+    }
 
-	public ActionBase GetRecommendedAction() {
-		return _ai.GetSuggestion();
-	}
+    public ActionBase GetRecommendedAction() {
+        return _ai.GetSuggestion();
+    }
 
-	public void SetQueuedAction(QueuedAction queuedAction) {
-		_queuedAction = queuedAction;
+    public void SetQueuedAction(QueuedAction queuedAction) {
+        _queuedAction = queuedAction;
         Messenger.Broadcast<QueuedAction>(Messages.OnSetQueuedAction, _queuedAction);
-	}
+    }
 
     public QueuedAction GetQueuedAction() {
         return _queuedAction;
@@ -117,11 +117,11 @@ public class FightingEntity : MonoBehaviour
         return actions[Random.Range(0, actions.Count)];
     }
 
-	public void Animate(string animationName, bool loop) {
+    public void Animate(string animationName, bool loop) {
         if (_animController != null) {
-		    _animController.SetAnimation(animationName, loop);
+            _animController.SetAnimation(animationName, loop);
         }
-	}
+    }
 
     public List<ActionBase> GetFilteredActions(ActionType actionType) {
         return this.actions.Filter( (ActionBase action) => action.actionType == actionType );
@@ -169,8 +169,8 @@ public class FightingEntity : MonoBehaviour
 
     private void OnBattleEnd(BattleResult result) {
         Debug.Log("AI: " + Name + " " + _ai);
-    	List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
-    	_ai.ReviewFightResult(myFights);
+        List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
+        _ai.ReviewFightResult(myFights);
     }
 
 }

@@ -11,7 +11,6 @@ public class FighterSlotUI : MonoBehaviour {
 
     private List<ArrowUI> targetArrows = new List<ArrowUI>();
 
-
     // Mapping from each fighter slot to its current targets
     private Dictionary<FighterSlot, List<FighterSlot>> fighterToActionMap = new Dictionary<FighterSlot, List<FighterSlot>>();
 
@@ -26,7 +25,7 @@ public class FighterSlotUI : MonoBehaviour {
 
 
     public void ClearTargetArrows() {
-        List<FighterSlot> slots = GameManager.Instance.turnController.field.GetFighterSlots();
+        List<FighterSlot> slots = GameManager.Instance.battleComponents.field.GetFighterSlots();
         foreach (var slot in slots) {
             slot.ClearAllArrowsUI();
         }
