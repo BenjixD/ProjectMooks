@@ -25,7 +25,6 @@ public class StatBuffAilment : StatusAilment {
 	}
 
 	public override void ApplyTo(FightingEntity p) {
-		//TODO: Possible Animation Modifications
 		switch(this.damageType) {
 			case Type.PERCENTAGE:
 				p.stats.SetPhysical(p.stats.GetPhysical() + (int)(p.stats.GetPhysical() * this.val / 100));

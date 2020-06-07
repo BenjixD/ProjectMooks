@@ -1,18 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class RewardSceneUI : MonoBehaviour
 {
     public Transform rewardParent;
 
-    public DuoText rewardUIPrefab;
+    public RewardTextUI rewardUIPrefab;
 
-    public void InitializeRewards(List<PlayerReward> rewardDescriptions) {
+    public BasicText selectedRewardText;
+
+    public BasicText continueText;
+
+    public void InitializeRewards(List<PlayerReward> rewardDescriptions, Action<PlayerReward> callback) {
         foreach (PlayerReward rewardDescription in rewardDescriptions) {
-            DuoText rewardUI = Instantiate<DuoText>(rewardUIPrefab, rewardParent);
-            rewardUI.header.SetText(rewardDescription.name + ":");
-            rewardUI.body.SetText(rewardDescription.description);
+            RewardTextUI rewardUI = Instantiate<RewardTextUI>(rewardUIPrefab, rewardParent);
+            string header = rewardDescription.name + ":";
+            string body = rewardDescription.description;
+            rewardUI.Initialize(header, body, rewardDescription, callback);
         }
+
+        this.selectedRewardText.transform.SetAsLastSibling();
+    }
+
+
+    public void OnSelectRewardUI(PlayerReward reward) {
+        this.selectedRewardText.text.SetText("Reward Selected: " + reward.name);
+        this.continueText.text.SetText("Press Z to continue");
     }
 }

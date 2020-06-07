@@ -3,7 +3,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Rewards", menuName = "Rewards/StatReward", order = 1)]
-public class StatReward : PlayerReward
+public class StatReward : PlayerRewardAilment
 {
     [Header("StatReward")]
     [Range(0, 200)]
@@ -17,22 +17,24 @@ public class StatReward : PlayerReward
 
     public override void Initialize() {
         statType = StatType.PHYSICAL; // TODO: Randomize this
-        this.name = GetStatDisplayName(statType);
         StatBuffAilment statAilment =  GameManager.Instance.models.GetStatBuffAilment(this.statType, percentage);
         statAilment.val = Random.Range(minPercentage, maxPercentage);
-        this.percentage = statAilment.val;
 
+        this.percentage = statAilment.val;
         this.ailment = statAilment;
+        this.name = GetStatDisplayName(statType) + " " + statAilment.val;
+        
 
         this.description = "Raises " + statType.ToString() + " by: " + statAilment.val;
         if (statAilment.damageType == StatBuffAilment.Type.PERCENTAGE) {
             this.description += "%";
+            this.name += "%";
         }
         
         
     }
 
     public static string GetStatDisplayName(StatType type) {
-        return type.ToString() + " Buff";
+        return type.ToString() + " Up";
     }
 }

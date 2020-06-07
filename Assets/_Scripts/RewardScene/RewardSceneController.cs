@@ -8,10 +8,16 @@ public class RewardSceneController : MonoBehaviour
     public List<PlayerReward> rewardPool;
     public RewardSceneUI ui;
 
+    public SceneChanger sceneChanger;
+
 
     private List<PlayerReward> currentRewards;
 
     const int numRewards = 3;
+
+    private PlayerReward selectedReward;
+
+    private bool canContinue = false;
 
 
     void Start()
@@ -33,12 +39,43 @@ public class RewardSceneController : MonoBehaviour
             this.currentRewards.Add(rewardInstance);
         }
 
-        this.ui.InitializeRewards(this.currentRewards);
+        this.ui.InitializeRewards(this.currentRewards, this.SelectReward);
     }
 
-    public void ApplyBuff(int index) {
-        PlayerReward chosenReward = this.currentRewards[index];
-        Player hero = GameManager.Instance.gameState.playerParty.GetFighters<Player>()[0];
-        hero.setPermanentBuff(chosenReward);
+    public void SelectReward(PlayerReward reward) {
+
+        this.selectedReward = reward;
+        this.ui.OnSelectRewardUI(reward);
+        if (!canContinue) {
+            StartCoroutine(WaitForInput());
+        }
     }
+
+    public void ApplyReward(PlayerReward reward) {
+        switch (reward.rewardType) {
+            case PlayerRewardType.AILMENT:
+                Player hero = GameManager.Instance.gameState.playerParty.GetHeroFighter();
+                hero.AddPermanentReward(reward);
+            break;
+
+            default:
+            break;
+        }
+    }
+
+
+    private IEnumerator WaitForInput() {
+        canContinue = true;
+        while (true) {
+            if (Input.GetKeyDown(KeyCode.Z)) {
+                this.ApplyReward(this.selectedReward);
+                this.sceneChanger.ChangeScene();
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    
 }

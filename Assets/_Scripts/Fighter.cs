@@ -9,7 +9,7 @@ public class Fighter
 
     // Player object (null if not on player scene)
     public FightingEntity fighter;
-    private List<PlayerReward> permanentBuffs = new List<PlayerReward>();
+    private List<PlayerReward> permanentRewards = new List<PlayerReward>();
 
 
     public void SetPlayerCreationData(PlayerCreationData data) {
@@ -30,17 +30,31 @@ public class Fighter
         }
 
         instantiatedFighter.Initialize(targetId, this.playerCreationData);
+
+        foreach (PlayerReward reward in this.GetPermanentRewards()) {
+
+            switch (reward.rewardType) {
+                case PlayerRewardType.AILMENT:
+                    PlayerRewardAilment ailmentReward = (PlayerRewardAilment)reward;
+                    instantiatedFighter.GetAilmentController().AddStatusAilment(GameObject.Instantiate(ailmentReward.ailment));
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         this.fighter = instantiatedFighter;
 
         return instantiatedFighter;
 
     }
 
-    public List<PlayerReward> getPermanentBuffs() {
-        return this.permanentBuffs;
+    public List<PlayerReward> GetPermanentRewards() {
+        return this.permanentRewards;
     }
 
-    public void setPermanentBuff(PlayerReward reward) {
-        this.permanentBuffs.Add(reward);
+    public void AddPermanentReward(PlayerReward reward) {
+        this.permanentRewards.Add(reward);
     }
 }

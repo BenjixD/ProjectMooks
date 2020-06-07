@@ -189,9 +189,7 @@ public class BattleField : MonoBehaviour
 
         JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(player.playerCreationData.job);
         PlayerObject playerObject = player.InstantiateFromJob<PlayerObject>(jobActionsList, player.playerCreationData.name, index);
-        foreach (PlayerReward reward in player.getPermanentBuffs()) {
-            playerObject.GetAilmentController().AddStatusAilment(Instantiate(reward.ailment));
-        }
+
 
         return playerObject;
     }
