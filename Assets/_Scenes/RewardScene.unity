@@ -971,8 +971,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 883acccf538ae3c4dabc8dd3facbafb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rewardPool:
-  - {fileID: 11400000, guid: dda1f69e3e7314f4ebf7a393433ba0d6, type: 2}
+  rewardRarityWeights:
+  - value:
+      rewardRarity: 0
+    weight: 0.5
+    rewardWeights:
+    - value: {fileID: 11400000, guid: dda1f69e3e7314f4ebf7a393433ba0d6, type: 2}
+      weight: 1
+  - value:
+      rewardRarity: 1
+    weight: 0.5
+    rewardWeights:
+    - value: {fileID: 11400000, guid: dda1f69e3e7314f4ebf7a393433ba0d6, type: 2}
+      weight: 1
   ui: {fileID: 1281206182}
   sceneChanger: {fileID: 1281206183}
 --- !u!4 &1281206181

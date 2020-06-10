@@ -12,6 +12,7 @@ public abstract class PlayerReward : ScriptableObject
 {
     public string name;
     public string description;
+    public RewardRarity rarity;
 
     public abstract PlayerRewardType rewardType {get;}
 

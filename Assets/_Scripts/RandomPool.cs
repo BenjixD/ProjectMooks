@@ -49,18 +49,14 @@ public class RandomPool<T> where T : class
     private float sum;
 
 
-    public RandomPool(List<ValueWeight<T>> pool, List<float> weights) {
-        if (pool.Count != weights.Count) {
-            Debug.LogError("ERROR: invalid weight function");
-        }
+    public RandomPool(List<ValueWeight<T>> pool) {
         this.pool = pool;
-
-        this.sum = 0;
-        foreach (var pooledObject in this.pool) {
-            this.sum += pooledObject.weight;
-        }
-
         this.NormalizeWeights();
+    }
+
+    public RandomPool<T> Clone(RandomPool<T> other) {
+        RandomPool<T> newPool = new RandomPool<T>(new List<ValueWeight<T>>(other.pool));
+        return newPool;
     }
 
     public void AddValue(ValueWeight<T> val) {
@@ -82,6 +78,11 @@ public class RandomPool<T> where T : class
     }
 
     private void NormalizeWeights() {
+        this.sum = 0;
+        foreach (var pooledObject in this.pool) {
+            this.sum += pooledObject.weight;
+        }
+
         for (int i = 0; i < this.pool.Count; i++) {
             this.pool[i].weight /= this.sum;
 
@@ -110,12 +111,16 @@ public class RandomPool<T> where T : class
         return pickedObject.value;
     }
 
-    public List<T> PickN(int n) {
+    public List<T> PickN(int n, bool allowDuplicates = true) {
         List<T> ret = new List<T>();
+        RandomPool<T> clone = this.Clone(this);
+
         for (int i = 0; i < n; i++) {
-            T pickedValue = this.PickOne();
+            T pickedValue = clone.PickOne();
             ret.Add(pickedValue);
-            this.RemoveValue(pickedValue);
+            if (!allowDuplicates) {
+                clone.RemoveValue(pickedValue);
+            }
         }
 
         return ret;
