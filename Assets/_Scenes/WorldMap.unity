@@ -133,16 +133,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: WorldMapCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 4817316782502161137, guid: 2bdb13f3983c76b48920111322b87a1a,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5358336805588760375, guid: 2bdb13f3983c76b48920111322b87a1a,
-        type: 3}
-      propertyPath: _mapSceneName
-      value: WorldMap
-      objectReference: {fileID: 0}
     - target: {fileID: 6153104635438424003, guid: 2bdb13f3983c76b48920111322b87a1a,
         type: 3}
       propertyPath: m_LocalPosition.x

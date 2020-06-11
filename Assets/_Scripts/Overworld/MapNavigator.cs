@@ -43,7 +43,6 @@ public class MapNavigator : MonoBehaviour {
             return;
         }
         DontDestroyOnLoad(gameObject);
-        SceneManager.sceneLoaded += OnSceneLoaded;
 
         _horizontalPadding = _mapGenerator.horizontalPadding;
         _verticalPadding = _mapGenerator.verticalPadding;
@@ -52,6 +51,14 @@ public class MapNavigator : MonoBehaviour {
     private void Start() {
         GenerateNewMap();
         EnableNextPaths();
+    }
+
+    private void OnEnable() {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable() {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -120,18 +127,6 @@ public class MapNavigator : MonoBehaviour {
 
         // Create branch leaving current node
         CreateBranch(GetCurrRoom(), false);
-
-        /*
-        // Find topmost and bottommost rooms
-        int topBranchIndex = Mathf.Max(_currCoord.row - _moveRange, 0);
-        while (_currMap[_currCoord.col + 1][topBranchIndex] == null) {
-            topBranchIndex++;
-        }
-        int bottomBranchIndex = Mathf.Min(_currCoord.row + _moveRange, _currMap[_currCoord.col + 1].Length - 1);
-        while (_currMap[_currCoord.col + 1][bottomBranchIndex] == null) {
-            bottomBranchIndex--;
-        }
-        */
 
         // Go through next column and find the topmost and bottommost rooms that can be reached
         // Also, grey out unreachable rooms

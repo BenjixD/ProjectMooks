@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3191040276140247181}
   - component: {fileID: 6065937748355477376}
   - component: {fileID: 2372278385006626687}
+  - component: {fileID: 511081068}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -68,6 +69,7 @@ MonoBehaviour:
   models: {fileID: 1133189570}
   gameState: {fileID: 1133189571}
   time: {fileID: 3191040276140247181}
+  eventManager: {fileID: 511081068}
 --- !u!114 &5902595311601403740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,3 +211,18 @@ MonoBehaviour:
   - {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 1}
   - {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 1}
   - {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 1}
+--- !u!114 &511081068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5902595311601403729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 294a7564ff5aab84ea8c1109a3f18191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _eventPrefabs:
+  - {fileID: 4898605610877541137, guid: 96c30301923cf354ba8081ae1ff098c0, type: 3}
+  - {fileID: 4898605610877541137, guid: 96c30301923cf354ba8081ae1ff098c0, type: 3}

@@ -286,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapNavigator: {fileID: 5358336805588760375}
+  _mapScroller: {fileID: 1406697840}
   _roomNodePrefab: {fileID: 5326803348686341004, guid: d9a68ed106d52194d8aaf34b106c2989,
     type: 3}
   _mapContainer: {fileID: 386424227}

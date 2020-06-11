@@ -41,6 +41,9 @@ public class RoomNode : MonoBehaviour {
 
     [Header("References")]
     [SerializeField] private Image _background = null;
+    [SerializeField] private Image _icon = null;
+    [SerializeField] private Sprite _battleIcon = null;
+    [SerializeField] private Sprite[] _eventIcons = null;
 
     [Space]
 
@@ -48,6 +51,7 @@ public class RoomNode : MonoBehaviour {
     [SerializeField] private string _battleScene = null;
     [SerializeField] private string _eventScene = null;
     private RoomCategory _roomCategory;
+    private EventType _eventType;
     private GameObject _entryBranch;
     private RectTransform _verticalPath;
 
@@ -59,11 +63,13 @@ public class RoomNode : MonoBehaviour {
         } else if (_roomCategory == RoomCategory.EVENT) {
             // TODO: pass EventType
             SceneManager.LoadScene(_eventScene);
+            GameManager.Instance.eventManager.LoadEvent(_eventType);
         }
     }
 
     public void SetRoom(BattleType type) {
         _roomCategory = RoomCategory.BATTLE;
+        _icon.sprite = _battleIcon;
         switch(type) {
             case BattleType.EASY_BATTLE:
                 _background.sprite = easyNode;
@@ -82,6 +88,8 @@ public class RoomNode : MonoBehaviour {
 
     public void SetRoom(EventType type) {
         _roomCategory = RoomCategory.EVENT;
+        _eventType = type;
+        _icon.sprite = _eventIcons[(int) type];
         _background.sprite = eventNode;
     }
 

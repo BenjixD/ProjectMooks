@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager> {
 
     public GameState gameState;
     public TimeManager time;
+    public EventManager eventManager;
 
     // Note: This field is null if not in battle
     public TurnController turnController{get; set;}
