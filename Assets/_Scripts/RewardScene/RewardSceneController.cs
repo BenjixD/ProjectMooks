@@ -75,6 +75,14 @@ public class RewardSceneController : MonoBehaviour
         List<ValueWeight<PlayerReward>> allRewards = new List<ValueWeight<PlayerReward>>();
 
         float weightSumForErrorCheck = 0;
+        foreach (ValueWeightRewardRarity rewardRarity in this.rewardRarityWeights) {
+            weightSumForErrorCheck += rewardRarity.weight;
+        }
+
+        if (weightSumForErrorCheck != 1) {
+            Debug.LogError("ERROR: Rarity pool weights should add to 1 or else they might not work properly!");
+            return;
+        }
 
         foreach (ValueWeightRewardRarity rewardRarity in this.rewardRarityWeights) {
             weightSumForErrorCheck += rewardRarity.weight;
@@ -101,11 +109,6 @@ public class RewardSceneController : MonoBehaviour
             rewardPool.ForAll( reward => reward.weight *= rewardRarity.weight );
 
             allRewards.AddRange(rewardPool.GetPoolWeights());
-        }
-
-        if (weightSumForErrorCheck != 1) {
-            Debug.LogError("ERROR: Rarity pool weights should add to 1 or else they might not work properly!");
-            return;
         }
 
         finalRewardPool = new RandomPool<PlayerReward>(allRewards);
