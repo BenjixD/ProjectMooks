@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: <dynamically generated>
   description: <dynamically generated>
+  rarity: 0
+  affinityTypes: 0000000001000000
   ailment: {fileID: 0}
   minPercentage: 0
   maxPercentage: 200

@@ -11,6 +11,14 @@ public enum RewardRarity {
     LEGENDARY
 };
 
+public enum RewardAffinity {
+    DEFAULT,
+    STAT_FOCUS,
+    ABILITY_FOCUS,
+    SPECIAL_FOCUS,
+    MOOK_FOCUS
+};
+
 
 // Wrappers to show properly in the inspector
 [System.Serializable]
@@ -62,15 +70,35 @@ public class RewardSceneController : MonoBehaviour
     public void InitializeRewards() {
         this.currentRewards = new List<PlayerReward>();
 
+        RewardAffinity affinity = GameManager.Instance.gameState.progressData.affinity;
+
         List<ValueWeight<PlayerReward>> allRewards = new List<ValueWeight<PlayerReward>>();
 
         foreach (ValueWeightRewardRarity rewardRarity in this.rewardRarityWeights) {
             RewardRarity rarity = rewardRarity.value.rewardRarity;
 
             List<ValueWeight<PlayerReward>> rewardWeightsCasted = rewardRarity.rewardWeights.Cast<ValueWeight<PlayerReward>>().ToList();
-            rewardRarityWeights.ForEach( reward => reward.weight *= rewardRarity.weight );
+            if (rewardWeightsCasted.Count() == 0) {
+                Debug.LogError("Zero rewards in pool!");
+                continue;
+            }
 
-            allRewards.AddRange(rewardWeightsCasted);
+            RandomPool<PlayerReward> rewardPool = new RandomPool<PlayerReward>(rewardWeightsCasted);
+
+            if (affinity != RewardAffinity.DEFAULT) {
+                // Note: ForAll normalizes weights afterwards
+                rewardPool.ForAll( (ValueWeight<PlayerReward> reward) => {
+                    float normalWeight = 1/(float)rewardWeightsCasted.Count();
+                    reward.weight = normalWeight;
+                    if (reward.value.affinityTypes.Contains(affinity)) {
+                        reward.weight *= 2;
+                    }
+                });
+            }
+
+            rewardPool.ForAll( reward => reward.weight *= rewardRarity.weight );
+
+            allRewards.AddRange(rewardPool.GetPoolWeights());
         }
 
         finalRewardPool = new RandomPool<PlayerReward>(allRewards);

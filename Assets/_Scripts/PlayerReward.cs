@@ -1,7 +1,7 @@
 
 
 using UnityEngine;
-
+using System.Collections.Generic;
 
 
 public enum PlayerRewardType {
@@ -13,6 +13,7 @@ public abstract class PlayerReward : ScriptableObject
     public string name;
     public string description;
     public RewardRarity rarity;
+    public List<RewardAffinity> affinityTypes;
 
     public abstract PlayerRewardType rewardType {get;}
 

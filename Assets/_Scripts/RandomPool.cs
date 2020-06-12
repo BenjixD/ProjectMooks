@@ -73,11 +73,11 @@ public class RandomPool<T> where T : class
         }
     }
 
-    public List<ValueWeight<T>> GetPool() {
+    public List<ValueWeight<T>> GetPoolWeights() {
         return this.pool;
     }
 
-    private void NormalizeWeights() {
+    public void NormalizeWeights() {
         this.sum = 0;
         foreach (var pooledObject in this.pool) {
             this.sum += pooledObject.weight;
@@ -124,5 +124,18 @@ public class RandomPool<T> where T : class
         }
 
         return ret;
+    }
+
+
+    public void ForAll(System.Action<ValueWeight<T>> action) {
+        foreach (ValueWeight<T> valueWeight in this.pool ) {
+            action(valueWeight);
+        }
+
+        this.NormalizeWeights();
+    }
+
+    public int Count() {
+        return this.pool.Count;
     }
 }
