@@ -85,16 +85,14 @@ public class RewardSceneController : MonoBehaviour
 
             RandomPool<PlayerReward> rewardPool = new RandomPool<PlayerReward>(rewardWeightsCasted);
 
-            if (affinity != RewardAffinity.DEFAULT) {
-                // Note: ForAll normalizes weights afterwards
-                rewardPool.ForAll( (ValueWeight<PlayerReward> reward) => {
-                    float normalWeight = 1/(float)rewardWeightsCasted.Count();
-                    reward.weight = normalWeight;
-                    if (reward.value.affinityTypes.Contains(affinity)) {
-                        reward.weight *= 2;
-                    }
-                });
-            }
+            // Note: ForAll normalizes weights afterwards
+            rewardPool.ForAll( (ValueWeight<PlayerReward> reward) => {
+                float normalWeight = 1/(float)rewardWeightsCasted.Count();
+                reward.weight = normalWeight;
+                if (affinity != RewardAffinity.DEFAULT && reward.value.affinityTypes.Contains(affinity)) {
+                    reward.weight *= 2;
+                }
+            });
 
             rewardPool.ForAll( reward => reward.weight *= rewardRarity.weight );
 
