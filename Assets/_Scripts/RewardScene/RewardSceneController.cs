@@ -80,6 +80,8 @@ public class RewardSceneController : MonoBehaviour
         }
 
         if (weightSumForErrorCheck != 1) {
+            // Note: Technically we can check this in the code by making it into a pool and normalizing it, but if it doesn't add to 1,
+            // it probably isn't intended 
             Debug.LogError("ERROR: Rarity pool weights should add to 1 or else they might not work properly!");
             return;
         }
