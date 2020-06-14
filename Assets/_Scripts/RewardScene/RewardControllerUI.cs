@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class RewardSceneUI : MonoBehaviour
+public class RewardControllerUI : MonoBehaviour
 {
     public Transform rewardParent;
 
