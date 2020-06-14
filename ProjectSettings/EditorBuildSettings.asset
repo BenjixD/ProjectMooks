@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Scenes/WorldMap.unity
+    guid: e175e9290ab25724e8ad468a5fb31fbb
+  - enabled: 1
     path: Assets/_Scenes/ConnectingScene.unity
     guid: 9d9be89b0d245d447be23e7b3799c25c
   - enabled: 1
@@ -18,9 +21,12 @@ EditorBuildSettings:
     path: Assets/_Scenes/GameOverScreen.unity
     guid: f70615f9a88dd2e47a318b4f32b59f0c
   - enabled: 1
-    path: Assets/_Scenes/WorldMap.unity
+    path: Assets/_Scenes/WorldMapOld.unity
     guid: 40e3d7292c2c09e48be0214605198011
   - enabled: 1
     path: Assets/_Scenes/Battle.unity
     guid: 8bb1843e6db80ae4eb4dda2b45316eb2
+  - enabled: 1
+    path: Assets/_Scenes/Event.unity
+    guid: 19749fa0a03ac8146a4db51513d37b91
   m_configObjects: {}

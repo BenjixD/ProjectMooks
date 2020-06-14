@@ -122,8 +122,8 @@ public class MapNavigator : MonoBehaviour {
             Debug.Log("end of map reached, no next rooms");
             return;
         }
-        _canMove = true;
 
+        _canMove = true;
 
         // Create branch leaving current node
         CreateBranch(GetCurrRoom(), false);
