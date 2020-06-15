@@ -6,5 +6,5 @@ using UnityEngine;
 public class EventData {
     public EventType eventType;
     public Sprite mapIcon;
-    public EventRoom eventRoomPrefab;
+    public EventStage eventStagePrefab;
 }

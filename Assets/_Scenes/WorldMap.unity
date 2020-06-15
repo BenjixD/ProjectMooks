@@ -133,16 +133,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: WorldMapCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 5358336805588760375, guid: 2bdb13f3983c76b48920111322b87a1a,
-        type: 3}
-      propertyPath: _zoneProperties.Array.data[0].columns.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5358336805588760375, guid: 2bdb13f3983c76b48920111322b87a1a,
-        type: 3}
-      propertyPath: _zoneProperties.Array.data[0].columns.Array.data[0]
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6153104635438424003, guid: 2bdb13f3983c76b48920111322b87a1a,
         type: 3}
       propertyPath: m_LocalPosition.x

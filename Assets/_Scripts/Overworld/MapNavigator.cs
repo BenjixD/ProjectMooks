@@ -29,7 +29,7 @@ public class MapNavigator : MonoBehaviour {
     [Tooltip("Maximum distance that the player can move when choosing their path.")]
     [SerializeField] private int _moveRange = 1;
 
-    private RoomNode[][] _currMap;
+    private StageNode[][] _currMap;
 
     // TODO: temp, move
     [SerializeField] private ZoneProperties[] _zoneProperties = null;
@@ -82,31 +82,31 @@ public class MapNavigator : MonoBehaviour {
         SetPlayerCoord(coord.col, coord.row);
     }
 
-    private RoomNode GetCurrRoom() { 
+    private StageNode GetCurrStage() { 
         return _currMap[_currCoord.col][_currCoord.row];
     }
 
     // Creates a path segment going into or out of the given transform (isEntryBranch specifies which)
-    private void CreateBranch(RoomNode room, bool isEntryBranch) {
+    private void CreateBranch(StageNode stage, bool isEntryBranch) {
         float branchWidth = _horizontalPadding / 2;
-        RectTransform branch = Instantiate(_pathPrefab, room.transform).GetComponent<RectTransform>();
+        RectTransform branch = Instantiate(_pathPrefab, stage.transform).GetComponent<RectTransform>();
         branch.sizeDelta = new Vector2(branchWidth + branch.rect.height, branch.rect.height);
         if (isEntryBranch) {
             branch.anchoredPosition -= new Vector2(branchWidth / 2, 0);
-            room.SetEntryBranch(branch.gameObject);
+            stage.SetEntryBranch(branch.gameObject);
         } else {
             branch.anchoredPosition += new Vector2(branchWidth / 2, 0);
         }
     }
 
-    // Change given path's height so that it extends from roomA to roomB
-    private void PositionVerticalPath(RectTransform path, RoomNode roomA, RoomNode roomB) {
-        if (roomA == null || roomB == null) {
-            Debug.LogWarning("Cannot position vertical path between null Rooms");
+    // Change given path's height so that it extends from stageA to stageB
+    private void PositionVerticalPath(RectTransform path, StageNode stageA, StageNode stageB) {
+        if (stageA == null || stageB == null) {
+            Debug.LogWarning("Cannot position vertical path between null StageNodes");
             return;
         }
-        RectTransform rectA = roomA.GetComponent<RectTransform>();
-        RectTransform rectB = roomB.GetComponent<RectTransform>();
+        RectTransform rectA = stageA.GetComponent<RectTransform>();
+        RectTransform rectB = stageB.GetComponent<RectTransform>();
         path.sizeDelta = new Vector2(path.rect.width, Mathf.Abs(rectA.anchoredPosition.y - rectB.anchoredPosition.y) + path.rect.width);
         // Set absolute y of the path
         float pathY = (rectA.anchoredPosition.y + rectB.anchoredPosition.y) / 2;
@@ -119,26 +119,25 @@ public class MapNavigator : MonoBehaviour {
     private void EnableNextPaths() {
         _mapDisplay.SetActive(true);
         if (_currCoord == null || _currCoord.col + 1 >= _currMap.Length) {
-            Debug.Log("end of map reached, no next rooms");
+            Debug.Log("End of map reached, no next stages");
             return;
         }
-
         _canMove = true;
 
         // Create branch leaving current node
-        CreateBranch(GetCurrRoom(), false);
+        CreateBranch(GetCurrStage(), false);
 
-        // Go through next column and find the topmost and bottommost rooms that can be reached
-        // Also, grey out unreachable rooms
+        // Go through next column and find the topmost and bottommost stages that can be reached
+        // Also, grey out unreachable stages
         int topBranchIndex = -1;
         int bottomBranchIndex = -1;
         for (int i = 0; i < _currMap[_currCoord.col + 1].Length; i++) {
-            RoomNode room = _currMap[_currCoord.col + 1][i];
-            if (room == null) {
+            StageNode stage = _currMap[_currCoord.col + 1][i];
+            if (stage == null) {
                 continue;
             }
             if (i < _currCoord.row - _moveRange || i > _currCoord.row + _moveRange) {
-                room.SetInaccessible();
+                stage.SetInaccessible();
             } else {
                 if (topBranchIndex == -1) {
                     topBranchIndex = i;
@@ -151,24 +150,24 @@ public class MapNavigator : MonoBehaviour {
 
         // Create branches entering each of the next nodes
         for (int i = topBranchIndex; i <= bottomBranchIndex; i++) {
-            RoomNode room = _currMap[_currCoord.col + 1][i];
-            if (room != null) {
-                CreateBranch(room, true);
+            StageNode stage = _currMap[_currCoord.col + 1][i];
+            if (stage != null) {
+                CreateBranch(stage, true);
             }
         }
 
         // Connect all the branches with one vertical path
-        RoomNode roomA = _currMap[_currCoord.col + 1][topBranchIndex];
-        RoomNode roomB = _currMap[_currCoord.col + 1][bottomBranchIndex];
+        StageNode stageA = _currMap[_currCoord.col + 1][topBranchIndex];
+        StageNode stageB = _currMap[_currCoord.col + 1][bottomBranchIndex];
         if (_currCoord.row < topBranchIndex) {
-            roomA = GetCurrRoom();
+            stageA = GetCurrStage();
         } else if (_currCoord.row > bottomBranchIndex) {
-            roomB = GetCurrRoom();
+            stageB = GetCurrStage();
         }
-        RectTransform verticalPath = Instantiate(_pathPrefab, GetCurrRoom().transform).GetComponent<RectTransform>();
+        RectTransform verticalPath = Instantiate(_pathPrefab, GetCurrStage().transform).GetComponent<RectTransform>();
         verticalPath.anchoredPosition += new Vector2(_horizontalPadding / 2, 0);
-        GetCurrRoom().SetVerticalPath(verticalPath);
-        PositionVerticalPath(verticalPath, roomA, roomB);
+        GetCurrStage().SetVerticalPath(verticalPath);
+        PositionVerticalPath(verticalPath, stageA, stageB);
     }
 
     public void TryMoveTo(Coord dest) {
@@ -178,26 +177,26 @@ public class MapNavigator : MonoBehaviour {
     }
 
     private IEnumerator Move(Coord dest) {
-        // Remove branches entering the rooms not chosen in the next column and grey them out
+        // Remove branches entering the stages not chosen in the next column and grey them out
         for (int i = 0; i < _currMap[dest.col].Length; i++) {
-            RoomNode room = _currMap[dest.col][i];
-            // Ignore null rooms and the current room
-            if (room == null || i == dest.row) {
+            StageNode stage = _currMap[dest.col][i];
+            // Ignore null stages and the current stage
+            if (stage == null || i == dest.row) {
                 continue;
             }
-            room.SetInaccessible();
-            room.DestroyEntryBranch();
+            stage.SetInaccessible();
+            stage.DestroyEntryBranch();
         }
 
         // Readjust length of vertical path leading to next column
-        PositionVerticalPath(GetCurrRoom().GetVerticalPath(), GetCurrRoom(), _currMap[dest.col][dest.row]);
+        PositionVerticalPath(GetCurrStage().GetVerticalPath(), GetCurrStage(), _currMap[dest.col][dest.row]);
         
         SetPlayerCoord(dest);
         _canMove = false;
 
         // TODO: move animation?
         yield return new WaitForSeconds(1f);
-        GetCurrRoom().EnterRoom();
+        GetCurrStage().EnterStage();
         _mapDisplay.SetActive(false);
     }
 

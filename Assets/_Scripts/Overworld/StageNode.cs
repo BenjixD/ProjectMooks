@@ -4,16 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public enum RoomColour {
-    INACTIVE,
-    EASY,
-    NORMAL,
-    HARD,
-    EVENT
-}
-
-
-public enum RoomCategory {
+public enum StageCategory {
     BATTLE,
     EVENT
 }
@@ -29,7 +20,7 @@ public enum EventType {
     LIBRARY
 }
 
-public class RoomNode : MonoBehaviour {
+public class StageNode : MonoBehaviour {
 
     public Coord coord;
 
@@ -47,28 +38,28 @@ public class RoomNode : MonoBehaviour {
 
     [Space]
 
-    [SerializeField] private Color _inaccessibleRoomColour = Color.black;
+    [SerializeField] private Color _inaccessibleStageColour = Color.black;
     [SerializeField] private string _battleScene = null;
     [SerializeField] private string _eventScene = null;
-    private RoomCategory _roomCategory;
+    private StageCategory _stageCategory;
     private EventType _eventType;
     private GameObject _entryBranch;
     private RectTransform _verticalPath;
 
-    public void EnterRoom() {
-        if (_roomCategory == RoomCategory.BATTLE) {
+    public void EnterStage() {
+        if (_stageCategory == StageCategory.BATTLE) {
             GameManager.Instance.gameState.progressData.currentStageIndex = GameManager.Instance.gameState.progressData.nextStageIndex;
             // TODO: load battle based on battle data
             SceneManager.LoadScene(_battleScene);
-        } else if (_roomCategory == RoomCategory.EVENT) {
+        } else if (_stageCategory == StageCategory.EVENT) {
             // TODO: pass EventType
             SceneManager.LoadScene(_eventScene);
             GameManager.Instance.eventManager.LoadEvent(_eventType);
         }
     }
 
-    public void SetRoom(BattleType type) {
-        _roomCategory = RoomCategory.BATTLE;
+    public void SetStage(BattleType type) {
+        _stageCategory = StageCategory.BATTLE;
         _icon.sprite = _battleIcon;
         switch(type) {
             case BattleType.EASY_BATTLE:
@@ -86,8 +77,8 @@ public class RoomNode : MonoBehaviour {
         }
     }
 
-    public void SetRoom(EventType type) {
-        _roomCategory = RoomCategory.EVENT;
+    public void SetStage(EventType type) {
+        _stageCategory = StageCategory.EVENT;
         _eventType = type;
         _icon.sprite = _eventIcons[(int) type];
         _background.sprite = eventNode;
@@ -111,6 +102,6 @@ public class RoomNode : MonoBehaviour {
     }
 
     public void SetInaccessible() {
-        _background.color = _inaccessibleRoomColour;
+        _background.color = _inaccessibleStageColour;
     }
 }

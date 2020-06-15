@@ -7,7 +7,7 @@ public class MapGenerator : MonoBehaviour {
     [Header("References")]
     [SerializeField] private MapNavigator _mapNavigator = null;
     [SerializeField] private MapScroller _mapScroller = null;
-    [SerializeField] private GameObject _roomNodePrefab = null;
+    [SerializeField] private GameObject _stageNodePrefab = null;
     [SerializeField] private Transform _mapContainer = null;
     
     [Space]
@@ -15,13 +15,13 @@ public class MapGenerator : MonoBehaviour {
     public float horizontalPadding = 0;
     public float verticalPadding = 0;
 
-    public RoomNode[][] GenerateZoneMap(ZoneProperties properties) {
-        RoomNode[][] map = new RoomNode[properties.columns.Length + 2][];
+    public StageNode[][] GenerateZoneMap(ZoneProperties properties) {
+        StageNode[][] map = new StageNode[properties.columns.Length + 2][];
 
         // Initialize columns
         for (int col = 0; col < properties.columns.Length + 2; col++) {
             // Create column of nodes
-            map[col] = new RoomNode[properties.mapRows];
+            map[col] = new StageNode[properties.mapRows];
             for (int row = 0; row < properties.mapRows; row++) {
                 map[col][row] = null;
             }
@@ -30,27 +30,27 @@ public class MapGenerator : MonoBehaviour {
         int middleRow = properties.mapRows / 2;
         
         // Create starting column
-        RoomNode firstRoom = InstantiateRoomNode(properties, map, 0, middleRow);
+        StageNode firstStage = InstantiateStageNode(properties, map, 0, middleRow);
         
         // Create end column (boss)
-        RoomNode finalRoom = InstantiateRoomNode(properties, map, properties.columns.Length + 1, middleRow);
-        InitializeRoom(finalRoom, RoomCategory.BATTLE);
+        StageNode finalStage = InstantiateStageNode(properties, map, properties.columns.Length + 1, middleRow);
+        InitializeStage(finalStage, StageCategory.BATTLE);
 
-        // Set first and last room positions as scrolling bounds
-        _mapScroller.SetBounds(firstRoom.transform.position.x, finalRoom.transform.position.x);
+        // Set first and last stage positions as scrolling bounds
+        _mapScroller.SetBounds(firstStage.transform.position.x, finalStage.transform.position.x);
 
         // Create nodes in between
         for (int col = 1; col < properties.columns.Length + 1; col++) {
             for (int row = 0; row < properties.mapRows; row++) {
-                RoomNode room = InstantiateRoomNode(properties, map, col, row).GetComponent<RoomNode>();
-                InitializeRoom(room, properties.columns[col - 1]);
+                StageNode stage = InstantiateStageNode(properties, map, col, row).GetComponent<StageNode>();
+                InitializeStage(stage, properties.columns[col - 1]);
             }
         }
         return map;
     }
 
-    private RoomNode InstantiateRoomNode(ZoneProperties properties, RoomNode[][] map, int col, int row) {
-        map[col][row] = Instantiate(_roomNodePrefab, _mapContainer).GetComponent<RoomNode>();
+    private StageNode InstantiateStageNode(ZoneProperties properties, StageNode[][] map, int col, int row) {
+        map[col][row] = Instantiate(_stageNodePrefab, _mapContainer).GetComponent<StageNode>();
         Vector2 position = new Vector2(horizontalPadding * col, -verticalPadding * row);
 
         // Centre the node
@@ -62,19 +62,19 @@ public class MapGenerator : MonoBehaviour {
         return map[col][row];
     }
 
-    private void InitializeRoom(RoomNode room, RoomCategory category) {
+    private void InitializeStage(StageNode stage, StageCategory category) {
         switch (category) {
-            case RoomCategory.BATTLE:
+            case StageCategory.BATTLE:
                 // TODO: wave data w/ difficulty scaling
                 BattleType battleType = (BattleType) Random.Range(0, System.Enum.GetValues(typeof(BattleType)).Length);
-                room.SetRoom(battleType);
+                stage.SetStage(battleType);
                 break;
-            case RoomCategory.EVENT:
+            case StageCategory.EVENT:
                 EventType eventType = (EventType) Random.Range(0, System.Enum.GetValues(typeof(EventType)).Length);
-                room.SetRoom(eventType);
+                stage.SetStage(eventType);
                 break;
             default:
-                Debug.LogWarning("No category found when initializing room.");
+                Debug.LogWarning("No category found when initializing stage.");
                 break;
         }
     }

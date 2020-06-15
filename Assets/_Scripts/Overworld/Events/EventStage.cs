@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class EventRoom : MonoBehaviour {
+public class EventStage : MonoBehaviour {
     
     [SerializeField] private string _mapScene = "WorldMap";
     [SerializeField] private GameObject _continueButton = null;
