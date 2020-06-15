@@ -18,7 +18,7 @@ public class MookActionMenuUI : MonoBehaviour
 
     public void SetActions(List<ActionBase> actions) {
         if (actions.Count > 4) {
-            Debug.LogError("Mooks should have no more than 4 actions");
+            Debug.LogError("Mooks should have no more than 4 actions: " + actions.Count);
         } else {
             for (int i = 0; i < actions.Count; i++) {
                 if (emptyActions[i] == null) {

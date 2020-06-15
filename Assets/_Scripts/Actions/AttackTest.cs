@@ -6,10 +6,10 @@ using UnityEngine;
 public class AttackTest : ActionBase {
 
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Attack command format: !a [target number]
-        if (!BasicValidation(splitCommand)) {
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
+        
         int targetId = this.GetTargetIdFromString(splitCommand[1], user);
         if (targetId == -1) {
             Debug.Log("Target id -1");

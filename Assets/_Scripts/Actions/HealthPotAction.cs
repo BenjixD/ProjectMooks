@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "FireAll", menuName = "Actions/Fire All", order = 2)]
-public class FireAllTest : ActionBase {
+[CreateAssetMenu(fileName = "HealthPotAction", menuName = "Actions/Health Pot", order = 2)]
+public class HealthPotAction : ActionBase {
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Fire All command format: !m fire2
-        if (!BasicValidation(splitCommand)) {
+        // Fire One command format: !m fire [target number]
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
-        List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
-        user.SetQueuedAction(new QueuedAction(user, this, targetIds));
+
+        int targetId = this.GetTargetIdFromString(splitCommand[2], user);
+        if (targetId == -1) {
+            return false;
+        }
+
+        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
         return true;
     }
 
@@ -20,11 +25,8 @@ public class FireAllTest : ActionBase {
         int attackDamage = user.stats.GetSpecial();
         
         foreach (FightingEntity target in targets) {
-            int defence = target.stats.GetResistance();
-            int damage =  Mathf.Max(attackDamage - defence, 0);
-
             before = (PlayerStats)target.stats.Clone();
-            target.stats.SetHp(target.stats.GetHp() - damage);
+            target.stats.SetHp(target.stats.GetHp() + attackDamage);
             after = (PlayerStats)target.stats.Clone();
 
             receivers.Add(new DamageReceiver(target, before, after));

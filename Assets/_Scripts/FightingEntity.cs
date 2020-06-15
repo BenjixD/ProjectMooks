@@ -18,6 +18,11 @@ public class FightingEntity : MonoBehaviour
 
     public FighterSlot fighterSlot {get; set;}
 
+    public bool isRare = false;
+
+    [SerializeField]
+    protected float rareRate = 0.01f;
+
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
@@ -39,13 +44,6 @@ public class FightingEntity : MonoBehaviour
 	public void Initialize(int index, PlayerCreationData data) {
         this.targetId = index;
 		Name = data.name;
-        
-        // Sets the default energy for mooks to be always a constant
-        // TODO: Do this a more cleaner way
-        if (!this.isEnemy() && index != 0) {
-            data.stats.SetMana(9);
-            data.stats.maxMana = 9;
-        }
 
 		SetStats(data.stats);
 		SetJob(data.job);
@@ -53,6 +51,16 @@ public class FightingEntity : MonoBehaviour
         this.targetName = GameManager.Instance.turnController.field.GetTargetNameFromIndex(index);
 		_ailmentController = new AilmentController(this);
         Debug.Log("Initialize: " + Name);
+
+        // Sets the default energy for mooks to be always a constant
+        // TODO: Do this a more cleaner way
+        if (!this.isEnemy() && index != 0) {
+            OutOfJuiceAilment outOfJuicePrefab = (OutOfJuiceAilment)GameManager.Instance.models.GetCommonStatusAilment("Out of Juice");
+            this._ailmentController.AddStatusAilment(Instantiate(outOfJuicePrefab));
+            data.stats.SetMana(outOfJuicePrefab.duration);
+            data.stats.maxMana = outOfJuicePrefab.duration;
+        }
+
 	}
 
 	public void SetStats(PlayerStats stats) {
@@ -67,10 +75,38 @@ public class FightingEntity : MonoBehaviour
 
 	public void SetJob(Job job) {
 		this.job = job;
+
+
         if (this.isEnemy()) {
-            actions = GameManager.Instance.models.GetEnemyJobActions(job);
+            actions = new List<ActionBase>(GameManager.Instance.models.GetEnemyJobActions(job));
+        } else if (this.IsHero()) {
+            actions = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
         } else {
-		    actions =  GameManager.Instance.models.GetPlayerJobActions(job);
+            
+            float randomSeed = Random.value;
+
+            if (randomSeed <= this.rareRate) {
+                this.isRare = true; // TODO: Modify Mook based on rare status
+            }
+
+            // Mooks have more specific logic regarding skills because they can only have at most 3 specific, 1 general.
+            List<ActionBase> actionPool = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
+            if (actionPool.Count <= 3) {
+                actions = actionPool;
+            } else {
+                actions = new List<ActionBase>();
+                while (actions.Count < 3) {
+                    int randIndex = Random.Range(0, actionPool.Count);
+                    actions.Add( actionPool[randIndex] );
+                    actionPool.RemoveAt(randIndex);
+                }
+
+                
+            }
+
+            List<ActionBase> commonMookActionPool = GameManager.Instance.models.GetCommonMookActionPool();
+            int commonActionIndex = Random.Range(0, commonMookActionPool.Count);
+            actions.Add(commonMookActionPool[commonActionIndex]);
         }
 	}
 
@@ -111,6 +147,10 @@ public class FightingEntity : MonoBehaviour
 
     public bool isEnemy() {
         return this.GetType() == typeof(EnemyObject);
+    }
+
+    public bool IsHero() {
+        return !this.isEnemy() && this.targetId == 0;
     }
 
     public ActionBase GetRandomAction() {

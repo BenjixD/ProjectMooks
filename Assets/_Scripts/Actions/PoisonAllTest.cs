@@ -8,8 +8,7 @@ public class PoisonAllTest : ActionBase {
     private List<StatusAilment> _status;
 
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Poison All command format: !m poison2
-        if (!BasicValidation(splitCommand)) {
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
         List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );

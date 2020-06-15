@@ -82,7 +82,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _template:
     level: 1
-    maxHp: 10
+    maxHp: 30
     maxMana: 100
     maxPhysical: 25
     maxSpecial: 25
@@ -128,9 +128,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
   - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
   commonActions: []
+  commonMookActionPool:
+  - {fileID: 11400000, guid: 978ab0ca05277fd439c5257c4a925014, type: 2}
+  - {fileID: 11400000, guid: 87ecb072cac21214cac72e8a6961b514, type: 2}
+  - {fileID: 11400000, guid: 46a449bf53492cb41b829822dd2515ea, type: 2}
   commonStatusAilments:
   - {fileID: 11400000, guid: eae875e142889274eb9f8267b7307a56, type: 2}
   - {fileID: 11400000, guid: 7ecf282388724c845bf917928408b9e7, type: 2}
+  - {fileID: 11400000, guid: 02a72bb2a6200aa45b6e517a4a7c9998, type: 2}
 --- !u!114 &1133189571
 MonoBehaviour:
   m_ObjectHideFlags: 0

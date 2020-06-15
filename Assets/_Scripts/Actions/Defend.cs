@@ -8,8 +8,7 @@ public class Defend : ActionBase {
     private DefenseStatusAilment _buff;
 
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Defend command format: !d
-        if (!BasicValidation(splitCommand)) {
+        if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
 
