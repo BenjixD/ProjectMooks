@@ -7,8 +7,6 @@ using System.Linq;
 // Class that holds field information / helper functions
 public class BattleField : MonoBehaviour
 {   
-
-
     [Header("Slots")]
     public FighterSlot heroSlot;
     public List<FighterSlot> mookSlots;
