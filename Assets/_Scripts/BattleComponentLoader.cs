@@ -17,7 +17,7 @@ public class BattleComponentLoader : MonoBehaviour {
 
 	void Start() {
 		GameManager.Instance.battleComponents = this;
-		GameManager.Instance.StartCoroutine(InitializeComponentsCR());
+		GameManager.Instance.time.StartCoroutine(InitializeComponentsCR());
 	}
 
 	// 
