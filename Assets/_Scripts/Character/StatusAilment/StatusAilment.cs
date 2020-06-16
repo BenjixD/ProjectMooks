@@ -9,7 +9,7 @@ public abstract class StatusAilment : ScriptableObject {
 	[HideInInspector] public int duration;
 	public int level;
 	[Tooltip("Phase to trigger Status Ailment")]
-	public BattlePhase phase;
+	public TurnPhase phase;
 
 	private void Awake() {
 		// Set duration to default if one is not set
