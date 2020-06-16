@@ -58,24 +58,33 @@ public class DeathResult {
     }
 }
 
-public abstract class ActionBase : ScriptableObject {
+[CreateAssetMenu(fileName = "NewAction", menuName = "Actions/ActionBase", order = 1)]
+public class ActionBase : ScriptableObject {
     public new string name;
+    public ActionType actionType;
+    [TextArea] public string description;
+
+    [Header("Resources")]
     [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
     public int maxPP;
     private int _currPP;
     private bool _infiniteUses = false;
     public ActionCost actionCost;
-    [TextArea]
-    public string description;
+
+    [Header("Effect Properties")]
+    public TargetInfo targetInfo;
+    [Tooltip("Basic action effects. Override ApplyEffect for more control over effects.")]
+    public ActionEffects effects;
+
+    [Header("Command")]
     [Tooltip("The main command word, e.g., \"a\".")]
     public string commandKeyword;
     [Tooltip("The number of arguments following the keyword.")]
     public int commandArgs;
+
+    [Header("Animations")]
     [Tooltip("The name of the animation played for the user of the attack.")]
     public string userAnimName;
-
-    public TargetInfo targetInfo;
-    public ActionType actionType;
 
     private void Awake() {
         if (maxPP == 0) {
@@ -107,12 +116,15 @@ public abstract class ActionBase : ScriptableObject {
     private bool CheckCost(FightingEntity user) {
         PlayerStats stats = user.stats;
         if (stats.GetHp() <= actionCost.HP || stats.GetMana() < actionCost.mana) {
+            Debug.Log(user + " has insufficient HP and/or mana to use " + name);
             return false;
         }
         if (!_infiniteUses && _currPP < actionCost.PP) {
+            Debug.Log(user + " has insufficient PP to use " + name);
             return false;
         }
         if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
+            Debug.Log(user + " has insufficient stamina to use " + name);
             return false;
         }
         return true;
@@ -130,7 +142,24 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        return BasicValidation(splitCommand, user);
+        if (!BasicValidation(splitCommand, user)) {
+            return false;
+        }
+        return QueueAction(user, splitCommand);
+    }
+
+    protected virtual bool QueueAction(FightingEntity user, string[] splitCommand) {
+        if (targetInfo.targetType == TargetType.SINGLE) {
+            int targetId = this.GetTargetIdFromString(splitCommand[1], user);
+            if (targetId == -1) {
+                return false;
+            }
+            user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
+        } else if (targetInfo.targetType == TargetType.ALL) {
+            List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
+            user.SetQueuedAction(new QueuedAction(user, this, targetIds));
+        }
+        return true;
     }
     
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
@@ -198,5 +227,30 @@ public abstract class ActionBase : ScriptableObject {
         return target.targetId;
     }
 
-    public abstract FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets);
+    public virtual FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
+        PlayerStats before, after;
+        List<DamageReceiver> receivers = new List<DamageReceiver>();
+        int attackDamage = (int) (user.stats.GetPhysical() * effects.physicalScaling + user.stats.GetSpecial() * effects.specialScaling);
+        
+        foreach (FightingEntity target in targets) {
+            // Default damage mitigation: defense and resistance with half the scaling ratios
+            int defence = (int) ((target.stats.GetDefense() * effects.physicalScaling + target.stats.GetResistance() * effects.specialScaling) / 2);
+            int damage = Mathf.Max(attackDamage - defence, 0);
+            // If there is a healing effect, negate the damage and ignore damage mitigation
+            if (effects.heals) {
+                damage = -attackDamage;
+            }
+
+            before = (PlayerStats)target.stats.Clone();
+            target.stats.SetHp(target.stats.GetHp() - damage);
+            after = (PlayerStats)target.stats.Clone();
+
+            foreach(StatusAilment sa in effects.statusAilments) {
+                target.GetAilmentController().AddStatusAilment(Instantiate(sa));
+            }
+
+            receivers.Add(new DamageReceiver(target, before, after, effects.statusAilments));
+        }
+        return new FightResult(user, this, receivers);
+    }
 }

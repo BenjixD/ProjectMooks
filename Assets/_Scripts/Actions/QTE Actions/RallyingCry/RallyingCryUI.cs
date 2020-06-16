@@ -13,6 +13,8 @@ public class RallyingCryUI : MonoBehaviour {
 
     [SerializeField, Tooltip("The max number of messages displayed at once. Any further messages will replace oldest messages.")]
     private int _maxConcurrentMessages;
+    [SerializeField, Range(0, 1), Tooltip("The percentage of the screen width and height within which messages will spawn. A value of 1 will allow messages to spawn anywhere on the screen.")]
+    private float _spawnableScreenPercent = 0.8f;
     private List<RallyingCryMessage> _currMessages = new List<RallyingCryMessage>();
     private int _oldestMessageIndex;
     private float _screenHalfWidth;
@@ -39,6 +41,7 @@ public class RallyingCryUI : MonoBehaviour {
 
     private void InitializeMessage(RallyingCryMessage rallyingCryMessage, string message) {
         Vector2 randomPosition = Random.insideUnitCircle * new Vector2(_screenHalfWidth, _screenHalfHeight);
+        randomPosition = randomPosition / transform.lossyScale * _spawnableScreenPercent;
         rallyingCryMessage.GetComponent<RectTransform>().anchoredPosition = randomPosition;
         rallyingCryMessage.SetText(message);
     }

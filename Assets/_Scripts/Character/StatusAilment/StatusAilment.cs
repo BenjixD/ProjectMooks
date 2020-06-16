@@ -6,7 +6,7 @@ public abstract class StatusAilment : ScriptableObject {
 	public new string name;
 	public int duration;
 	public int level;
-	[Header("Phase to trigger Status Ailment")]
+	[Tooltip("Phase to trigger Status Ailment")]
 	public TurnPhase phase;
 
 	public virtual void DecrementDuration() {

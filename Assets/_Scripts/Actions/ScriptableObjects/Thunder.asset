@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Attack
+  m_Name: Thunder
   m_EditorClassIdentifier: 
-  name: Attack
-  actionType: 0
+  name: Thunder
+  actionType: 1
   description: 
   maxPP: 0
   actionCost:
     HP: 0
-    mana: 0
+    mana: 8
     PP: 0
     stamina: 0
   targetInfo:
     targetTeam: 1
     targetType: 0
   effects:
-    element: 0
-    physicalScaling: 1
-    specialScaling: 0
+    element: 3
+    physicalScaling: 0
+    specialScaling: 0.75
     heals: 0
-    statusAilments: []
-  commandKeyword: a
+    statusAilments:
+    - {fileID: 11400000, guid: b1474899134994879b06bd74bd935c73, type: 2}
+  commandKeyword: thunder
   commandArgs: 1
   userAnimName: attack
