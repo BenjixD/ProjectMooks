@@ -43,7 +43,9 @@ public class MapGenerator : MonoBehaviour {
         for (int col = 1; col < properties.columns.Length + 1; col++) {
             for (int row = 0; row < properties.mapRows; row++) {
                 StageNode stage = InstantiateStageNode(properties, map, col, row).GetComponent<StageNode>();
-                InitializeStage(stage, properties.columns[col - 1]);
+
+                // TODOL
+                // InitializeStage(stage, properties.columns[col - 1]);
             }
         }
         return map;
