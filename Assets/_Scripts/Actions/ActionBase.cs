@@ -227,21 +227,10 @@ public class ActionBase : ScriptableObject {
         return target.targetId;
     }
 
-    protected void InflictStatus(FightingEntity target, AilmentInfliction infliction) {
-        StatusAilment ailment = Instantiate(infliction.statusAilment);
-        if (infliction.infiniteDuration) {
-            ailment.SetInfiniteDuration();
-        } else if (infliction.duration != 0) {
-            ailment.SetDuration(infliction.duration);
-        }
-        target.GetAilmentController().AddStatusAilment(ailment);
-    }
-
     protected List<StatusAilment> InflictStatuses(FightingEntity target) {
         List<StatusAilment> inflicted = new List<StatusAilment>();
         foreach(AilmentInfliction infliction in effects.statusAilments) {
-            if (Random.value <= infliction.chance) {
-                InflictStatus(target, infliction);
+            if (target.GetAilmentController().TryInflictAilment(infliction)) {
                 inflicted.Add(infliction.statusAilment);
             }
         }
