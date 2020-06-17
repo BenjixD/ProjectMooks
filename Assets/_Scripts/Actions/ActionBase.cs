@@ -229,7 +229,9 @@ public class ActionBase : ScriptableObject {
 
     protected void InflictStatus(FightingEntity target, AilmentInfliction infliction) {
         StatusAilment ailment = Instantiate(infliction.statusAilment);
-        if (infliction.duration != 0) {
+        if (infliction.infiniteDuration) {
+            ailment.SetInfiniteDuration();
+        } else if (infliction.duration != 0) {
             ailment.SetDuration(infliction.duration);
         }
         target.GetAilmentController().AddStatusAilment(ailment);
