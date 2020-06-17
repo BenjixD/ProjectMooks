@@ -76,7 +76,7 @@ public class BattleFight
         string attackName = attackerAction._action.name;
         List<FightingEntity> targets = attackerAction._action.GetTargets(this.fighter, attackerAction.GetTargetIds());
 
-        yield return GameManager.Instance.StartCoroutine(doAnimation(this.fighter, attackerAction, targets));
+        yield return GameManager.Instance.time.StartCoroutine(doAnimation(this.fighter, attackerAction, targets));
 
         FightResult fightResult = attackerAction.ExecuteAction();
 

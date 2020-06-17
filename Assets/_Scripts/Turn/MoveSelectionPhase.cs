@@ -65,7 +65,7 @@ public class MoveSelectionPhase : Phase {
 
     protected override IEnumerator Run() {
         this.ApplyStatusAilments(this._field.GetAllFightingEntities());
-        yield return GameManager.Instance.StartCoroutine(HeroMoveSelection());
+        yield return GameManager.Instance.time.StartCoroutine(HeroMoveSelection());
     }
 
     public override bool CanInputActions() {
