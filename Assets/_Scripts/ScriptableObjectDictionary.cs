@@ -14,18 +14,18 @@ public class ScriptableObjectDictionary : MonoBehaviour {
 
 
 
-    [SerializeField] private JobActionsList[] _playerJobActionsLists;
-    [SerializeField] private JobActionsList[] _enemyJobActionsLists;
+    [SerializeField] private JobActionsList[] _playerJobActionsLists = null;
+    [SerializeField] private JobActionsList[] _enemyJobActionsLists = null;
 
 
     [SerializeField]
-    private List<StageInfo> stageInfo;
+    private List<StageInfo> stageInfo = null;
 
-    [SerializeField] private List<ActionBase> commonActions;
+    [SerializeField] private List<ActionBase> commonActions = null;
 
-    [SerializeField] private List<ActionBase> commonMookActionPool;
+    [SerializeField] private List<ActionBase> commonMookActionPool = null;
 
-    [SerializeField] private List<StatusAilment> commonStatusAilments;
+    [SerializeField] private List<StatusAilment> commonStatusAilments = null;
 
     public void Initialize() {
         foreach(JobActionsList jobActionsList in _playerJobActionsLists) {

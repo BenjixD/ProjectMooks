@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "HerosMiracleAilment", menuName = "StatusAilment/Hero's Miracle")]
 public class HerosMiracleAilment : StatusAilment {
 
-    [SerializeField] private NothingAction nothingAction;
+    [SerializeField] private NothingAction nothingAction = null;
     [SerializeField] private int reviveHP = 1;
 
 	public override void StackWith(FightingEntity p, StatusAilment other) {

@@ -6,7 +6,7 @@ using Spine.Unity;
 public class AnimationController : MonoBehaviour {
     private SkeletonAnimation _skeletonAnimation;
     private Spine.AnimationState _animState;
-    [SerializeField] private string _defaultAnimName;
+    [SerializeField] private string _defaultAnimName = null;
     private HashSet<string> _animations = new HashSet<string>();
 
     private void Start() {

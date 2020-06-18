@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ManaShiftQTE : QuickTimeEvent {
     [Header("Mana Shift Parameters")]
-    [SerializeField] private string _increaseString;
-    [SerializeField] private float _increaseValue;
+    [SerializeField] private string _increaseString = null;
+    [SerializeField] private float _increaseValue = 0;
 
     [Header("References (ManaShiftQTE)")]
     [SerializeField, Tooltip("Reference to the ManaShiftCanvas prefab.")]
-    private GameObject _manaShiftCanvasPrefab;
-    private ManaShiftUI _manaShiftUI;
+    private GameObject _manaShiftCanvasPrefab = null;
+    private ManaShiftUI _manaShiftUI = null;
     private float _totalPower = 0;
 
     protected override void ProcessMessage(string message) {

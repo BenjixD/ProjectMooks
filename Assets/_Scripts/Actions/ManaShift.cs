@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "ManaShift", menuName = "Actions/Quick Time Events/Mana Shift", order = 3)]
 public class ManaShift : ActionBase {
-    [SerializeField] private GameObject _manaShiftQTE;
+    [SerializeField] private GameObject _manaShiftQTE = null;
 
     protected override bool QueueAction(FightingEntity user, string[] splitCommand) {
         user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ GameManager.Instance.turnController.field.GetHeroPlayer().targetId } ));
