@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+public enum Stat {
+	HP,
+	MANA,
+	PHYSICAL,
+	SPECIAL,
+	DEFENSE,
+	RESISTANCE,
+	SPEED
+}
+
 [System.Serializable]
 public class PlayerStats: ICloneable {
 	public int level;
@@ -77,6 +87,53 @@ public class PlayerStats: ICloneable {
 		Debug.Log("DEFENSE: " + _defense);
 		Debug.Log("RESISTANCE: " + _resistance);
 		Debug.Log("SPEED: " + _speed);
+	}
+
+	public int GetStat(Stat stat) {
+		switch(stat) {
+			case (Stat.HP):
+				return GetHp();
+			case (Stat.MANA):
+				return GetMana();
+			case (Stat.PHYSICAL):
+				return GetPhysical();
+			case (Stat.SPECIAL):
+				return GetSpecial();
+			case (Stat.DEFENSE):
+				return GetDefense();
+			case (Stat.RESISTANCE):
+				return GetResistance();
+			case (Stat.SPEED):
+				return GetSpeed();
+		}
+		Debug.LogWarning("Tried to retrieve invalid stat.");
+		return GetHp();
+	}
+
+	public void ModifyStat(Stat stat, int value) {
+		switch(stat) {
+			case (Stat.HP):
+				SetHp(GetHp() + value);
+				break;
+			case (Stat.MANA):
+				SetMana(GetMana() + value);
+				break;
+			case (Stat.PHYSICAL):
+				SetPhysical(GetPhysical() + value);
+				break;
+			case (Stat.SPECIAL):
+				SetSpecial(GetSpecial() + value);
+				break;
+			case (Stat.DEFENSE):
+				SetDefense(GetDefense() + value);
+				break;
+			case (Stat.RESISTANCE):
+				SetResistance(GetResistance() + value);
+				break;
+			case (Stat.SPEED):
+				SetSpeed(GetSpeed() + value);
+				break;
+		}
 	}
 
 	// Getter / Setter ------------ //

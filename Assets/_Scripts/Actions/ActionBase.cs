@@ -58,24 +58,33 @@ public class DeathResult {
     }
 }
 
-public abstract class ActionBase : ScriptableObject {
-    public string name;
+[CreateAssetMenu(fileName = "NewAction", menuName = "Actions/ActionBase", order = 1)]
+public class ActionBase : ScriptableObject {
+    public new string name;
+    public ActionType actionType;
+    [TextArea] public string description;
+
+    [Header("Resources")]
     [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
     public int maxPP;
     private int _currPP;
     private bool _infiniteUses = false;
     public ActionCost actionCost;
-    [TextArea]
-    public string description;
+
+    [Header("Effect Properties")]
+    public TargetInfo targetInfo;
+    [Tooltip("Basic action effects. Override ApplyEffect for more control over effects.")]
+    public ActionEffects effects;
+
+    [Header("Command")]
     [Tooltip("The main command word, e.g., \"a\".")]
     public string commandKeyword;
     [Tooltip("The number of arguments following the keyword.")]
     public int commandArgs;
+
+    [Header("Animations")]
     [Tooltip("The name of the animation played for the user of the attack.")]
     public string userAnimName;
-
-    public TargetInfo targetInfo;
-    public ActionType actionType;
 
     private void Awake() {
         if (maxPP == 0) {
@@ -93,7 +102,12 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     protected bool BasicValidation(string[] splitCommand, FightingEntity user) {
-        if (splitCommand.Length == 0 || !CheckKeyword(splitCommand[0]) || !CheckArgQuantity(splitCommand.Length - 1) || !GameManager.Instance.turnController.CanInputActions() || !CheckCost(user) ) {
+        if (splitCommand.Length == 0 || 
+            !CheckKeyword(splitCommand[0]) || 
+            !CheckArgQuantity(splitCommand.Length - 1) || 
+            !GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions() || 
+            !CheckCost(user) ) {
+            Debug.Log(GameManager.Instance.battleComponents.turnManager.GetPhase().GetType().Name);
             return false;
         }
         return true;
@@ -102,12 +116,15 @@ public abstract class ActionBase : ScriptableObject {
     private bool CheckCost(FightingEntity user) {
         PlayerStats stats = user.stats;
         if (stats.GetHp() <= actionCost.HP || stats.GetMana() < actionCost.mana) {
+            Debug.Log(user + " has insufficient HP and/or mana to use " + name);
             return false;
         }
         if (!_infiniteUses && _currPP < actionCost.PP) {
+            Debug.Log(user + " has insufficient PP to use " + name);
             return false;
         }
         if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
+            Debug.Log(user + " has insufficient stamina to use " + name);
             return false;
         }
         return true;
@@ -125,7 +142,24 @@ public abstract class ActionBase : ScriptableObject {
     }
 
     public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        return BasicValidation(splitCommand, user);
+        if (!BasicValidation(splitCommand, user)) {
+            return false;
+        }
+        return QueueAction(user, splitCommand);
+    }
+
+    protected virtual bool QueueAction(FightingEntity user, string[] splitCommand) {
+        if (targetInfo.targetType == TargetType.SINGLE) {
+            int targetId = this.GetTargetIdFromString(splitCommand[1], user);
+            if (targetId == -1) {
+                return false;
+            }
+            user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
+        } else if (targetInfo.targetType == TargetType.ALL) {
+            List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
+            user.SetQueuedAction(new QueuedAction(user, this, targetIds));
+        }
+        return true;
     }
     
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
@@ -146,11 +180,11 @@ public abstract class ActionBase : ScriptableObject {
 
     public List<FightingEntity> GetAllPossibleTargets(FightingEntity user) {
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
-            return GameManager.Instance.turnController.field.GetAllFightingEntities();
+            return GameManager.Instance.battleComponents.field.GetAllFightingEntities();
         }
         List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.turnController.field.GetEnemyObjects());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.turnController.field.GetPlayerObjects());
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetEnemyObjects());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetPlayerObjects());
 
         if (user.isEnemy()) {
             potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
@@ -193,5 +227,38 @@ public abstract class ActionBase : ScriptableObject {
         return target.targetId;
     }
 
-    public abstract FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets);
+    protected List<StatusAilment> InflictStatuses(FightingEntity target) {
+        List<StatusAilment> inflicted = new List<StatusAilment>();
+        foreach(AilmentInfliction infliction in effects.statusAilments) {
+            if (target.GetAilmentController().TryInflictAilment(infliction)) {
+                inflicted.Add(infliction.statusAilment);
+            }
+        }
+        return inflicted;
+    }
+
+    public virtual FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
+        PlayerStats before, after;
+        List<DamageReceiver> receivers = new List<DamageReceiver>();
+        int attackDamage = (int) (user.stats.GetPhysical() * effects.physicalScaling + user.stats.GetSpecial() * effects.specialScaling);
+        
+        foreach (FightingEntity target in targets) {
+            // Default damage mitigation: defense and resistance with half the scaling ratios
+            int defence = (int) ((target.stats.GetDefense() * effects.physicalScaling + target.stats.GetResistance() * effects.specialScaling) / 2);
+            int damage = Mathf.Max(attackDamage - defence, 0);
+            // If there is a healing effect, negate the damage and ignore damage mitigation
+            if (effects.heals) {
+                damage = -attackDamage;
+            }
+
+            before = (PlayerStats)target.stats.Clone();
+            target.stats.SetHp(target.stats.GetHp() - damage);
+            after = (PlayerStats)target.stats.Clone();
+
+            List<StatusAilment> inflicted = InflictStatuses(target);
+
+            receivers.Add(new DamageReceiver(target, before, after, inflicted));
+        }
+        return new FightResult(user, this, receivers);
+    }
 }

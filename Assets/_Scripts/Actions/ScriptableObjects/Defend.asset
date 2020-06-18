@@ -13,18 +13,26 @@ MonoBehaviour:
   m_Name: Defend
   m_EditorClassIdentifier: 
   name: Defend
+  actionType: 0
+  description: 
   maxPP: 0
   actionCost:
     HP: 0
     mana: 0
     PP: 0
     stamina: 0
-  description: 
-  commandKeyword: d
-  commandArgs: 0
-  userAnimName: 
   targetInfo:
     targetTeam: 0
     targetType: 0
-  actionType: 0
-  _buff: {fileID: 11400000, guid: 537fd95d4c3ba49bc84c861a32c4eea9, type: 2}
+  effects:
+    element: 0
+    physicalScaling: 0
+    specialScaling: 0
+    heals: 0
+    statusAilments:
+    - statusAilment: {fileID: 11400000, guid: 48fc6094a4f4ecf4898950952a067a83, type: 2}
+      duration: 1
+      chance: 1
+  commandKeyword: d
+  commandArgs: 0
+  userAnimName: 

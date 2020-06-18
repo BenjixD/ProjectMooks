@@ -13,19 +13,24 @@ MonoBehaviour:
   m_Name: Explosion
   m_EditorClassIdentifier: 
   name: Explosion
+  actionType: 0
+  description: 
   maxPP: 1
   actionCost:
     HP: 0
     mana: 0
     PP: 1
     stamina: 0
-  description: 
-  commandKeyword: explosion
-  commandArgs: 0
-  userAnimName: 
   targetInfo:
     targetTeam: 2
     targetType: 1
-  actionType: 0
+  effects:
+    physicalScaling: 0
+    specialScaling: 0
+    element: 1
+    statusAilments: []
+  commandKeyword: explosion
+  commandArgs: 0
+  userAnimName: 
   _explosionQTE: {fileID: 9026427991594010301, guid: ba5fc9297bc72374ca6ddf94dfd4e95f,
     type: 3}

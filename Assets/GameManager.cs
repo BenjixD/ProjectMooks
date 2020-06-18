@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager> {
 
     // Note: This field is null if not in battle
     public TurnController turnController{get; set;}
+    public BattleComponentLoader battleComponents{get; set;}
 
     void Awake() {
         if (FindObjectsOfType<GameManager>().Length >= 2) {
@@ -38,5 +39,4 @@ public class GameManager : Singleton<GameManager> {
 
         this.gameState.Initialize();
     }
-
 }

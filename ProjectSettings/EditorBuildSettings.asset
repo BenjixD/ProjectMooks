@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Event.unity
     guid: 19749fa0a03ac8146a4db51513d37b91
+  - enabled: 1
+    path: Assets/_Scenes/RewardScene.unity
+    guid: 0a596b365ba76794c9f063faf411b287
   m_configObjects: {}

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6309c7b13459f584fbacd5afb7a41ca0, type: 3}
+  m_Name: PercentBurnStatusAilment
+  m_EditorClassIdentifier: 
+  name: Burn
+  defaultDuration: 0
+  duration: 0
+  level: 1
+  phase: 4
+  damageType: 0
+  val: 0.05

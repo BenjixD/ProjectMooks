@@ -17,7 +17,11 @@ public abstract class Party : MonoBehaviour {
 
     public T[] GetFighters<T>() where T : Fighter {
         return fighters.Cast<T>().ToArray();
-    } 
+    }
+
+    public Player GetHeroFighter() {
+        return (Player)fighters[0];
+    }
 
     public List<U> GetActiveFighters<U>() where U : Fighter {
         U[] fighters = this.GetFighters<U>();

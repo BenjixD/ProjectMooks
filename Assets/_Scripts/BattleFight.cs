@@ -52,12 +52,11 @@ public class FightResult {
 
 public class BattleFight
 {
-    private TurnController _controller {get; set;}
-
     public FightingEntity fighter;
+    private BattleField _field {get; set;}
 
-    public BattleFight(TurnController controller, FightingEntity fighter) {
-        _controller = controller;
+    public BattleFight(BattleField field, FightingEntity fighter) {
+        this._field = field;
         this.fighter = fighter;
     }
 
@@ -77,7 +76,7 @@ public class BattleFight
         string attackName = attackerAction._action.name;
         List<FightingEntity> targets = attackerAction._action.GetTargets(this.fighter, attackerAction.GetTargetIds());
 
-        yield return this._controller.StartCoroutine(doAnimation(this.fighter, attackerAction, targets));
+        yield return GameManager.Instance.time.StartCoroutine(doAnimation(this.fighter, attackerAction, targets));
 
         FightResult fightResult = attackerAction.ExecuteAction();
 
@@ -101,7 +100,7 @@ public class BattleFight
 
     private void getEnemyAction() {
         // TODO: Aggro targetting
-        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRecommendedAction(), new List<int>{_controller.field.GetRandomPlayerObjectIndex()}  ));
+        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRecommendedAction(), new List<int>{_field.GetRandomPlayerObjectIndex()}  ));
     }
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {

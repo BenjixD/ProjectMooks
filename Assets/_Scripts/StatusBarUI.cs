@@ -6,8 +6,6 @@ using TMPro;
 
 public class StatusBarUI : MonoBehaviour
 {
-
-
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI hpText;
     public Slider hpBar;

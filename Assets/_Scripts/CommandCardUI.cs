@@ -9,7 +9,6 @@ public enum CommandCardUIMode {
     CLOSED
 };
 
-[RequireComponent (typeof(TurnController))]
 public class CommandCardUI : MonoBehaviour
 {
 

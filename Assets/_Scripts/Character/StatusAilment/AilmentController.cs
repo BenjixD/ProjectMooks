@@ -5,92 +5,107 @@ using System.Collections.ObjectModel;
 
 [System.Serializable]
 public class AilmentController {
-	// Ongoing status ailments
-	private Dictionary<string, StatusAilment> _ailments = new Dictionary<string, StatusAilment>();
-	private FightingEntity _entity;
+    // Ongoing status ailments
+    private Dictionary<string, StatusAilment> _ailments = new Dictionary<string, StatusAilment>();
+    private FightingEntity _entity;
 
-	public AilmentController(FightingEntity fe) {
-		_entity = fe;
-	}
+    public AilmentController(FightingEntity fe) {
+        _entity = fe;
+    }
 
-	public StatusAilment GetAilment(string name) {
-		if(_ailments.ContainsKey(name)) {
-			return _ailments[name];	
-		} else {
-			return null;
-		}
-	}
+    public StatusAilment GetAilment(string name) {
+        if(_ailments.ContainsKey(name)) {
+            return _ailments[name]; 
+        } else {
+            return null;
+        }
+    }
 
-	public ReadOnlyDictionary<string, StatusAilment> GetAllAilments() {
-		return new ReadOnlyDictionary<string, StatusAilment>(_ailments);
-	}
+    public ReadOnlyDictionary<string, StatusAilment> GetAllAilments() {
+        return new ReadOnlyDictionary<string, StatusAilment>(_ailments);
+    }
 
-	public ReadOnlyDictionary<string, StatusAilment> GetAilmentsOfPhase(BattlePhase bp) {
-		return new ReadOnlyDictionary<string, StatusAilment>(
-			_ailments.Where(kvp => kvp.Value.phase == bp).ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
-	}
+    public ReadOnlyDictionary<string, StatusAilment> GetAilmentsOfPhase(TurnPhase bp) {
+        return new ReadOnlyDictionary<string, StatusAilment>(
+            _ailments.Where(kvp => kvp.Value.phase == bp).ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
+    }
 
-	public void AddStatusAilment(StatusAilment ailment) {
-		if(_ailments.ContainsKey(ailment.name)) {
-			_ailments[ailment.name].StackWith(_entity, ailment);
-		} else {
-			_ailments.Add(ailment.name, ailment);
-			ailment.ApplyTo(_entity);
-		}
-	}
+    public bool TryInflictAilment(AilmentInfliction infliction) {
+        if (Random.value <= infliction.chance) {
+            StatusAilment ailment = Object.Instantiate(infliction.statusAilment);
+            if (infliction.infiniteDuration) {
+                ailment.SetInfiniteDuration();
+            } else if (infliction.duration != 0) {
+                ailment.SetDuration(infliction.duration);
+            }
+            AddStatusAilment(ailment);
+            return true;
+        }
+        return false;
+    }
 
-	public void RemoveStatusAilment(string ailment) {
-		StatusAilment status = _ailments[ailment];
-		_ailments.Remove(ailment);
-		status.Recover(_entity);
-	}
+    public void AddStatusAilment(StatusAilment ailment) {
+        if(_ailments.ContainsKey(ailment.name)) {
+            _ailments[ailment.name].StackWith(_entity, ailment);
+        } else {
+            _ailments.Add(ailment.name, ailment);
+            ailment.ApplyTo(_entity);
+        }
+    }
 
-	public void RemoveAllStatusAilments() {
-		_ailments.Clear();
-	}
+    public void RemoveStatusAilment(string ailment) {
+        StatusAilment status = _ailments[ailment];
+        _ailments.Remove(ailment);
+        Object.Destroy(status);
+        status.Recover(_entity);
+    }
 
-	public void DecrementAllAilmentsDuration() {
-		List<string> timeout = new List<string>();
-		foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
-			entry.Value.DecrementDuration();
-			if(entry.Value.duration <= 0) {
-				timeout.Add(entry.Key);
-			}
-		}
+    public void RemoveAllStatusAilments() {
+        _ailments.Clear();
+    }
 
-		foreach(string s in timeout) {
-			RemoveStatusAilment(s);
-		}
-	}
+    public void DecrementAllAilmentsDuration() {
+        List<string> timeout = new List<string>();
+        foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
+            entry.Value.DecrementDuration();
+            if(entry.Value.duration <= 0) {
+                timeout.Add(entry.Key);
+            }
+        }
 
-	public void DecrementAilmentDuration(StatusAilment status) {
-		if(_ailments.ContainsKey(status.name)) {
-			StatusAilment s = _ailments[status.name];
-			s.DecrementDuration();
-			if(s.duration <= 0) {
-				RemoveStatusAilment(s.name);
-			}	
-		}
-	}
+        foreach(string s in timeout) {
+            RemoveStatusAilment(s);
+        }
+    }
 
-	public void TickAilmentEffect(StatusAilment status) {
-		if(_ailments.ContainsKey(status.name)) {
-			StatusAilment s = _ailments[status.name];
-			s.TickEffect(_entity);
-		}
-	}
+    public void DecrementAilmentDuration(StatusAilment status) {
+        if(_ailments.ContainsKey(status.name)) {
+            StatusAilment s = _ailments[status.name];
+            s.DecrementDuration();
+            if(s.duration <= 0) {
+                RemoveStatusAilment(s.name);
+            }   
+        }
+    }
 
-	public void TickAilmentEffects(BattlePhase bp) {
-		foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
-			if(entry.Value.phase == bp) {
-				entry.Value.TickEffect(_entity);	
-			}
-		}
-	}
+    public void TickAilmentEffect(StatusAilment status) {
+        if(_ailments.ContainsKey(status.name)) {
+            StatusAilment s = _ailments[status.name];
+            s.TickEffect(_entity);
+        }
+    }
 
-	public void TickAllAilmentEffects() {
-		foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
-			entry.Value.TickEffect(_entity);
-		}
-	}
+    public void TickAilmentEffects(TurnPhase bp) {
+        foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
+            if(entry.Value.phase == bp) {
+                entry.Value.TickEffect(_entity);    
+            }
+        }
+    }
+
+    public void TickAllAilmentEffects() {
+        foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
+            entry.Value.TickEffect(_entity);
+        }
+    }
 }
