@@ -25,10 +25,10 @@ MonoBehaviour:
     targetTeam: 0
     targetType: 1
   effects:
+    element: 0
     physicalScaling: 0
     specialScaling: 0
-    defenseType: 0
-    element: 0
+    heals: 0
     statusAilments: []
   commandKeyword: rally
   commandArgs: 0

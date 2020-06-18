@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ModifierAilment
   m_EditorClassIdentifier: 
   name: ModifierAilment
-  duration: 1
+  defaultDuration: 1
+  duration: 0
   level: 0
   phase: 5

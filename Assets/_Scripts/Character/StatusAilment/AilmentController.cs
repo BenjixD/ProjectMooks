@@ -30,6 +30,20 @@ public class AilmentController {
             _ailments.Where(kvp => kvp.Value.phase == bp).ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
     }
 
+    public bool TryInflictAilment(AilmentInfliction infliction) {
+        if (Random.value <= infliction.chance) {
+            StatusAilment ailment = Object.Instantiate(infliction.statusAilment);
+            if (infliction.infiniteDuration) {
+                ailment.SetInfiniteDuration();
+            } else if (infliction.duration != 0) {
+                ailment.SetDuration(infliction.duration);
+            }
+            AddStatusAilment(ailment);
+            return true;
+        }
+        return false;
+    }
+
     public void AddStatusAilment(StatusAilment ailment) {
         if(_ailments.ContainsKey(ailment.name)) {
             _ailments[ailment.name].StackWith(_entity, ailment);
@@ -42,6 +56,7 @@ public class AilmentController {
     public void RemoveStatusAilment(string ailment) {
         StatusAilment status = _ailments[ailment];
         _ailments.Remove(ailment);
+        Object.Destroy(status);
         status.Recover(_entity);
     }
 

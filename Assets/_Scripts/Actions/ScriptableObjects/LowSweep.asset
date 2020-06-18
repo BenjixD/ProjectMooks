@@ -30,7 +30,9 @@ MonoBehaviour:
     specialScaling: 0
     heals: 0
     statusAilments:
-    - {fileID: 11400000, guid: b12b21a70da0e6f48b3a868ea6c85616, type: 2}
+    - statusAilment: {fileID: 11400000, guid: b12b21a70da0e6f48b3a868ea6c85616, type: 2}
+      duration: 3
+      chance: 1
   commandKeyword: sweep
   commandArgs: 1
   userAnimName: attack
