@@ -328,9 +328,7 @@ public class TurnController : MonoBehaviour
             if (deadFighter.targetId == 0) {
                 this.onHeroDeath(result);
             } else {
-                GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId);
-
-                Destroy(deadFighter.gameObject);
+                this.EvictMook(deadFighter);
             }
         }
 
@@ -342,6 +340,12 @@ public class TurnController : MonoBehaviour
         if (allPlayers.Count == 1 && this.field.GetHeroPlayer().HasModifier(ModifierAilment.MODIFIER_DEATH)) {
             this.stageController.LoadDeathScene();
         }
+    }
+
+    public void EvictMook(FightingEntity mookObject) {
+        GameManager.Instance.gameState.playerParty.EvictPlayer(mookObject.targetId);
+        Destroy(mookObject.gameObject);
+        this.ui.statusBarsUI.UpdateStatusBars();
     }
 
     private void onHeroDeath(DeathResult result) {

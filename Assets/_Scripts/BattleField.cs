@@ -188,6 +188,7 @@ public class BattleField : MonoBehaviour
         JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(player.playerCreationData.job);
         PlayerObject playerObject = player.InstantiateFromJob<PlayerObject>(jobActionsList, player.playerCreationData.name, index);
 
+
         return playerObject;
     }
 
