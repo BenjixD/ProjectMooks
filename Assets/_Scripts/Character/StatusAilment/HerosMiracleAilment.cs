@@ -29,7 +29,7 @@ public class HerosMiracleAilment : StatusAilment {
             p.RemoveModifier(ModifierAilment.MODIFIER_UNTARGETTABLE);
             //TODO: Play Animation
             // Temp animation will be to just set gameObject active 
-            p.stats.SetHp(reviveHP);
+            p.stats.hp.ApplyDelta(reviveHP);
             p.gameObject.SetActive(true);
         } else {
             p.SetQueuedAction(new QueuedAction(p, nothingAction, new List<int>{ p.targetId }  ));	

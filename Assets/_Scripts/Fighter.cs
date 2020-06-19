@@ -23,7 +23,7 @@ public class Fighter
 
         // Will be null for enemies, but not for players because we want to keep stats
         if (this.playerCreationData == null) {
-            PlayerStats stats = new PlayerStats(prefab.stats);
+            PlayerStats stats = (PlayerStats)prefab.stats.Clone();
             stats.RandomizeStats();
             stats.ResetStats();
             this.playerCreationData = new PlayerCreationData(name, stats, jobList.job);

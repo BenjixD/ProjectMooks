@@ -115,7 +115,7 @@ public class ActionBase : ScriptableObject {
 
     private bool CheckCost(FightingEntity user) {
         PlayerStats stats = user.stats;
-        if (stats.GetHp() <= actionCost.HP || stats.GetMana() < actionCost.mana) {
+        if (stats.hp.GetValue() <= actionCost.HP || stats.mana.GetValue() < actionCost.mana) {
             Debug.Log(user + " has insufficient HP and/or mana to use " + name);
             return false;
         }
@@ -132,8 +132,10 @@ public class ActionBase : ScriptableObject {
 
     private void PayCost(FightingEntity user) {
         PlayerStats stats = user.stats;
-        stats.SetHp(stats.GetHp() - actionCost.HP);
-        stats.SetMana(stats.GetMana() - actionCost.mana);
+
+        stats.hp.ApplyDelta(-actionCost.HP);
+        stats.mana.ApplyDelta(-actionCost.mana);
+
         _currPP -= actionCost.PP;
         if (user is Mook) {
             Mook mook = (Mook) user;
@@ -240,11 +242,11 @@ public class ActionBase : ScriptableObject {
     public virtual FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
-        int attackDamage = (int) (user.stats.GetPhysical() * effects.physicalScaling + user.stats.GetSpecial() * effects.specialScaling);
+        int attackDamage = (int) (user.stats.physical.GetValue() * effects.physicalScaling + user.stats.special.GetValue() * effects.specialScaling);
         
         foreach (FightingEntity target in targets) {
             // Default damage mitigation: defense and resistance with half the scaling ratios
-            int defence = (int) ((target.stats.GetDefense() * effects.physicalScaling + target.stats.GetResistance() * effects.specialScaling) / 2);
+            int defence = (int) ((target.stats.defence.GetValue() * effects.physicalScaling + target.stats.resistance.GetValue() * effects.specialScaling) / 2);
             int damage = Mathf.Max(attackDamage - defence, 0);
             // If there is a healing effect, negate the damage and ignore damage mitigation
             if (effects.heals) {
@@ -252,7 +254,7 @@ public class ActionBase : ScriptableObject {
             }
 
             before = (PlayerStats)target.stats.Clone();
-            target.stats.SetHp(target.stats.GetHp() - damage);
+            target.stats.hp.ApplyDelta(-damage);
             after = (PlayerStats)target.stats.Clone();
 
             List<StatusAilment> inflicted = InflictStatuses(target);

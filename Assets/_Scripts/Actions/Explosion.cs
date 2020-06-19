@@ -28,11 +28,11 @@ public class Explosion : ActionBase {
         
         foreach (FightingEntity target in targets) {
             PlayerStats before, after;
-            int defence = target.stats.GetResistance();
+            int defence = target.stats.resistance.GetValue();
             int damage = Mathf.Max(attackDamage - defence, 0);
 
             before = (PlayerStats)target.stats.Clone();
-            target.stats.SetHp(target.stats.GetHp() - damage);
+            target.stats.hp.ApplyDelta(-damage);
             after = (PlayerStats)target.stats.Clone();
 
             receivers.Add(new DamageReceiver(target, before, after));
@@ -44,6 +44,6 @@ public class Explosion : ActionBase {
     // Return damage based on explosion power and user's stats (without accounting for the targets' resistances)
     public int GetRawDamage(PlayerStats stats, float power) {     
         // TODO: balance damage formula
-        return (int) (power * stats.GetSpecial());
+        return (int) (power * stats.special.GetValue());
     }
 }

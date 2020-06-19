@@ -18,13 +18,13 @@ public class ManaPotAction : ActionBase {
     public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
-        int attackDamage = user.stats.GetSpecial();
+        int attackDamage = user.stats.special.GetValue();
         
         foreach (FightingEntity target in targets) {
-            int defence = target.stats.GetResistance();
+            int defence = target.stats.resistance.GetValue();
 
             before = (PlayerStats)target.stats.Clone();
-            target.stats.SetMana(target.stats.GetMana() + attackDamage);
+            target.stats.mana.ApplyDelta(attackDamage);
             after = (PlayerStats)target.stats.Clone();
 
             receivers.Add(new DamageReceiver(target, before, after));

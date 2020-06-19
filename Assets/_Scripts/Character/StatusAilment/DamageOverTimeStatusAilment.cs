@@ -35,7 +35,7 @@ public class DamageOverTimeStatusAilment : StatusAilment {
 		int damage = 0;
 		switch(this.damageType) {
 			case Type.PERCENTAGE:
-				damage = (int)(p.stats.GetHp() * this.val);
+				damage = (int)(p.stats.hp.GetValue() * this.val);
 				// Minimum % damage is 1
 				damage = Mathf.Max(damage, 1);
 				break;
@@ -44,6 +44,6 @@ public class DamageOverTimeStatusAilment : StatusAilment {
 				break;
 		}
 		Debug.Log("Taking Damage Over Time: " + damage);
-		p.stats.SetHp(p.stats.GetHp() - damage);
+        p.stats.hp.ApplyDelta(-damage);
 	}
 }

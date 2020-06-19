@@ -29,7 +29,7 @@ public class Battle
         List<FightingEntity> orderedPlayers = new List<FightingEntity>(_controller.field.GetAllFightingEntities());
         orderedPlayers = orderedPlayers.Filter( fighter => !fighter.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION));
 
-        orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
+        orderedPlayers.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.speed.GetValue().CompareTo(a.stats.speed.GetValue()); });
 
         // TODO: Raise another message - specifically for battle order
         //Messenger.Broadcast<BattleResult>(Messages.OnBattleStart, new BattleResult(orderedPlayers));

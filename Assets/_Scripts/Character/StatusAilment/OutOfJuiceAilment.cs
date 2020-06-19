@@ -20,7 +20,7 @@ public class OutOfJuiceAilment : StatusAilment {
 	}
 
 	public override void TickEffect(FightingEntity p) {
-        p.stats.SetMana(p.stats.GetMana() - 1);
+        p.stats.mana.ApplyDelta(-1);
         GameManager.Instance.turnController.ui.statusBarsUI.UpdateStatusBars();
 	}
 }
