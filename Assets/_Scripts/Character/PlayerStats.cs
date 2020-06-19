@@ -5,7 +5,9 @@ using System;
 
 public enum Stat {
 	HP,
+    MAX_HP,
 	MANA,
+    MAX_MANA,
 	PHYSICAL,
 	SPECIAL,
 	DEFENSE,
@@ -19,10 +21,7 @@ public class PlayerStat : ICloneable {
     [SerializeField]
     private int baseValue; // Can set in inspector if you need to
     [SerializeField]
-    private int minValue = -2147483648; // either 0 or -2147483648 for most cases
-    [SerializeField]
-    private int maxValue = 2147483647; // 2147483647 for most cases
-
+    bool zeroClamped = false;
     private int currentValue; // Updated on applying StatModifer
 
     private PriorityList<StatModifier> modifiers;
@@ -31,17 +30,13 @@ public class PlayerStat : ICloneable {
 
     public PlayerStat(){}
 
-    public PlayerStat(Stat stat, int baseValue, int minValue = -2147483648, int maxValue = 2147483647) {
+    public PlayerStat(Stat stat, int baseValue, bool zeroClamped = false) {
         this.stat = stat;
         this.baseValue = baseValue;
-        this.minValue = -2147483648;
-        this.maxValue = 2147483647;
+        this.zeroClamped = zeroClamped;
     }
 
-    public void SetMinMax(int min, int max) {
-        this.minValue = min;
-        this.maxValue = max;
-    }
+
 
     public PriorityList<StatModifier> GetModifiers() {
         return this.modifiers;
@@ -70,13 +65,6 @@ public class PlayerStat : ICloneable {
         this.baseValue = baseValue;
     }
 
-    public int GetMaxValue() {
-        return this.maxValue;
-    }
-
-    public int GetMinValue() {
-        return this.minValue;
-    }
 
     public int GetValue() {
         if (this.dirty == false) {
@@ -86,7 +74,7 @@ public class PlayerStat : ICloneable {
             int runningValue = baseValue;
 
             foreach (StatModifier modifier in this.modifiers) {
-                runningValue = modifier.Apply(runningValue, this.baseValue, this.minValue, this.maxValue);
+                runningValue = modifier.Apply(runningValue, this.baseValue, this.zeroClamped);
             }
 
             this.currentValue = runningValue;
@@ -110,7 +98,7 @@ public class PlayerStat : ICloneable {
 
     public object Clone()
     {
-        PlayerStat stat = new PlayerStat(this.stat, this.baseValue, this.minValue, this.maxValue);
+        PlayerStat stat = new PlayerStat(this.stat, this.baseValue, this.zeroClamped);
         PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
 
         foreach (StatModifier modifier in this.modifiers) {
@@ -149,7 +137,7 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
     }
 
     // Modifer is in its own class and virtual to enable more control in case you want to do something super special
-    public virtual int Apply(int runningValue, int baseValue, int minValue, int maxValue) {
+    public virtual int Apply(int runningValue, int baseValue, bool zeroClamped) {
         long resValue = runningValue;
 		switch(this.type) {
 			case Type.ADD_PERCENTAGE:
@@ -163,12 +151,10 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 				break;
 		}
 
-        if (resValue <= minValue) {
-            resValue = minValue;
-        }
+        resValue = (long)Mathf.Clamp(resValue, Int32.MinValue, Int32.MinValue);
 
-        if (resValue >= maxValue) {
-            resValue = maxValue;
+        if (resValue <= 0 && zeroClamped) {
+            resValue = 0;
         }
 
         return (int)resValue;
@@ -192,7 +178,10 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 public class PlayerStats: ICloneable {
 	public int level;
     public PlayerStat hp;
+    public PlayerStat maxHp;
     public PlayerStat mana;
+    public PlayerStat maxMana;
+
     public PlayerStat physical;
     public PlayerStat special;
     public PlayerStat defence;
@@ -221,7 +210,6 @@ public class PlayerStats: ICloneable {
                 case Stat.HP:
                 case Stat.MANA:
                     stat.RandomizeBase(1, stat.GetBaseValue());
-                    stat.SetMinMax(0, stat.GetBaseValue());
                 break;
 
                 default:

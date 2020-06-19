@@ -86,13 +86,13 @@ public class FightingEntityAI {
 	private float StatDeltaEffectiveness(PlayerStats before, PlayerStats after) {
 		// TODO: Generalize stat diff scores
 		float delta = 0f;
-		delta += (after.GetHp() - before.GetHp()) / (float)(before.GetHp() <= 0 ? 1 : before.GetHp());
-		delta += (after.GetMana() - before.GetMana()) / (float)(before.GetMana() <= 0 ? 1 : before.GetMana());
-		delta += (after.GetPhysical() - before.GetPhysical()) / (float)(before.GetPhysical() <= 0 ? 1 : before.GetPhysical());
-		delta += (after.GetSpecial() - before.GetSpecial()) / (float)(before.GetSpecial() <= 0 ? 1 : before.GetSpecial());
-		delta += (after.GetDefense() - before.GetDefense()) / (float)(before.GetDefense() <= 0 ? 1 : before.GetDefense());
-		delta += (after.GetResistance() - before.GetResistance()) / (float)(before.GetResistance() <= 0 ? 1 : before.GetResistance());
-		delta += (after.GetSpeed() - before.GetSpeed()) / (float)(before.GetSpeed() <= 0 ? 1 : before.GetSpeed());
+		delta += (after.hp.GetValue() - before.hp.GetValue()) / (float)(before.hp.GetValue() <= 0 ? 1 : before.hp.GetValue());
+		delta += (after.mana.GetValue() - before.mana.GetValue()) / (float)(before.mana.GetValue() <= 0 ? 1 : before.mana.GetValue());
+		delta += (after.physical.GetValue() - before.physical.GetValue()) / (float)(before.physical.GetValue() <= 0 ? 1 : before.physical.GetValue());
+		delta += (after.special.GetValue() - before.special.GetValue()) / (float)(before.special.GetValue() <= 0 ? 1 : before.special.GetValue());
+		delta += (after.defence.GetValue() - before.defence.GetValue()) / (float)(before.defence.GetValue() <= 0 ? 1 : before.defence.GetValue());
+		delta += (after.resistance.GetValue() - before.resistance.GetValue()) / (float)(before.resistance.GetValue() <= 0 ? 1 : before.resistance.GetValue());
+		delta += (after.speed.GetValue() - before.speed.GetValue()) / (float)(before.speed.GetValue() <= 0 ? 1 : before.speed.GetValue());
 		delta *= -1f / 7f;
 		return delta;
 	}
