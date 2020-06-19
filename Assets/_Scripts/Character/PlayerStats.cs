@@ -11,7 +11,152 @@ public enum Stat {
 	DEFENSE,
 	RESISTANCE,
 	SPEED
-}
+};
+
+[System.Serializable]
+public class PlayerStat : ICloneable {
+    public Stat stat; // Set in inspector pls
+    public int baseValue; // Can set in inspector if you need to
+    public int minValue = -2147483648; // either 0 or -2147483648 for most cases
+    public int maxValue = 2147483647; // 2147483647 for most cases
+
+    private int currentValue; // Updated on applying StatModifer
+
+    private List<StatModifier> modifiers;
+
+    private bool dirty = false;
+
+    public PlayerStat(){}
+
+    public PlayerStat(Stat stat, int baseValue, int minValue = -2147483648, int maxValue = 2147483647) {
+        this.stat = stat;
+        this.baseValue = baseValue;
+        this.minValue = -2147483648;
+        this.maxValue = 2147483647;
+    }
+
+    public List<StatModifier> GetModifiers() {
+        return this.modifiers;
+    }
+
+    public void ApplyModifier(StatModifier modifier) {
+        this.modifiers.Add(modifier);
+        this.SetDirty(true);
+    }
+
+    public void RemoveModifier(StatModifier modifier) {
+        this.modifiers.Remove(modifier);
+        this.SetDirty(true);
+    }
+
+    public void ClearModifiers() {
+        this.modifiers.Clear();
+        this.SetDirty(true);
+    }
+
+    public int GetBaseValue() {
+        return this.baseValue;
+    }
+
+    public int GetCurrentValue() {
+        if (this.dirty == false) {
+            return this.currentValue;
+        } else {
+
+            int runningValue = baseValue;
+
+            foreach (StatModifier modifier in this.modifiers) {
+                runningValue = modifier.Apply(runningValue, this.baseValue, this.minValue, this.maxValue);
+            }
+
+            this.currentValue = runningValue;
+            this.SetDirty(false);
+            return this.currentValue;
+        }
+    }
+
+    public void RandomizeBase(int minValue, int maxValue) {
+        this.baseValue = (int)(maxValue * (BoxMuller.GetRandom() + 1)) + minValue;
+    }
+
+    // Helper for simply applying flat change
+    public int ApplyFlatChange(int change) {
+        this.ApplyModifier(new StatModifier(StatModifier.Type.FLAT, change));
+        return this.GetCurrentValue();
+    }
+
+    // Helper for applying percentage change
+    public int ApplyPercentageChange(float change) {
+        this.ApplyModifier(new StatModifier(StatModifier.Type.PERCENTAGE, change));
+        return this.GetCurrentValue();
+    }
+
+    public object Clone()
+    {
+        PlayerStat stat = new PlayerStat(this.stat, this.baseValue, this.minValue, this.maxValue);
+        List<StatModifier> clonedModifiers = new List<StatModifier>();
+
+        foreach (StatModifier modifier in this.modifiers) {
+            clonedModifiers.Add((StatModifier)modifier.Clone());
+        }
+
+        stat.modifiers = clonedModifiers;
+        stat.SetDirty(true);
+
+        return stat;
+    }
+
+    private void SetDirty(bool dirty) {
+        this.dirty = dirty;
+    }
+};
+
+[System.Serializable]
+public class StatModifier : ICloneable {
+    public enum Type {
+        FLAT,
+        PERCENTAGE
+    };
+
+    public float value;
+    public StatModifier.Type type;
+
+    public StatModifier(){}
+
+    // Note: Should be able to be both Serializable, and instantiable.
+    public StatModifier(StatModifier.Type type, float value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    // Modifer is in its own class and virtual to enable more control in case you want to do something super special
+    public virtual int Apply(int runningValue, int baseValue, int minValue, int maxValue) {
+        long resValue = runningValue;
+		switch(this.type) {
+			case Type.PERCENTAGE:
+                resValue += (int)(baseValue * value / 100);
+				break;
+			case Type.FLAT:
+                resValue += (int)value;
+				break;
+		}
+
+        if (resValue <= minValue) {
+            resValue = minValue;
+        }
+
+        if (resValue >= maxValue) {
+            resValue = maxValue;
+        }
+
+        return (int)resValue;
+    }
+
+    public object Clone()
+    {
+        return new StatModifier(this.type, this.value);
+    }
+};
 
 [System.Serializable]
 public class PlayerStats: ICloneable {
