@@ -25,9 +25,9 @@ public class PlayerCreationData {
 
 	// TODO: Probably should use some kind of k-means clustering instead of defined logic
 	private Job ChooseJobFromStats(PlayerStats template) {
-		if(stats.hp.GetBaseValue() > template.hp.GetBaseValue() && stats.physical.GetBaseValue() > stats.special.GetBaseValue()) {
+		if(stats.maxHp.GetBaseValue() > template.maxHp.GetBaseValue() && stats.physical.GetBaseValue() > stats.special.GetBaseValue()) {
 			return Job.WARRIOR;
-		} else if(stats.mana.GetBaseValue() > template.mana.GetBaseValue() && stats.special.GetBaseValue() > stats.physical.GetBaseValue()) {
+		} else if(stats.maxMana.GetBaseValue() > template.maxMana.GetBaseValue() && stats.special.GetBaseValue() > stats.physical.GetBaseValue()) {
 			return Job.MAGE;
 		} else if(stats.defence.GetBaseValue() > template.defence.GetBaseValue() && stats.resistance.GetBaseValue() > template.resistance.GetBaseValue()) {
 			return Job.CLERIC;

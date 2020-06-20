@@ -18,26 +18,127 @@ public enum Stat {
 [System.Serializable]
 public class PlayerStat : ICloneable {
     public Stat stat; // Set in inspector pls
+
+    protected int currentValue; // Updated on applying StatModifer
+    
+    protected int minValue = Int32.MinValue; // Usually only necessary for health/mana
+    protected int maxValue = Int32.MaxValue;
+
+    public PlayerStat(){}
+
+    public PlayerStat(Stat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue) {
+        this.stat = stat;
+        this.currentValue = value;
+    }
+
+    public void SetMinMax(int min, int max) {
+        this.minValue = min;
+        this.maxValue = max;
+        this.currentValue = Mathf.Clamp(this.currentValue, minValue, maxValue);
+    }
+
+    public virtual void SetValue(int value) {
+        this.currentValue = Mathf.Clamp(value, minValue, maxValue);
+    }
+
+    public virtual void ApplyDelta(int delta) {
+        this.SetValue(this.GetValue() + delta );
+    }
+
+    public virtual int GetValue() {
+        return this.currentValue;
+    }
+
+    public virtual object Clone()
+    {
+        PlayerStat stat = new PlayerStat(this.stat, this.currentValue);
+        PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
+        return stat;
+    }
+
+};
+
+// "baseValue" is max
+// current value cannot go higher than base value.
+public class PlayerStatWithModifiers : PlayerStat {
     [SerializeField]
     private int baseValue; // Can set in inspector if you need to
-    [SerializeField]
-    bool zeroClamped = false;
-    private int currentValue; // Updated on applying StatModifer
 
     private PriorityList<StatModifier> modifiers;
 
     private bool dirty = false;
 
-    public PlayerStat(){}
+    private Action<int> callback;
 
-    public PlayerStat(Stat stat, int baseValue, bool zeroClamped = false) {
-        this.stat = stat;
-        this.baseValue = baseValue;
-        this.zeroClamped = zeroClamped;
+
+    public PlayerStatWithModifiers(Stat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue, Action<int> callback = null)
+    : base(stat, value, minValue, maxValue) {
+        this.callback = callback;
     }
 
+    public void SetCallback(Action<int> callback) {
+        this.callback = callback;
+    }
 
+    public override int GetValue() {
+        if (this.dirty == true) {
 
+            int runningValue = baseValue;
+
+            foreach (StatModifier modifier in this.modifiers) {
+                runningValue = modifier.Apply(runningValue, this.baseValue, this.minValue, this.maxValue);
+            }
+
+            this.currentValue = runningValue;
+            this.SetDirty(false);
+        }
+
+        if (this.callback != null) {
+            this.callback(this.currentValue);
+        }
+
+        return this.currentValue;
+    }
+
+    // Note: This FORCE sets the BASE value. Use sparingly.
+    public override void SetValue(int value) {
+        this.ClearModifiers();
+        this.baseValue = Mathf.Clamp(value, minValue, maxValue);
+        this.SetDirty(true);
+    }
+
+    public override void ApplyDelta(int delta) {
+        this.ApplyDeltaModifier(delta, StatModifier.Type.FLAT);
+    }
+
+    public override object Clone()
+    {
+        PlayerStatWithModifiers stat = (PlayerStatWithModifiers)base.Clone();
+        PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
+
+        foreach (StatModifier modifier in this.modifiers) {
+            clonedModifiers.Add((StatModifier)modifier.Clone());
+        }
+
+        stat.modifiers = clonedModifiers;
+        stat.SetDirty(true);
+
+        return stat;
+    }
+
+    // Helper for simply applying change
+    public StatModifier ApplyDeltaModifier(float delta, StatModifier.Type type = StatModifier.Type.FLAT) {
+        StatModifier modifier = new StatModifier(type, delta);
+        this.ApplyModifier(modifier);
+        this.GetValue();
+        return modifier;
+    }
+
+    public int GetBaseValue() {
+        return this.baseValue;
+    }
+
+    // Modifier helpers
     public PriorityList<StatModifier> GetModifiers() {
         return this.modifiers;
     }
@@ -57,63 +158,15 @@ public class PlayerStat : ICloneable {
         this.SetDirty(true);
     }
 
-    public int GetBaseValue() {
-        return this.baseValue;
-    }
-
-    public void SetBaseValue(int baseValue) {
-        this.baseValue = baseValue;
-    }
-
-
-    public int GetValue() {
-        if (this.dirty == false) {
-            return this.currentValue;
-        } else {
-
-            int runningValue = baseValue;
-
-            foreach (StatModifier modifier in this.modifiers) {
-                runningValue = modifier.Apply(runningValue, this.baseValue, this.zeroClamped);
-            }
-
-            this.currentValue = runningValue;
-            this.SetDirty(false);
-            return this.currentValue;
-        }
-    }
-
     public void RandomizeBase(int minValue, int maxValue) {
         this.baseValue = (int)(maxValue * (BoxMuller.GetRandom() + 1)) + minValue;
-
-    }
-
-    // Helper for simply applying change
-    public StatModifier ApplyDelta(float delta, StatModifier.Type type = StatModifier.Type.FLAT) {
-        StatModifier modifier = new StatModifier(type, delta);
-        this.ApplyModifier(modifier);
         this.GetValue();
-        return modifier;
-    }
-
-    public object Clone()
-    {
-        PlayerStat stat = new PlayerStat(this.stat, this.baseValue, this.zeroClamped);
-        PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
-
-        foreach (StatModifier modifier in this.modifiers) {
-            clonedModifiers.Add((StatModifier)modifier.Clone());
-        }
-
-        stat.modifiers = clonedModifiers;
-        stat.SetDirty(true);
-
-        return stat;
     }
 
     private void SetDirty(bool dirty) {
         this.dirty = dirty;
     }
+
 };
 
 [System.Serializable]
@@ -137,7 +190,7 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
     }
 
     // Modifer is in its own class and virtual to enable more control in case you want to do something super special
-    public virtual int Apply(int runningValue, int baseValue, bool zeroClamped) {
+    public virtual int Apply(int runningValue, int baseValue, int minValue, int maxValue) {
         long resValue = runningValue;
 		switch(this.type) {
 			case Type.ADD_PERCENTAGE:
@@ -151,11 +204,7 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 				break;
 		}
 
-        resValue = (long)Mathf.Clamp(resValue, Int32.MinValue, Int32.MinValue);
-
-        if (resValue <= 0 && zeroClamped) {
-            resValue = 0;
-        }
+        resValue = (long)Mathf.Clamp(resValue, minValue, maxValue);
 
         return (int)resValue;
     }
@@ -178,33 +227,36 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 public class PlayerStats: ICloneable {
 	public int level;
     public PlayerStat hp;
-    public PlayerStat maxHp;
+    public PlayerStatWithModifiers maxHp;
     public PlayerStat mana;
-    public PlayerStat maxMana;
+    public PlayerStatWithModifiers maxMana;
 
-    public PlayerStat physical;
-    public PlayerStat special;
-    public PlayerStat defence;
-    public PlayerStat resistance;
-    public PlayerStat speed;
+    public PlayerStatWithModifiers physical;
+    public PlayerStatWithModifiers special;
+    public PlayerStatWithModifiers defence;
+    public PlayerStatWithModifiers resistance;
+    public PlayerStatWithModifiers speed;
 
-    private List<PlayerStat> stats;
+    private List<PlayerStatWithModifiers> stats;
 
 	public PlayerStats() {
 		level = 1;
-        this.stats = new List<PlayerStat>();
-        this.stats.Add(hp);
-        this.stats.Add(mana);
+        this.stats = new List<PlayerStatWithModifiers>();
+        this.stats.Add(maxHp);
+        this.stats.Add(maxMana);
         this.stats.Add(physical);
         this.stats.Add(special);
         this.stats.Add(defence);
         this.stats.Add(resistance);
         this.stats.Add(speed);
 
+        this.SetupStatPair(hp, maxHp);
+        this.SetupStatPair(mana, maxMana);
+
 	}
 
 	public void RandomizeStats() {
-        foreach (PlayerStat stat in this.stats) {
+        foreach (PlayerStatWithModifiers stat in this.stats) {
 
             switch (stat.stat) {
                 case Stat.HP:
@@ -223,8 +275,11 @@ public class PlayerStats: ICloneable {
         PlayerStats stats = new PlayerStats();
         stats.level = this.level;
 
+        stats.hp = (PlayerStat)this.hp.Clone();
+        stats.mana = (PlayerStat)this.mana.Clone();
+
         for (int i = 0; i < stats.stats.Count; i++) {
-            stats.stats[i] = (PlayerStat)this.stats[i].Clone();
+            stats.stats[i] = (PlayerStatWithModifiers)this.stats[i].Clone();
         }
 
 		return stats;
@@ -268,9 +323,14 @@ public class PlayerStats: ICloneable {
 
 	// Resetter ------------------//
 	public void ResetStats() {
-        foreach (PlayerStat stat in this.stats) {
+        foreach (PlayerStatWithModifiers stat in this.stats) {
             stat.ClearModifiers();
             stat.GetValue();
         }
 	}
+
+    // Setup stat pairs for like hp/max hp and mana/max mana
+    private void SetupStatPair(PlayerStat curStat, PlayerStatWithModifiers maxStat) {
+        maxStat.SetCallback( (int maxValue) => curStat.SetMinMax(0, maxValue) );
+    }
 }

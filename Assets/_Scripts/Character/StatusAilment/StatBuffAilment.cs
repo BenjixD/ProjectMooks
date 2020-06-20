@@ -27,10 +27,10 @@ public class StatBuffAilment : StatusAilment {
 	public override void ApplyTo(FightingEntity p) {
 		switch(this.damageType) {
 			case Type.PERCENTAGE:
-                p.stats.physical.ApplyDelta(this.val, StatModifier.Type.ADD_PERCENTAGE);
+                p.stats.physical.ApplyDeltaModifier(this.val, StatModifier.Type.ADD_PERCENTAGE);
 				break;
 			case Type.FLAT:
-				p.stats.physical.ApplyDelta(this.val, StatModifier.Type.FLAT);
+				p.stats.physical.ApplyDeltaModifier(this.val, StatModifier.Type.FLAT);
 				break;
 		}
 	}

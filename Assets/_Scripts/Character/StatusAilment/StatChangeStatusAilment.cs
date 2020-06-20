@@ -18,7 +18,7 @@ public class StatChangeStatusAilment : StatusAilment {
 	private int _flatChange;
 
 
-    private PlayerStat playerStat;
+    private PlayerStatWithModifiers playerStat;
     private StatModifier statModifier;
 
 	public override void StackWith(FightingEntity p, StatusAilment other) {
@@ -31,17 +31,22 @@ public class StatChangeStatusAilment : StatusAilment {
 	}
 
 	public override void ApplyTo(FightingEntity p) {
-        this.playerStat = p.stats.GetStat(stat);
+        PlayerStat tmpStat = p.stats.GetStat(stat);
+        if (tmpStat.GetType() != typeof(PlayerStatWithModifiers)) {
+            Debug.LogError("Error: Should be stat with modifier");
+        } else {
+            this.playerStat = (PlayerStatWithModifiers)p.stats.GetStat(stat);
+        }
 
 		//TODO: Possible Animation Modifications
 		switch(type) {
 			case Type.PERCENTAGE:
 				_flatChange = (int)Mathf.Ceil(playerStat.GetValue() * modifier);
-                this.statModifier = playerStat.ApplyDelta(_flatChange, StatModifier.Type.FLAT);
+                this.statModifier = playerStat.ApplyDeltaModifier(_flatChange, StatModifier.Type.FLAT);
 				break;
 			case Type.FLAT:
 				_flatChange = (int)modifier;
-                this.statModifier = playerStat.ApplyDelta(_flatChange, StatModifier.Type.ADD_PERCENTAGE);
+                this.statModifier = playerStat.ApplyDeltaModifier(_flatChange, StatModifier.Type.ADD_PERCENTAGE);
 				break;
 		}
 		Debug.Log("Defending: " + _flatChange + " damage");
