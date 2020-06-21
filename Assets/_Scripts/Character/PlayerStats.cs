@@ -52,7 +52,6 @@ public class PlayerStat : ICloneable {
     public virtual object Clone()
     {
         PlayerStat stat = new PlayerStat(this.stat, this.currentValue);
-        PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
         return stat;
     }
 
@@ -60,19 +59,21 @@ public class PlayerStat : ICloneable {
 
 // "baseValue" is max
 // current value cannot go higher than base value.
+[System.Serializable]
 public class PlayerStatWithModifiers : PlayerStat {
     [SerializeField]
     private int baseValue; // Can set in inspector if you need to
 
-    private PriorityList<StatModifier> modifiers;
+    private PriorityList<StatModifier> modifiers = new PriorityList<StatModifier>();
 
     private bool dirty = false;
 
-    private Action<int> callback;
+    private Action<int> callback = null;
 
 
     public PlayerStatWithModifiers(Stat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue, Action<int> callback = null)
     : base(stat, value, minValue, maxValue) {
+        this.baseValue = value;
         this.callback = callback;
     }
 
@@ -113,7 +114,7 @@ public class PlayerStatWithModifiers : PlayerStat {
 
     public override object Clone()
     {
-        PlayerStatWithModifiers stat = (PlayerStatWithModifiers)base.Clone();
+        PlayerStatWithModifiers stat = new PlayerStatWithModifiers(this.stat, this.baseValue, this.minValue, this.maxValue, this.callback);
         PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
 
         foreach (StatModifier modifier in this.modifiers) {
@@ -160,6 +161,7 @@ public class PlayerStatWithModifiers : PlayerStat {
 
     public void RandomizeBase(int minValue, int maxValue) {
         this.baseValue = (int)(maxValue * (BoxMuller.GetRandom() + 1)) + minValue;
+        this.SetDirty(true);
         this.GetValue();
     }
 
@@ -225,21 +227,25 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 
 [System.Serializable]
 public class PlayerStats: ICloneable {
-	public int level;
-    public PlayerStat hp;
-    public PlayerStatWithModifiers maxHp;
-    public PlayerStat mana;
-    public PlayerStatWithModifiers maxMana;
+	public int level = 1;
+    public PlayerStat hp = new PlayerStat(Stat.HP, 1);
+    public PlayerStatWithModifiers maxHp = new PlayerStatWithModifiers(Stat.MAX_HP, 1);
+    public PlayerStat mana = new PlayerStat(Stat.MANA, 1);
+    public PlayerStatWithModifiers maxMana = new PlayerStatWithModifiers(Stat.MAX_MANA, 1);
 
-    public PlayerStatWithModifiers physical;
-    public PlayerStatWithModifiers special;
-    public PlayerStatWithModifiers defence;
-    public PlayerStatWithModifiers resistance;
-    public PlayerStatWithModifiers speed;
+    public PlayerStatWithModifiers physical = new PlayerStatWithModifiers(Stat.PHYSICAL, 1);
+    public PlayerStatWithModifiers special = new PlayerStatWithModifiers(Stat.SPECIAL, 1);
+    public PlayerStatWithModifiers defence = new PlayerStatWithModifiers(Stat.DEFENSE, 1);
+    public PlayerStatWithModifiers resistance = new PlayerStatWithModifiers(Stat.RESISTANCE, 1);
+    public PlayerStatWithModifiers speed = new PlayerStatWithModifiers(Stat.SPEED, 1);
 
     private List<PlayerStatWithModifiers> stats;
 
 	public PlayerStats() {
+        this.Initialize();
+	}
+
+    private void Initialize() {
 		level = 1;
         this.stats = new List<PlayerStatWithModifiers>();
         this.stats.Add(maxHp);
@@ -252,22 +258,14 @@ public class PlayerStats: ICloneable {
 
         this.SetupStatPair(hp, maxHp);
         this.SetupStatPair(mana, maxMana);
-
-	}
+    }
 
 	public void RandomizeStats() {
         foreach (PlayerStatWithModifiers stat in this.stats) {
+            stat.RandomizeBase(1, stat.GetBaseValue());
 
-            switch (stat.stat) {
-                case Stat.HP:
-                case Stat.MANA:
-                    stat.RandomizeBase(1, stat.GetBaseValue());
-                break;
-
-                default:
-                    stat.RandomizeBase(1, stat.GetBaseValue());
-                    break;
-            }
+            this.hp.SetValue(this.maxHp.GetValue());
+            this.mana.SetValue(this.maxMana.GetValue());            
         }
 	}
 
@@ -278,9 +276,15 @@ public class PlayerStats: ICloneable {
         stats.hp = (PlayerStat)this.hp.Clone();
         stats.mana = (PlayerStat)this.mana.Clone();
 
-        for (int i = 0; i < stats.stats.Count; i++) {
-            stats.stats[i] = (PlayerStatWithModifiers)this.stats[i].Clone();
-        }
+        stats.maxHp = (PlayerStatWithModifiers)this.maxHp.Clone();
+        stats.maxMana = (PlayerStatWithModifiers)this.maxMana.Clone();
+        stats.physical = (PlayerStatWithModifiers)this.physical.Clone();
+        stats.special = (PlayerStatWithModifiers)this.special.Clone();
+        stats.defence = (PlayerStatWithModifiers)this.defence.Clone();
+        stats.resistance = (PlayerStatWithModifiers)this.resistance.Clone();
+        stats.speed = (PlayerStatWithModifiers)this.speed.Clone();
+
+        stats.Initialize();
 
 		return stats;
 	}
@@ -331,6 +335,8 @@ public class PlayerStats: ICloneable {
 
     // Setup stat pairs for like hp/max hp and mana/max mana
     private void SetupStatPair(PlayerStat curStat, PlayerStatWithModifiers maxStat) {
+        curStat.SetMinMax(0, maxStat.GetBaseValue());
+        curStat.SetValue(maxStat.GetBaseValue());
         maxStat.SetCallback( (int maxValue) => curStat.SetMinMax(0, maxValue) );
     }
 }

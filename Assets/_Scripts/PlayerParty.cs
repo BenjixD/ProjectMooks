@@ -17,7 +17,9 @@ public class PlayerParty : Party {
         // Creates the hero player
         JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(Job.HERO);
         FightingEntity heroPrefab = jobActionsList.prefab;
+        Debug.Log("Hero prefab base stat: " + heroPrefab.stats.hp.GetValue() + "/" + heroPrefab.stats.maxHp.GetBaseValue());
         PlayerStats stats = (PlayerStats)heroPrefab.stats.Clone();
+        Debug.Log("Hero prefab cloned base stat: " + stats.hp.GetValue() + "/" + stats.maxHp.GetBaseValue());
         PlayerCreationData heroData = new PlayerCreationData(heroName, stats, Job.HERO);
         Player hero = new Player();
         hero.SetPlayerCreationData(heroData);

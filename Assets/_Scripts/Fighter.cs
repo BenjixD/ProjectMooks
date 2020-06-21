@@ -24,8 +24,16 @@ public class Fighter
         // Will be null for enemies, but not for players because we want to keep stats
         if (this.playerCreationData == null) {
             PlayerStats stats = (PlayerStats)prefab.stats.Clone();
+
+            if (stats.hp.GetValue() != stats.maxHp.GetValue()) {
+                Debug.LogError("ERROR1: hp is not equal to max");
+            }
             stats.RandomizeStats();
-            stats.ResetStats();
+            //stats.ResetStats();
+
+            if (stats.hp.GetValue() != stats.maxHp.GetValue()) {
+                Debug.LogError("ERROR2: hp is not equal to max: " + stats.hp.GetValue() + "/" + stats.maxHp.GetValue());
+            }
             this.playerCreationData = new PlayerCreationData(name, stats, jobList.job);
         }
 
