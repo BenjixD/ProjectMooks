@@ -65,7 +65,7 @@ MonoBehaviour:
       baseValue: 30
     physical:
       stat: 4
-      baseValue: 30
+      baseValue: 15
     special:
       stat: 5
       baseValue: 30

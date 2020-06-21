@@ -20,6 +20,17 @@ public class BattleField : MonoBehaviour
         this.InitializeEnemies();
     }
 
+    
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.K)) {
+            List<EnemyObject> enemies = this.GetActiveEnemyObjects();
+            foreach(EnemyObject enemy in enemies) {
+                enemy.stats.hp.SetValue(0);
+                DeathResult deathResult = new DeathResult(enemy, new DamageReceiver(enemy, enemy.stats, enemy.stats), null);
+                Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, deathResult);
+            }
+        }
+    }
 
     // Field helper functions ===
     public PlayerObject GetHeroPlayer() {
