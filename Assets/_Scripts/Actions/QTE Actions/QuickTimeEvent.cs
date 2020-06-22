@@ -33,6 +33,7 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     protected abstract void ProcessMessage(string message);
 
     private IEnumerator StartQTE() {
+        GameManager.Instance.time.Pause();
         _qteUI = Instantiate(_qteCommonCanvasPrefab).GetComponent<QteCommonUI>();
         _qteUI.SetGuidance(_guidance);
         StartCoroutine(Countdown());
@@ -68,6 +69,7 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     private IEnumerator EndQTE() {
         _acceptingInput = false;
         _qteUI.DeactivateTimer();
+        GameManager.Instance.time.UnPause();
         yield return new WaitForSeconds(_windDownDuration);
         DestroyUI();
         Destroy(gameObject);
