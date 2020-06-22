@@ -69,8 +69,8 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     private IEnumerator EndQTE() {
         _acceptingInput = false;
         _qteUI.DeactivateTimer();
-        GameManager.Instance.time.UnPause();
         yield return new WaitForSeconds(_windDownDuration);
+        GameManager.Instance.time.UnPause();
         DestroyUI();
         Destroy(gameObject);
         // TODO: execute move
