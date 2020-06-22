@@ -57,6 +57,7 @@ public class TurnController : MonoBehaviour
 
     void OnDestroy() {
         this.RemoveListeners();
+        this.StopAllCoroutines();
     }
 
     public void BroadcastPartySetup() {

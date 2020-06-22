@@ -58,7 +58,7 @@ public class BattlePhase : Phase {
 
     protected override IEnumerator Run() {
         this._ui.battleOrderUI.SetTurnOrder(fighters);
-        yield return GameManager.Instance.time.WaitForSeconds(0.5f);
+        yield return GameManager.Instance.time.GetController().WaitForSeconds(0.5f);
         this._ui.targetIconsUI.ClearTargetArrows();
 
         for (int i = 0; i < fighters.Count; i++) {
@@ -66,7 +66,7 @@ public class BattlePhase : Phase {
             if (fighters[i] == null) {
                 // This can happen if the fighter dies mid-battle
                 this._ui.battleOrderUI.PopFighter();
-                yield return GameManager.Instance.time.WaitForSeconds(1.0f);
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(1.0f);
                 continue;
             }
 
@@ -84,7 +84,7 @@ public class BattlePhase : Phase {
             // This can happen if target dies mid-battle
             if (attackerAction._action.GetTargets(fighters[i], attackerAction.GetTargetIds()).Count == 0) {
                 this._ui.battleOrderUI.PopFighter();
-                yield return GameManager.Instance.time.WaitForSeconds(1.0f);
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(1.0f);
                 continue;
             }
             

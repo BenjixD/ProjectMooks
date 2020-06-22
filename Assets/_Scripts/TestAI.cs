@@ -23,7 +23,7 @@ public class TestAI : PlayerObject {
 			}
 			//_ai.FeedbackOnBestAction(result);
 			_ai.PerturbScore();
-            yield return GameManager.Instance.time.WaitForSeconds(3f);
+            yield return GameManager.Instance.time.GetController().WaitForSeconds(3f);
 		}
 	}
 }
