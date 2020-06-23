@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 public class RallyingCryMessage : MonoBehaviour {
-    [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private TextMeshProUGUI _text = null;
 
     public void SetText(string text) {
         _text.text = text;

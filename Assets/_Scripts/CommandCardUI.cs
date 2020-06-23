@@ -16,15 +16,15 @@ public class CommandCardUI : MonoBehaviour
     [Header("SELECT COMMAND")]
     // The parent object if mode is SELECT_COMMAND
     [SerializeField]
-    private RectTransform _actionMenu;
+    private RectTransform _actionMenu = null;
 
     // The parent object for texts if mode is SELECT_COMMAND
     [SerializeField]
-    private RectTransform _actionMenuTextParent;
+    private RectTransform _actionMenuTextParent = null;
 
     // Prefab for _battleOptionsUI
     [SerializeField]
-    private CommandOptionText _commandTextPrefab;
+    private CommandOptionText _commandTextPrefab = null;
 
     // The list of text objects if mode is SELECT_COMMAND
     private List<CommandOptionText> _battleOptionsUI {get; set;}

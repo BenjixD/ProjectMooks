@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class QuickTimeEvent : MonoBehaviour {
     [Header("Quick Time Event Parameters")]
     [SerializeField, Tooltip("Duration for which this QTE accepts chat input.")]
-    protected float _inputDuration;
+    protected float _inputDuration = 0;
     [SerializeField, TextArea, Tooltip("Instructional text for this QTE that is displayed to the players.")]
-    private string _guidance;
+    private string _guidance = null;
     [Tooltip("Duration during which players can see the instructional text and prepare to give input.")]
     private float _warmupDuration = 3;
     [Tooltip("Duration to wait after input is closed before executing action, so that players can see the results of the QTE.")]

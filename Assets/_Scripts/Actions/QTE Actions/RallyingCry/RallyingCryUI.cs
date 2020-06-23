@@ -6,13 +6,13 @@ using TMPro;
 public class RallyingCryUI : MonoBehaviour {
     [Header("References")]
     [SerializeField, Tooltip("Reference to the RallyingCryMessage prefab.")]
-    private GameObject _rallyingCryMessagePrefab;
-    [SerializeField] private TextMeshProUGUI _powerText;
+    private GameObject _rallyingCryMessagePrefab = null;
+    [SerializeField] private TextMeshProUGUI _powerText = null;
 
     [Space]
 
     [SerializeField, Tooltip("The max number of messages displayed at once. Any further messages will replace oldest messages.")]
-    private int _maxConcurrentMessages;
+    private int _maxConcurrentMessages = 0;
     [SerializeField, Range(0, 1), Tooltip("The percentage of the screen width and height within which messages will spawn. A value of 1 will allow messages to spawn anywhere on the screen.")]
     private float _spawnableScreenPercent = 0.8f;
     private List<RallyingCryMessage> _currMessages = new List<RallyingCryMessage>();

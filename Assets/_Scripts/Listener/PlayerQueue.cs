@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerQueue : TwitchChatListenerBase {
 	[SerializeField]
-	private PlayerStats _template;
+	private PlayerStats _template = null;
 
 	private LinkedList<PlayerCreationData> _waitingQueue = new LinkedList<PlayerCreationData>();
 	private Dictionary<string, LinkedListNode<PlayerCreationData>> _inQueue = new Dictionary<string, LinkedListNode<PlayerCreationData>>(); 

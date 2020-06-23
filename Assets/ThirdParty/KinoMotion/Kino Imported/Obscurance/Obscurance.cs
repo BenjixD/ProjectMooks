@@ -189,7 +189,7 @@ namespace Kino
 
         // Reference to the quad mesh in the built-in assets
         // (used in MRT blitting)
-        [SerializeField] Mesh _quadMesh;
+        [SerializeField] Mesh _quadMesh = null;
 
         #endregion
 

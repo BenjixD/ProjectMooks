@@ -5,10 +5,10 @@ using TMPro;
 
 public class QteCommonUI : MonoBehaviour {
     [Header("References (QteUI)")]
-    [SerializeField] private TextMeshProUGUI _guidanceText;
-    [SerializeField] private GameObject _warmup;
-    [SerializeField] private TextMeshProUGUI _countdownText;
-    [SerializeField] private TextMeshProUGUI _timerText;
+    [SerializeField] private TextMeshProUGUI _guidanceText = null;
+    [SerializeField] private GameObject _warmup = null;
+    [SerializeField] private TextMeshProUGUI _countdownText = null;
+    [SerializeField] private TextMeshProUGUI _timerText = null;
 
     public void SetGuidance(string text) {
         _guidanceText.text = text;
