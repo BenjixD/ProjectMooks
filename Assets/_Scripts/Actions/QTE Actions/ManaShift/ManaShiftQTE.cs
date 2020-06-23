@@ -10,7 +10,7 @@ public class ManaShiftQTE : QuickTimeEvent {
     [Header("References (ManaShiftQTE)")]
     [SerializeField, Tooltip("Reference to the ManaShiftCanvas prefab.")]
     private GameObject _manaShiftCanvasPrefab = null;
-    private ManaShiftUI _manaShiftUI = null;
+    private ManaShiftUI _manaShiftUI;
     private float _totalPower = 0;
 
     protected override void ProcessMessage(string message) {
