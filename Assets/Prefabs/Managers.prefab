@@ -121,15 +121,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 372d059ea52793146a680ded329e4347, type: 2}
   _enemyJobActionsLists:
   - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-  stageInfo:
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  zones:
+  - {fileID: 11400000, guid: b26e2ed0a9f467549bb402a270ebe9cb, type: 2}
   commonActions: []
   commonMookActionPool:
   - {fileID: 11400000, guid: 978ab0ca05277fd439c5257c4a925014, type: 2}

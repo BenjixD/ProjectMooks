@@ -11,14 +11,16 @@ public class StageInfoContainer
     
     public StageInfoContainer(StageInfo stageInfo) {
         this.stageInfo = stageInfo;
-        this.numWaves = Random.Range(this.stageInfo.minAmountWaves, this.stageInfo.maxAmountWaves);
+        numWaves = stageInfo.waveInfos.Count;
+        // Randomly generate waves
         this.InitializeWaveList();
     }
 
     public void InitializeWaveList() {
         this.waveInfo = new List<WaveInfoContainer>();
-        for (int i = 0; i < this.numWaves; i++) {
-            this.waveInfo.Add(new WaveInfoContainer(this.stageInfo.waveInfos[i % this.numWaves]));
+        Debug.Log("initializing waves");
+        for (int i = 0; i < numWaves; i++) {
+            this.waveInfo.Add(new WaveInfoContainer(this.stageInfo.waveInfos[i % numWaves]));
         }
     }
 

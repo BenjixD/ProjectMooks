@@ -13,15 +13,24 @@ public class GameState : MonoBehaviour {
 
     public ProgressData progressData;
 
-    public List<StageInfoContainer> stages {get; set;}
+    // TODOL
+    // public List<StageInfoContainer> stages {get; set;}
+
+    private StageInfoContainer _currStage;
+
+    // TODOL
+    public Queue<WaveInfo> waves;
 
     public void Initialize() {
-        this.InitializeStages();
+        // TODOL
+        // this.InitializeStages();
     }
 
   
     public StageInfoContainer GetCurrentStage() {
-        return this.stages[this.progressData.currentStageIndex];
+        // TODOL
+        return _currStage;
+        // return this.stages[this.progressData.currentStageIndex];
     }
 
     public void SetStageIndex(int index) {
@@ -32,13 +41,19 @@ public class GameState : MonoBehaviour {
         this.progressData.nextStageIndex = index;
     }
 
-    private void InitializeStages() {
-        this.stages = new List<StageInfoContainer>();
-        List<StageInfo> stages = GameManager.Instance.models.GetStageInfos();
-        foreach (StageInfo stage in stages) {
-            StageInfoContainer stageInfo = new StageInfoContainer(stage);
-            stageInfo.InitializeWaveList(); // Does random generation
-            this.stages.Add(stageInfo);
-        }
+    // TODOL
+    // private void InitializeStages() {
+    //     this.stages = new List<StageInfoContainer>();
+    //     List<StageInfo> stages = GameManager.Instance.models.GetStageInfos();
+    //     foreach (StageInfo stage in stages) {
+    //         StageInfoContainer stageInfo = new StageInfoContainer(stage);
+    //         stageInfo.InitializeWaveList(); // Does random generation
+    //         this.stages.Add(stageInfo);
+    //     }
+    // }
+
+    public void InitializeStage(StageInfoContainer stageInfoContainer) {
+        // TODOL
+        _currStage = stageInfoContainer;
     }
 }

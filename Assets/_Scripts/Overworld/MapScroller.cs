@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MapScroller : MonoBehaviour {
-    [SerializeField] private Transform scrollingTransform = null;
+    public RectTransform scrollingTransform = null;
     [SerializeField] private float _scrollSpeed = 0;
     private Vector3 _destVector = Vector3.zero;
     private float _leftBound;
@@ -12,6 +12,13 @@ public class MapScroller : MonoBehaviour {
     public void SetBounds(float left, float right) {
         _leftBound = left;
         _rightBound = right;
+    }
+
+    // Centre map on given x
+    public void RefocusMap(float newX) {
+        Vector3 newPos = scrollingTransform.anchoredPosition;
+        newPos.x = newX;
+        scrollingTransform.anchoredPosition = newPos;
     }
 
     private void Update() {

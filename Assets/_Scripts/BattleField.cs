@@ -101,9 +101,7 @@ public class BattleField : MonoBehaviour
 
         StageInfoContainer stageInfo = GameManager.Instance.gameState.GetCurrentStage();
         WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.currentWaveIndex);
-        waveInfo.InitializeEnemyList(); // Does random generation
 
-        int numberOfEnemiesToGenerate = waveInfo.numEnemies;
         List<JobActionsList> enemyList = waveInfo.GetEnemyList();
 
         for (int i = 0; i < enemyList.Count; i++) {

@@ -264,16 +264,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapGenerator: {fileID: 28748460501261499}
+  _mapScroller: {fileID: 1406697840}
   _pathPrefab: {fileID: 5643430686367219409, guid: 1185e389607cb3343856d611a639bc29,
     type: 3}
   _mapDisplay: {fileID: 6070822843216032487}
   _playerIcon: {fileID: 4387844164566929031}
   _mapSceneName: WorldMap
   _moveRange: 1
-  _zoneProperties:
-  - stageInfo: {fileID: 0}
-    mapRows: 3
-    columns: 00000000000000000100000000000000
 --- !u!114 &28748460501261499
 MonoBehaviour:
   m_ObjectHideFlags: 0

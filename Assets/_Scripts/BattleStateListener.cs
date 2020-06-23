@@ -61,6 +61,7 @@ public class BattleStateListener : MonoBehaviour {
 
         GameManager.Instance.battleComponents.field.currentWaveIndex++;
         if (GameManager.Instance.battleComponents.field.currentWaveIndex >= stageInfo.numWaves) {
+            // TODOL: return to world map
             GameManager.Instance.battleComponents.stageController.LoadNextStage();
         } else {
             GameManager.Instance.battleComponents.field.GenerateEnemyList(GameManager.Instance.battleComponents.field.currentWaveIndex);

@@ -6,13 +6,15 @@ using UnityEngine.SceneManagement;
 
 public enum StageCategory {
     BATTLE,
+    BOSS,
     EVENT
 }
 
 public enum BattleType {
     EASY_BATTLE,
     MEDIUM_BATTLE,
-    HARD_BATTLE
+    HARD_BATTLE,
+    BOSS
 }
 
 public enum EventType {
@@ -42,17 +44,20 @@ public class StageNode : MonoBehaviour {
     [SerializeField] private string _battleScene = null;
     [SerializeField] private string _eventScene = null;
     private StageCategory _stageCategory;
+    // TODOL
+    private StageInfoContainer _stageInfoContainer; // Container for StageInfo if this stage is a battle stage
     private EventType _eventType;
     private GameObject _entryBranch;
     private RectTransform _verticalPath;
 
     public void EnterStage() {
-        if (_stageCategory == StageCategory.BATTLE) {
+        if (_stageCategory == StageCategory.BATTLE || _stageCategory == StageCategory.BOSS) {
             GameManager.Instance.gameState.progressData.currentStageIndex = GameManager.Instance.gameState.progressData.nextStageIndex;
-            // TODO: load battle based on battle data
+            // TODOL: load battle based on battle data
             SceneManager.LoadScene(_battleScene);
+            GameManager.Instance.gameState.InitializeStage(_stageInfoContainer);
         } else if (_stageCategory == StageCategory.EVENT) {
-            // TODO: pass EventType
+            // TODOL: pass EventType
             SceneManager.LoadScene(_eventScene);
             GameManager.Instance.eventManager.LoadEvent(_eventType);
         }
@@ -71,6 +76,9 @@ public class StageNode : MonoBehaviour {
             case BattleType.HARD_BATTLE:
                 _background.sprite = hardNode;
                 break;
+            case BattleType.BOSS:
+                _background.sprite = hardNode;
+                break;
             default:
                 Debug.LogWarning("BattleType " + type + " unrecognized");
                 break;
@@ -82,6 +90,10 @@ public class StageNode : MonoBehaviour {
         _eventType = type;
         _icon.sprite = _eventIcons[(int) type];
         _background.sprite = eventNode;
+    }
+
+    public void SetStageInfoContainer(StageInfoContainer stageInfoContainer) {
+        _stageInfoContainer = stageInfoContainer;
     }
 
     public void SetEntryBranch(GameObject branch) {

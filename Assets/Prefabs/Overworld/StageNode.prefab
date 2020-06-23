@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 3414273719917130761}
   - component: {fileID: -901543197303318491}
   m_Layer: 5
-  m_Name: RoomNode
+  m_Name: StageNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,6 +261,6 @@ MonoBehaviour:
   _eventIcons:
   - {fileID: 21300000, guid: 2391fdad9378ddb489a99f6d5e9c95b4, type: 3}
   - {fileID: 21300000, guid: 5cc95caa83014964eac77ababc005c9d, type: 3}
-  _inaccessibleRoomColour: {r: 0.65, g: 0.65, b: 0.65, a: 1}
+  _inaccessibleStageColour: {r: 0.65, g: 0.65, b: 0.65, a: 1}
   _battleScene: ConnectingScene
   _eventScene: Event
