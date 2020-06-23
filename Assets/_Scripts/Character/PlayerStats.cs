@@ -19,6 +19,7 @@ public enum Stat {
 public class PlayerStat : ICloneable {
     public Stat stat; // Set in inspector pls
 
+    [SerializeField] // Note: the only reason it's serializable is for debugging purposes.
     protected int currentValue; // Updated on applying StatModifer
     
     protected int minValue = Int32.MinValue; // Usually only necessary for health/mana

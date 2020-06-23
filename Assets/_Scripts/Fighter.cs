@@ -29,6 +29,7 @@ public class Fighter
                 Debug.LogError("ERROR1: hp is not equal to max");
             }
             stats.RandomizeStats();
+            Debug.Log("Randomize stats: " +name); 
             //stats.ResetStats();
 
             if (stats.hp.GetValue() != stats.maxHp.GetValue()) {
