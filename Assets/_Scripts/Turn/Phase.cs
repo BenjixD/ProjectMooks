@@ -19,20 +19,28 @@ public abstract class Phase {
     public TurnPhase _phase;
     protected string _callback;
 
+    protected Coroutine _coroutine;
+
     public Phase(string callback) {
         _phase = TurnPhase.NONE;
         _callback = callback;
     }
 
+    ~Phase() {
+        GameManager.Instance.time.StopCoroutine(_coroutine);
+    }
+
     public Phase(TurnPhase phase, string callback) {
         _phase = phase;
         _callback = callback;
+        
     }
 
     public IEnumerator RunPhase() {
         Debug.Log("Starting Phase: " + this.GetType().Name);
         OnPhaseStart();
-        yield return GameManager.Instance.time.StartCoroutine(Run());
+        _coroutine = GameManager.Instance.time.StartCoroutine(Run());
+        yield return _coroutine;
         OnPhaseEnd();
     }
 

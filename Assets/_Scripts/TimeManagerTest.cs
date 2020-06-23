@@ -20,20 +20,18 @@ public class TimeManagerTest : MonoBehaviour
         }
         else if(Input.GetKeyDown("w")) {
             if(!tm.IsPaused()) {
-                tm.PauseFor(5f);
+                tm.GetController().PauseFor(5f);
             }
         }
     }
 
     IEnumerator Test() {
         while(true) {
-            Debug.Log("Hello");
-            yield return tm.WaitForNextFrame();
+            yield return tm.GetController().WaitForNextFrame();
         }
     }
 
     IEnumerator Test2() {
-        yield return tm.WaitForSeconds(3f);
-        Debug.Log("Hello2");
+        yield return tm.GetController().WaitForSeconds(3f);
     }
 }
