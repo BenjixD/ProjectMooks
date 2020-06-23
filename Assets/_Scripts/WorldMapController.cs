@@ -37,7 +37,7 @@ public class WorldMapController : MonoBehaviour
             yield return null;
         }
 
-        yield return GameManager.Instance.time.WaitForSeconds(1.0f);
+        yield return GameManager.Instance.time.GetController().WaitForSeconds(1.0f);
 
         GameManager.Instance.gameState.progressData.currentStageIndex = GameManager.Instance.gameState.progressData.nextStageIndex;
         SceneManager.LoadScene(battleScene);

@@ -2,12 +2,17 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class TimeManager : MonoBehaviour
 {
     public float deltaTime;
 
     [SerializeField] private bool isPaused = false;
+
+    [SerializeField] private TimeController timeControllerPrefab;
+
+    private TimeController controller = null;
 
     // Might want to make a base class PauseableBehaviour that extends MonoBehaviour in the future...
     void Update() {
@@ -30,44 +35,11 @@ public class TimeManager : MonoBehaviour
         return isPaused;
     }
 
-    public Coroutine PauseFor(float seconds)  {
-        return base.StartCoroutine(PauseForCor(seconds));
-    }
-
-    public new Coroutine StartCoroutine(IEnumerator cor) {
-        return base.StartCoroutine(PausableStartCoroutineCor(cor));
-    }
-
-    public Coroutine WaitForSeconds(float seconds) {
-        return StartCoroutine(WaitForSecondsCor(seconds));
-    }
-
-    public Coroutine WaitForNextFrame() {
-        return StartCoroutine(WaitForNextFrameCor());
-    }
-
-    public IEnumerator PauseForCor(float seconds) {
-        Pause();
-        yield return new WaitForSeconds(seconds);
-        UnPause();
-    } 
-
-    public IEnumerator WaitForSecondsCor(float seconds) {
-        float counter = 0;
-        while (counter < seconds) {
-            counter += deltaTime;
-            yield return null;
+    public TimeController GetController() {
+        if (controller == null) {
+            controller = Instantiate(timeControllerPrefab);
         }
-    }
 
-    public IEnumerator WaitForNextFrameCor() {
-        yield return null;
-    }
-
-    public IEnumerator PausableStartCoroutineCor(IEnumerator cor) {
-        while(isPaused) {
-            yield return null;
-        }
-        yield return base.StartCoroutine(cor);
+        return this.controller;
     }
 }

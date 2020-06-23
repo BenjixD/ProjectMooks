@@ -6,7 +6,7 @@ using TMPro;
 public class ManaShiftUI : MonoBehaviour {
     [Header("References")]
     [SerializeField, Tooltip("Reference to the RallyingCryMessage prefab.")]
-    private TextMeshProUGUI _powerText;
+    private TextMeshProUGUI _powerText = null;
 
     public void UpdatePower(float power) {
         _powerText.text = power.ToString();

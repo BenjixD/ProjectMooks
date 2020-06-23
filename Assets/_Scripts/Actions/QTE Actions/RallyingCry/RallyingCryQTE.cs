@@ -5,19 +5,19 @@ using UnityEngine;
 public class RallyingCryQTE : QuickTimeEvent {
     [Header("Rallying Cry Parameters")]
     [SerializeField, Tooltip("Maximum value a message can add.")]
-    private float _maxCryValue;
+    private float _maxCryValue = 0;
     [SerializeField, Tooltip("The minimum message length that uses the messageValue curve to determine value. Shorter messages are special cases.")]
-    private int _properCryMinLength;
+    private int _properCryMinLength = 0;
     [SerializeField, Tooltip("Value of each character in a message shorter than properCryMinLength in length.")]
-    private float _shortCryCharValue;
+    private float _shortCryCharValue = 0;
     [SerializeField, Tooltip("Message length beyond which characters offer no additional value.")]
-    private int _cutoffLength;
+    private int _cutoffLength = 0;
     [SerializeField, Tooltip("Function returning message value percentages given their lengths. Normalized for messages of length 2 to cutoffLength.")]
-    private AnimationCurve _messageValue;
+    private AnimationCurve _messageValue = null;
 
     [Header("References (RallyingCryQTE)")]
     [SerializeField, Tooltip("Reference to the RallyingCryCanvas prefab.")]
-    private GameObject _rallyingCryCanvasPrefab;
+    private GameObject _rallyingCryCanvasPrefab = null;
     private RallyingCryUI _rallyingCryUI;
 
     private float _totalPower = 0;

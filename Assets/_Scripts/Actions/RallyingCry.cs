@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "RallyingCry", menuName = "Actions/Quick Time Events/Rallying Cry", order = 3)]
 public class RallyingCry : ActionBase {
-    [SerializeField] private GameObject _rallyingCryQTE;
+    [SerializeField] private GameObject _rallyingCryQTE = null;
 
     protected override bool QueueAction(FightingEntity user, string[] splitCommand) {
         List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );

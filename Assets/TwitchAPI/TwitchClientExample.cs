@@ -11,7 +11,7 @@ public class TwitchClientExample : MonoBehaviour
 	private string _channelToConnectTo = "dvchibot";
 
     [SerializeField]
-    private string _oauthToken;
+    private string _oauthToken = null;
 
 	private Client _client;
 

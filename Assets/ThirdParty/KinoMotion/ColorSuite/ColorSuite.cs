@@ -100,7 +100,7 @@ public class ColorSuite : MonoBehaviour
     #region Internal Properties
 
     // Reference to the shader.
-    [SerializeField] Shader shader;
+    [SerializeField] Shader shader = null;
 
     // Temporary objects.
     Material _material;

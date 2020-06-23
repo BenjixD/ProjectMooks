@@ -51,7 +51,7 @@ public class Battle
 
         this._controller.ui.battleOrderUI.SetTurnOrder(fighters);
 
-        yield return GameManager.Instance.time.WaitForSeconds(0.5f);
+        yield return GameManager.Instance.time.GetController().WaitForSeconds(0.5f);
 
         this._controller.ui.targetIconsUI.ClearTargetArrows();
 
@@ -61,7 +61,7 @@ public class Battle
             if (fighters[i] == null) {
                 // This can happen if the fighter dies mid-battle
                 this._controller.ui.battleOrderUI.PopFighter();
-                yield return GameManager.Instance.time.WaitForSeconds(1.0f);
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(1.0f);
                 continue;
             }
 
@@ -79,7 +79,7 @@ public class Battle
             // This can happen if target dies mid-battle
             if (attackerAction._action.GetTargets(fighters[i], attackerAction.GetTargetIds()).Count == 0) {
                 this._controller.ui.battleOrderUI.PopFighter();
-                yield return GameManager.Instance.time.WaitForSeconds(1.0f);
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(1.0f);
                 continue;
             }
             
