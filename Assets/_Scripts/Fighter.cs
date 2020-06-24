@@ -25,22 +25,36 @@ public class Fighter
         this.playerCreationData = data;
     }
 
-    public T InstantiateFromJob<T>(JobActionsList jobList, string name, int targetId) where T : FightingEntity  {
-        T prefab = (T)jobList.prefab;
-        T instantiatedFighter = GameObject.Instantiate<T>(prefab) as T;
-
+    public void Initialize(JobActionsList jobList, string name) {
         // Will be null for enemies, but not for players because we want to keep stats
         if (this.playerCreationData == null) {
-            PlayerStats stats = (PlayerStats)prefab.stats.Clone();
+            PlayerStats stats = (PlayerStats)jobList.prefab.stats.Clone();
 
             stats.RandomizeStats();
 
             this.playerCreationData = new PlayerCreationData(name, stats, jobList.job);
         }
+        
+        this.Initialize(name);
+    }
 
+    public void Initialize(PlayerCreationData data, string name) {
+        this.playerCreationData = data;
+        this.Initialize(name);
+    }
+
+    private void Initialize(string name) {
         this.Name = name;
+
         this.stats = (PlayerStats)this.playerCreationData.stats.Clone();
+        Debug.Log("Stats: " + this.stats.hp.GetValue());
+        this.stats.hp.SetValue(this.stats.maxHp.GetValue());
         this.SetJobAndActions(this.playerCreationData.job);
+    }
+
+    public T InstantiateFromJob<T>(JobActionsList jobList, string name, int targetId) where T : FightingEntity  {
+        T prefab = (T)jobList.prefab;
+        T instantiatedFighter = GameObject.Instantiate<T>(prefab) as T;
 
         instantiatedFighter.Initialize(targetId, this);
 
@@ -58,9 +72,7 @@ public class Fighter
         }
 
         this.fighter = instantiatedFighter;
-
         return instantiatedFighter;
-
     }
 
     public List<PlayerReward> GetPermanentRewards() {
@@ -95,8 +107,6 @@ public class Fighter
                     actions.Add( actionPool[randIndex] );
                     actionPool.RemoveAt(randIndex);
                 }
-
-                
             }
 
             List<ActionBase> commonMookActionPool = GameManager.Instance.models.GetCommonMookActionPool();
@@ -113,5 +123,4 @@ public class Fighter
     public bool IsHero() {
         return this.job == Job.HERO;
     }
-
 }

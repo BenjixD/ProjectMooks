@@ -122,12 +122,11 @@ public class BattleField : MonoBehaviour
             string name = jobList.prefab.Name + " (" + GetTargetNameFromIndex(i) + ")";
             int index = i;
 
-
             Enemy enemy = new Enemy();
+            enemy.Initialize(jobList, name);
             EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
 
             // TODO: Some sort of entrance animation
-            
             instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
             FighterSlot slot = enemySlots[i];
             slot.InitializePosition(instantiatedEnemy);
@@ -199,8 +198,6 @@ public class BattleField : MonoBehaviour
         JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(player.playerCreationData.job);
         PlayerObject playerObject = player.InstantiateFromJob<PlayerObject>(jobActionsList, player.playerCreationData.name, index);
 
-
         return playerObject;
     }
-
 }

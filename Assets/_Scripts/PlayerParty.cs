@@ -22,6 +22,7 @@ public class PlayerParty : Party {
         PlayerCreationData heroData = new PlayerCreationData(heroName, stats, Job.HERO);
         Player hero = new Player();
         hero.SetPlayerCreationData(heroData);
+        hero.Initialize(jobActionsList, heroName);
         this.SetFighter(0, hero);
     }
 
@@ -73,6 +74,7 @@ public class PlayerParty : Party {
             PlayerCreationData data = playerQueue.Dequeue();
             if(data != null) {
                 Player player = new Player();
+                player.Initialize(data, data.name);
                 player.SetPlayerCreationData(data);
                 players.Add(player);
             }

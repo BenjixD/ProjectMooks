@@ -41,7 +41,7 @@ public class TurnController : MonoBehaviour
     }
 
     void Start() {
-        GameManager.Instance.turnController = this;
+        //GameManager.Instance.turnController = this;
         this.Initialize();
     }
 
