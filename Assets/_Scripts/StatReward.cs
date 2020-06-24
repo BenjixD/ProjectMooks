@@ -26,7 +26,7 @@ public class StatReward : PlayerRewardAilment
         
 
         this.description = "Raises " + statType.ToString() + " by: " + statAilment.val;
-        if (statAilment.damageType == StatBuffAilment.Type.PERCENTAGE) {
+        if (statAilment.damageType == StatModifier.Type.ADD_PERCENTAGE) {
             this.description += "%";
             this.name += "%";
         }
