@@ -50,7 +50,7 @@ public class FightResult {
     }
 }
 
-public class BattleFight
+public class BattleFight : IDisposable
 {
     public FightingEntity fighter;
     private BattleField _field {get; set;}
@@ -58,6 +58,10 @@ public class BattleFight
     public BattleFight(BattleField field, FightingEntity fighter) {
         this._field = field;
         this.fighter = fighter;
+    }
+
+    public void Dispose() {
+
     }
 
     public IEnumerator DoFight() {

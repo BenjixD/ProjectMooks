@@ -15,7 +15,7 @@ public enum TurnPhase{
 };
 
 [System.Serializable]
-public abstract class Phase {
+public abstract class Phase : IDisposable {
     public TurnPhase _phase;
     protected string _callback;
 
@@ -24,10 +24,6 @@ public abstract class Phase {
     public Phase(string callback) {
         _phase = TurnPhase.NONE;
         _callback = callback;
-    }
-
-    ~Phase() {
-        GameManager.Instance.time.StopCoroutine(_coroutine);
     }
 
     public Phase(TurnPhase phase, string callback) {
@@ -39,7 +35,7 @@ public abstract class Phase {
     public IEnumerator RunPhase() {
         Debug.Log("Starting Phase: " + this.GetType().Name);
         OnPhaseStart();
-        _coroutine = GameManager.Instance.time.StartCoroutine(Run());
+        _coroutine = GameManager.Instance.time.GetController().StartCoroutine(Run());
         yield return _coroutine;
         OnPhaseEnd();
     }
@@ -70,6 +66,16 @@ public abstract class Phase {
     protected void DecrementStatusAilmentDuration(List<FightingEntity> entities) {
         foreach(var entity in entities) {
             entity.GetAilmentController().DecrementAllAilmentsDuration();
+        }
+    }
+
+    public virtual void Dispose()
+    {
+        if (GameManager.Instance == null || GameManager.Instance.time == null) return;
+
+        TimeController controller =  GameManager.Instance.time.GetController();
+        if (_coroutine != null && controller != null) {
+            controller.StopCoroutine(_coroutine);
         }
     }
 }
