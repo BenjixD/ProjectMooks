@@ -71,11 +71,6 @@ public abstract class Phase : IDisposable {
 
     public virtual void Dispose()
     {
-        if (GameManager.Instance == null || GameManager.Instance.time == null) return;
 
-        TimeController controller =  GameManager.Instance.time.GetController();
-        if (_coroutine != null && controller != null) {
-            controller.StopCoroutine(_coroutine);
-        }
     }
 }
