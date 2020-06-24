@@ -37,6 +37,7 @@ public class StatusBarsUI : MonoBehaviour
     void OnDestroy() {
         Messenger.RemoveListener<List<PlayerObject>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
         Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
+        Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         Messenger.RemoveListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
     }
 

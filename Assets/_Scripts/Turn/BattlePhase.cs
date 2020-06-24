@@ -31,8 +31,14 @@ public class BattlePhase : Phase {
         Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.OnFightEnd);
     }
 
-    ~BattlePhase() {
+    public override void Dispose() {
+        if (this.currentFight != null) {
+            this.currentFight.Dispose();
+        }
+
         Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.OnFightEnd);
+
+        base.Dispose();
     }
 
     protected override void OnPhaseStart() {
