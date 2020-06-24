@@ -9,38 +9,36 @@ public enum StatType {
 }
 [CreateAssetMenu(fileName = "StatBuffAilment", menuName = "StatusAilment/StatBuffAilment")]
 public class StatBuffAilment : StatusAilment {
-	public enum Type {
-		PERCENTAGE,
-		FLAT
-	}
 
-
-	public Type damageType;
+	public StatModifier.Type damageType = StatModifier.Type.ADD_PERCENTAGE;
 	public float val;
 
     public StatType statType;
 
+    private List<StatModifier> modifiers = new List<StatModifier>();
+
 	public override void StackWith(FightingEntity p, StatusAilment other) {
-		
+        StatBuffAilment otherAilment = (StatBuffAilment) other;
+        this.ApplyHelper(p, otherAilment);
 	}
 
 	public override void ApplyTo(FightingEntity p) {
-        Debug.Log("APPLY DELTA MODIFIER");
-		switch(this.damageType) {
-			case Type.PERCENTAGE:
-                p.stats.physical.ApplyDeltaModifier(this.val, StatModifier.Type.ADD_PERCENTAGE);
-				break;
-			case Type.FLAT:
-				p.stats.physical.ApplyDeltaModifier(this.val, StatModifier.Type.FLAT);
-				break;
-		}
+        this.ApplyHelper(p, this);
 	}
 
 	public override void Recover(FightingEntity p) {
 		//TODO: Possible Animation Modifications
+        foreach (StatModifier modifier in this.modifiers) {
+            p.stats.physical.RemoveModifier(modifier);
+        }
 	}
 
 	public override void TickEffect(FightingEntity p) {
 
 	}
+
+    private void ApplyHelper(FightingEntity p, StatBuffAilment ailment) {
+        modifiers.Add(p.stats.physical.ApplyDeltaModifier(ailment.val, ailment.damageType));
+    }
+
 }
