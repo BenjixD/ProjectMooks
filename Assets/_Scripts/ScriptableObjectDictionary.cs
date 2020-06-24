@@ -18,7 +18,7 @@ public class ScriptableObjectDictionary : MonoBehaviour {
     [SerializeField] private JobActionsList[] _enemyJobActionsLists = null;
 
 
-    [SerializeField] private List<ZoneProperties> zones;
+    [SerializeField] private List<ZoneProperties> zones = null;
 
     [SerializeField] private List<ActionBase> commonActions = null;
 

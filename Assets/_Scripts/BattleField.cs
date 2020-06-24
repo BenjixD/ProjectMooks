@@ -103,6 +103,8 @@ public class BattleField : MonoBehaviour
         WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.currentWaveIndex);
 
         List<JobActionsList> enemyList = waveInfo.GetEnemyList();
+        
+        float mult = stageInfo.GetDifficultyMult();
 
         for (int i = 0; i < enemyList.Count; i++) {
             JobActionsList jobList = enemyList[i];
@@ -112,6 +114,15 @@ public class BattleField : MonoBehaviour
 
             Enemy enemy = new Enemy();
             EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
+
+            // Apply difficulty adjustments
+            PlayerStats stats = instantiatedEnemy.stats;
+            foreach(Stat stat in System.Enum.GetValues(typeof(Stat))) {
+                Debug.Log("=== " + stat + " ===");
+                Debug.Log("before: " + stats.GetStat(stat));
+                stats.ModifyStat(stat, (int)(stats.GetStat(stat) * mult));
+                Debug.Log("after: " + stats.GetStat(stat));
+            }
 
             // TODO: Some sort of entrance animation
             

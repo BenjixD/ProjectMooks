@@ -46,13 +46,14 @@ public class StageNode : MonoBehaviour {
     private StageCategory _stageCategory;
     // TODOL
     private StageInfoContainer _stageInfoContainer; // Container for StageInfo if this stage is a battle stage
-    private EventType _eventType;
+    private EventType _eventType; // This stage's EventType, if applicable
     private GameObject _entryBranch;
     private RectTransform _verticalPath;
 
     public void EnterStage() {
         if (_stageCategory == StageCategory.BATTLE || _stageCategory == StageCategory.BOSS) {
-            GameManager.Instance.gameState.progressData.currentStageIndex = GameManager.Instance.gameState.progressData.nextStageIndex;
+            // TODOL
+            // GameManager.Instance.gameState.progressData.currentStageIndex = GameManager.Instance.gameState.progressData.nextStageIndex;
             // TODOL: load battle based on battle data
             SceneManager.LoadScene(_battleScene);
             GameManager.Instance.gameState.InitializeStage(_stageInfoContainer);

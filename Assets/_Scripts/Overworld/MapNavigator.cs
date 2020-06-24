@@ -57,9 +57,6 @@ public class MapNavigator : MonoBehaviour {
         // TODOL
         _zoneProperties = GameManager.Instance.models.GetZoneProperties();
         _currZoneIndex = 0;
-        foreach (StageInfo info in _zoneProperties[0].columns) {
-            Debug.Log(info.waveInfos.Count);
-        }
 
         GenerateCurrMap();
     }

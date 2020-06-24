@@ -33,13 +33,14 @@ public class GameState : MonoBehaviour {
         // return this.stages[this.progressData.currentStageIndex];
     }
 
-    public void SetStageIndex(int index) {
-        this.progressData.currentStageIndex = index;
-    }
+    // TODOL
+    // public void SetStageIndex(int index) {
+    //     this.progressData.currentStageIndex = index;
+    // }
 
-    public void SetNextStageIndex(int index) {
-        this.progressData.nextStageIndex = index;
-    }
+    // public void SetNextStageIndex(int index) {
+    //     this.progressData.nextStageIndex = index;
+    // }
 
     // TODOL
     // private void InitializeStages() {

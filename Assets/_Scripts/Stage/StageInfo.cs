@@ -8,6 +8,10 @@ public class WaveInfo {
     public int maxAmountOfEnemies = 1;
     public List<JobActionsList> possibleEnemies;
     // May want to do more in the future
+
+    
+    // TODOL
+    public List<PlayerCreationData> enemyPool;
 }
 
 [System.Serializable]

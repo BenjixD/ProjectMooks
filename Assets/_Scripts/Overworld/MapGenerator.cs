@@ -69,13 +69,13 @@ public class MapGenerator : MonoBehaviour {
         switch (category) {
             case StageCategory.BATTLE:
                 // TODOL: wave data w/ difficulty scaling
-                BattleType battleType = (BattleType) Random.Range(0, System.Enum.GetValues(typeof(BattleType)).Length);
+                BattleType battleType = (BattleType) Random.Range(0, System.Enum.GetValues(typeof(BattleType)).Length - 1);
                 stage.SetStage(battleType);
-                InitializeCombatStage(properties, stageCol, stage);
+                InitializeCombatStage(properties, stageCol, stage, battleType);
                 break;
             case StageCategory.BOSS:
                 stage.SetStage(BattleType.BOSS);
-                InitializeCombatStage(properties, stageCol, stage);
+                InitializeCombatStage(properties, stageCol, stage, BattleType.BOSS);
                 break;
             case StageCategory.EVENT:
                 EventType eventType = (EventType) Random.Range(0, System.Enum.GetValues(typeof(EventType)).Length);
@@ -87,8 +87,8 @@ public class MapGenerator : MonoBehaviour {
         }
     }
 
-    private void InitializeCombatStage(ZoneProperties properties, int stageCol, StageNode stage) {
-        StageInfoContainer stageInfo = new StageInfoContainer(properties.columns[stageCol - 1]);
+    private void InitializeCombatStage(ZoneProperties properties, int stageCol, StageNode stage, BattleType battleType) {
+        StageInfoContainer stageInfo = new StageInfoContainer(properties.columns[stageCol - 1], battleType);
         stage.SetStageInfoContainer(stageInfo);
     }
 }
