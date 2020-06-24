@@ -17,6 +17,9 @@ public class TurnManager : MonoBehaviour {
 
     void OnDestroy() {
         RemoveListeners();
+        foreach (var phase in this.phases) {
+            phase.Dispose();
+        }
     }
 
 	public void Initialize(BattleField field, BattleUI ui, CommandSelector commandSelector, StageController stageController) {

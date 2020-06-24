@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System;
 
 [Obsolete("Moved to BattlePhase")]
-public class Battle
+public class Battle : IDisposable
 {
     private TurnController _controller {get; set;}
 
@@ -18,7 +18,10 @@ public class Battle
         Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
     }
 
-    ~Battle() {
+    public void Dispose() {
+        if (this.currentFight != null) {
+            this.currentFight.Dispose();
+        }
         Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
     }
 
