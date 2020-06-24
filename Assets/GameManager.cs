@@ -36,7 +36,5 @@ public class GameManager : Singleton<GameManager> {
             chatBroadcaster.ConnectToChannel(chatBroadcaster._channelToConnectTo);
             gameState.playerParty.CreateHero(chatBroadcaster._channelToConnectTo);
         }
-
-        this.gameState.Initialize();
     }
 }

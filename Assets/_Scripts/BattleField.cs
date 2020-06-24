@@ -115,13 +115,10 @@ public class BattleField : MonoBehaviour
             Enemy enemy = new Enemy();
             EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
 
-            // Apply difficulty adjustments
+            // Apply stat adjustments based on difficulty
             PlayerStats stats = instantiatedEnemy.stats;
             foreach(Stat stat in System.Enum.GetValues(typeof(Stat))) {
-                Debug.Log("=== " + stat + " ===");
-                Debug.Log("before: " + stats.GetStat(stat));
-                stats.ModifyStat(stat, (int)(stats.GetStat(stat) * mult));
-                Debug.Log("after: " + stats.GetStat(stat));
+                stats.ModifyStat(stat, (int) (stats.GetStat(stat) * mult));
             }
 
             // TODO: Some sort of entrance animation

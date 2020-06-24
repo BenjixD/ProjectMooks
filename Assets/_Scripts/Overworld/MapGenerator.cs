@@ -8,7 +8,7 @@ public class MapGenerator : MonoBehaviour {
     [SerializeField] private MapNavigator _mapNavigator = null;
     [SerializeField] private MapScroller _mapScroller = null;
     [SerializeField] private GameObject _stageNodePrefab = null;
-    [SerializeField] private Transform _mapContainer = null;
+    [SerializeField] private RectTransform _mapContainer = null;
     
     [Space]
     
@@ -28,14 +28,15 @@ public class MapGenerator : MonoBehaviour {
         }
 
         int middleRow = properties.mapRows / 2;
+
+        _mapContainer.anchoredPosition = Vector3.zero;
         
         // Create starting column
         StageNode firstStage = InstantiateStageNode(properties, map, 0, middleRow);
         
         // Create end column (boss)
-        // TODOL
         StageNode finalStage = InstantiateStageNode(properties, map, properties.columns.Length, middleRow);
-        InitializeStage(properties, properties.columns.Length - 1, finalStage, StageCategory.BOSS);
+        InitializeStage(properties, properties.columns.Length, finalStage, StageCategory.BOSS);
 
         // Set first and last stage positions as scrolling bounds
         _mapScroller.SetBounds(firstStage.transform.position.x, finalStage.transform.position.x);
@@ -44,8 +45,6 @@ public class MapGenerator : MonoBehaviour {
         for (int col = 1; col < properties.columns.Length; col++) {
             for (int row = 0; row < properties.mapRows; row++) {
                 StageNode stage = InstantiateStageNode(properties, map, col, row).GetComponent<StageNode>();
-
-                // TODOL
                 InitializeStage(properties, col, stage, properties.columns[col - 1].stageType);
             }
         }
@@ -68,7 +67,6 @@ public class MapGenerator : MonoBehaviour {
     private void InitializeStage(ZoneProperties properties, int stageCol, StageNode stage, StageCategory category) {
         switch (category) {
             case StageCategory.BATTLE:
-                // TODOL: wave data w/ difficulty scaling
                 BattleType battleType = (BattleType) Random.Range(0, System.Enum.GetValues(typeof(BattleType)).Length - 1);
                 stage.SetStage(battleType);
                 InitializeCombatStage(properties, stageCol, stage, battleType);
@@ -90,5 +88,12 @@ public class MapGenerator : MonoBehaviour {
     private void InitializeCombatStage(ZoneProperties properties, int stageCol, StageNode stage, BattleType battleType) {
         StageInfoContainer stageInfo = new StageInfoContainer(properties.columns[stageCol - 1], battleType);
         stage.SetStageInfoContainer(stageInfo);
+    }
+
+    public void DestroyMap() {
+        int children = _mapContainer.childCount;
+        for (int i = children - 1; i >= 0; i--) {
+            Destroy(_mapContainer.GetChild(i).gameObject);
+        }
     }
 }

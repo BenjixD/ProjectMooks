@@ -11,6 +11,10 @@ public class Coord {
         this.col = col;
         this.row = row;
     }
+    
+    public override string ToString() {
+        return "Coord(" + col + ", " + row + ")";
+    }
 }
 
 public class MapNavigator : MonoBehaviour {
@@ -33,7 +37,7 @@ public class MapNavigator : MonoBehaviour {
 
     // TODO: temp, move
     private List<ZoneProperties> _zoneProperties;
-    private int _currZoneIndex;
+    private int _currZoneIndex = 0;
     private StageNode[][] _currMap;
 
 
@@ -47,17 +51,13 @@ public class MapNavigator : MonoBehaviour {
         }
         DontDestroyOnLoad(gameObject);
 
+        _zoneProperties = GameManager.Instance.models.GetZoneProperties();
+
         _horizontalPadding = _mapGenerator.horizontalPadding;
         _verticalPadding = _mapGenerator.verticalPadding;
-
     }
 
     private void Start() {
-
-        // TODOL
-        _zoneProperties = GameManager.Instance.models.GetZoneProperties();
-        _currZoneIndex = 0;
-
         GenerateCurrMap();
     }
 
@@ -75,14 +75,6 @@ public class MapNavigator : MonoBehaviour {
         }
     }
 
-    private void OnOpenMap() {
-        EnableNextPaths();
-        if (GetCurrStage() != null) {
-            float currStageX = GetCurrStage().GetComponent<RectTransform>().anchoredPosition.x;
-            _mapScroller.RefocusMap(-(currStageX + _horizontalPadding));
-        }
-    }
-
     private void GenerateCurrMap() {
         _currMap = _mapGenerator.GenerateZoneMap(_zoneProperties[_currZoneIndex]);
         SetPlayerCoord(0, _zoneProperties[_currZoneIndex].mapRows / 2);
@@ -93,6 +85,25 @@ public class MapNavigator : MonoBehaviour {
         _currCoord = new Coord(col, row);
         _playerIcon.SetParent(_currMap[col][row].transform);
         _playerIcon.anchoredPosition = Vector2.zero;
+    }
+
+    private void OnOpenMap() {
+        EnableNextPaths();
+        if (GetCurrStage() != null) {
+            float currStageX = GetCurrStage().GetComponent<RectTransform>().anchoredPosition.x;
+            _mapScroller.RefocusMap(-(currStageX + _horizontalPadding));
+        }
+    }
+
+    private void NextMap() {
+        if (_currZoneIndex + 1 >= _zoneProperties.Count) {
+            Debug.Log("No more zones, game complete");
+            return;
+        }
+        _playerIcon.SetParent(null);
+        _mapGenerator.DestroyMap();
+        _currZoneIndex++;
+        GenerateCurrMap();
     }
 
     private void SetPlayerCoord(Coord coord) {
@@ -138,8 +149,11 @@ public class MapNavigator : MonoBehaviour {
 
     private void EnableNextPaths() {
         _mapDisplay.SetActive(true);
-        if (_currCoord == null || _currCoord.col + 1 >= _currMap.Length) {
-            Debug.Log("End of map reached, no next stages");
+        if (_currCoord == null) {
+            return;
+        }
+        if (_currCoord.col + 1 >= _currMap.Length) {
+            NextMap();
             return;
         }
         _canMove = true;

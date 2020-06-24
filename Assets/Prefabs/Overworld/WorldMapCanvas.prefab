@@ -289,7 +289,7 @@ MonoBehaviour:
     type: 3}
   _mapContainer: {fileID: 386424227}
   horizontalPadding: 350
-  verticalPadding: 200
+  verticalPadding: 300
 --- !u!114 &1406697840
 MonoBehaviour:
   m_ObjectHideFlags: 0

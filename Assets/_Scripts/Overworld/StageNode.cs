@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public enum StageCategory {
     BATTLE,
@@ -31,12 +32,12 @@ public class StageNode : MonoBehaviour {
     [SerializeField] private Sprite mediumNode = null;
     [SerializeField] private Sprite hardNode = null;
     [SerializeField] private Sprite eventNode = null;
+    [SerializeField] private Sprite _battleIcon = null;
 
     [Header("References")]
     [SerializeField] private Image _background = null;
     [SerializeField] private Image _icon = null;
-    [SerializeField] private Sprite _battleIcon = null;
-    [SerializeField] private Sprite[] _eventIcons = null;
+    [SerializeField] private TextMeshProUGUI _infoText = null;
 
     [Space]
 
@@ -44,7 +45,6 @@ public class StageNode : MonoBehaviour {
     [SerializeField] private string _battleScene = null;
     [SerializeField] private string _eventScene = null;
     private StageCategory _stageCategory;
-    // TODOL
     private StageInfoContainer _stageInfoContainer; // Container for StageInfo if this stage is a battle stage
     private EventType _eventType; // This stage's EventType, if applicable
     private GameObject _entryBranch;
@@ -52,13 +52,9 @@ public class StageNode : MonoBehaviour {
 
     public void EnterStage() {
         if (_stageCategory == StageCategory.BATTLE || _stageCategory == StageCategory.BOSS) {
-            // TODOL
-            // GameManager.Instance.gameState.progressData.currentStageIndex = GameManager.Instance.gameState.progressData.nextStageIndex;
-            // TODOL: load battle based on battle data
             SceneManager.LoadScene(_battleScene);
-            GameManager.Instance.gameState.InitializeStage(_stageInfoContainer);
+            GameManager.Instance.gameState.SetStage(_stageInfoContainer);
         } else if (_stageCategory == StageCategory.EVENT) {
-            // TODOL: pass EventType
             SceneManager.LoadScene(_eventScene);
             GameManager.Instance.eventManager.LoadEvent(_eventType);
         }
@@ -89,12 +85,25 @@ public class StageNode : MonoBehaviour {
     public void SetStage(EventType type) {
         _stageCategory = StageCategory.EVENT;
         _eventType = type;
-        _icon.sprite = _eventIcons[(int) type];
+        EventStage eventStage = GameManager.Instance.eventManager.GetEvent(type);
+        _icon.sprite = eventStage.icon;
+        // TODO: temporary info display, beautify later
+        _infoText.gameObject.SetActive(true);
+        _infoText.text = eventStage.eventName;
         _background.sprite = eventNode;
     }
 
     public void SetStageInfoContainer(StageInfoContainer stageInfoContainer) {
         _stageInfoContainer = stageInfoContainer;
+
+        // Set enemy list
+        string listAsText = "";
+        foreach (KeyValuePair<string, int> enemy in stageInfoContainer.GetEnemyTally()) {
+            // TODO: text display is temporary; switch to images or something later
+            listAsText += enemy.Value + "x " + enemy.Key + "\n";
+        }
+        _infoText.gameObject.SetActive(true);
+        _infoText.text = listAsText;
     }
 
     public void SetEntryBranch(GameObject branch) {

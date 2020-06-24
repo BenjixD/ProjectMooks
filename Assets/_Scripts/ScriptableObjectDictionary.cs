@@ -79,12 +79,6 @@ public class ScriptableObjectDictionary : MonoBehaviour {
         return jobs;
     }
 
-    public List<StageInfo> GetStageInfos() {
-        // TODOL
-        return null;
-        // return this.stageInfo;
-    }
-
     public List<ZoneProperties> GetZoneProperties() {
         return zones;
     }

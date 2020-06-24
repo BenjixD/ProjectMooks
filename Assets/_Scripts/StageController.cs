@@ -4,11 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class StageController : MonoBehaviour
 {
-    // TODOL: rename to EndStage? or LoadNextScene? LoadRewardScene??
-    public void LoadNextStage() {
+    public void CompleteStage() {
         this.Unload();
-        // TODOL
-        // GameManager.Instance.gameState.SetNextStageIndex(GameManager.Instance.gameState.progressData.currentStageIndex + 1); // May want to change logic in the future
         SceneManager.LoadScene("RewardScene");
     }
 
