@@ -25,6 +25,7 @@ public class StatBuffAilment : StatusAilment {
 	}
 
 	public override void ApplyTo(FightingEntity p) {
+        Debug.Log("APPLY DELTA MODIFIER");
 		switch(this.damageType) {
 			case Type.PERCENTAGE:
                 p.stats.physical.ApplyDeltaModifier(this.val, StatModifier.Type.ADD_PERCENTAGE);

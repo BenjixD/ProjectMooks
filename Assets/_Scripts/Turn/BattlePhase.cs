@@ -106,8 +106,6 @@ public class BattlePhase : Phase {
     }
 
     private void OnFightEnd(FightResult result) {
-        Debug.Log("this result: " + this.result);
-        Debug.Log("Other result: " + this.result.results);
         this.result.results.Add(result);
         this.currentFight = null;
     }

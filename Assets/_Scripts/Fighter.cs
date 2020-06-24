@@ -44,8 +44,10 @@ public class Fighter
 
             switch (reward.rewardType) {
                 case PlayerRewardType.AILMENT:
+                    Debug.Log("CURRENT: " + this.fighter.stats.physical.GetValue());
                     PlayerRewardAilment ailmentReward = (PlayerRewardAilment)reward;
                     instantiatedFighter.GetAilmentController().AddStatusAilment(GameObject.Instantiate(ailmentReward.ailment));
+                    Debug.Log("AFTER: " + this.fighter.stats.physical.GetValue());
                     break;
 
                 default:

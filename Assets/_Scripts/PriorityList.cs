@@ -11,6 +11,10 @@ public class PriorityList<T> : IEnumerable, IEnumerator where T : IComparable<T>
         this.data = new List<T>();
     }
 
+    public PriorityList(PriorityList<T> priorityList) {
+        this.data = priorityList.data;
+    }
+
     public void Add(T item) {
         int index = 0;
 
@@ -49,7 +53,7 @@ public class PriorityList<T> : IEnumerable, IEnumerator where T : IComparable<T>
     }
     public IEnumerator GetEnumerator()
     {
-        return (IEnumerator)this;
+        return new PriorityList<T>(this);
     }
 
     public bool MoveNext()
@@ -60,7 +64,7 @@ public class PriorityList<T> : IEnumerable, IEnumerator where T : IComparable<T>
 
     public void Reset()
     {
-        this.position = 0;
+        this.position = -1;
     }
     
 }
