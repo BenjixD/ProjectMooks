@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 7777298287657591932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_LocalScale: {x: 0.65, y: 0.65, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -116,7 +116,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9aa2023c2c91b254f9cb0a4fba19af00, type: 2}
+  - {fileID: 2100000, guid: 0ff77ca3414e4fc459146bb0024afa82, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd0c89fa66bf0f1499f2a32393d24771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: 2f899e95232e6144786de8fb99678a8d, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 8e252c4d450a4ea47a7744df05f58314, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da91b99b96e11145b73ba7da2254faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultAnimName: idle
+  _defaultAnimName: idle pose
 --- !u!114 &-489335705822062292
 MonoBehaviour:
   m_ObjectHideFlags: 0
