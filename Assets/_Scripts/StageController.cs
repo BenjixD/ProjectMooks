@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class StageController : MonoBehaviour
 {
-    public void CompleteStage() {
+    public void LoadNextScene() {
         this.Unload();
         SceneManager.LoadScene("RewardScene");
     }
