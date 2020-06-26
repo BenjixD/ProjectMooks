@@ -27,7 +27,7 @@ MonoBehaviour:
   effects:
     element: 0
     physicalScaling: 0
-    specialScaling: 5
+    specialScaling: 0.5
     heals: 0
     statusAilments:
     - statusAilment: {fileID: 11400000, guid: f96b21ae72f37e64da9bc2fc8b099644, type: 2}

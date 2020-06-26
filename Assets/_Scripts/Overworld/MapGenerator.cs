@@ -56,7 +56,7 @@ public class MapGenerator : MonoBehaviour {
         Vector2 position = new Vector2(horizontalPadding * col, -verticalPadding * row);
 
         // Centre the node
-        Vector2 offset = new Vector2(horizontalPadding * (properties.columns.Length) / 2, -verticalPadding * (properties.mapRows - 1) / 2);
+        Vector2 offset = new Vector2(horizontalPadding * properties.columns.Length / 2, -verticalPadding * (properties.mapRows - 1) / 2);
         position -= offset;
 
         map[col][row].GetComponent<RectTransform>().anchoredPosition = position;

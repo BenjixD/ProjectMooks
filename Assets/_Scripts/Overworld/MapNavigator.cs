@@ -35,7 +35,6 @@ public class MapNavigator : MonoBehaviour {
     [SerializeField] private int _moveRange = 1;
 
 
-    // TODO: temp, move
     private List<ZoneProperties> _zoneProperties;
     private int _currZoneIndex = 0;
     private StageNode[][] _currMap;
