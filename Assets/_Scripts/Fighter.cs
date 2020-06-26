@@ -21,35 +21,35 @@ public class Fighter
     protected float rareRate = 0.01f;
     private List<PlayerReward> permanentRewards = new List<PlayerReward>();
 
-    public void SetPlayerCreationData(PlayerCreationData data) {
-        this.playerCreationData = data;
-    }
+    // Hero: Need to know that it is the hero (job)
+    // Enemy: Need to know that it is the enemy (job). Need to generate stats on the fly
+    // Mook: Generated based on PlayercreationData.
 
     public void Initialize(JobActionsList jobList, string name) {
         // Will be null for enemies, but not for players because we want to keep stats
-        if (this.playerCreationData == null) {
+       // if (creationData == null) {
             PlayerStats stats = (PlayerStats)jobList.prefab.stats.Clone();
 
             stats.RandomizeStats();
 
             this.playerCreationData = new PlayerCreationData(name, stats, jobList.job);
-        }
+       // }
         
-        this.Initialize(name);
+        this.CommonInitialization(name);
     }
 
     public void Initialize(PlayerCreationData data, string name) {
         this.playerCreationData = data;
-        this.Initialize(name);
+        this.CommonInitialization(name);
     }
 
-    private void Initialize(string name) {
+    private void CommonInitialization(string name) {
         this.Name = name;
 
         this.stats = (PlayerStats)this.playerCreationData.stats.Clone();
-        Debug.Log("Stats: " + this.stats.hp.GetValue());
         this.stats.hp.SetValue(this.stats.maxHp.GetValue());
         this.SetJobAndActions(this.playerCreationData.job);
+        this.stats.ApplyStatsBasedOnLevel(1); //TODO: Change 1 to something else
     }
 
     public T InstantiateFromJob<T>(JobActionsList jobList, string name, int targetId) where T : FightingEntity  {

@@ -25,7 +25,8 @@ public class PlayerStat : ICloneable {
     protected int minValue = Int32.MinValue; // Usually only necessary for health/mana
     protected int maxValue = Int32.MaxValue;
 
-    public PlayerStat(){}
+    public PlayerStat(){
+    }
 
     public PlayerStat(Stat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue) {
         this.stat = stat;
@@ -62,6 +63,9 @@ public class PlayerStat : ICloneable {
 // current value cannot go higher than base value.
 [System.Serializable]
 public class PlayerStatWithModifiers : PlayerStat {
+
+    public int originalBaseValue {get; set;}
+
     [SerializeField]
     private int baseValue; // Can set in inspector if you need to
 
@@ -76,6 +80,7 @@ public class PlayerStatWithModifiers : PlayerStat {
     : base(stat, value, minValue, maxValue) {
         this.baseValue = value;
         this.callback = callback;
+        this.originalBaseValue = this.baseValue;
     }
 
     public void SetCallback(Action<int> callback) {
@@ -140,6 +145,13 @@ public class PlayerStatWithModifiers : PlayerStat {
         return this.baseValue;
     }
 
+    public void SetBaseValue(int value, bool setOriginalValue = false) {
+        this.baseValue = value;
+        if (setOriginalValue) {
+            this.originalBaseValue = this.baseValue;
+        }
+    }
+
     // Modifier helpers
     public PriorityList<StatModifier> GetModifiers() {
         return this.modifiers;
@@ -161,7 +173,7 @@ public class PlayerStatWithModifiers : PlayerStat {
     }
 
     public void RandomizeBase(int minValue, int maxValue) {
-        this.baseValue = (int)(maxValue * (BoxMuller.GetRandom() + 1)) + minValue;
+        this.SetBaseValue((int)(maxValue * (BoxMuller.GetRandom() + 1)) + minValue, true);
         this.SetDirty(true);
         this.GetValue();
     }
@@ -333,6 +345,48 @@ public class PlayerStats: ICloneable {
             stat.GetValue();
         }
 	}
+
+    // Level up stat. Used for hero.
+    public void LevelUpStat(Stat stat) {
+        PlayerStatWithModifiers theStat = this.stats.Find( (PlayerStatWithModifiers statWithMod) => statWithMod.stat == stat );
+        if (theStat == null) {
+            Debug.LogError("ERROR: Not assignable stat");
+        } else {
+            theStat.SetBaseValue(theStat.GetBaseValue() + 1);
+        }
+    }
+
+    // Applys level assuming that 
+    public void ApplyStatsBasedOnLevel(int level) {
+        int statPointsToSpend = StatLevelHelpers.GetTotalNumberStatPointsForLevel(level);
+        if (statPointsToSpend == 0) {
+      //      return;
+        }
+
+        List<ValueWeight<PlayerStatWithModifiers>> statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
+        do {
+            statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
+            foreach (PlayerStatWithModifiers statWithModifiers in this.stats) {
+                if (statPointsToSpend >=  StatLevelHelpers.GetCostToLevelUpStat(statWithModifiers.GetBaseValue())) {
+                    statsWithModifiersWeights.Add(new ValueWeight<PlayerStatWithModifiers>(statWithModifiers, statWithModifiers.originalBaseValue));
+                }
+            }
+
+            if (statsWithModifiersWeights.Count <= 0) {
+                break;
+            }
+
+            RandomPool<PlayerStatWithModifiers> statsPool = new RandomPool<PlayerStatWithModifiers>(statsWithModifiersWeights);
+            PlayerStatWithModifiers theStat = statsPool.PickOne();
+            int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
+            theStat.SetBaseValue(theStat.GetBaseValue() + 1);
+            statPointsToSpend -= costToLevelUp;
+        } while (statsWithModifiersWeights.Count > 0);
+
+        this.hp.SetValue(this.maxHp.GetValue());
+        this.mana.SetValue(this.maxMana.GetValue());
+
+    }
 
     // Setup stat pairs for like hp/max hp and mana/max mana
     private void SetupStatPair(PlayerStat curStat, PlayerStatWithModifiers maxStat) {

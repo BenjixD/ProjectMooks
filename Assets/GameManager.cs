@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager> {
 
         DontDestroyOnLoad(gameObject);
 
+        StatLevelHelpers.InitializeCache();
         this.models.Initialize();
         gameState.playerParty.Initialize();
         gameState.enemyParty.Initialize();

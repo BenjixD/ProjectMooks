@@ -8,27 +8,38 @@ public class StatLevelHelpers
 {
 
     // level => total number of stat points
-    public static Dictionary<int, int> levelToStatPoints;
+    private static Dictionary<int, int> levelToStatPoints;
 
+    // Note: Should this be Monohaviour just so we can play around with these numbers? ...
     public const int MIN_LEVEL = 1;
     public const int MAX_LEVEL = 99;
+    public const int MIN_LEVEL_TO_STAT_INCREMENT = 3;
+    public const int LEVEL_TO_STAT_INCREMENT = 5;
+    public const int STAT_COST_INCREMENT = 10;
+    public const int MIN_STAT_COST_INCREMENT = 2;
 
     public static void InitializeCache() {
-
+        levelToStatPoints = new Dictionary<int, int>();
         levelToStatPoints[MIN_LEVEL] = 0;
         for (int i = MIN_LEVEL + 1; i <= MAX_LEVEL; i++) {
-            levelToStatPoints[i] = levelToStatPoints[i-1] + ((i/5) + 3);
+            levelToStatPoints[i] = levelToStatPoints[i-1] + ((i/LEVEL_TO_STAT_INCREMENT) + MIN_LEVEL_TO_STAT_INCREMENT);
         }
 
     }
 
     public static int GetNumStatPointsForLevelUp(int currentLevel, int nextLevel = -1) {
+        if (levelToStatPoints == null) {
+            Debug.LogError("ERROR: Call InitializeCache first!");
+            return -1;
+        }
+
         if (nextLevel == -1) {
             nextLevel = currentLevel + 1;
         }
 
-        ErrorIfNotInBounds(currentLevel);
-        ErrorIfNotInBounds(nextLevel);
+        if ( !ErrorIfNotInBounds(currentLevel) || !ErrorIfNotInBounds(nextLevel)) {
+            return -1;
+        };
 
         if (currentLevel == nextLevel) {
             return 0;
@@ -42,8 +53,20 @@ public class StatLevelHelpers
     }
 
     public static int GetTotalNumberStatPointsForLevel(int level) {
-        ErrorIfNotInBounds(level);
+        if (levelToStatPoints == null) {
+            Debug.LogError("ERROR: Call InitializeCache first!");
+            return -1;
+        }
+
+        if (!ErrorIfNotInBounds(level)) {
+            return -1;
+        }
+        
         return levelToStatPoints[level];
+    }
+
+    public static int GetCostToLevelUpStat(int currentStatAmount) {
+        return ((currentStatAmount - 1) / STAT_COST_INCREMENT) + MIN_STAT_COST_INCREMENT;
     }
 
 
@@ -51,9 +74,12 @@ public class StatLevelHelpers
         return level <= MAX_LEVEL && level >= MIN_LEVEL;
     }
 
-    public static void ErrorIfNotInBounds(int level) {
+    public static bool ErrorIfNotInBounds(int level) {
         if (!IsLevelInBounds(level)) {
             Debug.LogError("ERROR: Level outside of bounds!");
+            return false;
         }
+
+        return true;
     }
 }
