@@ -49,7 +49,12 @@ public class Fighter
         this.stats = (PlayerStats)this.playerCreationData.stats.Clone();
         this.stats.hp.SetValue(this.stats.maxHp.GetValue());
         this.SetJobAndActions(this.playerCreationData.job);
-        this.stats.ApplyStatsBasedOnLevel(1); //TODO: Change 1 to something else
+        // TODO: Change this based on wave generation
+        if (this.IsHero()) {
+            this.stats.ApplyStatsBasedOnLevel(10);
+        } else {
+            this.stats.ApplyStatsBasedOnLevel(1);
+        }
     }
 
     public T InstantiateFromJob<T>(JobActionsList jobList, string name, int targetId) where T : FightingEntity  {

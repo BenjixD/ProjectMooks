@@ -241,6 +241,7 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 [System.Serializable]
 public class PlayerStats: ICloneable {
 	public int level = 1;
+    public int statPoints = 0;
     public PlayerStat hp = new PlayerStat(Stat.HP, 1);
     public PlayerStatWithModifiers maxHp = new PlayerStatWithModifiers(Stat.MAX_HP, 1);
     public PlayerStat mana = new PlayerStat(Stat.MANA, 1);
@@ -252,7 +253,7 @@ public class PlayerStats: ICloneable {
     public PlayerStatWithModifiers resistance = new PlayerStatWithModifiers(Stat.RESISTANCE, 1);
     public PlayerStatWithModifiers speed = new PlayerStatWithModifiers(Stat.SPEED, 1);
 
-    private List<PlayerStatWithModifiers> stats;
+    private List<PlayerStatWithModifiers> modifiableStats;
 
 	public PlayerStats() {
         this.Initialize();
@@ -260,21 +261,21 @@ public class PlayerStats: ICloneable {
 
     private void Initialize() {
 		level = 1;
-        this.stats = new List<PlayerStatWithModifiers>();
-        this.stats.Add(maxHp);
-        this.stats.Add(maxMana);
-        this.stats.Add(physical);
-        this.stats.Add(special);
-        this.stats.Add(defence);
-        this.stats.Add(resistance);
-        this.stats.Add(speed);
+        this.modifiableStats = new List<PlayerStatWithModifiers>();
+        this.modifiableStats.Add(maxHp);
+        this.modifiableStats.Add(maxMana);
+        this.modifiableStats.Add(physical);
+        this.modifiableStats.Add(special);
+        this.modifiableStats.Add(defence);
+        this.modifiableStats.Add(resistance);
+        this.modifiableStats.Add(speed);
 
         this.SetupStatPair(hp, maxHp);
         this.SetupStatPair(mana, maxMana);
     }
 
 	public void RandomizeStats() {
-        foreach (PlayerStatWithModifiers stat in this.stats) {
+        foreach (PlayerStatWithModifiers stat in this.modifiableStats) {
             stat.RandomizeBase(1, stat.GetBaseValue());
 
             this.hp.SetValue(this.maxHp.GetValue());
@@ -316,8 +317,12 @@ public class PlayerStats: ICloneable {
 		switch(stat) {
 			case (Stat.HP):
 				return this.hp;
+            case (Stat.MAX_HP):
+                return this.maxHp;
 			case (Stat.MANA):
 				return this.mana;
+            case (Stat.MAX_MANA):
+                return this.maxMana;
 			case (Stat.PHYSICAL):
 				return this.physical;
 			case (Stat.SPECIAL):
@@ -340,34 +345,44 @@ public class PlayerStats: ICloneable {
 
 	// Resetter ------------------//
 	public void ResetStats() {
-        foreach (PlayerStatWithModifiers stat in this.stats) {
+        foreach (PlayerStatWithModifiers stat in this.modifiableStats) {
             stat.ClearModifiers();
             stat.GetValue();
         }
 	}
 
     // Level up stat. Used for hero.
-    public void LevelUpStat(Stat stat) {
-        PlayerStatWithModifiers theStat = this.stats.Find( (PlayerStatWithModifiers statWithMod) => statWithMod.stat == stat );
+    public bool LevelUpStat(Stat stat) {
+        PlayerStatWithModifiers theStat = this.modifiableStats.Find( (PlayerStatWithModifiers statWithMod) => statWithMod.stat == stat );
         if (theStat == null) {
             Debug.LogError("ERROR: Not assignable stat");
+            return false;
         } else {
+           int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
+           if (costToLevelUp > this.statPoints) {
+               Debug.LogWarning("Not enough stat points to level up!");
+               return false;
+           }
+
+            this.statPoints -= costToLevelUp;
             theStat.SetBaseValue(theStat.GetBaseValue() + 1);
+            return true;
         }
     }
 
     // Applys level assuming that 
     public void ApplyStatsBasedOnLevel(int level) {
-        int statPointsToSpend = StatLevelHelpers.GetTotalNumberStatPointsForLevel(level);
-        if (statPointsToSpend == 0) {
-      //      return;
+        this.level = level;
+        statPoints = StatLevelHelpers.GetTotalNumberStatPointsForLevel(level);
+        if (statPoints == 0) {
+          return;
         }
 
         List<ValueWeight<PlayerStatWithModifiers>> statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
         do {
             statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
-            foreach (PlayerStatWithModifiers statWithModifiers in this.stats) {
-                if (statPointsToSpend >=  StatLevelHelpers.GetCostToLevelUpStat(statWithModifiers.GetBaseValue())) {
+            foreach (PlayerStatWithModifiers statWithModifiers in this.modifiableStats) {
+                if (statPoints >=  StatLevelHelpers.GetCostToLevelUpStat(statWithModifiers.GetBaseValue())) {
                     statsWithModifiersWeights.Add(new ValueWeight<PlayerStatWithModifiers>(statWithModifiers, statWithModifiers.originalBaseValue));
                 }
             }
@@ -380,12 +395,21 @@ public class PlayerStats: ICloneable {
             PlayerStatWithModifiers theStat = statsPool.PickOne();
             int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
             theStat.SetBaseValue(theStat.GetBaseValue() + 1);
-            statPointsToSpend -= costToLevelUp;
+            statPoints -= costToLevelUp;
         } while (statsWithModifiersWeights.Count > 0);
 
         this.hp.SetValue(this.maxHp.GetValue());
         this.mana.SetValue(this.maxMana.GetValue());
 
+    }
+
+    public void LevelUp() {
+        int additionalStatPoints = StatLevelHelpers.GetNumStatPointsForLevelUp(this.level, this.level+1);
+        this.statPoints += additionalStatPoints;
+    }
+
+    public List<PlayerStatWithModifiers> GetModifiableStats() {
+        return this.modifiableStats;
     }
 
     // Setup stat pairs for like hp/max hp and mana/max mana
