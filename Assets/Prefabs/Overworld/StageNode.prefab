@@ -252,10 +252,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efc6f15d28a11d648b2d69bb5d14c0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  easyNode: {fileID: 21300000, guid: 55df3535bd95c844cad72dca62526a16, type: 3}
-  mediumNode: {fileID: 21300000, guid: 0822268088eea26449b1c4a46c4f49b8, type: 3}
-  hardNode: {fileID: 21300000, guid: 4a4d00a44818640498859fbb15f5ba11, type: 3}
-  eventNode: {fileID: 21300000, guid: 54b131f9828361841ae24a1259bac454, type: 3}
+  _easyNode: {fileID: 21300000, guid: 55df3535bd95c844cad72dca62526a16, type: 3}
+  _mediumNode: {fileID: 21300000, guid: 0822268088eea26449b1c4a46c4f49b8, type: 3}
+  _hardNode: {fileID: 21300000, guid: 4a4d00a44818640498859fbb15f5ba11, type: 3}
+  _eventNode: {fileID: 21300000, guid: 54b131f9828361841ae24a1259bac454, type: 3}
   _battleIcon: {fileID: 21300000, guid: 2dde0bbfe4bb1314a8d4cdbd527308e1, type: 3}
   _background: {fileID: 5676412471041750755}
   _icon: {fileID: 1170057569378258184}

@@ -28,10 +28,10 @@ public class StageNode : MonoBehaviour {
     public Coord coord;
 
     [Header("Node Sprites")]
-    [SerializeField] private Sprite easyNode = null;
-    [SerializeField] private Sprite mediumNode = null;
-    [SerializeField] private Sprite hardNode = null;
-    [SerializeField] private Sprite eventNode = null;
+    [SerializeField] private Sprite _easyNode = null;
+    [SerializeField] private Sprite _mediumNode = null;
+    [SerializeField] private Sprite _hardNode = null;
+    [SerializeField] private Sprite _eventNode = null;
     [SerializeField] private Sprite _battleIcon = null;
 
     [Header("References")]
@@ -65,16 +65,16 @@ public class StageNode : MonoBehaviour {
         _icon.sprite = _battleIcon;
         switch(type) {
             case BattleType.EASY_BATTLE:
-                _background.sprite = easyNode;
+                _background.sprite = _easyNode;
                 break;
             case BattleType.MEDIUM_BATTLE:
-                _background.sprite = mediumNode;
+                _background.sprite = _mediumNode;
                 break;
             case BattleType.HARD_BATTLE:
-                _background.sprite = hardNode;
+                _background.sprite = _hardNode;
                 break;
             case BattleType.BOSS:
-                _background.sprite = hardNode;
+                _background.sprite = _hardNode;
                 break;
             default:
                 Debug.LogWarning("BattleType " + type + " unrecognized");
@@ -90,7 +90,7 @@ public class StageNode : MonoBehaviour {
         // TODO: temporary info display, beautify later
         _infoText.gameObject.SetActive(true);
         _infoText.text = eventStage.eventName;
-        _background.sprite = eventNode;
+        _background.sprite = _eventNode;
     }
 
     public void SetStageInfoContainer(StageInfoContainer stageInfoContainer) {

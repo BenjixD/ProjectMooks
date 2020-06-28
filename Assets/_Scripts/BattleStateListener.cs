@@ -61,7 +61,7 @@ public class BattleStateListener : MonoBehaviour {
 
         GameManager.Instance.battleComponents.field.currentWaveIndex++;
         if (GameManager.Instance.battleComponents.field.currentWaveIndex >= stageInfo.numWaves) {
-            GameManager.Instance.battleComponents.stageController.CompleteStage();
+            GameManager.Instance.battleComponents.stageController.LoadNextScene();
         } else {
             GameManager.Instance.battleComponents.field.GenerateEnemyList(GameManager.Instance.battleComponents.field.currentWaveIndex);
         }
