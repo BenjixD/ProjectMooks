@@ -1,0 +1,160 @@
+
+FCleric.png
+size: 1997,475
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+FCleric_BackHeadCover
+  rotate: false
+  xy: 427, 7
+  size: 108, 139
+  orig: 108, 139
+  offset: 0, 0
+  index: -1
+FCleric_FrontHair
+  rotate: false
+  xy: 224, 75
+  size: 102, 71
+  orig: 102, 71
+  offset: 0, 0
+  index: -1
+FCleric_FrontHeadCover
+  rotate: false
+  xy: 1646, 26
+  size: 160, 182
+  orig: 160, 182
+  offset: 0, 0
+  index: -1
+FCleric_Head
+  rotate: false
+  xy: 1808, 21
+  size: 94, 100
+  orig: 94, 100
+  offset: 0, 0
+  index: -1
+FCleric_LeftBicep
+  rotate: true
+  xy: 1808, 123
+  size: 85, 181
+  orig: 85, 181
+  offset: 0, 0
+  index: -1
+FCleric_LeftDrape
+  rotate: false
+  xy: 2, 73
+  size: 156, 400
+  orig: 156, 400
+  offset: 0, 0
+  index: -1
+FCleric_LeftDrape2
+  rotate: true
+  xy: 623, 27
+  size: 119, 151
+  orig: 119, 151
+  offset: 0, 0
+  index: -1
+FCleric_LeftForeArm
+  rotate: false
+  xy: 328, 6
+  size: 97, 140
+  orig: 97, 140
+  offset: 0, 0
+  index: -1
+FCleric_LeftHair
+  rotate: true
+  xy: 79, 4
+  size: 67, 149
+  orig: 67, 149
+  offset: 0, 0
+  index: -1
+FCleric_LeftHand
+  rotate: true
+  xy: 2, 2
+  size: 69, 75
+  orig: 69, 75
+  offset: 0, 0
+  index: -1
+FCleric_Neck
+  rotate: false
+  xy: 1904, 21
+  size: 67, 100
+  orig: 67, 100
+  offset: 0, 0
+  index: -1
+FCleric_Right
+  rotate: false
+  xy: 961, 206
+  size: 100, 267
+  orig: 100, 267
+  offset: 0, 0
+  index: -1
+FCleric_RightDrape
+  rotate: false
+  xy: 809, 162
+  size: 150, 311
+  orig: 150, 311
+  offset: 0, 0
+  index: -1
+FCleric_RightFingers
+  rotate: false
+  xy: 230, 15
+  size: 56, 58
+  orig: 56, 58
+  offset: 0, 0
+  index: -1
+FCleric_RightForeArm
+  rotate: true
+  xy: 776, 33
+  size: 113, 110
+  orig: 113, 110
+  offset: 0, 0
+  index: -1
+FCleric_RightHair
+  rotate: false
+  xy: 537, 13
+  size: 84, 133
+  orig: 84, 133
+  offset: 0, 0
+  index: -1
+FCleric_RightHand
+  rotate: false
+  xy: 160, 74
+  size: 62, 72
+  orig: 62, 72
+  offset: 0, 0
+  index: -1
+FCleric_Staff
+  rotate: true
+  xy: 1063, 210
+  size: 263, 932
+  orig: 263, 932
+  offset: 0, 0
+  index: -1
+FCleric_Thumb
+  rotate: true
+  xy: 288, 27
+  size: 46, 36
+  orig: 46, 36
+  offset: 0, 0
+  index: -1
+FCleric_Torso
+  rotate: true
+  xy: 1157, 7
+  size: 201, 487
+  orig: 201, 487
+  offset: 0, 0
+  index: -1
+Layer 88 Copy
+  rotate: true
+  xy: 160, 148
+  size: 325, 647
+  orig: 325, 647
+  offset: 0, 0
+  index: -1
+Layer 88 Copy 2
+  rotate: true
+  xy: 888, 6
+  size: 154, 267
+  orig: 154, 267
+  offset: 0, 0
+  index: -1

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Skewer
+  m_Name: GolemAttack
   m_EditorClassIdentifier: 
-  name: Skewer
+  name: Attack
   actionType: 0
   description: 
   maxPP: 0
@@ -30,6 +30,7 @@ MonoBehaviour:
     specialScaling: 0
     heals: 0
     statusAilments: []
-  commandKeyword: skewer
+  commandKeyword: a
   commandArgs: 1
-  userAnimName: melee attack
+  userAnimName: super slam
+  userAnimNamesTest: []

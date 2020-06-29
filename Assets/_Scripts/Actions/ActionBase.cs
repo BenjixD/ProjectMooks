@@ -83,7 +83,7 @@ public class ActionBase : ScriptableObject {
     public int commandArgs;
 
     [Header("Animations")]
-    [Tooltip("The name of the animation played for the user of the attack.")]
+    [Tooltip("The name of the default animation played for the user of this action. Alternatively, you can override Animate().")]
     public string userAnimName;
 
     private void Awake() {
@@ -143,6 +143,15 @@ public class ActionBase : ScriptableObject {
         }
     }
 
+    protected virtual void Animate(AnimationController controller) {
+        int track = controller.TakeFreeTrack();
+        if (track != -1) {
+            Debug.Log("anim track: " + track);
+            controller.AddToTrack(track, userAnimName, false, 0);
+            controller.EndTrackAnims(track);
+        }
+    }
+
     public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
         if (!BasicValidation(splitCommand, user)) {
             return false;
@@ -163,13 +172,13 @@ public class ActionBase : ScriptableObject {
         }
         return true;
     }
-    
+
     public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
         if (!CheckCost(user)) {
             return new FightResult(user, this);
         }
-        user.Animate(userAnimName, false);
         PayCost(user);
+        Animate(user.GetAnimController());
         FightResult result = ApplyEffect(user, targets);
         this.OnPostEffect(result);
 

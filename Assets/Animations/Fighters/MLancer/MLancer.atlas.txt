@@ -1,0 +1,139 @@
+
+MLancer.png
+size: 641,1045
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+MLancer_BackSkirt
+  rotate: true
+  xy: 151, 5
+  size: 151, 65
+  orig: 151, 65
+  offset: 0, 0
+  index: -1
+MLancer_Chest
+  rotate: true
+  xy: 151, 278
+  size: 211, 281
+  orig: 211, 281
+  offset: 0, 0
+  index: -1
+MLancer_Chest Copy
+  rotate: true
+  xy: 151, 158
+  size: 118, 62
+  orig: 118, 62
+  offset: 0, 0
+  index: -1
+MLancer_Fingers
+  rotate: true
+  xy: 557, 84
+  size: 72, 82
+  orig: 72, 82
+  offset: 0, 0
+  index: -1
+MLancer_FrontSkirt
+  rotate: true
+  xy: 151, 491
+  size: 274, 318
+  orig: 274, 318
+  offset: 0, 0
+  index: -1
+MLancer_Head
+  rotate: true
+  xy: 471, 428
+  size: 190, 159
+  orig: 190, 159
+  offset: 0, 0
+  index: -1
+MLancer_Lance
+  rotate: false
+  xy: 2, 2
+  size: 147, 1041
+  orig: 147, 1041
+  offset: 0, 0
+  index: -1
+MLancer_LeftBicep
+  rotate: true
+  xy: 308, 18
+  size: 138, 247
+  orig: 138, 247
+  offset: 0, 0
+  index: -1
+MLancer_LeftHand
+  rotate: true
+  xy: 477, 717
+  size: 92, 162
+  orig: 92, 162
+  offset: 0, 0
+  index: -1
+MLancer_LeftLeg
+  rotate: true
+  xy: 151, 767
+  size: 118, 324
+  orig: 118, 324
+  offset: 0, 0
+  index: -1
+MLancer_LeftShoulder
+  rotate: false
+  xy: 502, 899
+  size: 133, 144
+  orig: 133, 144
+  offset: 0, 0
+  index: -1
+MLancer_Neck
+  rotate: false
+  xy: 305, 173
+  size: 89, 103
+  orig: 89, 103
+  offset: 0, 0
+  index: -1
+MLancer_RightArm
+  rotate: false
+  xy: 471, 620
+  size: 165, 95
+  orig: 165, 95
+  offset: 0, 0
+  index: -1
+MLancer_RightBicep
+  rotate: false
+  xy: 215, 160
+  size: 88, 116
+  orig: 88, 116
+  offset: 0, 0
+  index: -1
+MLancer_RightLeg
+  rotate: true
+  xy: 151, 887
+  size: 156, 349
+  orig: 156, 349
+  offset: 0, 0
+  index: -1
+MLancer_RightShoulder
+  rotate: false
+  xy: 218, 14
+  size: 88, 142
+  orig: 88, 142
+  offset: 0, 0
+  index: -1
+MLancer_RightShoulder2
+  rotate: true
+  xy: 502, 811
+  size: 86, 121
+  orig: 86, 121
+  offset: 0, 0
+  index: -1
+MLancer_Shield
+  rotate: false
+  xy: 434, 158
+  size: 198, 268
+  orig: 198, 268
+  offset: 0, 0
+  index: -1
+MLancer_Thumb
+  rotate: false
+  xy: 557, 25
+  size: 75, 57
+  orig: 75, 57
+  offset: 0, 0
+  index: -1
