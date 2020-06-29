@@ -28,7 +28,7 @@ public class FightingEntity : MonoBehaviour
     public FighterMessageBox fighterMessageBox;
 
     protected QueuedAction _queuedAction;
-    protected AnimationController _animController;
+    private AnimationController _animController;
     protected FightingEntityAI _ai;
     protected AilmentController _ailmentController;
 
@@ -155,9 +155,28 @@ public class FightingEntity : MonoBehaviour
         return actions[Random.Range(0, actions.Count)];
     }
 
+    public AnimationController GetAnimController() {
+        return _animController;
+    }
+
+    // TODOL
     public void Animate(string animationName, bool loop) {
         if (_animController != null) {
             _animController.SetAnimation(animationName, loop);
+        }
+    }
+
+    // TODOL
+    public void AddAnimation(string animationName, bool loop) {
+        if (_animController != null) {
+            _animController.AddAnimation(animationName, loop);
+        }
+    }
+
+    // TODOL
+    public void AddToTrack(int trackIndex, string animationName, bool loop, float delay) {
+        if (_animController != null) {
+            _animController.AddToTrack(trackIndex, animationName, loop, delay);
         }
     }
 
