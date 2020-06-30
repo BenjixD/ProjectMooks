@@ -117,28 +117,7 @@ public class FightingEntity : MonoBehaviour
     public AnimationController GetAnimController() {
         return _animController;
     }
-
-    // TODOL
-    public void Animate(string animationName, bool loop) {
-        if (_animController != null) {
-            _animController.SetAnimation(animationName, loop);
-        }
-    }
-
-    // TODOL
-    public void AddAnimation(string animationName, bool loop) {
-        if (_animController != null) {
-            _animController.AddAnimation(animationName, loop);
-        }
-    }
-
-    // TODOL
-    public void AddToTrack(int trackIndex, string animationName, bool loop, float delay) {
-        if (_animController != null) {
-            _animController.AddToTrack(trackIndex, animationName, loop, delay);
-        }
-    }
-
+    
     public List<ActionBase> GetFilteredActions(ActionType actionType) {
         return this.actions.Filter( (ActionBase action) => action.actionType == actionType );
     }
