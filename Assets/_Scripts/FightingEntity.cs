@@ -158,7 +158,7 @@ public class FightingEntity : MonoBehaviour
     public AnimationController GetAnimController() {
         return _animController;
     }
-    
+
     public List<ActionBase> GetFilteredActions(ActionType actionType) {
         return this.actions.Filter( (ActionBase action) => action.actionType == actionType );
     }
