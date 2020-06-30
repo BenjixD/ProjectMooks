@@ -144,7 +144,6 @@ public class ActionBase : ScriptableObject {
     protected virtual void Animate(AnimationController controller) {
         int track = controller.TakeFreeTrack();
         if (track != -1) {
-            Debug.Log("anim track: " + track);
             controller.AddToTrack(track, userAnimName, false, 0);
             controller.EndTrackAnims(track);
         }

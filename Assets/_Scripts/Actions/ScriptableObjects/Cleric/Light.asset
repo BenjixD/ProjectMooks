@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Scorch
+  m_Script: {fileID: 11500000, guid: bde622594d2733b459717fcd736eebec, type: 3}
+  m_Name: Light
   m_EditorClassIdentifier: 
-  name: Scorch
+  name: Light
   actionType: 1
   description: 
   maxPP: 0
@@ -22,17 +22,22 @@ MonoBehaviour:
     PP: 0
     stamina: 0
   targetInfo:
-    targetTeam: 1
+    targetTeam: 0
     targetType: 0
   effects:
-    element: 1
+    element: 4
     physicalScaling: 0
-    specialScaling: 0.75
+    specialScaling: 0.3
     heals: 0
     statusAilments:
-    - statusAilment: {fileID: 11400000, guid: 4859a5e1b4883ac43b16090a253a5df4, type: 2}
-      duration: 5
+    - statusAilment: {fileID: 11400000, guid: bd8a5883a0bf1874193a604c84dbab90, type: 2}
+      duration: 3
+      infiniteDuration: 0
       chance: 1
-  commandKeyword: scorch
+    - statusAilment: {fileID: 11400000, guid: 47e6ee092a7064c4696a4086dd78297e, type: 2}
+      duration: 3
+      infiniteDuration: 0
+      chance: 1
+  commandKeyword: light
   commandArgs: 1
-  userAnimName: attack
+  userAnimName: 

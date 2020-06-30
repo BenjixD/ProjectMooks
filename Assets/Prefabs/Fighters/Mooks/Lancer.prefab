@@ -7,15 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 625841003950948007, guid: 35f01a16f79c8c94ba5771a613681882,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 5588856247799786281, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: m_Name
-      value: Mook Variant
+      value: Lancer
       objectReference: {fileID: 0}
     - target: {fileID: 5961816476775266575, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}

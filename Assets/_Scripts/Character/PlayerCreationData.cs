@@ -27,6 +27,8 @@ public class PlayerCreationData {
 	private Job ChooseJobFromStats(PlayerStats template) {
 		if(stats.maxHp > template.maxHp && stats.maxPhysical > stats.maxSpecial) {
 			return Job.WARRIOR;
+		} else if(stats.maxHp > template.maxHp && stats.maxSpeed > template.maxSpeed) {
+			return Job.LANCER;
 		} else if(stats.maxMana > template.maxMana && stats.maxSpecial > stats.maxPhysical) {
 			return Job.MAGE;
 		} else if(stats.maxDefense > template.maxDefense && stats.maxResistance > template.maxResistance) {

@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00319b932a1e934428b556664d130c55, type: 3}
-  m_Name: SpeedDownStatusAilment
+  m_Name: DefenseStatusAilmentOld
   m_EditorClassIdentifier: 
-  name: Speed Down
+  name: Defend
   defaultDuration: 0
+  infiniteDefaultDuration: 0
   duration: 0
   level: 1
   phase: 3
-  stat: 6
-  type: 0
-  modifier: -0.1
+  stat: 4
+  type: 1
+  modifier: 20
