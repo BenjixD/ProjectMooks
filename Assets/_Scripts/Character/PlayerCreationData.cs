@@ -27,7 +27,7 @@ public class PlayerCreationData {
 	private Job ChooseJobFromStats(PlayerStats template) {
 		if(stats.maxHp.GetBaseValue() > template.maxHp.GetBaseValue() && stats.physical.GetBaseValue() > stats.special.GetBaseValue()) {
 			return Job.WARRIOR;
-		} else if(stats.maxHp.GetBaseValue() > template.maxHp.GetBaseValue() && stats.maxSpeed.GetBaseValue() > template.maxSpeed.GetBaseValue()) {
+		} else if(stats.maxHp.GetBaseValue() > template.maxHp.GetBaseValue() && stats.speed.GetBaseValue() > template.speed.GetBaseValue()) {
 			return Job.LANCER;
 		} else if(stats.maxMana.GetBaseValue() > template.maxMana.GetBaseValue() && stats.special.GetBaseValue() > stats.physical.GetBaseValue()) {
 			return Job.MAGE;
