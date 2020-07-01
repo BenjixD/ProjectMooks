@@ -92,6 +92,7 @@ MonoBehaviour:
     maxHp:
       stat: 1
       currentValue: 1
+      divisor: 3
       baseValue: 15
     mana:
       stat: 2
@@ -99,26 +100,32 @@ MonoBehaviour:
     maxMana:
       stat: 3
       currentValue: 1
+      divisor: 3
       baseValue: 15
     physical:
       stat: 4
       currentValue: 1
+      divisor: 1
       baseValue: 15
     special:
       stat: 5
       currentValue: 1
+      divisor: 1
       baseValue: 15
     defence:
       stat: 6
       currentValue: 1
+      divisor: 1
       baseValue: 15
     resistance:
       stat: 7
       currentValue: 1
-      baseValue: 20
+      divisor: 1
+      baseValue: 15
     speed:
       stat: 8
       currentValue: 1
+      divisor: 1
       baseValue: 15
 --- !u!114 &1133189570
 MonoBehaviour:

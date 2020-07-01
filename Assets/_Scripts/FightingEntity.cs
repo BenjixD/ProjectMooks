@@ -35,6 +35,7 @@ public class FightingEntity : MonoBehaviour
 
     protected virtual void OnDestroy() {
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
+        _ailmentController.RemoveAllStatusAilments();
     }
     
     public void Initialize(int index, Fighter persistentFighter) {

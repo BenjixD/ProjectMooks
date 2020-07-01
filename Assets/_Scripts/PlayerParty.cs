@@ -22,7 +22,7 @@ public class PlayerParty : Party {
         PlayerCreationData heroData = new PlayerCreationData(heroName, stats, Job.HERO);
         Player hero = new Player();
         hero.Initialize(jobActionsList, heroName);
-        hero.stats.ApplyStatsBasedOnLevel(5);
+        hero.stats.ApplyStatsBasedOnLevel(3);
         this.SetFighter(0, hero);
     }
 
@@ -75,7 +75,7 @@ public class PlayerParty : Party {
             if(data != null) {
                 Player player = new Player();
                 player.Initialize(data, data.name);
-                player.stats.ApplyStatsBasedOnLevel(GameManager.Instance.gameState.playerParty.GetHeroFighter().stats.level / 2);
+                player.stats.ApplyStatsBasedOnLevel(GameManager.Instance.gameState.playerParty.GetHeroFighter().stats.level / 2, true);
                 //player.stats.ApplyStatsBasedOnLevel(1);
                 players.Add(player);
             }

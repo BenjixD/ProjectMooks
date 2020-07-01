@@ -266,6 +266,8 @@ public class ActionBase : ScriptableObject {
                 damage = -attackDamage;
             }
 
+            Debug.Log("Damage Done to: " + target.Name + " " + damage );
+
             before = (PlayerStats)target.stats.Clone();
             target.stats.hp.ApplyDelta(-damage);
             after = (PlayerStats)target.stats.Clone();

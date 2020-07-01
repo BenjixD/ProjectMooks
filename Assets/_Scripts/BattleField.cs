@@ -139,12 +139,12 @@ public class BattleField : MonoBehaviour
             if (battleType == BattleType.HARD_BATTLE) {
                 level += 3;
             } else if (battleType == BattleType.EASY_BATTLE) {
-                level -= 3;
+                level -= 1;
             } else if (battleType == BattleType.BOSS) {
-                level += 10;
+               // level += 10; // Should be done from inspector side
             }
 
-            stats.ApplyStatsBasedOnLevel(level);
+            stats.ApplyStatsBasedOnLevel(level, true);
 
             // TODO: Some sort of entrance animation
             instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;

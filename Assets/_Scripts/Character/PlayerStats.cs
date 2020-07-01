@@ -65,6 +65,7 @@ public class PlayerStat : ICloneable {
 public class PlayerStatWithModifiers : PlayerStat {
 
     public int originalBaseValue {get; set;}
+    public int divisor = 1;
 
     [SerializeField]
     private int baseValue; // Can set in inspector if you need to
@@ -346,19 +347,19 @@ public class PlayerStats: ICloneable {
 
         PlayerStatWithModifiers theStat = this.modifiableStats[stat];
 
-        int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
+        int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue(), theStat.divisor);
         if (costToLevelUp > this.statPoints) {
             Debug.LogWarning("Not enough stat points to level up!");
             return false;
         }
 
         this.statPoints -= costToLevelUp;
-        theStat.SetBaseValue(theStat.GetBaseValue() + 1);
+        theStat.SetBaseValue(theStat.GetBaseValue() + theStat.divisor);
         return true;
     }
 
     // Applys level assuming that 
-    public void ApplyStatsBasedOnLevel(int level) {
+    public void ApplyStatsBasedOnLevel(int level, bool manaless = false) {
 
         if (level <= this.level) {
             return;
@@ -376,8 +377,14 @@ public class PlayerStats: ICloneable {
             statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
             foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
                 PlayerStatWithModifiers statWithModifiers = statPair.Value;
-                if (statPoints >=  StatLevelHelpers.GetCostToLevelUpStat(statWithModifiers.GetBaseValue())) {
-                    statsWithModifiersWeights.Add(new ValueWeight<PlayerStatWithModifiers>(statWithModifiers, statWithModifiers.originalBaseValue));
+                if (statWithModifiers.stat == Stat.MAX_MANA && manaless == true) {
+                    continue;
+                }
+
+                int cost = StatLevelHelpers.GetCostToLevelUpStat(statWithModifiers.GetBaseValue(), statWithModifiers.divisor);
+
+                if (statPoints >=  cost) {
+                    statsWithModifiersWeights.Add(new ValueWeight<PlayerStatWithModifiers>(statWithModifiers, (float)statWithModifiers.originalBaseValue / statWithModifiers.divisor));
                 }
             }
 
@@ -387,8 +394,9 @@ public class PlayerStats: ICloneable {
 
             RandomPool<PlayerStatWithModifiers> statsPool = new RandomPool<PlayerStatWithModifiers>(statsWithModifiersWeights);
             PlayerStatWithModifiers theStat = statsPool.PickOne();
-            int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
-            theStat.SetBaseValue(theStat.GetBaseValue() + 1);
+            int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue(), theStat.divisor);
+            theStat.SetBaseValue(theStat.GetBaseValue() + theStat.divisor);
+
             statPoints -= costToLevelUp;
         } while (statsWithModifiersWeights.Count > 0);
 
@@ -400,6 +408,7 @@ public class PlayerStats: ICloneable {
     public void LevelUp() {
         int additionalStatPoints = StatLevelHelpers.GetNumStatPointsForLevelUp(this.level, this.level+1);
         this.statPoints += additionalStatPoints;
+        this.level++;
     }
 
     public Dictionary<Stat, PlayerStatWithModifiers> GetModifiableStats() {
@@ -411,5 +420,7 @@ public class PlayerStats: ICloneable {
         curStat.SetMinMax(0, maxStat.GetBaseValue());
         curStat.SetValue(maxStat.GetBaseValue());
         maxStat.SetCallback( (int maxValue) => curStat.SetMinMax(0, maxValue) );
+
+        maxStat.divisor = 3;
     }
 }
