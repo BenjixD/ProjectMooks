@@ -13,11 +13,23 @@ MonoBehaviour:
   m_Name: ManaPotAction
   m_EditorClassIdentifier: 
   name: Mana Pot
+  actionType: 0
   description: Heals the hero's mana
-  commandKeyword: mana
-  commandArgs: 0
-  userAnimName: 
+  maxPP: 1
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 1
+    stamina: 0
   targetInfo:
     targetTeam: 0
     targetType: 0
-  actionType: 0
+  effects:
+    element: 0
+    physicalScaling: 0
+    specialScaling: 0
+    heals: 0
+    statusAilments: []
+  commandKeyword: mana
+  commandArgs: 1
+  userAnimName: 

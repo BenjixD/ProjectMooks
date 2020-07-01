@@ -53,37 +53,46 @@ MonoBehaviour:
   Name: dvchibot
   stats:
     level: 1
+    statPoints: 0
     hp:
       stat: 0
+      currentValue: 1
     maxHp:
       stat: 1
-      baseValue: 30
+      currentValue: 1
+      baseValue: 50
     mana:
       stat: 2
+      currentValue: 1
     maxMana:
       stat: 3
-      baseValue: 30
+      currentValue: 1
+      baseValue: 50
     physical:
       stat: 4
-      baseValue: 15
+      currentValue: 1
+      baseValue: 30
     special:
       stat: 5
+      currentValue: 1
       baseValue: 30
     defence:
       stat: 6
+      currentValue: 1
       baseValue: 30
     resistance:
       stat: 7
+      currentValue: 1
       baseValue: 30
     speed:
       stat: 8
+      currentValue: 1
       baseValue: 30
   job: 0
   actions: []
+  isRare: 0
   targetId: 0
   targetName: 
-  isRare: 0
-  rareRate: 0.01
   fighterMessageBox: {fileID: 0}
 --- !u!114 &2080289099
 MonoBehaviour:

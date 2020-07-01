@@ -115,7 +115,8 @@ public class BattleField : MonoBehaviour
 
         List<JobActionsList> enemyList = waveInfo.GetEnemyList();
         
-        float mult = stageInfo.GetDifficultyMult();
+//        float mult = stageInfo.GetDifficultyMult();
+        BattleType battleType = stageInfo.GetBattleType();
 
         for (int i = 0; i < enemyList.Count; i++) {
             JobActionsList jobList = enemyList[i];
@@ -133,7 +134,16 @@ public class BattleField : MonoBehaviour
                 stats.ModifyStat(stat, (int) (stats.GetStat(stat) * mult));
             }
             */
-            int level = (int)(1f * mult); // TODO: revisie this algorithm 
+            int level = waveInfo.GetWaveInfo().averageLevel;
+
+            if (battleType == BattleType.HARD_BATTLE) {
+                level += 3;
+            } else if (battleType == BattleType.EASY_BATTLE) {
+                level -= 3;
+            } else if (battleType == BattleType.BOSS) {
+                level += 10;
+            }
+
             stats.ApplyStatsBasedOnLevel(level);
 
             // TODO: Some sort of entrance animation

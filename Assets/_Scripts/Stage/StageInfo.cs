@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 [System.Serializable]
 public class WaveInfo {
+    public int averageLevel = 1;
     public int minAmountOfEnemies = 1;
     public int maxAmountOfEnemies = 1;
     public List<JobActionsList> possibleEnemies;

@@ -158,7 +158,12 @@ public class ActionBase : ScriptableObject {
             }
             user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
         } else if (targetInfo.targetType == TargetType.ALL) {
-            List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
+            List<FightingEntity> possibleTargets = this.GetAllPossibleTargets(user);
+            List<int> targetIds = new List<int>();
+            for (int i = 0; i < possibleTargets.Count; i++) {
+                targetIds.Add(i);
+            }
+            
             user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         }
         return true;

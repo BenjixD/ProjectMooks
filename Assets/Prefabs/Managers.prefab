@@ -85,32 +85,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _template:
     level: 1
+    statPoints: 0
     hp:
       stat: 0
       currentValue: 1
     maxHp:
       stat: 1
-      currentValue: 500
-      baseValue: 500
+      currentValue: 1
+      baseValue: 15
     mana:
       stat: 2
       currentValue: 1
     maxMana:
       stat: 3
       currentValue: 1
-      baseValue: 20
+      baseValue: 15
     physical:
       stat: 4
       currentValue: 1
-      baseValue: 20
+      baseValue: 15
     special:
       stat: 5
       currentValue: 1
-      baseValue: 20
+      baseValue: 15
     defence:
       stat: 6
       currentValue: 1
-      baseValue: 20
+      baseValue: 15
     resistance:
       stat: 7
       currentValue: 1
@@ -118,7 +119,7 @@ MonoBehaviour:
     speed:
       stat: 8
       currentValue: 1
-      baseValue: 20
+      baseValue: 15
 --- !u!114 &1133189570
 MonoBehaviour:
   m_ObjectHideFlags: 0
