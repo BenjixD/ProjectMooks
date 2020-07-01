@@ -237,7 +237,7 @@ public class PlayerStats: ICloneable {
     public PlayerStatWithModifiers resistance = new PlayerStatWithModifiers(Stat.RESISTANCE, 1);
     public PlayerStatWithModifiers speed = new PlayerStatWithModifiers(Stat.SPEED, 1);
 
-    private List<PlayerStatWithModifiers> modifiableStats;
+    private Dictionary<Stat, PlayerStatWithModifiers> modifiableStats;
 
 	public PlayerStats() {
         this.Initialize();
@@ -245,21 +245,22 @@ public class PlayerStats: ICloneable {
 
     private void Initialize() {
 		level = 1;
-        this.modifiableStats = new List<PlayerStatWithModifiers>();
-        this.modifiableStats.Add(maxHp);
-        this.modifiableStats.Add(maxMana);
-        this.modifiableStats.Add(physical);
-        this.modifiableStats.Add(special);
-        this.modifiableStats.Add(defence);
-        this.modifiableStats.Add(resistance);
-        this.modifiableStats.Add(speed);
+        this.modifiableStats = new Dictionary<Stat, PlayerStatWithModifiers>();
+        this.modifiableStats.Add(Stat.MAX_HP, maxHp);
+        this.modifiableStats.Add(Stat.MAX_MANA, maxMana);
+        this.modifiableStats.Add(Stat.PHYSICAL, physical);
+        this.modifiableStats.Add(Stat.SPECIAL, special);
+        this.modifiableStats.Add(Stat.DEFENSE, defence);
+        this.modifiableStats.Add(Stat.RESISTANCE, resistance);
+        this.modifiableStats.Add(Stat.SPEED, speed);
 
         this.SetupStatPair(hp, maxHp);
         this.SetupStatPair(mana, maxMana);
     }
 
 	public void RandomizeStats() {
-        foreach (PlayerStatWithModifiers stat in this.modifiableStats) {
+        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+            PlayerStatWithModifiers stat = statPair.Value;
             stat.RandomizeBase(1, stat.GetBaseValue());
 
             this.hp.SetValue(this.maxHp.GetValue());
@@ -329,7 +330,8 @@ public class PlayerStats: ICloneable {
 
 	// Resetter ------------------//
 	public void ResetStats() {
-        foreach (PlayerStatWithModifiers stat in this.modifiableStats) {
+        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+            PlayerStatWithModifiers stat = statPair.Value;
             stat.ClearModifiers();
             stat.GetValue();
         }
@@ -337,21 +339,22 @@ public class PlayerStats: ICloneable {
 
     // Level up stat. Used for hero.
     public bool LevelUpStat(Stat stat) {
-        PlayerStatWithModifiers theStat = this.modifiableStats.Find( (PlayerStatWithModifiers statWithMod) => statWithMod.stat == stat );
-        if (theStat == null) {
+        if (!this.modifiableStats.ContainsKey(stat)) {
             Debug.LogError("ERROR: Not assignable stat");
             return false;
-        } else {
-           int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
-           if (costToLevelUp > this.statPoints) {
-               Debug.LogWarning("Not enough stat points to level up!");
-               return false;
-           }
-
-            this.statPoints -= costToLevelUp;
-            theStat.SetBaseValue(theStat.GetBaseValue() + 1);
-            return true;
         }
+
+        PlayerStatWithModifiers theStat = this.modifiableStats[stat];
+
+        int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
+        if (costToLevelUp > this.statPoints) {
+            Debug.LogWarning("Not enough stat points to level up!");
+            return false;
+        }
+
+        this.statPoints -= costToLevelUp;
+        theStat.SetBaseValue(theStat.GetBaseValue() + 1);
+        return true;
     }
 
     // Applys level assuming that 
@@ -371,7 +374,8 @@ public class PlayerStats: ICloneable {
         List<ValueWeight<PlayerStatWithModifiers>> statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
         do {
             statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
-            foreach (PlayerStatWithModifiers statWithModifiers in this.modifiableStats) {
+            foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+                PlayerStatWithModifiers statWithModifiers = statPair.Value;
                 if (statPoints >=  StatLevelHelpers.GetCostToLevelUpStat(statWithModifiers.GetBaseValue())) {
                     statsWithModifiersWeights.Add(new ValueWeight<PlayerStatWithModifiers>(statWithModifiers, statWithModifiers.originalBaseValue));
                 }
@@ -398,7 +402,7 @@ public class PlayerStats: ICloneable {
         this.statPoints += additionalStatPoints;
     }
 
-    public List<PlayerStatWithModifiers> GetModifiableStats() {
+    public Dictionary<Stat, PlayerStatWithModifiers> GetModifiableStats() {
         return this.modifiableStats;
     }
 
