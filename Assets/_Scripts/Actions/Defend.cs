@@ -13,4 +13,8 @@ public class Defend : ActionBase {
         InflictStatuses(user);
         return new FightResult(user, this);
     }
+
+    protected override void Animate(AnimationController controller) {
+        controller.AddToTrack("idle", "defend start", false, 0);
+    }
 }

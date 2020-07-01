@@ -32,4 +32,5 @@ MonoBehaviour:
     statusAilments: []
   commandKeyword: a
   commandArgs: 1
-  userAnimName: attack
+  userAnimName: melee attack
+  userAnimNamesTest: []

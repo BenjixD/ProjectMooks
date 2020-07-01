@@ -30,8 +30,9 @@ MonoBehaviour:
     specialScaling: 0
     heals: 0
     statusAilments:
-    - statusAilment: {fileID: 11400000, guid: 48fc6094a4f4ecf4898950952a067a83, type: 2}
+    - statusAilment: {fileID: 11400000, guid: ddb5ed78149c74a47bc1b5d7b11345bd, type: 2}
       duration: 1
+      infiniteDuration: 0
       chance: 1
   commandKeyword: d
   commandArgs: 0

@@ -6,6 +6,7 @@ public enum Job {
 	WARRIOR,
 	MAGE,
 	CLERIC,
+	LANCER,
 
     BASIC_ENEMY
 }
