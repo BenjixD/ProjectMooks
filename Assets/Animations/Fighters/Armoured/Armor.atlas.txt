@@ -1,0 +1,188 @@
+
+Armor.png
+size: 1379,1059
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Armor_Axe
+  rotate: false
+  xy: 415, 572
+  size: 377, 485
+  orig: 377, 485
+  offset: 0, 0
+  index: -1
+Armor_Chest
+  rotate: true
+  xy: 2, 34
+  size: 323, 356
+  orig: 323, 356
+  offset: 0, 0
+  index: -1
+Armor_Fingers
+  rotate: true
+  xy: 525, 6
+  size: 105, 108
+  orig: 105, 108
+  offset: 0, 0
+  index: -1
+Armor_Hand
+  rotate: false
+  xy: 1046, 29
+  size: 148, 125
+  orig: 148, 125
+  offset: 0, 0
+  index: -1
+Armor_Helmet
+  rotate: true
+  xy: 1046, 156
+  size: 200, 179
+  orig: 200, 179
+  offset: 0, 0
+  index: -1
+Armor_LeftBicep
+  rotate: false
+  xy: 794, 789
+  size: 233, 268
+  orig: 233, 268
+  offset: 0, 0
+  index: -1
+Armor_LeftKnee
+  rotate: true
+  xy: 1227, 44
+  size: 140, 146
+  orig: 140, 146
+  offset: 0, 0
+  index: -1
+Armor_LeftLeg
+  rotate: false
+  xy: 1053, 565
+  size: 169, 296
+  orig: 169, 296
+  offset: 0, 0
+  index: -1
+Armor_LeftThigh
+  rotate: false
+  xy: 710, 342
+  size: 167, 228
+  orig: 167, 228
+  offset: 0, 0
+  index: -1
+Armor_LeftWaist
+  rotate: true
+  xy: 794, 591
+  size: 196, 257
+  orig: 196, 257
+  offset: 0, 0
+  index: -1
+Armor_Neck
+  rotate: true
+  xy: 1202, 362
+  size: 201, 140
+  orig: 201, 140
+  offset: 0, 0
+  index: -1
+Armor_RightArm
+  rotate: false
+  xy: 360, 78
+  size: 163, 279
+  orig: 163, 279
+  offset: 0, 0
+  index: -1
+Armor_RightBicep
+  rotate: false
+  xy: 1227, 186
+  size: 150, 174
+  orig: 150, 174
+  offset: 0, 0
+  index: -1
+Armor_RightForearm
+  rotate: true
+  xy: 1024, 358
+  size: 205, 176
+  orig: 205, 176
+  offset: 0, 0
+  index: -1
+Armor_RightKnee
+  rotate: false
+  xy: 698, 2
+  size: 114, 131
+  orig: 114, 131
+  offset: 0, 0
+  index: -1
+Armor_RightLeg
+  rotate: true
+  xy: 415, 364
+  size: 206, 293
+  orig: 206, 293
+  offset: 0, 0
+  index: -1
+Armor_RightThigh
+  rotate: false
+  xy: 892, 122
+  size: 152, 222
+  orig: 152, 222
+  offset: 0, 0
+  index: -1
+Armor_RightWaist
+  rotate: false
+  xy: 879, 346
+  size: 143, 243
+  orig: 143, 243
+  offset: 0, 0
+  index: -1
+Armor_Shield
+  rotate: false
+  xy: 2, 359
+  size: 411, 698
+  orig: 411, 698
+  offset: 0, 0
+  index: -1
+Armor_ShoulderL1
+  rotate: true
+  xy: 814, 10
+  size: 110, 194
+  orig: 110, 194
+  offset: 0, 0
+  index: -1
+Armor_ShoulderL2
+  rotate: false
+  xy: 1029, 863
+  size: 274, 194
+  orig: 274, 194
+  offset: 0, 0
+  index: -1
+Armor_ShoulderR1
+  rotate: true
+  xy: 360, 2
+  size: 74, 133
+  orig: 74, 133
+  offset: 0, 0
+  index: -1
+Armor_ShoulderR2
+  rotate: true
+  xy: 698, 135
+  size: 205, 192
+  orig: 205, 192
+  offset: 0, 0
+  index: -1
+Armor_Shoulderback
+  rotate: true
+  xy: 525, 113
+  size: 249, 171
+  orig: 249, 171
+  offset: 0, 0
+  index: -1
+Armor_Tassle
+  rotate: false
+  xy: 1224, 606
+  size: 133, 255
+  orig: 133, 255
+  offset: 0, 0
+  index: -1
+Armor_Thumb
+  rotate: true
+  xy: 1305, 962
+  size: 95, 71
+  orig: 95, 71
+  offset: 0, 0
+  index: -1

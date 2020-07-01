@@ -1,0 +1,265 @@
+
+MainCharacter.png
+size: 1998,762
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Back_Hair
+  rotate: true
+  xy: 593, 313
+  size: 447, 374
+  orig: 447, 374
+  offset: 0, 0
+  index: -1
+Back_Skirt
+  rotate: false
+  xy: 1914, 336
+  size: 68, 61
+  orig: 68, 61
+  offset: 0, 0
+  index: -1
+Book_Holder_Back
+  rotate: true
+  xy: 1459, 153
+  size: 102, 139
+  orig: 102, 139
+  offset: 0, 0
+  index: -1
+Book_Holder_Front
+  rotate: false
+  xy: 1651, 34
+  size: 100, 93
+  orig: 100, 93
+  offset: 0, 0
+  index: -1
+Breasts
+  rotate: true
+  xy: 1058, 28
+  size: 145, 100
+  orig: 145, 100
+  offset: 0, 0
+  index: -1
+Cape
+  rotate: true
+  xy: 2, 43
+  size: 717, 589
+  orig: 717, 589
+  offset: 0, 0
+  index: -1
+Front_Cape
+  rotate: false
+  xy: 1479, 257
+  size: 181, 298
+  orig: 181, 298
+  offset: 0, 0
+  index: -1
+Left_Biceps
+  rotate: true
+  xy: 1184, 216
+  size: 127, 152
+  orig: 127, 152
+  offset: 0, 0
+  index: -1
+Left_Collar
+  rotate: false
+  xy: 1600, 190
+  size: 53, 65
+  orig: 53, 65
+  offset: 0, 0
+  index: -1
+Left_Forearm
+  rotate: true
+  xy: 1877, 98
+  size: 115, 116
+  orig: 115, 116
+  offset: 0, 0
+  index: -1
+Left_Hand_1
+  rotate: false
+  xy: 1914, 568
+  size: 82, 88
+  orig: 82, 88
+  offset: 0, 0
+  index: -1
+Left_Hand_2
+  rotate: true
+  xy: 2, 4
+  size: 37, 43
+  orig: 37, 43
+  offset: 0, 0
+  index: -1
+Left_Leg
+  rotate: true
+  xy: 969, 516
+  size: 244, 483
+  orig: 244, 483
+  offset: 0, 0
+  index: -1
+Left_Shoulder_Cowl_Back
+  rotate: false
+  xy: 1184, 95
+  size: 122, 119
+  orig: 122, 119
+  offset: 0, 0
+  index: -1
+Left_Shoulder_Cowl_Front
+  rotate: true
+  xy: 1549, 14
+  size: 124, 100
+  orig: 124, 100
+  offset: 0, 0
+  index: -1
+Neck
+  rotate: false
+  xy: 1914, 658
+  size: 79, 102
+  orig: 79, 102
+  offset: 0, 0
+  index: -1
+Right_Biceps
+  rotate: false
+  xy: 1058, 175
+  size: 124, 168
+  orig: 124, 168
+  offset: 0, 0
+  index: -1
+Right_Collar
+  rotate: true
+  xy: 1275, 31
+  size: 49, 48
+  orig: 49, 48
+  offset: 0, 0
+  index: -1
+Right_Collar_2
+  rotate: false
+  xy: 1914, 473
+  size: 77, 93
+  orig: 77, 93
+  offset: 0, 0
+  index: -1
+Right_Fingers
+  rotate: false
+  xy: 1600, 140
+  size: 53, 48
+  orig: 53, 48
+  offset: 0, 0
+  index: -1
+Right_Forearm
+  rotate: false
+  xy: 1662, 255
+  size: 98, 127
+  orig: 98, 127
+  offset: 0, 0
+  index: -1
+Right_Leg
+  rotate: true
+  xy: 969, 345
+  size: 169, 508
+  orig: 169, 508
+  offset: 0, 0
+  index: -1
+Right_Palm
+  rotate: true
+  xy: 1914, 399
+  size: 72, 73
+  orig: 72, 73
+  offset: 0, 0
+  index: -1
+Right_Shoulder_Cowl_Back
+  rotate: true
+  xy: 1160, 2
+  size: 91, 113
+  orig: 91, 113
+  offset: 0, 0
+  index: -1
+Right_Shoulder_Cowl_Front
+  rotate: true
+  xy: 1338, 201
+  size: 142, 119
+  orig: 142, 119
+  offset: 0, 0
+  index: -1
+Right_Thumb
+  rotate: true
+  xy: 1914, 215
+  size: 60, 61
+  orig: 60, 61
+  offset: 0, 0
+  index: -1
+Sheathe_Back
+  rotate: true
+  xy: 1914, 277
+  size: 57, 68
+  orig: 57, 68
+  offset: 0, 0
+  index: -1
+Sheathe_Front
+  rotate: false
+  xy: 1763, 376
+  size: 149, 384
+  orig: 149, 384
+  offset: 0, 0
+  index: -1
+Spellbook
+  rotate: true
+  xy: 1753, 17
+  size: 93, 88
+  orig: 93, 88
+  offset: 0, 0
+  index: -1
+Spellbook_Back
+  rotate: false
+  xy: 1308, 82
+  size: 120, 117
+  orig: 120, 117
+  offset: 0, 0
+  index: -1
+Spellbook_Front
+  rotate: true
+  xy: 1430, 32
+  size: 119, 117
+  orig: 119, 117
+  offset: 0, 0
+  index: -1
+Spellbook_Page
+  rotate: true
+  xy: 1758, 112
+  size: 115, 117
+  orig: 115, 117
+  offset: 0, 0
+  index: -1
+Sword
+  rotate: false
+  xy: 593, 8
+  size: 463, 303
+  orig: 463, 303
+  offset: 0, 0
+  index: -1
+Torso
+  rotate: true
+  xy: 1454, 557
+  size: 203, 307
+  orig: 203, 307
+  offset: 0, 0
+  index: -1
+Waist_Belt
+  rotate: true
+  xy: 1662, 384
+  size: 171, 95
+  orig: 171, 95
+  offset: 0, 0
+  index: -1
+front hair
+  rotate: true
+  xy: 1655, 129
+  size: 124, 101
+  orig: 124, 101
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 1762, 229
+  size: 150, 145
+  orig: 150, 145
+  offset: 0, 0
+  index: -1

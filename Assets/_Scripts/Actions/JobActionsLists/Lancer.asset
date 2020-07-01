@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14fb53d9f9719b1498cd0a900037d9e2, type: 3}
   m_Name: Lancer
   m_EditorClassIdentifier: 
-  job: 0
+  job: 4
   _actions:
   - {fileID: 11400000, guid: 10e5e09a956753642b8c825d95c3edfc, type: 2}
   - {fileID: 11400000, guid: babd49c684bab3d4881a29db27ddf422, type: 2}
   - {fileID: 11400000, guid: 66e0ad1453e067149bfb7874e1e4bac0, type: 2}
-  prefab: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882, type: 3}
+  prefab: {fileID: 4060384404376670359, guid: d94c567b2882f264eaf100fdb74b8994, type: 3}

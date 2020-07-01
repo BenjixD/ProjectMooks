@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f564566de3cbf4593910407200a20a, type: 3}
+  m_Name: Explosion
+  m_EditorClassIdentifier: 
+  name: Explosion
+  actionType: 0
+  description: 
+  maxPP: 1
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 1
+    stamina: 0
+  targetInfo:
+    targetTeam: 2
+    targetType: 1
+  effects:
+    element: 1
+    physicalScaling: 0
+    specialScaling: 0
+    heals: 0
+    statusAilments: []
+  commandKeyword: explosion
+  commandArgs: 0
+  userAnimName: 
+  _explosionQTE: {fileID: 9026427991594010301, guid: ba5fc9297bc72374ca6ddf94dfd4e95f,
+    type: 3}
