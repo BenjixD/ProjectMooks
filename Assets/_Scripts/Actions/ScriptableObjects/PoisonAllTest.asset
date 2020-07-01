@@ -32,6 +32,7 @@ MonoBehaviour:
     statusAilments:
     - statusAilment: {fileID: 11400000, guid: f96b21ae72f37e64da9bc2fc8b099644, type: 2}
       duration: 5
+      infiniteDuration: 0
       chance: 1
   commandKeyword: poison2
   commandArgs: 0

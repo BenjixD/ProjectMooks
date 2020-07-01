@@ -555,5 +555,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87c877daeb2aa64e8cec14ce82270fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapScene: WorldMap
+  eventName: Camp
+  icon: {fileID: 21300000, guid: 001051cd94572a44e871d74083684a68, type: 3}
   _continueButton: {fileID: 4898605610004241512}

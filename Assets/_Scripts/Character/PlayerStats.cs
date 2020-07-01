@@ -71,8 +71,6 @@ public class PlayerStatWithModifiers : PlayerStat {
 
     private PriorityList<StatModifier> modifiers = new PriorityList<StatModifier>();
 
-    private bool dirty = false;
-
     private Action<int> callback = null;
 
 
@@ -88,17 +86,14 @@ public class PlayerStatWithModifiers : PlayerStat {
     }
 
     public override int GetValue() {
-        if (this.dirty == true) {
 
-            int runningValue = baseValue;
+        int runningValue = baseValue;
 
-            foreach (StatModifier modifier in this.modifiers) {
-                runningValue = modifier.Apply(runningValue, this.baseValue, this.minValue, this.maxValue);
-            }
-
-            this.currentValue = runningValue;
-            this.SetDirty(false);
+        foreach (StatModifier modifier in this.modifiers) {
+            runningValue = modifier.Apply(runningValue, this.baseValue, this.minValue, this.maxValue);
         }
+
+        this.currentValue = runningValue;
 
         if (this.callback != null) {
             this.callback(this.currentValue);
@@ -111,7 +106,6 @@ public class PlayerStatWithModifiers : PlayerStat {
     public override void SetValue(int value) {
         this.ClearModifiers();
         this.baseValue = Mathf.Clamp(value, minValue, maxValue);
-        this.SetDirty(true);
     }
 
     public override void ApplyDelta(int delta) {
@@ -128,7 +122,6 @@ public class PlayerStatWithModifiers : PlayerStat {
         }
 
         stat.modifiers = clonedModifiers;
-        stat.SetDirty(true);
 
         return stat;
     }
@@ -159,27 +152,18 @@ public class PlayerStatWithModifiers : PlayerStat {
 
     public void ApplyModifier(StatModifier modifier) {
         this.modifiers.Add(modifier);
-        this.SetDirty(true);
     }
 
     public void RemoveModifier(StatModifier modifier) {
         this.modifiers.Remove(modifier);
-        this.SetDirty(true);
     }
 
     public void ClearModifiers() {
         this.modifiers.Clear();
-        this.SetDirty(true);
     }
 
     public void RandomizeBase(int minValue, int maxValue) {
         this.SetBaseValue((int)(maxValue * (BoxMuller.GetRandom() + 1)) + minValue, true);
-        this.SetDirty(true);
-        this.GetValue();
-    }
-
-    private void SetDirty(bool dirty) {
-        this.dirty = dirty;
     }
 
 };
@@ -372,8 +356,14 @@ public class PlayerStats: ICloneable {
 
     // Applys level assuming that 
     public void ApplyStatsBasedOnLevel(int level) {
+
+        if (level <= this.level) {
+            return;
+        }
+
+        statPoints += StatLevelHelpers.GetNumStatPointsForLevelUp(this.level, level);
         this.level = level;
-        statPoints = StatLevelHelpers.GetTotalNumberStatPointsForLevel(level);
+
         if (statPoints == 0) {
           return;
         }

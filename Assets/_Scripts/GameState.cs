@@ -13,32 +13,13 @@ public class GameState : MonoBehaviour {
 
     public ProgressData progressData;
 
-    public List<StageInfoContainer> stages {get; set;}
+    private StageInfoContainer _currStage;
 
-    public void Initialize() {
-        this.InitializeStages();
-    }
-
-  
     public StageInfoContainer GetCurrentStage() {
-        return this.stages[this.progressData.currentStageIndex];
+        return _currStage;
     }
 
-    public void SetStageIndex(int index) {
-        this.progressData.currentStageIndex = index;
-    }
-
-    public void SetNextStageIndex(int index) {
-        this.progressData.nextStageIndex = index;
-    }
-
-    private void InitializeStages() {
-        this.stages = new List<StageInfoContainer>();
-        List<StageInfo> stages = GameManager.Instance.models.GetStageInfos();
-        foreach (StageInfo stage in stages) {
-            StageInfoContainer stageInfo = new StageInfoContainer(stage);
-            stageInfo.InitializeWaveList(); // Does random generation
-            this.stages.Add(stageInfo);
-        }
+    public void SetStage(StageInfoContainer stageInfoContainer) {
+        _currStage = stageInfoContainer;
     }
 }
