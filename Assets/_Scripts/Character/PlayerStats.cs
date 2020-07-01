@@ -5,7 +5,9 @@ using System;
 
 public enum Stat {
 	HP,
+	MAX_HP,
 	MANA,
+	MAX_MANA,
 	PHYSICAL,
 	SPECIAL,
 	DEFENSE,
@@ -93,8 +95,12 @@ public class PlayerStats: ICloneable {
 		switch(stat) {
 			case (Stat.HP):
 				return GetHp();
+			case (Stat.MAX_HP):
+				return maxHp;
 			case (Stat.MANA):
 				return GetMana();
+			case (Stat.MAX_MANA):
+				return maxMana;
 			case (Stat.PHYSICAL):
 				return GetPhysical();
 			case (Stat.SPECIAL):
@@ -107,7 +113,7 @@ public class PlayerStats: ICloneable {
 				return GetSpeed();
 		}
 		Debug.LogWarning("Tried to retrieve invalid stat.");
-		return GetHp();
+		return 0;
 	}
 
 	public void ModifyStat(Stat stat, int value) {
@@ -115,8 +121,14 @@ public class PlayerStats: ICloneable {
 			case (Stat.HP):
 				SetHp(GetHp() + value);
 				break;
+			case (Stat.MAX_HP):
+				maxHp += value;
+				break;
 			case (Stat.MANA):
 				SetMana(GetMana() + value);
+				break;
+			case (Stat.MAX_MANA):
+				maxMana += value;
 				break;
 			case (Stat.PHYSICAL):
 				SetPhysical(GetPhysical() + value);

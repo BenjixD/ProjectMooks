@@ -121,15 +121,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 372d059ea52793146a680ded329e4347, type: 2}
   _enemyJobActionsLists:
   - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-  stageInfo:
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
-  - {fileID: 11400000, guid: 6cbd221c5fb16894eae59016beb7a9ae, type: 2}
+  zones:
+  - {fileID: 11400000, guid: b26e2ed0a9f467549bb402a270ebe9cb, type: 2}
+  - {fileID: 11400000, guid: 54c1caa855fade7429004903da097cb4, type: 2}
   commonActions: []
   commonMookActionPool:
   - {fileID: 11400000, guid: 978ab0ca05277fd439c5257c4a925014, type: 2}
@@ -167,8 +161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3dd4e88a83fa741b684d20ef0c59b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStageIndex: 0
-  nextStageIndex: 0
   affinity: 0
 --- !u!114 &3191040276140247181
 MonoBehaviour:
@@ -234,8 +226,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _eventPrefabs:
-  - {fileID: 4898605610877541137, guid: 96c30301923cf354ba8081ae1ff098c0, type: 3}
-  - {fileID: 4898605610877541137, guid: 96c30301923cf354ba8081ae1ff098c0, type: 3}
+  - {fileID: 4898605610877541148, guid: 96c30301923cf354ba8081ae1ff098c0, type: 3}
+  - {fileID: 4898605610877541148, guid: 96c30301923cf354ba8081ae1ff098c0, type: 3}
 --- !u!114 &1357655215
 MonoBehaviour:
   m_ObjectHideFlags: 0

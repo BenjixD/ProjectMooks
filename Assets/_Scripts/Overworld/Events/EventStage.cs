@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class EventStage : MonoBehaviour {
-    
-    [SerializeField] private string _mapScene = "WorldMap";
+    public string eventName;
+    [Tooltip("Map icon for this event.")]
+    public Sprite icon;
     [SerializeField] private GameObject _continueButton = null;
+    private string _mapScene = "WorldMap";
 
     private void Start() {
         ProcessEvent();

@@ -101,10 +101,10 @@ public class BattleField : MonoBehaviour
 
         StageInfoContainer stageInfo = GameManager.Instance.gameState.GetCurrentStage();
         WaveInfoContainer waveInfo = stageInfo.GetWaveInfo(this.currentWaveIndex);
-        waveInfo.InitializeEnemyList(); // Does random generation
 
-        int numberOfEnemiesToGenerate = waveInfo.numEnemies;
         List<JobActionsList> enemyList = waveInfo.GetEnemyList();
+        
+        float mult = stageInfo.GetDifficultyMult();
 
         for (int i = 0; i < enemyList.Count; i++) {
             JobActionsList jobList = enemyList[i];
@@ -114,6 +114,12 @@ public class BattleField : MonoBehaviour
 
             Enemy enemy = new Enemy();
             EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
+
+            // Apply stat adjustments based on difficulty
+            PlayerStats stats = instantiatedEnemy.stats;
+            foreach(Stat stat in System.Enum.GetValues(typeof(Stat))) {
+                stats.ModifyStat(stat, (int) (stats.GetStat(stat) * mult));
+            }
 
             // TODO: Some sort of entrance animation
             

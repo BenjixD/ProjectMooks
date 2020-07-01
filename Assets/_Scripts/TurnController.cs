@@ -297,7 +297,7 @@ public class TurnController : MonoBehaviour
 
         this.field.currentWaveIndex++;
         if (this.field.currentWaveIndex >= stageInfo.numWaves) {
-            this.stageController.LoadNextStage();
+            this.stageController.LoadNextScene();
         } else {
             this.field.GenerateEnemyList(this.field.currentWaveIndex);
         }

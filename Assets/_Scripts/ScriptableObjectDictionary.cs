@@ -18,8 +18,7 @@ public class ScriptableObjectDictionary : MonoBehaviour {
     [SerializeField] private JobActionsList[] _enemyJobActionsLists = null;
 
 
-    [SerializeField]
-    private List<StageInfo> stageInfo = null;
+    [SerializeField] private List<ZoneProperties> zones = null;
 
     [SerializeField] private List<ActionBase> commonActions = null;
 
@@ -80,8 +79,8 @@ public class ScriptableObjectDictionary : MonoBehaviour {
         return jobs;
     }
 
-    public List<StageInfo> GetStageInfos() {
-        return this.stageInfo;
+    public List<ZoneProperties> GetZoneProperties() {
+        return zones;
     }
 
     public ActionBase GetCommonAction(string name) {

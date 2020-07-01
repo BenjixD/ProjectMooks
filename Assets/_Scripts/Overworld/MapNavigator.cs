@@ -11,11 +11,16 @@ public class Coord {
         this.col = col;
         this.row = row;
     }
+    
+    public override string ToString() {
+        return "Coord(" + col + ", " + row + ")";
+    }
 }
 
 public class MapNavigator : MonoBehaviour {
     [Header("References")]
     [SerializeField] private MapGenerator _mapGenerator = null;
+    [SerializeField] private MapScroller _mapScroller = null;
     [SerializeField] private GameObject _pathPrefab = null;
     [SerializeField] private GameObject _mapDisplay = null;
     [SerializeField] private RectTransform _playerIcon = null;
@@ -29,10 +34,11 @@ public class MapNavigator : MonoBehaviour {
     [Tooltip("Maximum distance that the player can move when choosing their path.")]
     [SerializeField] private int _moveRange = 1;
 
+
+    private List<ZoneProperties> _zoneProperties;
+    private int _currZoneIndex = 0;
     private StageNode[][] _currMap;
 
-    // TODO: temp, move
-    [SerializeField] private ZoneProperties[] _zoneProperties = null;
 
     private Coord _currCoord;
     private bool _canMove = false;
@@ -44,13 +50,14 @@ public class MapNavigator : MonoBehaviour {
         }
         DontDestroyOnLoad(gameObject);
 
+        _zoneProperties = GameManager.Instance.models.GetZoneProperties();
+
         _horizontalPadding = _mapGenerator.horizontalPadding;
         _verticalPadding = _mapGenerator.verticalPadding;
     }
 
     private void Start() {
-        GenerateNewMap();
-        EnableNextPaths();
+        GenerateCurrMap();
     }
 
     private void OnEnable() {
@@ -63,13 +70,14 @@ public class MapNavigator : MonoBehaviour {
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         if (scene.name == _mapSceneName) {
-            EnableNextPaths();
+            OnOpenMap();
         }
     }
 
-    private void GenerateNewMap() {
-        _currMap = _mapGenerator.GenerateZoneMap(_zoneProperties[0]);
-        SetPlayerCoord(0, _zoneProperties[0].mapRows / 2);
+    private void GenerateCurrMap() {
+        _currMap = _mapGenerator.GenerateZoneMap(_zoneProperties[_currZoneIndex]);
+        SetPlayerCoord(0, _zoneProperties[_currZoneIndex].mapRows / 2);
+        OnOpenMap();
     }
 
     private void SetPlayerCoord(int col, int row) {
@@ -78,11 +86,33 @@ public class MapNavigator : MonoBehaviour {
         _playerIcon.anchoredPosition = Vector2.zero;
     }
 
+    private void OnOpenMap() {
+        EnableNextPaths();
+        if (GetCurrStage() != null) {
+            float currStageX = GetCurrStage().GetComponent<RectTransform>().anchoredPosition.x;
+            _mapScroller.RefocusMap(-(currStageX + _horizontalPadding));
+        }
+    }
+
+    private void NextMap() {
+        if (_currZoneIndex + 1 >= _zoneProperties.Count) {
+            Debug.Log("No more zones, game complete");
+            return;
+        }
+        _playerIcon.SetParent(null);
+        _mapGenerator.DestroyMap();
+        _currZoneIndex++;
+        GenerateCurrMap();
+    }
+
     private void SetPlayerCoord(Coord coord) {
         SetPlayerCoord(coord.col, coord.row);
     }
 
     private StageNode GetCurrStage() { 
+        if (_currCoord == null) {
+            return null;
+        }
         return _currMap[_currCoord.col][_currCoord.row];
     }
 
@@ -118,8 +148,11 @@ public class MapNavigator : MonoBehaviour {
 
     private void EnableNextPaths() {
         _mapDisplay.SetActive(true);
-        if (_currCoord == null || _currCoord.col + 1 >= _currMap.Length) {
-            Debug.Log("End of map reached, no next stages");
+        if (_currCoord == null) {
+            return;
+        }
+        if (_currCoord.col + 1 >= _currMap.Length) {
+            NextMap();
             return;
         }
         _canMove = true;
@@ -176,6 +209,12 @@ public class MapNavigator : MonoBehaviour {
         }
     }
 
+    private bool CanMoveTo(Coord dest) {
+        bool nextCol = dest.col == _currCoord.col + 1;
+        bool adjacent = dest.row >= _currCoord.row - 1 && dest.row <= _currCoord.row + 1;
+        return _canMove && nextCol && adjacent;
+    }
+
     private IEnumerator Move(Coord dest) {
         // Remove branches entering the stages not chosen in the next column and grey them out
         for (int i = 0; i < _currMap[dest.col].Length; i++) {
@@ -198,11 +237,5 @@ public class MapNavigator : MonoBehaviour {
         yield return new WaitForSeconds(1f);
         GetCurrStage().EnterStage();
         _mapDisplay.SetActive(false);
-    }
-
-    private bool CanMoveTo(Coord dest) {
-        bool nextCol = dest.col == _currCoord.col + 1;
-        bool adjacent = dest.row >= _currCoord.row - 1 && dest.row <= _currCoord.row + 1;
-        return _canMove && nextCol && adjacent;
     }
 }
