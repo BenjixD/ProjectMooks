@@ -10,7 +10,7 @@ public class TimeManager : MonoBehaviour
 
     [SerializeField] private bool isPaused = false;
 
-    [SerializeField] private TimeController timeControllerPrefab;
+    [SerializeField] private TimeController timeControllerPrefab = null;
 
     private TimeController controller = null;
 
