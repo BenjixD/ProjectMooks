@@ -10,7 +10,7 @@ public class PlayerCreationData {
 
 	public PlayerCreationData(string n, PlayerStats template) {
 		this.name = n;
-		this.stats = new PlayerStats(template);
+		this.stats = (PlayerStats)template.Clone();
 		this.stats.RandomizeStats();
 		this.stats.ResetStats();
 		this.job = ChooseJobFromStats(template);
@@ -25,11 +25,11 @@ public class PlayerCreationData {
 
 	// TODO: Probably should use some kind of k-means clustering instead of defined logic
 	private Job ChooseJobFromStats(PlayerStats template) {
-		if(stats.maxHp > template.maxHp && stats.maxPhysical > stats.maxSpecial) {
+		if(stats.maxHp.GetBaseValue() > template.maxHp.GetBaseValue() && stats.physical.GetBaseValue() > stats.special.GetBaseValue()) {
 			return Job.WARRIOR;
-		} else if(stats.maxMana > template.maxMana && stats.maxSpecial > stats.maxPhysical) {
+		} else if(stats.maxMana.GetBaseValue() > template.maxMana.GetBaseValue() && stats.special.GetBaseValue() > stats.physical.GetBaseValue()) {
 			return Job.MAGE;
-		} else if(stats.maxDefense > template.maxDefense && stats.maxResistance > template.maxResistance) {
+		} else if(stats.defence.GetBaseValue() > template.defence.GetBaseValue() && stats.resistance.GetBaseValue() > template.resistance.GetBaseValue()) {
 			return Job.CLERIC;
 		} else {
             List<Job> jobsList = GameManager.Instance.models.getMookJobs();

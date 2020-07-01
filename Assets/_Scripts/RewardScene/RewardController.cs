@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
+using System;
 
 public enum RewardRarity {
     COMMON,
@@ -33,7 +33,6 @@ public class RewardController : MonoBehaviour
     public List<ValueWeightRewardRarity> rewardRarityWeights;
     public RewardControllerUI ui;
 
-    public SceneChanger sceneChanger;
 
 
     private List<PlayerReward> currentRewards;
@@ -47,10 +46,12 @@ public class RewardController : MonoBehaviour
     // rarity => playerRewardPool
     //private Dictionary<RewardRarity, RandomPool<PlayerReward>> rewardPools;
     private RandomPool<PlayerReward> finalRewardPool;
+    private Action callback;
 
-    public void Initialize()
+    public void Initialize(Action callback)
     {
-        this.InitializeRewards();        
+        this.callback = callback;
+        this.InitializeRewards();
     }
 
     public void InitializeRewards() {
@@ -139,7 +140,7 @@ public class RewardController : MonoBehaviour
         while (true) {
             if (Input.GetKeyDown(KeyCode.Z)) {
                 this.ApplyReward(this.selectedReward);
-                this.sceneChanger.ChangeScene();
+                this.callback();
                 yield break;
             }
 

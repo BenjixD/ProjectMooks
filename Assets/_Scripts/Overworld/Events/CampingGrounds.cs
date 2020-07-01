@@ -5,7 +5,7 @@ using UnityEngine;
 public class CampingGrounds : EventStage {
     protected override void BeginEvent() {
         PlayerStats heroStats = GameManager.Instance.gameState.playerParty.GetFighters<Player>()[0].playerCreationData.stats;
-        heroStats.SetHp(heroStats.maxHp);
-        heroStats.SetMana(heroStats.maxMana);
+        heroStats.hp.SetValue(heroStats.maxHp.GetValue());
+        heroStats.mana.SetValue(heroStats.maxMana.GetValue());
     }
 }

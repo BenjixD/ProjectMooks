@@ -85,23 +85,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _template:
     level: 1
-    maxHp: 30
-    maxMana: 100
-    maxPhysical: 25
-    maxSpecial: 25
-    maxDefense: 7
-    maxResistance: 7
-    maxSpeed: 25
-    isRare: 0
-    _hp: 0
-    _mana: 0
-    _physical: 0
-    _special: 0
-    _defense: 0
-    _resistance: 0
-    _speed: 0
-    _hpRegen: 0
-    _manaRegen: 0
+    hp:
+      stat: 0
+      currentValue: 1
+    maxHp:
+      stat: 1
+      currentValue: 500
+      baseValue: 500
+    mana:
+      stat: 2
+      currentValue: 1
+    maxMana:
+      stat: 3
+      currentValue: 1
+      baseValue: 20
+    physical:
+      stat: 4
+      currentValue: 1
+      baseValue: 20
+    special:
+      stat: 5
+      currentValue: 1
+      baseValue: 20
+    defence:
+      stat: 6
+      currentValue: 1
+      baseValue: 20
+    resistance:
+      stat: 7
+      currentValue: 1
+      baseValue: 20
+    speed:
+      stat: 8
+      currentValue: 1
+      baseValue: 20
 --- !u!114 &1133189570
 MonoBehaviour:
   m_ObjectHideFlags: 0

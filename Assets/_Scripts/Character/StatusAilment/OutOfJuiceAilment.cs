@@ -16,11 +16,12 @@ public class OutOfJuiceAilment : StatusAilment {
 	public override void Recover(FightingEntity p) {
 		//TODO: Possible Animation Modifications
 
-        GameManager.Instance.turnController.EvictMook(p);
+        GameManager.Instance.battleComponents.EvictMook(p);
 	}
 
 	public override void TickEffect(FightingEntity p) {
-        p.stats.SetMana(p.stats.GetMana() - 1);
-        GameManager.Instance.turnController.ui.statusBarsUI.UpdateStatusBars();
+        p.stats.mana.ApplyDelta(-1);
+        GameManager.Instance.battleComponents.ui.statusBarsUI.UpdateStatusBars();
+
 	}
 }

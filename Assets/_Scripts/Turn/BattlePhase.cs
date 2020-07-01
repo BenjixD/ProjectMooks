@@ -45,9 +45,12 @@ public class BattlePhase : Phase {
         // Set Mook Commands
         this.SetUnsetMookCommands();
 
+
+        Debug.Log("ON BATTLE PHASE Start");
+
         // Order Players
         fighters = new List<FightingEntity>(this._field.GetAllFightingEntities());
-        fighters.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.GetSpeed().CompareTo(a.stats.GetSpeed()); });
+        fighters.Sort( (FightingEntity a, FightingEntity b) =>  {  return b.stats.speed.GetValue().CompareTo(a.stats.speed.GetValue()); });
         result = new BattleResult(fighters);
 
         // Call Base Implementation

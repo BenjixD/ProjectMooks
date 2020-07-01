@@ -56,17 +56,17 @@ public class StatusBarsUI : MonoBehaviour
                 ManaStatusBarUI heroStatusBar = (ManaStatusBarUI)statusBars[i];
                 heroStatusBar.SetFighter(player);
                 heroStatusBar.SetName(player.Name);
-                heroStatusBar.SetHP(player.stats.GetHp(), players[i].stats.maxHp);
-                heroStatusBar.SetMana(player.stats.GetMana(), player.stats.maxMana);
+                heroStatusBar.SetHP(player.stats.hp.GetValue(), player.stats.maxHp.GetValue());
+                heroStatusBar.SetMana(player.stats.mana.GetValue(), player.stats.maxMana.GetValue());
                 heroStatusBar.SetNameColor(player.GetOrderColor());
             } else {
                 // Mooks have energy
                 MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
                 mookStatusBar.SetFighter(player);
                 mookStatusBar.SetName(player.Name);
-                mookStatusBar.SetHP(player.stats.GetHp(), player.stats.maxHp);
+                mookStatusBar.SetHP(player.stats.hp.GetValue(), player.stats.maxHp.GetValue());
                 // Note: Energy might be its own thing later, but for now, lets just use mana
-                mookStatusBar.SetEnergy(player.stats.GetMana(), player.stats.maxMana);
+                mookStatusBar.SetEnergy(player.stats.mana.GetValue(), player.stats.maxMana.GetValue());
                 mookStatusBar.SetNameColor(player.GetOrderColor());
             }
 
@@ -84,7 +84,7 @@ public class StatusBarsUI : MonoBehaviour
 
             enemyStatusBars[i].SetFighter(enemy);
             enemyStatusBars[i].SetName(enemies[i].targetName);
-            enemyStatusBars[i].SetHP(enemies[i].stats.GetHp(), enemies[i].stats.maxHp);
+            enemyStatusBars[i].SetHP(enemies[i].stats.hp.GetValue(), enemies[i].stats.maxHp.GetValue());
 
             this.enemyStatusBars[i].gameObject.SetActive(true);
         }

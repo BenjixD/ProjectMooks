@@ -11,17 +11,13 @@ public class FightingEntity : MonoBehaviour
 
     public Job job;
 
-    public List<ActionBase> actions = new List<ActionBase>();
+    public List<ActionBase> actions;
+    public bool isRare = false;
 
     public int targetId;
     public string targetName;
 
     public FighterSlot fighterSlot {get; set;}
-
-    public bool isRare = false;
-
-    [SerializeField]
-    protected float rareRate = 0.01f;
 
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
@@ -41,12 +37,14 @@ public class FightingEntity : MonoBehaviour
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
     }
     
-    public void Initialize(int index, PlayerCreationData data) {
+    public void Initialize(int index, Fighter persistentFighter) {
         this.targetId = index;
-		Name = data.name;
+		this.Name = persistentFighter.Name;
+        this.stats = persistentFighter.stats;
+        this.job = persistentFighter.job;
+        this.actions = persistentFighter.actions;
+        this.isRare = persistentFighter.isRare;
 
-        SetStats(data.stats);
-        SetJob(data.job);
         _ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.battleComponents.field.GetTargetNameFromIndex(index);
         _ailmentController = new AilmentController(this);
@@ -57,54 +55,15 @@ public class FightingEntity : MonoBehaviour
         if (!this.isEnemy() && index != 0) {
             OutOfJuiceAilment outOfJuicePrefab = (OutOfJuiceAilment)GameManager.Instance.models.GetCommonStatusAilment("Out of Juice");
             this._ailmentController.AddStatusAilment(Instantiate(outOfJuicePrefab));
-            data.stats.SetMana(outOfJuicePrefab.duration);
-            data.stats.maxMana = outOfJuicePrefab.duration;
+            this.stats.mana.SetValue(outOfJuicePrefab.duration);
+            this.stats.maxMana.SetValue(outOfJuicePrefab.duration);
         }
 
 	}
 
-    public void SetStats(PlayerStats stats) {
-        this.stats = stats;
-    }
-
     // Getters / Setters 
     public string GetJobName() {
         return job.ToString();
-    }
-
-
-    public void SetJob(Job job) {
-        this.job = job;
-        if (this.isEnemy()) {
-            actions = new List<ActionBase>(GameManager.Instance.models.GetEnemyJobActions(job));
-        } else if (this.IsHero()) {
-            actions = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
-        } else {
-            float randomSeed = Random.value;
-
-            if (randomSeed <= this.rareRate) {
-                this.isRare = true; // TODO: Modify Mook based on rare status
-            }
-
-            // Mooks have more specific logic regarding skills because they can only have at most 3 specific, 1 general.
-            List<ActionBase> actionPool = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
-            if (actionPool.Count <= 3) {
-                actions = actionPool;
-            } else {
-                actions = new List<ActionBase>();
-                while (actions.Count < 3) {
-                    int randIndex = Random.Range(0, actionPool.Count);
-                    actions.Add( actionPool[randIndex] );
-                    actionPool.RemoveAt(randIndex);
-                }
-
-                
-            }
-
-            List<ActionBase> commonMookActionPool = GameManager.Instance.models.GetCommonMookActionPool();
-            int commonActionIndex = Random.Range(0, commonMookActionPool.Count);
-            actions.Add(commonMookActionPool[commonActionIndex]);
-        }
     }
 
     public AilmentController GetAilmentController() {

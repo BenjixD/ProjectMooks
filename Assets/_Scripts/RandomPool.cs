@@ -38,6 +38,12 @@ public class EnumWrapper<T> where T : struct {
 public class ValueWeight<T> where T : class {
     public T value;
     public float weight;
+
+    public ValueWeight(){}
+    public ValueWeight(T value, float weight) {
+        this.value = value;
+        this.weight = weight;
+    }
 };
 
 [System.Serializable]

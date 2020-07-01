@@ -5,263 +5,411 @@ using System;
 
 public enum Stat {
 	HP,
-	MAX_HP,
+    MAX_HP,
 	MANA,
-	MAX_MANA,
+    MAX_MANA,
 	PHYSICAL,
 	SPECIAL,
 	DEFENSE,
 	RESISTANCE,
 	SPEED
-}
+};
+
+[System.Serializable]
+public class PlayerStat : ICloneable {
+    public Stat stat; // Set in inspector pls
+
+    [SerializeField] // Note: the only reason it's serializable is for debugging purposes.
+    protected int currentValue; // Updated on applying StatModifer
+    
+    protected int minValue = Int32.MinValue; // Usually only necessary for health/mana
+    protected int maxValue = Int32.MaxValue;
+
+    public PlayerStat(){
+    }
+
+    public PlayerStat(Stat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue) {
+        this.stat = stat;
+        this.currentValue = value;
+    }
+
+    public void SetMinMax(int min, int max) {
+        this.minValue = min;
+        this.maxValue = max;
+        this.currentValue = Mathf.Clamp(this.currentValue, minValue, maxValue);
+    }
+
+    public virtual void SetValue(int value) {
+        this.currentValue = Mathf.Clamp(value, minValue, maxValue);
+    }
+
+    public virtual void ApplyDelta(int delta) {
+        this.SetValue(this.GetValue() + delta );
+    }
+
+    public virtual int GetValue() {
+        return this.currentValue;
+    }
+
+    public virtual object Clone()
+    {
+        PlayerStat stat = new PlayerStat(this.stat, this.currentValue);
+        return stat;
+    }
+
+};
+
+// "baseValue" is max
+// current value cannot go higher than base value.
+[System.Serializable]
+public class PlayerStatWithModifiers : PlayerStat {
+
+    public int originalBaseValue {get; set;}
+
+    [SerializeField]
+    private int baseValue; // Can set in inspector if you need to
+
+    private PriorityList<StatModifier> modifiers = new PriorityList<StatModifier>();
+
+    private Action<int> callback = null;
+
+
+    public PlayerStatWithModifiers(Stat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue, Action<int> callback = null)
+    : base(stat, value, minValue, maxValue) {
+        this.baseValue = value;
+        this.callback = callback;
+        this.originalBaseValue = this.baseValue;
+    }
+
+    public void SetCallback(Action<int> callback) {
+        this.callback = callback;
+    }
+
+    public override int GetValue() {
+
+        int runningValue = baseValue;
+
+        foreach (StatModifier modifier in this.modifiers) {
+            runningValue = modifier.Apply(runningValue, this.baseValue, this.minValue, this.maxValue);
+        }
+
+        this.currentValue = runningValue;
+
+        if (this.callback != null) {
+            this.callback(this.currentValue);
+        }
+
+        return this.currentValue;
+    }
+
+    // Note: This FORCE sets the BASE value. Use sparingly.
+    public override void SetValue(int value) {
+        this.ClearModifiers();
+        this.baseValue = Mathf.Clamp(value, minValue, maxValue);
+    }
+
+    public override void ApplyDelta(int delta) {
+        this.ApplyDeltaModifier(delta, StatModifier.Type.FLAT);
+    }
+
+    public override object Clone()
+    {
+        PlayerStatWithModifiers stat = new PlayerStatWithModifiers(this.stat, this.baseValue, this.minValue, this.maxValue, this.callback);
+        PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
+
+        foreach (StatModifier modifier in this.modifiers) {
+            clonedModifiers.Add((StatModifier)modifier.Clone());
+        }
+
+        stat.modifiers = clonedModifiers;
+
+        return stat;
+    }
+
+    // Helper for simply applying change
+    public StatModifier ApplyDeltaModifier(float delta, StatModifier.Type type = StatModifier.Type.FLAT) {
+        StatModifier modifier = new StatModifier(type, delta);
+        this.ApplyModifier(modifier);
+        this.GetValue();
+        return modifier;
+    }
+
+    public int GetBaseValue() {
+        return this.baseValue;
+    }
+
+    public void SetBaseValue(int value, bool setOriginalValue = false) {
+        this.baseValue = value;
+        if (setOriginalValue) {
+            this.originalBaseValue = this.baseValue;
+        }
+    }
+
+    // Modifier helpers
+    public PriorityList<StatModifier> GetModifiers() {
+        return this.modifiers;
+    }
+
+    public void ApplyModifier(StatModifier modifier) {
+        this.modifiers.Add(modifier);
+    }
+
+    public void RemoveModifier(StatModifier modifier) {
+        this.modifiers.Remove(modifier);
+    }
+
+    public void ClearModifiers() {
+        this.modifiers.Clear();
+    }
+
+    public void RandomizeBase(int minValue, int maxValue) {
+        this.SetBaseValue((int)(maxValue * (BoxMuller.GetRandom() + 1)) + minValue, true);
+    }
+
+};
+
+[System.Serializable]
+public class StatModifier : ICloneable, IComparable<StatModifier> {
+    public enum Type {
+        FLAT,
+        ADD_PERCENTAGE,
+        MULTIPLY_PERCENTAGE
+    };
+
+    public float value;
+    public StatModifier.Type type;
+    public int priority = 1;
+
+    public StatModifier(){}
+
+    // Note: Should be able to be both Serializable, and instantiable.
+    public StatModifier(StatModifier.Type type, float value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    // Modifer is in its own class and virtual to enable more control in case you want to do something super special
+    public virtual int Apply(int runningValue, int baseValue, int minValue, int maxValue) {
+        long resValue = runningValue;
+		switch(this.type) {
+			case Type.ADD_PERCENTAGE:
+                resValue += (int)(baseValue * value / 100);
+				break;
+            case Type.MULTIPLY_PERCENTAGE:
+                resValue *= (int)(baseValue * value / 100);
+                break;
+			case Type.FLAT:
+                resValue += (int)value;
+				break;
+		}
+
+        resValue = (long)Mathf.Clamp(resValue, minValue, maxValue);
+
+        return (int)resValue;
+    }
+
+    public object Clone()
+    {
+        return new StatModifier(this.type, this.value);
+    }
+
+    public int CompareTo(StatModifier other)
+    {
+        if (this.priority < other.priority) return -1;
+        else if (this.priority > other.priority) return 1;
+        else return 0;
+    }
+
+};
 
 [System.Serializable]
 public class PlayerStats: ICloneable {
-	public int level;
+	public int level = 1;
+    public int statPoints = 0;
+    public PlayerStat hp = new PlayerStat(Stat.HP, 1);
+    public PlayerStatWithModifiers maxHp = new PlayerStatWithModifiers(Stat.MAX_HP, 1);
+    public PlayerStat mana = new PlayerStat(Stat.MANA, 1);
+    public PlayerStatWithModifiers maxMana = new PlayerStatWithModifiers(Stat.MAX_MANA, 1);
 
-	// Max Stats
-	public int maxHp;
-	public int maxMana;
-	public int maxPhysical;
-	public int maxSpecial;
-	public int maxDefense;
-	public int maxResistance;
-	public int maxSpeed;
-	public bool isRare;
+    public PlayerStatWithModifiers physical = new PlayerStatWithModifiers(Stat.PHYSICAL, 1);
+    public PlayerStatWithModifiers special = new PlayerStatWithModifiers(Stat.SPECIAL, 1);
+    public PlayerStatWithModifiers defence = new PlayerStatWithModifiers(Stat.DEFENSE, 1);
+    public PlayerStatWithModifiers resistance = new PlayerStatWithModifiers(Stat.RESISTANCE, 1);
+    public PlayerStatWithModifiers speed = new PlayerStatWithModifiers(Stat.SPEED, 1);
 
-	// Base Stats
-	[SerializeField]
-	private int _hp;
-	[SerializeField]
-	private int _mana;
-	[SerializeField]
-	private int _physical;
-	[SerializeField]
-	private int _special;
-	[SerializeField]
-	private int _defense;
-	[SerializeField]
-	private int _resistance;
-	[SerializeField]
-	private int _speed;
-
-	// Regen Fields
-	[SerializeField]
-	private int _hpRegen;
-	[SerializeField]
-	private int _manaRegen;
+    private Dictionary<Stat, PlayerStatWithModifiers> modifiableStats;
 
 	public PlayerStats() {
-		level = 1;
+        this.Initialize();
 	}
 
-	public PlayerStats(PlayerStats stats) {
-		maxHp = stats.maxHp;
-		maxMana = stats.maxMana;
-		maxPhysical = stats.maxPhysical;
-		maxSpecial = stats.maxSpecial;
-		maxDefense = stats.maxDefense;
-		maxResistance = stats.maxResistance;
-		maxSpeed = stats.maxSpeed;
-	}
+    private void Initialize() {
+		level = 1;
+        this.modifiableStats = new Dictionary<Stat, PlayerStatWithModifiers>();
+        this.modifiableStats.Add(Stat.MAX_HP, maxHp);
+        this.modifiableStats.Add(Stat.MAX_MANA, maxMana);
+        this.modifiableStats.Add(Stat.PHYSICAL, physical);
+        this.modifiableStats.Add(Stat.SPECIAL, special);
+        this.modifiableStats.Add(Stat.DEFENSE, defence);
+        this.modifiableStats.Add(Stat.RESISTANCE, resistance);
+        this.modifiableStats.Add(Stat.SPEED, speed);
+
+        this.SetupStatPair(hp, maxHp);
+        this.SetupStatPair(mana, maxMana);
+    }
 
 	public void RandomizeStats() {
-		maxHp = (int)(maxHp * (BoxMuller.GetRandom() + 1)) + 1;
-		maxMana = (int)(maxMana * (BoxMuller.GetRandom() + 1)) + 1;
-		maxSpeed = (int)(maxSpeed * (BoxMuller.GetRandom() + 1));
+        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+            PlayerStatWithModifiers stat = statPair.Value;
+            stat.RandomizeBase(1, stat.GetBaseValue());
 
-		maxPhysical = (int)(maxPhysical * (BoxMuller.GetRandom() + 1));
-		maxSpecial = (int)(maxSpecial * (BoxMuller.GetRandom() + 1));
-
-		maxDefense = (int)(maxDefense * (BoxMuller.GetRandom() + 1));
-		maxResistance = (int)(maxResistance * (BoxMuller.GetRandom() + 1));
+            this.hp.SetValue(this.maxHp.GetValue());
+            this.mana.SetValue(this.maxMana.GetValue());            
+        }
 	}
 
 	public object Clone() {
-		return this.MemberwiseClone();
+        PlayerStats stats = new PlayerStats();
+        stats.level = this.level;
+
+        stats.hp = (PlayerStat)this.hp.Clone();
+        stats.mana = (PlayerStat)this.mana.Clone();
+
+        stats.maxHp = (PlayerStatWithModifiers)this.maxHp.Clone();
+        stats.maxMana = (PlayerStatWithModifiers)this.maxMana.Clone();
+        stats.physical = (PlayerStatWithModifiers)this.physical.Clone();
+        stats.special = (PlayerStatWithModifiers)this.special.Clone();
+        stats.defence = (PlayerStatWithModifiers)this.defence.Clone();
+        stats.resistance = (PlayerStatWithModifiers)this.resistance.Clone();
+        stats.speed = (PlayerStatWithModifiers)this.speed.Clone();
+
+        stats.Initialize();
+
+		return stats;
 	}
 
 	public void LogStats() {
-		Debug.Log("HP: " + _hp);
-		Debug.Log("MANA: " + _mana);
-		Debug.Log("PHYSICAL: " + _physical);
-		Debug.Log("SPECIAL: " + _special);
-		Debug.Log("DEFENSE: " + _defense);
-		Debug.Log("RESISTANCE: " + _resistance);
-		Debug.Log("SPEED: " + _speed);
+		Debug.Log("HP: " + hp.GetValue());
+		Debug.Log("MANA: " + mana.GetValue());
+		Debug.Log("PHYSICAL: " + physical.GetValue());
+		Debug.Log("SPECIAL: " + special.GetValue());
+		Debug.Log("DEFENSE: " + defence.GetValue());
+		Debug.Log("RESISTANCE: " + resistance.GetValue());
+		Debug.Log("SPEED: " + speed.GetValue());
 	}
 
-	public int GetStat(Stat stat) {
+	public PlayerStat GetStat(Stat stat) {
 		switch(stat) {
 			case (Stat.HP):
-				return GetHp();
-			case (Stat.MAX_HP):
-				return maxHp;
+				return this.hp;
+            case (Stat.MAX_HP):
+                return this.maxHp;
 			case (Stat.MANA):
-				return GetMana();
-			case (Stat.MAX_MANA):
-				return maxMana;
+				return this.mana;
+            case (Stat.MAX_MANA):
+                return this.maxMana;
 			case (Stat.PHYSICAL):
-				return GetPhysical();
+				return this.physical;
 			case (Stat.SPECIAL):
-				return GetSpecial();
+				return this.special;
 			case (Stat.DEFENSE):
-				return GetDefense();
+				return this.defence;
 			case (Stat.RESISTANCE):
-				return GetResistance();
+				return this.resistance;
 			case (Stat.SPEED):
-				return GetSpeed();
+				return this.speed;
 		}
 		Debug.LogWarning("Tried to retrieve invalid stat.");
-		return 0;
+		return this.hp;
 	}
 
-	public void ModifyStat(Stat stat, int value) {
-		switch(stat) {
-			case (Stat.HP):
-				SetHp(GetHp() + value);
-				break;
-			case (Stat.MAX_HP):
-				maxHp += value;
-				break;
-			case (Stat.MANA):
-				SetMana(GetMana() + value);
-				break;
-			case (Stat.MAX_MANA):
-				maxMana += value;
-				break;
-			case (Stat.PHYSICAL):
-				SetPhysical(GetPhysical() + value);
-				break;
-			case (Stat.SPECIAL):
-				SetSpecial(GetSpecial() + value);
-				break;
-			case (Stat.DEFENSE):
-				SetDefense(GetDefense() + value);
-				break;
-			case (Stat.RESISTANCE):
-				SetResistance(GetResistance() + value);
-				break;
-			case (Stat.SPEED):
-				SetSpeed(GetSpeed() + value);
-				break;
-		}
+	public int GetStatValue(Stat stat) {
+		return this.GetStat(stat).GetValue();
 	}
 
-	// Getter / Setter ------------ //
-	public int GetHp() {
-		return _hp;
-	}
-
-	public void SetHp(int hp) {
-		_hp = hp;
-		if(_hp < 0) {
-			_hp = 0;
-		}
-	}
-
-	public int GetMana() {
-		return _mana;
-	}
-
-	public void SetMana(int mana) {
-		_mana = mana;
-		if(_mana < 0) {
-			_mana = 0;
-		}
-	}
-
-	public int GetPhysical() {
-		return _physical;
-	}
-
-	public void SetPhysical(int physical) {
-		_physical = physical;
-		if(_physical < 0) {
-			_physical = 0;
-		}
-	}
-
-	public int GetSpecial() {
-		return _special;
-	}
-
-	public void SetSpecial(int special) {
-		_special = special;
-		if(_special < 0) {
-			_special = 0;
-		}
-	}
-
-	public int GetDefense() {
-		return _defense;
-	}
-
-	public void SetDefense(int defense) {
-		_defense = defense;
-		if(_defense < 0) {
-			_defense = 0;
-		}
-	}
-
-	public int GetResistance() {
-		return _resistance;
-	}
-
-	public void SetResistance(int resistance) {
-		_resistance = resistance;
-		if(_resistance < 0) {
-			_resistance = 0;
-		} 
-	}
-
-	public int GetSpeed() {
-		return _speed;
-	}
-
-	public void SetSpeed(int speed) {
-		_speed = speed;
-		if(_speed < 0) {
-			_speed = 0;
-		}
-	}
 
 	// Resetter ------------------//
 	public void ResetStats() {
-		ResetHp();
-		ResetMana();
-		ResetPhysical();
-		ResetSpecial();
-		ResetDefense();
-		ResetResistance();
-		ResetSpeed();	
+        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+            PlayerStatWithModifiers stat = statPair.Value;
+            stat.ClearModifiers();
+            stat.GetValue();
+        }
 	}
 
-	public void ResetHp() {
-		_hp = maxHp;
-	}
+    // Level up stat. Used for hero.
+    public bool LevelUpStat(Stat stat) {
+        if (!this.modifiableStats.ContainsKey(stat)) {
+            Debug.LogError("ERROR: Not assignable stat");
+            return false;
+        }
 
-	public void ResetMana() {
-		_mana = maxMana;
-	}
+        PlayerStatWithModifiers theStat = this.modifiableStats[stat];
 
-	public void ResetPhysical() {
-		_physical = maxPhysical;
-	}
+        int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
+        if (costToLevelUp > this.statPoints) {
+            Debug.LogWarning("Not enough stat points to level up!");
+            return false;
+        }
 
-	public void ResetSpecial() {
-		_special = maxSpecial;
-	}
+        this.statPoints -= costToLevelUp;
+        theStat.SetBaseValue(theStat.GetBaseValue() + 1);
+        return true;
+    }
 
-	public void ResetDefense() {
-		_defense = maxDefense;
-	}
+    // Applys level assuming that 
+    public void ApplyStatsBasedOnLevel(int level) {
 
-	public void ResetResistance() {
-		_resistance = maxResistance;
-	}
+        if (level <= this.level) {
+            return;
+        }
 
-	public void ResetSpeed() {
-		_speed = maxSpeed;
-	}
+        statPoints += StatLevelHelpers.GetNumStatPointsForLevelUp(this.level, level);
+        this.level = level;
+
+        if (statPoints == 0) {
+          return;
+        }
+
+        List<ValueWeight<PlayerStatWithModifiers>> statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
+        do {
+            statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
+            foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+                PlayerStatWithModifiers statWithModifiers = statPair.Value;
+                if (statPoints >=  StatLevelHelpers.GetCostToLevelUpStat(statWithModifiers.GetBaseValue())) {
+                    statsWithModifiersWeights.Add(new ValueWeight<PlayerStatWithModifiers>(statWithModifiers, statWithModifiers.originalBaseValue));
+                }
+            }
+
+            if (statsWithModifiersWeights.Count <= 0) {
+                break;
+            }
+
+            RandomPool<PlayerStatWithModifiers> statsPool = new RandomPool<PlayerStatWithModifiers>(statsWithModifiersWeights);
+            PlayerStatWithModifiers theStat = statsPool.PickOne();
+            int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue());
+            theStat.SetBaseValue(theStat.GetBaseValue() + 1);
+            statPoints -= costToLevelUp;
+        } while (statsWithModifiersWeights.Count > 0);
+
+        this.hp.SetValue(this.maxHp.GetValue());
+        this.mana.SetValue(this.maxMana.GetValue());
+
+    }
+
+    public void LevelUp() {
+        int additionalStatPoints = StatLevelHelpers.GetNumStatPointsForLevelUp(this.level, this.level+1);
+        this.statPoints += additionalStatPoints;
+    }
+
+    public Dictionary<Stat, PlayerStatWithModifiers> GetModifiableStats() {
+        return this.modifiableStats;
+    }
+
+    // Setup stat pairs for like hp/max hp and mana/max mana
+    private void SetupStatPair(PlayerStat curStat, PlayerStatWithModifiers maxStat) {
+        curStat.SetMinMax(0, maxStat.GetBaseValue());
+        curStat.SetValue(maxStat.GetBaseValue());
+        maxStat.SetCallback( (int maxValue) => curStat.SetMinMax(0, maxValue) );
+    }
 }

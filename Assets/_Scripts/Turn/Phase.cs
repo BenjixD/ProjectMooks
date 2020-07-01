@@ -33,7 +33,6 @@ public abstract class Phase : IDisposable {
     }
 
     public IEnumerator RunPhase() {
-        Debug.Log("Starting Phase: " + this.GetType().Name);
         OnPhaseStart();
         _coroutine = GameManager.Instance.time.GetController().StartCoroutine(Run());
         yield return _coroutine;

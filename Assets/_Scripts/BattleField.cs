@@ -20,6 +20,17 @@ public class BattleField : MonoBehaviour
         this.InitializeEnemies();
     }
 
+    
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.K)) {
+            List<EnemyObject> enemies = this.GetActiveEnemyObjects();
+            foreach(EnemyObject enemy in enemies) {
+                enemy.stats.hp.SetValue(0);
+                DeathResult deathResult = new DeathResult(enemy, new DamageReceiver(enemy, enemy.stats, enemy.stats), null);
+                Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, deathResult);
+            }
+        }
+    }
 
     // Field helper functions ===
     public PlayerObject GetHeroPlayer() {
@@ -111,18 +122,21 @@ public class BattleField : MonoBehaviour
             string name = jobList.prefab.Name + " (" + GetTargetNameFromIndex(i) + ")";
             int index = i;
 
-
             Enemy enemy = new Enemy();
+            enemy.Initialize(jobList, name);
             EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
 
             // Apply stat adjustments based on difficulty
             PlayerStats stats = instantiatedEnemy.stats;
+            /*
             foreach(Stat stat in System.Enum.GetValues(typeof(Stat))) {
                 stats.ModifyStat(stat, (int) (stats.GetStat(stat) * mult));
             }
+            */
+            int level = (int)(1f * mult); // TODO: revisie this algorithm 
+            stats.ApplyStatsBasedOnLevel(level);
 
             // TODO: Some sort of entrance animation
-            
             instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
             FighterSlot slot = enemySlots[i];
             slot.InitializePosition(instantiatedEnemy);
@@ -194,8 +208,6 @@ public class BattleField : MonoBehaviour
         JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(player.playerCreationData.job);
         PlayerObject playerObject = player.InstantiateFromJob<PlayerObject>(jobActionsList, player.playerCreationData.name, index);
 
-
         return playerObject;
     }
-
 }

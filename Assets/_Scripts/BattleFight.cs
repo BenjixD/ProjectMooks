@@ -91,7 +91,7 @@ public class BattleFight : IDisposable
 
     private void CheckIfAnyEntityDied(FightResult result, ActionBase action) {
         foreach (var damageReceiver in result.receivers) {
-            if (damageReceiver.fighter.stats.GetHp() <= 0) {
+            if (damageReceiver.fighter.stats.hp.GetValue() <= 0) {
                 DeathResult deathResult = new DeathResult(result.fighter, damageReceiver, action);
                 Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, deathResult);
             }

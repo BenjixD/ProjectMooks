@@ -17,10 +17,11 @@ public class PlayerParty : Party {
         // Creates the hero player
         JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(Job.HERO);
         FightingEntity heroPrefab = jobActionsList.prefab;
-        PlayerStats stats = new PlayerStats(heroPrefab.stats);
+        PlayerStats stats = (PlayerStats)heroPrefab.stats.Clone();
+        // stats.RandomizeStats(); // May or may not want this...
         PlayerCreationData heroData = new PlayerCreationData(heroName, stats, Job.HERO);
         Player hero = new Player();
-        hero.SetPlayerCreationData(heroData);
+        hero.Initialize(jobActionsList, heroName);
         this.SetFighter(0, hero);
     }
 
@@ -72,7 +73,7 @@ public class PlayerParty : Party {
             PlayerCreationData data = playerQueue.Dequeue();
             if(data != null) {
                 Player player = new Player();
-                player.SetPlayerCreationData(data);
+                player.Initialize(data, data.name);
                 players.Add(player);
             }
         }
