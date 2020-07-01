@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1365926307686284328, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: _defaultAnims.Array.data[0]
+      value: idle
+      objectReference: {fileID: 0}
     - target: {fileID: 2979245312994801430, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

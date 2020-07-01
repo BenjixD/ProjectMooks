@@ -53,37 +53,46 @@ MonoBehaviour:
   Name: dvchibot
   stats:
     level: 1
+    statPoints: 0
     hp:
       stat: 0
+      currentValue: 1
     maxHp:
       stat: 1
-      baseValue: 30
+      currentValue: 1
+      baseValue: 1
     mana:
       stat: 2
+      currentValue: 1
     maxMana:
       stat: 3
-      baseValue: 30
+      currentValue: 1
+      baseValue: 1
     physical:
       stat: 4
-      baseValue: 15
+      currentValue: 1
+      baseValue: 1
     special:
       stat: 5
-      baseValue: 30
+      currentValue: 1
+      baseValue: 1
     defence:
       stat: 6
-      baseValue: 30
+      currentValue: 1
+      baseValue: 1
     resistance:
       stat: 7
-      baseValue: 30
+      currentValue: 1
+      baseValue: 1
     speed:
       stat: 8
-      baseValue: 30
+      currentValue: 1
+      baseValue: 1
   job: 0
   actions: []
+  isRare: 0
   targetId: 0
   targetName: 
-  isRare: 0
-  rareRate: 0.01
   fighterMessageBox: {fileID: 0}
 --- !u!114 &2080289099
 MonoBehaviour:
@@ -197,7 +206,6 @@ MonoBehaviour:
   - cape idle
   - hair idle
   - idle pose
-  - book idle
 --- !u!114 &-489335705822062292
 MonoBehaviour:
   m_ObjectHideFlags: 0
