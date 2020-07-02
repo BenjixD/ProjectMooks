@@ -88,7 +88,7 @@ MonoBehaviour:
     statPoints: 0
     hp:
       stat: 0
-      currentValue: 1
+      currentValue: 15
     maxHp:
       stat: 1
       currentValue: 1

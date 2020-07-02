@@ -16,6 +16,7 @@ public class OutOfJuiceAilment : StatusAilment {
 	public override void Recover(FightingEntity p) {
 		//TODO: Possible Animation Modifications
 
+        
         GameManager.Instance.battleComponents.EvictMook(p);
 	}
 
