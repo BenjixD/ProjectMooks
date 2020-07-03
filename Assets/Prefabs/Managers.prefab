@@ -85,6 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _template:
     level: 1
+    statPoints: 0
     hp:
       stat: 0
       currentValue: 1
@@ -134,8 +135,9 @@ MonoBehaviour:
   _playerJobActionsLists:
   - {fileID: 11400000, guid: bd82d9fdf5b21804caff0ce69b578f01, type: 2}
   - {fileID: 11400000, guid: 560d63ceaa43a8146b242f0b21c603c9, type: 2}
-  - {fileID: 11400000, guid: d09a40123d671e8488ff6b4affb9cdb3, type: 2}
+  - {fileID: 11400000, guid: 5b1760801577f6a45b48874b759d5416, type: 2}
   - {fileID: 11400000, guid: 372d059ea52793146a680ded329e4347, type: 2}
+  - {fileID: 11400000, guid: 2870201eb095a8e468911c37e31819f9, type: 2}
   _enemyJobActionsLists:
   - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
   zones:

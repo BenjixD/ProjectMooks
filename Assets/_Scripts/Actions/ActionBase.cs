@@ -67,8 +67,7 @@ public class ActionBase : ScriptableObject {
     [Header("Resources")]
     [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
     public int maxPP;
-    private int _currPP;
-    private bool _infiniteUses = false;
+    [HideInInspector] public int currPP;
     public ActionCost actionCost;
 
     [Header("Effect Properties")]
@@ -87,11 +86,21 @@ public class ActionBase : ScriptableObject {
     public string userAnimName;
 
     private void Awake() {
-        if (maxPP == 0) {
-            _infiniteUses = true;
-        } else {
-            _currPP = maxPP;
+        if (CostsPP()) {
+            currPP = maxPP;
         }
+    }
+
+    public bool CostsPP() {
+        return maxPP != 0;
+    }
+
+    public string GetCommandFormat() {
+        string command = "!" + commandKeyword;
+        if (commandArgs > 0) {
+            command += " [target]";
+        }
+        return command;
     }
 
     private bool CheckKeyword(string keyword) {
@@ -119,7 +128,7 @@ public class ActionBase : ScriptableObject {
             Debug.Log(user + " has insufficient HP and/or mana to use " + name);
             return false;
         }
-        if (!_infiniteUses && _currPP < actionCost.PP) {
+        if (CostsPP() && currPP < actionCost.PP) {
             Debug.Log(user + " has insufficient PP to use " + name);
             return false;
         }
@@ -136,7 +145,7 @@ public class ActionBase : ScriptableObject {
         stats.hp.ApplyDelta(-actionCost.HP);
         stats.mana.ApplyDelta(-actionCost.mana);
 
-        _currPP -= actionCost.PP;
+        currPP -= actionCost.PP;
         if (user is Mook) {
             Mook mook = (Mook) user;
             mook.stamina.SetStamina(mook.stamina.GetStamina() - actionCost.stamina);

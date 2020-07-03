@@ -6,7 +6,7 @@ public enum Element {
     NONE,
     FIRE,
     ICE,
-    THUNDER,
+    LIGHTNING,
     HOLY,
     DARK
 }
