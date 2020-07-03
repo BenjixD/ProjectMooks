@@ -56,7 +56,7 @@ public abstract class Party : MonoBehaviour {
         if (getTargetableOnly) {
             fighters.Filter( fighter => !fighter.fighter.HasModifier(ModifierAilment.MODIFIER_UNTARGETTABLE) );
         }
-        return this.fighters[Random.Range(0, fighters.Count)].fighter.targetId;
+        return fighters[Random.Range(0, fighters.Count)].fighter.targetId;
     }
 
     public Color IndexToColor(int index) {

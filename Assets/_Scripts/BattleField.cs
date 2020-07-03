@@ -102,6 +102,7 @@ public class BattleField : MonoBehaviour
 
         if (joinedPlayers.Count > 0) {
             Messenger.Broadcast<List<PlayerObject>>(Messages.OnPlayersJoinBattle, joinedPlayers);
+            Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);
         }
 
     }

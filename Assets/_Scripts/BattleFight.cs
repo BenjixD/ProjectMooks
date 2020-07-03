@@ -100,6 +100,7 @@ public class BattleFight : IDisposable
 
     private void onFightEnd(FightResult result) {
         Messenger.Broadcast<FightResult>(Messages.OnFightEnd, result);
+        Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);
     }
 
     private void getEnemyAction() {

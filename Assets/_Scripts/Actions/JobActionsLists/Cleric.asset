@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14fb53d9f9719b1498cd0a900037d9e2, type: 3}
   m_Name: Cleric
   m_EditorClassIdentifier: 
-  job: 3
+  job: 4
   _actions:
   - {fileID: 11400000, guid: 3ffa9791c7a060843bc887b70950ef11, type: 2}
   - {fileID: 11400000, guid: 307fd9a1eb9fb3a4a8c747cf771a4325, type: 2}
+  - {fileID: 11400000, guid: 82bb13a1d0e05dd4b8df78733c3824e4, type: 2}
   prefab: {fileID: 1001592495586619533, guid: 961ef81912a68664486e8779cb2fe0a4, type: 3}

@@ -29,7 +29,6 @@ public class MookStatusBarUI : StatusBarUI
 
         for (int i = energy; i < maxEnergy; i++) {
             this.InstantiateToken(emptyEnergyTokenPrefab);
-
         }
     }
 
