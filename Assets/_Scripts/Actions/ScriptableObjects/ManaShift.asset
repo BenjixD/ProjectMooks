@@ -16,7 +16,7 @@ MonoBehaviour:
   actionType: 0
   description: 
   maxPP: 2
-  currPP: 2
+  currPP: 0
   actionCost:
     HP: 0
     mana: 0
