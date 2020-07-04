@@ -129,11 +129,8 @@ public class BattleField : MonoBehaviour
             EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
 
             // Apply stat adjustments based on difficulty
-            Debug.Log("MAX HP VALUE: " + jobList.prefab.stats.maxHp.GetValue());
 
             PlayerStats stats = instantiatedEnemy.stats;
-            Debug.Log("MAX HP VALUE2: " + stats.maxHp.GetValue());
-            Debug.Log("MAX HP VALUE3: " + enemy.stats.maxHp.GetValue());
             /*
             foreach(Stat stat in System.Enum.GetValues(typeof(Stat))) {
                 stats.ModifyStat(stat, (int) (stats.GetStat(stat) * mult));
