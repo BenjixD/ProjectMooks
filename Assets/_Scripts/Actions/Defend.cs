@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "Defend", menuName = "Actions/Defend", order = 5)]
 public class Defend : ActionBase {
-    protected override bool QueueAction(FightingEntity user, string[] splitCommand) {
+    public override bool QueueAction(FightingEntity user, string[] splitCommand) {
         user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ user.targetId }));
         return true;
     }

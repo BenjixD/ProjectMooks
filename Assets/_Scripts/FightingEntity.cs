@@ -6,27 +6,35 @@ using System.Linq;
 
 public class FightingEntity : MonoBehaviour
 {
-    public string Name;
-    public PlayerStats stats;
-
-    public Job job;
-
-    public List<ActionBase> actions;
-    public bool isRare = false;
-
     public int targetId;
+
     public string targetName;
 
     public FighterSlot fighterSlot {get; set;}
+
+    public Fighter persistentFighter;
+
+    public string Name;
+    public PlayerStats stats;
+
+    public Job job { get { return this.persistentFighter.job; }}
+
+    public List<ActionBase> actions { get { return this.persistentFighter.actions; } }
+    public bool isRare { get { return this.persistentFighter.isRare; }}
+
 
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
 
+
+
     protected QueuedAction _queuedAction;
     private AnimationController _animController;
     protected FightingEntityAI _ai;
     protected AilmentController _ailmentController;
+
+    
 
     protected virtual void Awake() {
         _animController = GetComponent<AnimationController>();
@@ -40,11 +48,9 @@ public class FightingEntity : MonoBehaviour
     
     public void Initialize(int index, Fighter persistentFighter) {
         this.targetId = index;
-		this.Name = persistentFighter.Name;
+        this.Name = persistentFighter.Name;
+        this.persistentFighter = persistentFighter;
         this.stats = persistentFighter.stats;
-        this.job = persistentFighter.job;
-        this.actions = persistentFighter.actions;
-        this.isRare = persistentFighter.isRare;
 
         _ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.battleComponents.field.GetTargetNameFromIndex(index);
@@ -73,9 +79,19 @@ public class FightingEntity : MonoBehaviour
 
     public void TryActionCommand(string message) {
         string[] splitCommand = message.Split(' ');
-        foreach (ActionBase action in actions) {
-            if (action.TryChooseAction(this, splitCommand)) {
-                return;
+        string firstCommand = splitCommand[0];
+
+        bool shortCut = firstCommand.Length >= 5 && firstCommand.Substring(0, 4) == "move" && firstCommand[4] >= '1' && firstCommand[4] <= '4';
+
+        if (shortCut) {
+            int index = int.Parse(firstCommand[4].ToString()) - 1;
+            ActionBase action = this.actions[index];
+            action.QueueAction(this, splitCommand);
+        } else {
+            foreach (ActionBase action in actions) {
+                if (action.TryChooseAction(this, splitCommand)) {
+                    return;
+                }
             }
         }
         
