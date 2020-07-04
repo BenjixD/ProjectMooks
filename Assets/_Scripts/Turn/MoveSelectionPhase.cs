@@ -76,6 +76,7 @@ public class MoveSelectionPhase : Phase {
     IEnumerator HeroMoveSelection() {
         this._heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
         InitializeCommandCardActionUI(GetHeroActionChoices(ActionType.BASIC));
+        GameManager.Instance.time.StartCoroutine(this.AdvanceStateTimer());
 
         while(true) {
             HeroMenuAction menuAction = this.GetHeroMenuAction();
@@ -228,8 +229,8 @@ public class MoveSelectionPhase : Phase {
     private bool CheckExecuteTurn() {
         List<PlayerObject> players = this._field.GetActivePlayerObjects();
 
-        //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
-        bool timeOutIfChatTooSlow = false;
+        bool timeOutIfChatTooSlow = (this._field.GetHeroPlayer().HasSetCommand() && _playerActionCounter >= this.maxTimeBeforeAction);
+        //bool timeOutIfChatTooSlow = false;
         bool startTurn = timeOutIfChatTooSlow || HasEveryoneEnteredActions();
         if (startTurn) {
             this._playerActionCounter = 0;
@@ -241,14 +242,17 @@ public class MoveSelectionPhase : Phase {
 
     private void UpdateStateText() {
         // Currently not in the UI, but may add something similar later
-        /*
-        if (!field.GetHeroPlayer().HasSetCommand()) {
-            this._ui.SetStateText("Waiting on streamer input");
+        if (!this._field.GetHeroPlayer().HasSetCommand()) {
+            this._ui.tmp_TimerText.text.SetText("Waiting on streamer input");
         } else {
-            int timer = (int)(this.maxTimeBeforeAction - playerActionCounter);
-            this._ui.SetStateText("Waiting on Chat: " + timer);
+            int timer = (int)(this.maxTimeBeforeAction - this._playerActionCounter);
+            this._ui.tmp_TimerText.text.SetText("Waiting on Chat: " + timer);
         }
-        */
+    }
+
+    private IEnumerator AdvanceStateTimer() {
+        this._playerActionCounter += GameManager.Instance.time.deltaTime;
+        yield return null;
     }
 
     private bool HasEveryoneEnteredActions() {

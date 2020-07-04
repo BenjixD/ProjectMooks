@@ -103,11 +103,6 @@ public class BattleFight : IDisposable
         Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);
     }
 
-    private void getEnemyAction() {
-        // TODO: Aggro targetting
-        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRecommendedAction(), new List<int>{_field.GetRandomPlayerObjectIndex()}  ));
-    }
-
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {
         // TODO: Put animation here
         yield return GameManager.Instance.time.GetController().WaitForSeconds(1.0f);
