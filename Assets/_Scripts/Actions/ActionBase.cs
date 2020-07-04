@@ -63,6 +63,7 @@ public class ActionBase : ScriptableObject {
     public new string name;
     public ActionType actionType;
     [TextArea] public string description;
+    public ActionAnimation animation;
 
     [Header("Resources")]
     [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
@@ -81,9 +82,18 @@ public class ActionBase : ScriptableObject {
     [Tooltip("The number of arguments following the keyword.")]
     public int commandArgs;
 
-    [Header("Animations")]
-    [Tooltip("The name of the default animation played for the user of this action. Alternatively, you can override Animate().")]
-    public string userAnimName;
+    // [Header("Animations")]
+    // [Tooltip("The name of the default animation played for the user of this action. Alternatively, you can override Animate().")]
+    // public string userAnimName;
+    // [SerializeField, Tooltip("Time into the action before the effect takes place.")]
+    // private float _animTimeBeforeEffect;
+    // [SerializeField, Tooltip("Time to wait after the action effect takes place.")]
+    // private float _animTimeAfterEffect;
+
+    [Header("References")]
+    [SerializeField] protected GameObject damagePopupCanvasPrefab = null;
+
+    [HideInInspector] public FightResult lastFightResult;
 
     private void Awake() {
         if (CostsPP()) {
@@ -124,8 +134,12 @@ public class ActionBase : ScriptableObject {
 
     private bool CheckCost(FightingEntity user) {
         PlayerStats stats = user.stats;
-        if (stats.hp.GetValue() <= actionCost.HP || stats.mana.GetValue() < actionCost.mana) {
-            Debug.Log(user + " has insufficient HP and/or mana to use " + name);
+        if (stats.hp.GetValue() <= actionCost.HP) {
+            Debug.Log(user + " has insufficient HP use " + name);
+            return false;
+        }
+        if (stats.mana.GetValue() < actionCost.mana) {
+            Debug.Log(user + " has insufficient mana to use " + name);
             return false;
         }
         if (CostsPP() && currPP < actionCost.PP) {
@@ -151,15 +165,7 @@ public class ActionBase : ScriptableObject {
             mook.stamina.SetStamina(mook.stamina.GetStamina() - actionCost.stamina);
         }
     }
-
-    protected virtual void Animate(AnimationController controller) {
-        int track = controller.TakeFreeTrack();
-        if (track != -1) {
-            controller.AddToTrack(track, userAnimName, false, 0);
-            controller.EndTrackAnims(track);
-        }
-    }
-
+    
     public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
         if (!BasicValidation(splitCommand, user)) {
             return false;
@@ -186,16 +192,20 @@ public class ActionBase : ScriptableObject {
         return true;
     }
 
-    public FightResult ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
+    public IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
         if (!CheckCost(user)) {
-            return new FightResult(user, this);
+            lastFightResult = new FightResult(user, this);
+            yield break;
         }
         PayCost(user);
-        Animate(user.GetAnimController());
-        FightResult result = ApplyEffect(user, targets);
-        this.OnPostEffect(result);
-
-        return result;
+        if (animation != null) {
+            animation.Animate(user.GetAnimController());
+            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeBeforeEffect);
+        } else {
+            Debug.LogWarning("No animation set for " + user.name + "'s " + name);
+        }
+        lastFightResult = ApplyEffect(user, targets);
+        OnPostEffect(lastFightResult);
     }
 
     public List<FightingEntity> GetAllPossibleActiveTargets(FightingEntity user) {
@@ -275,6 +285,7 @@ public class ActionBase : ScriptableObject {
             } else {
                 damage = (int)(damage + target.stats.GetDamageMultiplierArmor());
             }
+            InstantiateDamagePopup(target, damage);
 
             Debug.Log("Damage Done to: " + target.Name + " " + damage );
 
@@ -287,5 +298,11 @@ public class ActionBase : ScriptableObject {
             receivers.Add(new DamageReceiver(target, before, after, inflicted));
         }
         return new FightResult(user, this, receivers);
+    }
+
+    protected virtual void InstantiateDamagePopup(FightingEntity target, int damage) {
+        DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
+        DamageType damageType = effects.heals ? DamageType.HEALING : DamageType.NORMAL;
+        popup.Initialize(target, damage, damageType);
     }
 }

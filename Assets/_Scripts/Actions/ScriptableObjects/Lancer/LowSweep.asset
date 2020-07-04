@@ -15,7 +15,9 @@ MonoBehaviour:
   name: Low Sweep
   actionType: 0
   description: 
+  animation: {fileID: 11400000, guid: 8b477148dad16594894ba7f787aea892, type: 2}
   maxPP: 0
+  currPP: 0
   actionCost:
     HP: 0
     mana: 0
@@ -36,4 +38,5 @@ MonoBehaviour:
       chance: 1
   commandKeyword: sweep
   commandArgs: 1
-  userAnimName: melee attack
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}

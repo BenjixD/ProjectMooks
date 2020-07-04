@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ManaPotAction", menuName = "Actions/Mana Pot", order = 2)]
 public class ManaPotAction : ActionBase {
     public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        // Fire One command format: !m fire [target number]
         if (!base.TryChooseAction(user, splitCommand)) {
             return false;
         }
@@ -29,5 +28,10 @@ public class ManaPotAction : ActionBase {
         }
 
         return new FightResult(user, this, receivers);
+    }
+
+    protected override void InstantiateDamagePopup(FightingEntity target, int damage) {
+        DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
+        popup.Initialize(target, damage, DamageType.MANA_RECOVERY);
     }
 }

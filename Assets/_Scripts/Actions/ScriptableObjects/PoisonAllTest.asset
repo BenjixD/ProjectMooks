@@ -15,10 +15,12 @@ MonoBehaviour:
   name: Poison All
   actionType: 1
   description: 
+  animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
   maxPP: 0
+  currPP: 0
   actionCost:
     HP: 0
-    mana: 12
+    mana: 4
     PP: 0
     stamina: 0
   targetInfo:
@@ -37,3 +39,6 @@ MonoBehaviour:
   commandKeyword: poison2
   commandArgs: 0
   userAnimName: attack
+  _animTimeBeforeEffect: 0
+  _animTimeAfterEffect: 0
+  damagePopupCanvasPrefab: {fileID: 0}

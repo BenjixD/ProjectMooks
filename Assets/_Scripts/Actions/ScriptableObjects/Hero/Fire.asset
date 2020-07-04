@@ -9,16 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3683767fc23ed664b93c9f9e9d3cdd96, type: 3}
+  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
   m_Name: Fire
   m_EditorClassIdentifier: 
   name: Fire
   actionType: 1
   description: 
+  animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
   maxPP: 0
+  currPP: 0
   actionCost:
     HP: 0
-    mana: 8
+    mana: 2
     PP: 0
     stamina: 0
   targetInfo:
@@ -34,6 +36,7 @@ MonoBehaviour:
       duration: 5
       infiniteDuration: 0
       chance: 0.4
-  commandKeyword: fire
-  commandArgs: 1
-  userAnimName: 
+  commandKeyword: 
+  commandArgs: 0
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}

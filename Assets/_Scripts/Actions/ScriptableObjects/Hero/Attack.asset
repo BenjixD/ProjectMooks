@@ -9,31 +9,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba7470dbe4525d24fa6d48a4f5ea7eb9, type: 3}
-  m_Name: Defend
+  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
+  m_Name: Attack
   m_EditorClassIdentifier: 
-  name: Defend
+  name: Attack
   actionType: 0
   description: 
+  animation: {fileID: 11400000, guid: 4b9ea0309b85cc14ba17c21fede1acb2, type: 2}
   maxPP: 0
+  currPP: 0
   actionCost:
     HP: 0
     mana: 0
     PP: 0
     stamina: 0
   targetInfo:
-    targetTeam: 0
+    targetTeam: 1
     targetType: 0
   effects:
     element: 0
-    physicalScaling: 0
+    physicalScaling: 1
     specialScaling: 0
     heals: 0
-    statusAilments:
-    - statusAilment: {fileID: 11400000, guid: ddb5ed78149c74a47bc1b5d7b11345bd, type: 2}
-      duration: 1
-      infiniteDuration: 0
-      chance: 1
-  commandKeyword: d
+    statusAilments: []
+  commandKeyword: 
   commandArgs: 0
-  userAnimName: 
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}
