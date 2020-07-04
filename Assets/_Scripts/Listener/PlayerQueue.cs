@@ -1,8 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerQueue : TwitchChatListenerBase {
+    public class PlayerQueueResponse {
+        public static string ValidJoin = "@{0} has joined the fray!";
+        public static string AlreadyJoin = "@{0}, you are already registered in queue.";
+    }
+
 	[SerializeField]
 	private PlayerStats _template = null;
 
@@ -61,8 +67,12 @@ public class PlayerQueue : TwitchChatListenerBase {
 	public override void OnCommandReceived(string username, string message) {
 		switch(message) {
 			case "join":
-				Enqueue(username);
-                Messenger.Broadcast(Messages.OnPlayerJoinQueue, username);
+				if(Enqueue(username)) {
+					this.EchoMessage(String.Format(PlayerQueueResponse.ValidJoin, username));
+	                Messenger.Broadcast(Messages.OnPlayerJoinQueue, username);
+				} else {
+					this.EchoMessage(String.Format(PlayerQueueResponse.AlreadyJoin, username));
+				}
 				break;
 			default:
 				Debug.Log("Unknown command: " + message);

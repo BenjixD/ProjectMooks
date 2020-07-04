@@ -83,8 +83,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 023c0ddb947787d4294570012677de51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableReply: 1
   _template:
     level: 1
+    statPoints: 0
     hp:
       stat: 0
       currentValue: 1
