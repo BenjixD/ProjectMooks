@@ -66,6 +66,7 @@ public class PlayerStatWithModifiers : PlayerStat {
 
     public int originalBaseValue {get; set;}
     public int divisor = 1;
+    public int growth = 1;
 
     [SerializeField]
     private int baseValue; // Can set in inspector if you need to
@@ -75,15 +76,21 @@ public class PlayerStatWithModifiers : PlayerStat {
     private Action<int> callback = null;
 
 
-    public PlayerStatWithModifiers(Stat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue, Action<int> callback = null)
+    public PlayerStatWithModifiers(Stat stat, int value, int growth, int divisor = 1, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue, Action<int> callback = null)
     : base(stat, value, minValue, maxValue) {
         this.baseValue = value;
         this.callback = callback;
         this.originalBaseValue = this.baseValue;
+        this.divisor = divisor;
+        this.growth = growth;
     }
 
     public void SetCallback(Action<int> callback) {
         this.callback = callback;
+    }
+
+    public void ApplyBaseValueBasedOnLevel(int level) {
+        this.baseValue = originalBaseValue + (level - 1) * growth;
     }
 
     public override int GetValue() {
@@ -115,7 +122,7 @@ public class PlayerStatWithModifiers : PlayerStat {
 
     public override object Clone()
     {
-        PlayerStatWithModifiers stat = new PlayerStatWithModifiers(this.stat, this.baseValue, this.minValue, this.maxValue, this.callback);
+        PlayerStatWithModifiers stat = new PlayerStatWithModifiers(this.stat, this.baseValue, this.growth, this.divisor, this.minValue, this.maxValue, this.callback);
         PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
 
         foreach (StatModifier modifier in this.modifiers) {
@@ -139,13 +146,6 @@ public class PlayerStatWithModifiers : PlayerStat {
         return this.baseValue;
     }
 
-    public void SetBaseValue(int value, bool setOriginalValue = false) {
-        this.baseValue = value;
-        if (setOriginalValue) {
-            this.originalBaseValue = this.baseValue;
-        }
-    }
-
     // Modifier helpers
     public PriorityList<StatModifier> GetModifiers() {
         return this.modifiers;
@@ -162,11 +162,6 @@ public class PlayerStatWithModifiers : PlayerStat {
     public void ClearModifiers() {
         this.modifiers.Clear();
     }
-
-    public void RandomizeBase(int minValue, int maxValue) {
-        this.SetBaseValue((int)(maxValue * (BoxMuller.GetRandom() + 1)) + minValue, true);
-    }
-
 };
 
 [System.Serializable]
@@ -226,17 +221,17 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 [System.Serializable]
 public class PlayerStats: ICloneable {
 	public int level = 1;
-    public int statPoints = 0;
+    public int statPoints{get; set;}
     public PlayerStat hp = new PlayerStat(Stat.HP, 1);
-    public PlayerStatWithModifiers maxHp = new PlayerStatWithModifiers(Stat.MAX_HP, 1);
+    public PlayerStatWithModifiers maxHp = new PlayerStatWithModifiers(Stat.MAX_HP, 1, 1);
     public PlayerStat mana = new PlayerStat(Stat.MANA, 1);
-    public PlayerStatWithModifiers maxMana = new PlayerStatWithModifiers(Stat.MAX_MANA, 1);
+    public PlayerStatWithModifiers maxMana = new PlayerStatWithModifiers(Stat.MAX_MANA, 1, 1);
 
-    public PlayerStatWithModifiers physical = new PlayerStatWithModifiers(Stat.PHYSICAL, 1);
-    public PlayerStatWithModifiers special = new PlayerStatWithModifiers(Stat.SPECIAL, 1);
-    public PlayerStatWithModifiers defence = new PlayerStatWithModifiers(Stat.DEFENSE, 1);
-    public PlayerStatWithModifiers resistance = new PlayerStatWithModifiers(Stat.RESISTANCE, 1);
-    public PlayerStatWithModifiers speed = new PlayerStatWithModifiers(Stat.SPEED, 1);
+    public PlayerStatWithModifiers physical = new PlayerStatWithModifiers(Stat.PHYSICAL, 1, 1);
+    public PlayerStatWithModifiers special = new PlayerStatWithModifiers(Stat.SPECIAL, 1, 1);
+    public PlayerStatWithModifiers defence = new PlayerStatWithModifiers(Stat.DEFENSE, 1, 1);
+    public PlayerStatWithModifiers resistance = new PlayerStatWithModifiers(Stat.RESISTANCE, 1, 1);
+    public PlayerStatWithModifiers speed = new PlayerStatWithModifiers(Stat.SPEED, 1, 1);
 
     private Dictionary<Stat, PlayerStatWithModifiers> modifiableStats;
 
@@ -258,16 +253,6 @@ public class PlayerStats: ICloneable {
         this.SetupStatPair(hp, maxHp);
         this.SetupStatPair(mana, maxMana);
     }
-
-	public void RandomizeStats() {
-        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
-            PlayerStatWithModifiers stat = statPair.Value;
-            stat.RandomizeBase(1, stat.GetBaseValue());
-
-            this.hp.SetValue(this.maxHp.GetValue());
-            this.mana.SetValue(this.maxMana.GetValue());            
-        }
-	}
 
 	public object Clone() {
         PlayerStats stats = new PlayerStats();
@@ -336,30 +321,36 @@ public class PlayerStats: ICloneable {
             stat.ClearModifiers();
             stat.GetValue();
         }
+
+        this.SetHPMPToMax();
 	}
+
+    public void SetHPMPToMax() {
+        this.hp.SetValue(this.maxHp.GetValue());
+        this.mana.SetValue(this.maxMana.GetValue());
+    }
 
     // Level up stat. Used for hero.
     public bool LevelUpStat(Stat stat) {
+
+        // TODO: FIX THIS
         if (!this.modifiableStats.ContainsKey(stat)) {
             Debug.LogError("ERROR: Not assignable stat");
             return false;
         }
 
+
         PlayerStatWithModifiers theStat = this.modifiableStats[stat];
-
-        int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue(), theStat.divisor);
-        if (costToLevelUp > this.statPoints) {
-            Debug.LogWarning("Not enough stat points to level up!");
-            return false;
-        }
-
+        int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.growth, theStat.divisor);
+        theStat.growth += StatLevelHelpers.LEVEL_UP_GROWTH_INCREASE;
+        theStat.ApplyBaseValueBasedOnLevel(this.level);
         this.statPoints -= costToLevelUp;
-        theStat.SetBaseValue(theStat.GetBaseValue() + theStat.divisor);
+
         return true;
     }
 
-    // Applys level assuming that 
-    public void ApplyStatsBasedOnLevel(int level, bool manaless = false) {
+    // Applys level based on level. Note that this resets all stats.
+    public void ApplyStatsBasedOnLevel(int level) {
 
         if (level <= this.level) {
             return;
@@ -368,51 +359,27 @@ public class PlayerStats: ICloneable {
         statPoints += StatLevelHelpers.GetNumStatPointsForLevelUp(this.level, level);
         this.level = level;
 
-        if (statPoints == 0) {
-          return;
-        }
+        this.RefreshStatsBasedOnLevel();
 
-        List<ValueWeight<PlayerStatWithModifiers>> statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
-        do {
-            statsWithModifiersWeights = new List<ValueWeight<PlayerStatWithModifiers>>();
-            foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
-                PlayerStatWithModifiers statWithModifiers = statPair.Value;
-                if (statWithModifiers.stat == Stat.MAX_MANA && manaless == true) {
-                    continue;
-                }
-
-                int cost = StatLevelHelpers.GetCostToLevelUpStat(statWithModifiers.GetBaseValue(), statWithModifiers.divisor);
-
-                if (statPoints >=  cost) {
-                    statsWithModifiersWeights.Add(new ValueWeight<PlayerStatWithModifiers>(statWithModifiers, (float)statWithModifiers.originalBaseValue / statWithModifiers.divisor));
-                }
-            }
-
-            if (statsWithModifiersWeights.Count <= 0) {
-                break;
-            }
-
-            RandomPool<PlayerStatWithModifiers> statsPool = new RandomPool<PlayerStatWithModifiers>(statsWithModifiersWeights);
-            PlayerStatWithModifiers theStat = statsPool.PickOne();
-            int costToLevelUp = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue(), theStat.divisor);
-            theStat.SetBaseValue(theStat.GetBaseValue() + theStat.divisor);
-
-            statPoints -= costToLevelUp;
-        } while (statsWithModifiersWeights.Count > 0);
-
-        this.hp.SetValue(this.maxHp.GetValue());
-        this.mana.SetValue(this.maxMana.GetValue());
-
+        this.SetHPMPToMax();
     }
 
     public void LevelUp() {
         int additionalStatPoints = StatLevelHelpers.GetNumStatPointsForLevelUp(this.level, this.level+1);
         this.statPoints += additionalStatPoints;
         this.level++;
+        this.RefreshStatsBasedOnLevel();
     }
 
     public Dictionary<Stat, PlayerStatWithModifiers> GetModifiableStats() {
         return this.modifiableStats;
+    }
+
+    public void RefreshStatsBasedOnLevel() {
+        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+            PlayerStatWithModifiers statWithModifiers = statPair.Value;
+            statWithModifiers.ApplyBaseValueBasedOnLevel(this.level);
+        }
     }
 
     // Setup stat pairs for like hp/max hp and mana/max mana
@@ -420,7 +387,16 @@ public class PlayerStats: ICloneable {
         curStat.SetMinMax(0, maxStat.GetBaseValue());
         curStat.SetValue(maxStat.GetBaseValue());
         maxStat.SetCallback( (int maxValue) => curStat.SetMinMax(0, maxValue) );
-
-        maxStat.divisor = 3;
+        //maxStat.divisor = 3;
     }
+
+    // https://leagueoflegends.fandom.com/wiki/Armor
+    public float GetDamageMultiplierArmor() {
+        return ((float)100 / (100 + this.defence.GetValue()));
+    }
+
+    public float GetDamageMultiplierResistence() {
+        return ((float)100 / (100 + this.resistance.GetValue()));
+    }
+    
 }

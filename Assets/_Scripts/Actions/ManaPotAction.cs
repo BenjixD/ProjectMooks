@@ -21,8 +21,6 @@ public class ManaPotAction : ActionBase {
         int attackDamage = user.stats.special.GetValue();
         
         foreach (FightingEntity target in targets) {
-            int defence = target.stats.resistance.GetValue();
-
             before = (PlayerStats)target.stats.Clone();
             target.stats.mana.ApplyDelta(attackDamage);
             after = (PlayerStats)target.stats.Clone();

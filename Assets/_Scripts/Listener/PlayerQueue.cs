@@ -13,7 +13,10 @@ public class PlayerQueue : TwitchChatListenerBase {
 		if(_inQueue.ContainsKey(username)) {
 			return false;
 		} else {
-			LinkedListNode<PlayerCreationData> node = _waitingQueue.AddLast(new PlayerCreationData(username, _template));
+            List<Job> mookJobs = GameManager.Instance.models.getMookJobs();
+            Job mookJob = mookJobs[UnityEngine.Random.Range(0, mookJobs.Count)];
+
+			LinkedListNode<PlayerCreationData> node = _waitingQueue.AddLast(new PlayerCreationData(username, mookJob));
 			_inQueue.Add(username, node);
 			return true;
 		}

@@ -62,8 +62,9 @@ public class FightingEntity : MonoBehaviour
         if (!this.isEnemy() && index != 0) {
             OutOfJuiceAilment outOfJuicePrefab = (OutOfJuiceAilment)GameManager.Instance.models.GetCommonStatusAilment("Out of Juice");
             this._ailmentController.AddStatusAilment(Instantiate(outOfJuicePrefab));
-            this.stats.mana.SetValue(outOfJuicePrefab.duration);
-            this.stats.maxMana.SetValue(outOfJuicePrefab.duration);
+            Debug.Log("OUT OF JUICE DURATION: " + outOfJuicePrefab.defaultDuration);
+            this.stats.mana.SetValue(outOfJuicePrefab.defaultDuration);
+            this.stats.maxMana.SetValue(outOfJuicePrefab.defaultDuration);
         }
 
 	}

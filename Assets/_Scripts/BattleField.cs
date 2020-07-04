@@ -129,7 +129,11 @@ public class BattleField : MonoBehaviour
             EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
 
             // Apply stat adjustments based on difficulty
+            Debug.Log("MAX HP VALUE: " + jobList.prefab.stats.maxHp.GetValue());
+
             PlayerStats stats = instantiatedEnemy.stats;
+            Debug.Log("MAX HP VALUE2: " + stats.maxHp.GetValue());
+            Debug.Log("MAX HP VALUE3: " + enemy.stats.maxHp.GetValue());
             /*
             foreach(Stat stat in System.Enum.GetValues(typeof(Stat))) {
                 stats.ModifyStat(stat, (int) (stats.GetStat(stat) * mult));
@@ -145,7 +149,7 @@ public class BattleField : MonoBehaviour
                // level += 10; // Should be done from inspector side
             }
 
-            stats.ApplyStatsBasedOnLevel(level, true);
+            stats.ApplyStatsBasedOnLevel(level);
 
             // TODO: Some sort of entrance animation
             instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;

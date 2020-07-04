@@ -15,8 +15,10 @@ public class StatLevelHelpers
     public const int MAX_LEVEL = 99;
     public const int MIN_LEVEL_TO_STAT_INCREMENT = 3;
     public const int LEVEL_TO_STAT_INCREMENT = 3;
-    public const int STAT_COST_INCREMENT = 10;
-    public const int MIN_STAT_COST_INCREMENT = 1;
+    public const int STAT_COST_INCREMENT = 5;
+    public const int MIN_STAT_COST_INCREMENT = 2;
+    
+    public const int LEVEL_UP_GROWTH_INCREASE = 1; // Amount increased when level up 
 
     public static void InitializeCache() {
         levelToStatPoints = new Dictionary<int, int>();
@@ -65,9 +67,9 @@ public class StatLevelHelpers
         return levelToStatPoints[level];
     }
 
-    public static int GetCostToLevelUpStat(int currentStatAmount, int divisor = 1) {
-        currentStatAmount /= divisor;
-        return ((currentStatAmount - 1) / STAT_COST_INCREMENT) + MIN_STAT_COST_INCREMENT;
+    public static int GetCostToLevelUpStat(int currentGrowthAmount, int divisor = 1) {
+        currentGrowthAmount /= divisor;
+        return ((currentGrowthAmount - 1) / STAT_COST_INCREMENT) + MIN_STAT_COST_INCREMENT;
     }
 
 

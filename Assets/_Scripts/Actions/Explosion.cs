@@ -28,8 +28,7 @@ public class Explosion : ActionBase {
         
         foreach (FightingEntity target in targets) {
             PlayerStats before, after;
-            int defence = target.stats.resistance.GetValue();
-            int damage = Mathf.Max(attackDamage - defence, 0);
+            int damage = (int)(attackDamage * target.stats.GetDamageMultiplierResistence());
 
             before = (PlayerStats)target.stats.Clone();
             target.stats.hp.ApplyDelta(-damage);

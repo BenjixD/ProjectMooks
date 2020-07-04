@@ -37,12 +37,29 @@ public class ScriptableObjectDictionary : MonoBehaviour {
     }
 
 
-  public List<ActionBase> GetPlayerJobActions(Job job) {
+    public List<ActionBase> GetPlayerJobActions(Job job) {
         if(!playerJobActions.ContainsKey(job)) {
             Debug.Log("No JobActionsList for job " + job + " found");
             return null;
         }
         return playerJobActions[job];
+    }
+
+    public List<JobActionsList> GetAllJobActionLists() {
+        List<JobActionsList> actionLists = new List<JobActionsList>();
+        for (int i = 0; i < _playerJobActionsLists.Length; i++) {
+            if (_playerJobActionsLists != null) {
+                actionLists.Add(_playerJobActionsLists[i]);
+            }
+        }
+
+        for (int i = 0; i < _enemyJobActionsLists.Length; i++) {
+            if (_enemyJobActionsLists != null) {
+                actionLists.Add(_enemyJobActionsLists[i]);
+            }
+        }
+
+        return actionLists;
     }
 
     public List<ActionBase> GetEnemyJobActions(Job job) {

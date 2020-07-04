@@ -33,7 +33,7 @@ public class StatRewardUI : MonoBehaviour
 
     public void UpdateUIValues() {
         this.value = theStat.GetBaseValue();
-        this.cost = StatLevelHelpers.GetCostToLevelUpStat(theStat.GetBaseValue(), theStat.divisor);
+        this.cost = StatLevelHelpers.GetCostToLevelUpStat(theStat.growth, theStat.divisor);
         text.SetText(theStat.stat.ToString() + ": " + this.value + " | " + "COST: " + this.cost );
 
         if (this.playerStats.statPoints < this.cost) {

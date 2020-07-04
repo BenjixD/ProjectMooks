@@ -259,11 +259,12 @@ public class ActionBase : ScriptableObject {
         
         foreach (FightingEntity target in targets) {
             // Default damage mitigation: defense and resistance with half the scaling ratios
-            int defence = (int) ((target.stats.defence.GetValue() * effects.physicalScaling + target.stats.resistance.GetValue() * effects.specialScaling) / 2);
-            int damage = Mathf.Max(attackDamage - defence, 0);
+            int damage = attackDamage;
             // If there is a healing effect, negate the damage and ignore damage mitigation
             if (effects.heals) {
                 damage = -attackDamage;
+            } else {
+                damage = (int)(damage + target.stats.GetDamageMultiplierArmor());
             }
 
             Debug.Log("Damage Done to: " + target.Name + " " + damage );

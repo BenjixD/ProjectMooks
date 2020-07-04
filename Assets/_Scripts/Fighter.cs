@@ -26,15 +26,9 @@ public class Fighter
     // Mook: Generated based on PlayercreationData.
 
     public void Initialize(JobActionsList jobList, string name) {
-        // Will be null for enemies, but not for players because we want to keep stats
-       // if (creationData == null) {
-            PlayerStats stats = (PlayerStats)jobList.prefab.stats.Clone();
-
-            stats.RandomizeStats();
-
-            this.playerCreationData = new PlayerCreationData(name, stats, jobList.job);
-       // }
-        
+        Debug.Log("Job: " + jobList.job);
+        this.playerCreationData = new PlayerCreationData(name, jobList.job);
+    
         this.CommonInitialization(name);
     }
 
@@ -47,7 +41,7 @@ public class Fighter
         this.Name = name;
 
         this.stats = (PlayerStats)this.playerCreationData.stats.Clone();
-        this.stats.hp.SetValue(this.stats.maxHp.GetValue());
+        this.stats.ResetStats();
         this.SetJobAndActions(this.playerCreationData.job);
     }
 

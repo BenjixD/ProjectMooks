@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 625841003950948007, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1365926307686284328, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: _defaultAnims.Array.data[0]
@@ -83,5 +88,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 78ff32c5223aa864abf68a4dc5c94572,
         type: 2}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxHp.baseValue
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxHp.growth
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.physical.baseValue
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.special.baseValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.defence.baseValue
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.resistance.baseValue
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.speed.baseValue
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35f01a16f79c8c94ba5771a613681882, type: 3}
