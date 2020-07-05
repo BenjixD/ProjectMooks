@@ -22,29 +22,29 @@ MonoBehaviour:
       maxAmountOfEnemies: 3
       possibleEnemies:
       - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-    - averageLevel: 3
+    - averageLevel: 1
       minAmountOfEnemies: 2
       maxAmountOfEnemies: 2
       possibleEnemies:
       - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-    - averageLevel: 5
+    - averageLevel: 1
       minAmountOfEnemies: 1
       maxAmountOfEnemies: 1
       possibleEnemies:
       - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
   - stageType: 0
     waveInfos:
-    - averageLevel: 3
+    - averageLevel: 1
       minAmountOfEnemies: 4
       maxAmountOfEnemies: 4
       possibleEnemies:
       - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-    - averageLevel: 5
+    - averageLevel: 1
       minAmountOfEnemies: 2
       maxAmountOfEnemies: 2
       possibleEnemies:
       - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-    - averageLevel: 7
+    - averageLevel: 1
       minAmountOfEnemies: 1
       maxAmountOfEnemies: 1
       possibleEnemies:
@@ -53,24 +53,24 @@ MonoBehaviour:
     waveInfos: []
   - stageType: 0
     waveInfos:
-    - averageLevel: 6
+    - averageLevel: 1
       minAmountOfEnemies: 3
       maxAmountOfEnemies: 3
       possibleEnemies:
       - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-    - averageLevel: 10
+    - averageLevel: 1
       minAmountOfEnemies: 2
       maxAmountOfEnemies: 2
       possibleEnemies:
       - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-    - averageLevel: 15
+    - averageLevel: 1
       minAmountOfEnemies: 1
       maxAmountOfEnemies: 1
       possibleEnemies:
       - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
   - stageType: 1
     waveInfos:
-    - averageLevel: 25
+    - averageLevel: 1
       minAmountOfEnemies: 1
       maxAmountOfEnemies: 1
       possibleEnemies:
