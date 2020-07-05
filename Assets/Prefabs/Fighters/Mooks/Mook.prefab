@@ -278,6 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe321b222c7fb947850511a6dad0258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableReply: 1
   _player: {fileID: 8356248066131107559}
 --- !u!33 &625841003950948007
 MeshFilter:

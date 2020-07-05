@@ -6,6 +6,5 @@ public interface TwitchChatListener
 {
    void OnMessageReceived(string username, string message);
    void OnCommandReceived(string username, string message);
-
 }
 

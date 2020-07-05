@@ -44,6 +44,9 @@ public class FightingEntity : MonoBehaviour
     protected virtual void OnDestroy() {
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         _ailmentController.RemoveAllStatusAilments();
+        for (int i = 0; i < actions.Count; i++) {
+            Destroy(actions[i]);
+        }
     }
     
     public void Initialize(int index, Fighter persistentFighter) {
@@ -78,7 +81,7 @@ public class FightingEntity : MonoBehaviour
         return _ailmentController;
     }
 
-    public void TryActionCommand(string message) {
+    public bool TryActionCommand(string message) {
         string[] splitCommand = message.Split(' ');
         string firstCommand = splitCommand[0];
 
@@ -91,12 +94,13 @@ public class FightingEntity : MonoBehaviour
         } else {
             foreach (ActionBase action in actions) {
                 if (action.TryChooseAction(this, splitCommand)) {
-                    return;
+                    return true;
                 }
             }
         }
         
         Debug.Log("Invalid action command for player " + Name + ": " + message);
+        return false;
     }
 
     public ActionBase GetRecommendedAction() {

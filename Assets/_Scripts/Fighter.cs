@@ -79,9 +79,9 @@ public class Fighter
     public void SetJobAndActions(Job job) {
         this.job = job;
         if (this.isEnemy()) {
-            actions = new List<ActionBase>(GameManager.Instance.models.GetEnemyJobActions(job));
+            actions = GameManager.Instance.models.GetEnemyJobActionsInstance(job);
         } else if (this.IsHero()) {
-            actions = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
+            actions = GameManager.Instance.models.GetPlayerJobActionsInstance(job);
         } else {
             float randomSeed = Random.value;
 
@@ -90,21 +90,25 @@ public class Fighter
             }
 
             // Mooks have more specific logic regarding skills because they can only have at most 3 specific, 1 general.
-            List<ActionBase> actionPool = new List<ActionBase>(GameManager.Instance.models.GetPlayerJobActions(job));
+            List<ActionBase> actionPool = GameManager.Instance.models.GetPlayerJobActionsInstance(job);
             if (actionPool.Count <= 3) {
                 actions = actionPool;
             } else {
                 actions = new List<ActionBase>();
                 while (actions.Count < 3) {
                     int randIndex = Random.Range(0, actionPool.Count);
-                    actions.Add( actionPool[randIndex] );
+                    actions.Add(actionPool[randIndex]);
                     actionPool.RemoveAt(randIndex);
+                }
+                // Destroy unused actions
+                for (int i = 0; i < actionPool.Count; i++) {
+                    Object.Destroy(actionPool[i]);
                 }
             }
 
             List<ActionBase> commonMookActionPool = GameManager.Instance.models.GetCommonMookActionPool();
             int commonActionIndex = Random.Range(0, commonMookActionPool.Count);
-            actions.Add(commonMookActionPool[commonActionIndex]);
+            actions.Add(Object.Instantiate(commonMookActionPool[commonActionIndex]));
         }
     }
 
