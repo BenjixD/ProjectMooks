@@ -95,10 +95,10 @@ MonoBehaviour:
   _ascensionSpeed: 0.5
   _healColour:
     serializedVersion: 2
-    rgba: 4278245632
+    rgba: 4278249216
   _manaRecoveryColour:
     serializedVersion: 2
-    rgba: 4293221632
+    rgba: 4293685760
 --- !u!1 &5903673806292270433
 GameObject:
   m_ObjectHideFlags: 0

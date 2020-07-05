@@ -38,7 +38,5 @@ MonoBehaviour:
       chance: 1
   commandKeyword: poison2
   commandArgs: 0
-  userAnimName: attack
-  _animTimeBeforeEffect: 0
-  _animTimeAfterEffect: 0
-  damagePopupCanvasPrefab: {fileID: 0}
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}

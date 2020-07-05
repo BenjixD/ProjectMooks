@@ -25,7 +25,7 @@ MonoBehaviour:
     stamina: 0
   targetInfo:
     targetTeam: 0
-    targetType: 0
+    targetType: 2
   effects:
     element: 0
     physicalScaling: 0
@@ -33,6 +33,6 @@ MonoBehaviour:
     heals: 0
     statusAilments: []
   commandKeyword: mana
-  commandArgs: 1
+  commandArgs: 0
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
     type: 3}

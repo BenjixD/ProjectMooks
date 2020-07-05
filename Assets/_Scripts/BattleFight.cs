@@ -83,10 +83,10 @@ public class BattleFight : IDisposable
         yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets));
         FightResult fightResult = action.lastFightResult;
         this.CheckIfAnyEntityDied(fightResult, action);
+        this.onFightEnd(fightResult);
         if (action.animation != null) {
             yield return GameManager.Instance.time.GetController().WaitForSeconds(action.animation.timeAfterEffect);
         }
-        this.onFightEnd(fightResult);
     }
 
     private void CheckIfAnyEntityDied(FightResult result, ActionBase action) {

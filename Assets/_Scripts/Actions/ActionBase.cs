@@ -82,14 +82,6 @@ public class ActionBase : ScriptableObject {
     [Tooltip("The number of arguments following the keyword.")]
     public int commandArgs;
 
-    // [Header("Animations")]
-    // [Tooltip("The name of the default animation played for the user of this action. Alternatively, you can override Animate().")]
-    // public string userAnimName;
-    // [SerializeField, Tooltip("Time into the action before the effect takes place.")]
-    // private float _animTimeBeforeEffect;
-    // [SerializeField, Tooltip("Time to wait after the action effect takes place.")]
-    // private float _animTimeAfterEffect;
-
     [Header("References")]
     [SerializeField] protected GameObject damagePopupCanvasPrefab = null;
 
