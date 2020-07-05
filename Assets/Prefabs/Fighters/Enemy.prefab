@@ -49,49 +49,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11087af7767b364c8265296922bf0be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetId: 0
+  targetName: 
   Name: Evil Monster
   stats:
     level: 1
-    statPoints: 0
     hp:
       stat: 0
       currentValue: 1
     maxHp:
       stat: 1
       currentValue: 1
-      baseValue: 1
+      divisor: 5
+      growth: 38
+      baseValue: 50
     mana:
       stat: 2
       currentValue: 1
     maxMana:
       stat: 3
       currentValue: 1
+      divisor: 5
+      growth: 1
       baseValue: 1
     physical:
       stat: 4
       currentValue: 1
-      baseValue: 1
+      divisor: 1
+      growth: 1
+      baseValue: 25
     special:
       stat: 5
       currentValue: 1
-      baseValue: 1
+      divisor: 1
+      growth: 1
+      baseValue: 13
     defence:
       stat: 6
       currentValue: 1
-      baseValue: 1
+      divisor: 1
+      growth: 2
+      baseValue: 25
     resistance:
       stat: 7
       currentValue: 1
-      baseValue: 1
+      divisor: 1
+      growth: 2
+      baseValue: 25
     speed:
       stat: 8
       currentValue: 1
-      baseValue: 1
-  job: 0
-  actions: []
-  isRare: 0
-  targetId: 0
-  targetName: 
+      divisor: 1
+      growth: 1
+      baseValue: 15
   fighterMessageBox: {fileID: 0}
 --- !u!33 &5907855612439490822
 MeshFilter:

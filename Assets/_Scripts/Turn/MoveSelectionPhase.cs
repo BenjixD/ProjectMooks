@@ -75,6 +75,7 @@ public class MoveSelectionPhase : Phase {
     // Helper Coroutines
     IEnumerator HeroMoveSelection() {
         this._heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
+        
         InitializeCommandCardActionUI(GetHeroActionChoices(ActionType.BASIC));
 
         while(true) {
@@ -108,8 +109,10 @@ public class MoveSelectionPhase : Phase {
                 }            
             }
 
-
-            _playerActionCounter += Time.deltaTime;
+            if (this._field.GetHeroPlayer().HasSetCommand()) {
+                _playerActionCounter += Time.deltaTime;
+            }
+            
             if(this.CheckExecuteTurn()) {
                 break;
             }
@@ -228,11 +231,12 @@ public class MoveSelectionPhase : Phase {
     private bool CheckExecuteTurn() {
         List<PlayerObject> players = this._field.GetActivePlayerObjects();
 
-        //bool timeOutIfChatTooSlow = (stage.GetHeroPlayer().HasSetCommand() && playerActionCounter >= this.maxTimeBeforeAction);
-        bool timeOutIfChatTooSlow = false;
+        bool timeOutIfChatTooSlow = (this._field.GetHeroPlayer().HasSetCommand() && _playerActionCounter >= this.maxTimeBeforeAction);
+        //bool timeOutIfChatTooSlow = false;
         bool startTurn = timeOutIfChatTooSlow || HasEveryoneEnteredActions();
         if (startTurn) {
             this._playerActionCounter = 0;
+            this._ui.tmp_TimerText.gameObject.SetActive(false);
         } else {
             UpdateStateText();
         }
@@ -241,14 +245,13 @@ public class MoveSelectionPhase : Phase {
 
     private void UpdateStateText() {
         // Currently not in the UI, but may add something similar later
-        /*
-        if (!field.GetHeroPlayer().HasSetCommand()) {
-            this._ui.SetStateText("Waiting on streamer input");
+        if (!this._field.GetHeroPlayer().HasSetCommand()) {
+            this._ui.tmp_TimerText.text.SetText("Waiting on streamer input");
+            this._ui.tmp_TimerText.gameObject.SetActive(true);
         } else {
-            int timer = (int)(this.maxTimeBeforeAction - playerActionCounter);
-            this._ui.SetStateText("Waiting on Chat: " + timer);
+            int timer = (int)(this.maxTimeBeforeAction - this._playerActionCounter);
+            this._ui.tmp_TimerText.text.SetText("Waiting on Chat: " + timer);
         }
-        */
     }
 
     private bool HasEveryoneEnteredActions() {
@@ -261,6 +264,7 @@ public class MoveSelectionPhase : Phase {
     }
 
     private void GoBackToLastHeroAction() {
+        this._playerActionCounter = 0;
         this._heroMenuActions.Pop();
         HeroMenuAction menuAction = GetHeroMenuAction();
         if (menuAction.onBackCallback != null) {
@@ -284,10 +288,12 @@ public class MoveSelectionPhase : Phase {
     private void OnActionChooseBackCallback() {
         this._ui.targetSelectionUI.ClearSelection();
         InitializeCommandCardActionUI(GetHeroMenuAction().currentHeroChoices);
+        this._field.GetHeroPlayer().SetQueuedAction(null);
     }
 
     private void OnTargetChooseBackCallback() {
         this._ui.targetIconsUI.ClearTargetsForFighter(this._field.GetHeroPlayer());
+        this._field.GetHeroPlayer().SetQueuedAction(null);
         GoBackToLastHeroAction();
     }
 }

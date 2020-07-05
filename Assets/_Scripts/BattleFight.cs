@@ -100,11 +100,7 @@ public class BattleFight : IDisposable
 
     private void onFightEnd(FightResult result) {
         Messenger.Broadcast<FightResult>(Messages.OnFightEnd, result);
-    }
-
-    private void getEnemyAction() {
-        // TODO: Aggro targetting
-        this.fighter.SetQueuedAction(new QueuedAction(this.fighter, this.fighter.GetRecommendedAction(), new List<int>{_field.GetRandomPlayerObjectIndex()}  ));
+        Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);
     }
 
     private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {

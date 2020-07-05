@@ -102,6 +102,7 @@ public class BattleField : MonoBehaviour
 
         if (joinedPlayers.Count > 0) {
             Messenger.Broadcast<List<PlayerObject>>(Messages.OnPlayersJoinBattle, joinedPlayers);
+            Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);
         }
 
     }
@@ -115,7 +116,8 @@ public class BattleField : MonoBehaviour
 
         List<JobActionsList> enemyList = waveInfo.GetEnemyList();
         
-        float mult = stageInfo.GetDifficultyMult();
+//        float mult = stageInfo.GetDifficultyMult();
+        BattleType battleType = stageInfo.GetBattleType();
 
         for (int i = 0; i < enemyList.Count; i++) {
             JobActionsList jobList = enemyList[i];
@@ -127,13 +129,23 @@ public class BattleField : MonoBehaviour
             EnemyObject instantiatedEnemy = enemy.InstantiateFromJob<EnemyObject>(jobList, name, index);
 
             // Apply stat adjustments based on difficulty
+
             PlayerStats stats = instantiatedEnemy.stats;
             /*
             foreach(Stat stat in System.Enum.GetValues(typeof(Stat))) {
                 stats.ModifyStat(stat, (int) (stats.GetStat(stat) * mult));
             }
             */
-            int level = (int)(1f * mult); // TODO: revisie this algorithm 
+            int level = waveInfo.GetWaveInfo().averageLevel;
+
+            if (battleType == BattleType.HARD_BATTLE) {
+                level += 3;
+            } else if (battleType == BattleType.EASY_BATTLE) {
+                level -= 1;
+            } else if (battleType == BattleType.BOSS) {
+               // level += 10; // Should be done from inspector side
+            }
+
             stats.ApplyStatsBasedOnLevel(level);
 
             // TODO: Some sort of entrance animation

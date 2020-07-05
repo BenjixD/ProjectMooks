@@ -76,5 +76,75 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxHp.baseValue
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxHp.growth
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.special.baseValue
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.special.growth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.physical.baseValue
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.defence.baseValue
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.defence.growth
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.resistance.baseValue
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.speed.baseValue
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxHp.divisor
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxMana.divisor
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxMana.growth
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.physical.growth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.resistance.growth
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35f01a16f79c8c94ba5771a613681882, type: 3}

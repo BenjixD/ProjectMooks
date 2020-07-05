@@ -113,7 +113,26 @@ public class BattlePhase : Phase {
     private void SetUnsetMookCommands() {
         foreach (var player in this._field.GetActivePlayerObjects()) {
             if (!player.HasSetCommand()) {
-                player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{this._field.GetRandomEnemyObjectIndex()}  ));
+                ActionBase action = player.GetRecommendedAction();
+
+                switch (action.targetInfo.targetType) {
+                    case TargetType.SINGLE:
+                        List<FightingEntity> possibleTargets = action.GetAllPossibleActiveTargets(player);
+                        int randomIndex = Random.Range(0, possibleTargets.Count);
+                        player.SetQueuedAction(new QueuedAction(player, player.GetRecommendedAction(), new List<int>{ possibleTargets[randomIndex].targetId }  ));
+                        break;
+                    case TargetType.ALL:
+                        List<int> allEnemies = new List<int>();
+                        for (int i = 0; i < this._field.GetEnemyObjects().Length; i++) {
+                            allEnemies.Add(i);
+                        }
+
+                        player.SetQueuedAction(new QueuedAction(player, action, allEnemies));
+                        break;
+                    default:
+                        player.SetQueuedAction(new QueuedAction(player, action, new List<int>()));
+                        break;
+                }
             }
         }
     }

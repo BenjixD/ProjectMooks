@@ -8,10 +8,6 @@ public class PlayerQueue : TwitchChatListenerBase {
         public static string ValidJoin = "@{0} has joined the fray!";
         public static string AlreadyJoin = "@{0}, you are already registered in queue.";
     }
-
-	[SerializeField]
-	private PlayerStats _template = null;
-
 	private LinkedList<PlayerCreationData> _waitingQueue = new LinkedList<PlayerCreationData>();
 	private Dictionary<string, LinkedListNode<PlayerCreationData>> _inQueue = new Dictionary<string, LinkedListNode<PlayerCreationData>>(); 
 
@@ -19,7 +15,10 @@ public class PlayerQueue : TwitchChatListenerBase {
 		if(_inQueue.ContainsKey(username)) {
 			return false;
 		} else {
-			LinkedListNode<PlayerCreationData> node = _waitingQueue.AddLast(new PlayerCreationData(username, _template));
+            List<Job> mookJobs = GameManager.Instance.models.getMookJobs();
+            Job mookJob = mookJobs[UnityEngine.Random.Range(0, mookJobs.Count)];
+
+			LinkedListNode<PlayerCreationData> node = _waitingQueue.AddLast(new PlayerCreationData(username, mookJob));
 			_inQueue.Add(username, node);
 			return true;
 		}

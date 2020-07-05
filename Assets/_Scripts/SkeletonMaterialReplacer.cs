@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class SkeletonMaterialReplacer : MonoBehaviour {
 
    private Material[] materialsIWantToUse;
+   private Material[] originalMaterials;
    private MeshRenderer meshRenderer;
 
     // Spine sets the material every frame, so we need to hack it to change material properties at runtime:
@@ -15,6 +16,7 @@ public class SkeletonMaterialReplacer : MonoBehaviour {
 
    void Awake() {
        meshRenderer = GetComponent<MeshRenderer>();
+       originalMaterials = meshRenderer.sharedMaterials;
    }
 
    void OnWillRenderObject ()
@@ -47,5 +49,11 @@ public class SkeletonMaterialReplacer : MonoBehaviour {
 
    public void UseOriginal() {
        this.setOriginal = true;
+        var sharedMaterials = meshRenderer.sharedMaterials;
+        for (int i = 0; i < sharedMaterials.Length; i++) {
+            sharedMaterials[i] = originalMaterials[i];
+        }
+        
+        meshRenderer.sharedMaterials = sharedMaterials;
    }
 }

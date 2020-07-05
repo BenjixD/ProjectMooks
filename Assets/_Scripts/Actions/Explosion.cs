@@ -6,7 +6,7 @@ using UnityEngine;
 public class Explosion : ActionBase {
     [SerializeField] private GameObject _explosionQTE = null;
 
-    protected override bool QueueAction(FightingEntity user, string[] splitCommand) {
+    public override bool QueueAction(FightingEntity user, string[] splitCommand) {
         List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
         user.SetQueuedAction(new QueuedAction(user, this, targetIds));
         return true;
@@ -28,8 +28,7 @@ public class Explosion : ActionBase {
         
         foreach (FightingEntity target in targets) {
             PlayerStats before, after;
-            int defence = target.stats.resistance.GetValue();
-            int damage = Mathf.Max(attackDamage - defence, 0);
+            int damage = (int)(attackDamage * target.stats.GetDamageMultiplierResistence());
 
             before = (PlayerStats)target.stats.Clone();
             target.stats.hp.ApplyDelta(-damage);

@@ -8,21 +8,13 @@ public class PlayerCreationData {
 	public PlayerStats stats;
 	public Job job;
 
-	public PlayerCreationData(string n, PlayerStats template) {
+	public PlayerCreationData(string n, Job job) {
 		this.name = n;
-		this.stats = (PlayerStats)template.Clone();
-		this.stats.RandomizeStats();
-		this.stats.ResetStats();
-		this.job = ChooseJobFromStats(template);
-	}
-
-	public PlayerCreationData(string n, PlayerStats stats, Job job) {
-		this.name = n;
-		this.stats = stats;
-		this.stats.ResetStats();
 		this.job = job;
+        this.stats = (PlayerStats)GameManager.Instance.models.GetAllJobActionLists().Find( actionList => actionList.job == job ).prefab.stats.Clone();
 	}
 
+/*
 	// TODO: Probably should use some kind of k-means clustering instead of defined logic
 	private Job ChooseJobFromStats(PlayerStats template) {
 		if(stats.maxHp.GetBaseValue() > template.maxHp.GetBaseValue() && stats.physical.GetBaseValue() > stats.special.GetBaseValue()) {
@@ -39,4 +31,6 @@ public class PlayerCreationData {
 			return jobsList[UnityEngine.Random.Range(0, jobsList.Count)];
 		}
 	}
+*/
+
 }

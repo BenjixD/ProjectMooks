@@ -56,11 +56,17 @@ public class AilmentController {
     public void RemoveStatusAilment(string ailment) {
         StatusAilment status = _ailments[ailment];
         _ailments.Remove(ailment);
-        Object.Destroy(status);
         status.Recover(_entity);
+        Object.Destroy(status);
     }
 
     public void RemoveAllStatusAilments() {
+        foreach (KeyValuePair<string, StatusAilment> entry in this._ailments) {
+            StatusAilment ailment = entry.Value;
+            ailment.Recover(_entity);
+            Object.Destroy(ailment);
+        }
+
         _ailments.Clear();
     }
 

@@ -16,12 +16,10 @@ public class PlayerParty : Party {
     public void CreateHero(string heroName) {
         // Creates the hero player
         JobActionsList jobActionsList = GameManager.Instance.models.GetPlayerJobActionsList(Job.HERO);
-        FightingEntity heroPrefab = jobActionsList.prefab;
-        PlayerStats stats = (PlayerStats)heroPrefab.stats.Clone();
-        // stats.RandomizeStats(); // May or may not want this...
-        PlayerCreationData heroData = new PlayerCreationData(heroName, stats, Job.HERO);
+        PlayerCreationData heroData = new PlayerCreationData(heroName, Job.HERO);
         Player hero = new Player();
         hero.Initialize(jobActionsList, heroName);
+        hero.stats.ApplyStatsBasedOnLevel(4);
         this.SetFighter(0, hero);
     }
 
@@ -44,7 +42,11 @@ public class PlayerParty : Party {
     
     public void EvictPlayer(int index) {
         Player player = this.GetFighters<Player>()[index];
-        playerQueue.Remove(player.playerCreationData.name);
+        if (player == null) {
+            return;
+        }
+
+        playerQueue.Remove(player.Name);
         this.SetFighter(index, null);
     }
 
@@ -74,6 +76,8 @@ public class PlayerParty : Party {
             if(data != null) {
                 Player player = new Player();
                 player.Initialize(data, data.name);
+                player.stats.ApplyStatsBasedOnLevel(GameManager.Instance.gameState.playerParty.GetHeroFighter().stats.level - 2);
+                //player.stats.ApplyStatsBasedOnLevel(1);
                 players.Add(player);
             }
         }

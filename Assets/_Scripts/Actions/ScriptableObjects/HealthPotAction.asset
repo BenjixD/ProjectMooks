@@ -13,11 +13,23 @@ MonoBehaviour:
   m_Name: HealthPotAction
   m_EditorClassIdentifier: 
   name: Health Pot
+  actionType: 1
   description: Heals a target
-  commandKeyword: health
-  commandArgs: 1
-  userAnimName: 
+  maxPP: 1
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 1
+    stamina: 0
   targetInfo:
     targetTeam: 0
     targetType: 0
-  actionType: 1
+  effects:
+    element: 0
+    physicalScaling: 0
+    specialScaling: 0
+    heals: 0
+    statusAilments: []
+  commandKeyword: health
+  commandArgs: 1
+  userAnimName: 

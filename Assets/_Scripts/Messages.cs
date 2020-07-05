@@ -29,6 +29,8 @@ public class Messages {
 
     public static string OnPlayerJoinQueue = "OnPlayerJoinQueue"; // string
 
+    public static string OnUpdateStatusBarsUI = "OnUpdateStatusBarsUI"; //void
+
 }
 
 

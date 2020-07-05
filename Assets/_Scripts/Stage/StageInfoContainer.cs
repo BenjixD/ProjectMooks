@@ -32,6 +32,10 @@ public class StageInfoContainer
         }
     }
 
+    public BattleType GetBattleType() {
+        return this._battleType;
+    }
+
     public float GetDifficultyMult() {
         switch(_battleType) {
             case BattleType.EASY_BATTLE:

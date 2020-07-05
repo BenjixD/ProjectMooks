@@ -76,6 +76,10 @@ public class TargetSelectionUI : MonoBehaviour
     private void SetMaterialOutline(int targetIndex, bool enabled) {
         FightingEntity target = potentialTargets[targetIndex];
         SkeletonMaterialOutliner materialOutliner = target.GetComponent<SkeletonMaterialOutliner>();
+        if (materialOutliner == null) {
+            return;
+        }
+
         if (enabled) {
             materialOutliner.SetOutlineColor(this.targetSelectionColor);
         } else {

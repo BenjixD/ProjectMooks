@@ -16,36 +16,34 @@ public class StatusBarsUI : MonoBehaviour
     public EnemyStatusBarUI enemyStatusBarPrefab;
 
 
-
     private StatusBarUI[] statusBars = new StatusBarUI[PlayerParty.maxPlayers];
     private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[EnemyParty.maxPlayers];
 
-    void Awake() {
-        
-    }
-
     public void Initialize() {
-        Messenger.AddListener<List<PlayerObject>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
-        Messenger.AddListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
         Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         Messenger.AddListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
+        Messenger.AddListener(Messages.OnUpdateStatusBarsUI, this.UpdateStatusBars);
 
         this.buildStatusBars();
         this.UpdateStatusBars();
     }
 
     void OnDestroy() {
-        Messenger.RemoveListener<List<PlayerObject>>(Messages.OnPlayersJoinBattle, this.onPlayerJoin);
-        Messenger.RemoveListener<FightResult>(Messages.OnFightEnd, this.onFightEnd);
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         Messenger.RemoveListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
+        Messenger.RemoveListener(Messages.OnUpdateStatusBarsUI, this.UpdateStatusBars);
     }
 
     public void UpdateStatusBars() {
         PlayerObject[] players = GameManager.Instance.battleComponents.field.GetPlayerObjects();
 
         for (int i = 0; i < players.Length; i++) {
+            if (this.statusBars[i] == null) {
+                continue;
+            }
+
             PlayerObject player = players[i];
+
             if (player == null) {
                 this.statusBars[i].gameObject.SetActive(false);
                 continue;
@@ -76,6 +74,10 @@ public class StatusBarsUI : MonoBehaviour
         EnemyObject[] enemies = GameManager.Instance.battleComponents.field.GetEnemyObjects();
 
         for (int i = 0; i < enemies.Length; i++) {
+            if (this.enemyStatusBars[i] == null) {
+                continue;
+            }
+
             EnemyObject enemy = enemies[i];
             if (enemy == null) {
                 this.enemyStatusBars[i].gameObject.SetActive(false);
@@ -112,14 +114,6 @@ public class StatusBarsUI : MonoBehaviour
             statusBarForEnemy.gameObject.SetActive(false);
             enemyStatusBars[i] = statusBarForEnemy;
         }
-    }
-
-    private void onPlayerJoin(List<PlayerObject> players) {
-        this.UpdateStatusBars();
-    }
-
-    private void onFightEnd(FightResult result) {
-        this.UpdateStatusBars();
     }
 
     private void OnBattleEnd(BattleResult result) {

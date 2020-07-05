@@ -5,6 +5,7 @@ public enum Job {
     HERO,
 	WARRIOR,
 	MAGE,
+    FIRE_MAGE,
 	CLERIC,
 	LANCER,
 

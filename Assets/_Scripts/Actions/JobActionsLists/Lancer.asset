@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14fb53d9f9719b1498cd0a900037d9e2, type: 3}
   m_Name: Lancer
   m_EditorClassIdentifier: 
-  job: 4
+  job: 5
   _actions:
   - {fileID: 11400000, guid: 10e5e09a956753642b8c825d95c3edfc, type: 2}
   - {fileID: 11400000, guid: babd49c684bab3d4881a29db27ddf422, type: 2}

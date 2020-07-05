@@ -20,6 +20,8 @@ public class BattleUI : MonoBehaviour
 
     public FighterSlotUI targetIconsUI;
 
+    public BasicText tmp_TimerText;
+
     public void Initialize() {
         this.commandCardUI.Initialize();
         this.statusBarsUI.Initialize();
