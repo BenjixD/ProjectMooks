@@ -36,21 +36,29 @@ public class ScriptableObjectDictionary : MonoBehaviour {
         }
     }
 
-
-  public List<ActionBase> GetPlayerJobActions(Job job) {
+    // Instantiates a list of actions given a job and returns it. Every action must eventually be manually destroyed.
+    public List<ActionBase> GetPlayerJobActionsInstance(Job job) {
         if(!playerJobActions.ContainsKey(job)) {
             Debug.Log("No JobActionsList for job " + job + " found");
             return null;
         }
-        return playerJobActions[job];
+        List<ActionBase> instance = new List<ActionBase>();
+        foreach (ActionBase action in playerJobActions[job]) {
+            instance.Add(Instantiate(action));
+        }
+        return instance;
     }
 
-    public List<ActionBase> GetEnemyJobActions(Job job) {
+    public List<ActionBase> GetEnemyJobActionsInstance(Job job) {
         if(!enemyJobActions.ContainsKey(job)) {
             Debug.Log("No JobActionsList for job " + job + " found");
             return null;
         }
-        return enemyJobActions[job];
+        List<ActionBase> instance = new List<ActionBase>();
+        foreach (ActionBase action in enemyJobActions[job]) {
+            instance.Add(Instantiate(action));
+        }
+        return instance;
     }
 
     public JobActionsList GetPlayerJobActionsList(Job job) {

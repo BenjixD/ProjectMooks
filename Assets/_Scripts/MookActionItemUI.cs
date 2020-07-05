@@ -10,6 +10,7 @@ public class MookActionItemUI : MonoBehaviour
     public Color selectedColor;
     public TextMeshProUGUI moveNumberText;
     public TextMeshProUGUI actionText;
+    public TextMeshProUGUI resourceText;
 
     public Image background;
 
@@ -18,7 +19,13 @@ public class MookActionItemUI : MonoBehaviour
     public void Initialize(ActionBase action, int index) {
         this.action = action;
         this.SetText(this.action.name);
-        this.moveNumberText.SetText("!move" + (index+1));
+        this.moveNumberText.SetText(action.GetCommandFormat());
+        if (action.CostsPP()) {
+            resourceText.gameObject.SetActive(true);
+            resourceText.SetText(action.currPP.ToString());
+        } else {
+            resourceText.gameObject.SetActive(false);
+        }
     }
 
     public void SetSelected(bool isSelected) {
