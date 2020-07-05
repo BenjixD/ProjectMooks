@@ -12,6 +12,11 @@ public class PlayerCreationData {
 		this.name = n;
 		this.job = job;
         this.stats = (PlayerStats)GameManager.Instance.models.GetAllJobActionLists().Find( actionList => actionList.job == job ).prefab.stats.Clone();
+
+        if (this.stats.maxHp.GetValue() <= 10) {
+            Debug.LogError("ERROR: " + this.job);
+        }
+
 	}
 
 /*

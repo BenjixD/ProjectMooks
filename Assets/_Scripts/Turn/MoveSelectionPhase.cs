@@ -37,7 +37,7 @@ public class HeroMenuAction {
 
 [System.Serializable]
 public class MoveSelectionPhase : Phase {
-    public float maxTimeBeforeAction = 15f;
+    public float maxTimeBeforeAction = 25f;
 
     protected BattleUI _ui {get; set; }
     protected BattleField _field {get; set;}
@@ -65,7 +65,7 @@ public class MoveSelectionPhase : Phase {
 
     protected override IEnumerator Run() {
         this.ApplyStatusAilments(this._field.GetAllFightingEntities());
-        yield return GameManager.Instance.time.StartCoroutine(HeroMoveSelection());
+        yield return GameManager.Instance.time.GetController().StartCoroutine(HeroMoveSelection());
     }
 
     public override bool CanInputActions() {
@@ -107,6 +107,10 @@ public class MoveSelectionPhase : Phase {
                 if (Input.GetKeyDown(KeyCode.X)) {
                     GoBackToLastHeroAction();
                 }            
+            }
+
+            if (Input.GetKeyDown(KeyCode.L)) {
+                _playerActionCounter = this.maxTimeBeforeAction;
             }
 
             if (this._field.GetHeroPlayer().HasSetCommand()) {
@@ -229,6 +233,10 @@ public class MoveSelectionPhase : Phase {
     }
 
     private bool CheckExecuteTurn() {
+        if (_ui.tmp_TimerText == null) {
+            return false;
+        }
+
         List<PlayerObject> players = this._field.GetActivePlayerObjects();
 
         bool timeOutIfChatTooSlow = (this._field.GetHeroPlayer().HasSetCommand() && _playerActionCounter >= this.maxTimeBeforeAction);
@@ -236,7 +244,7 @@ public class MoveSelectionPhase : Phase {
         bool startTurn = timeOutIfChatTooSlow || HasEveryoneEnteredActions();
         if (startTurn) {
             this._playerActionCounter = 0;
-            this._ui.tmp_TimerText.gameObject.SetActive(false);
+
         } else {
             UpdateStateText();
         }

@@ -45,6 +45,8 @@ public class AilmentController {
     }
 
     public void AddStatusAilment(StatusAilment ailment) {
+        ailment.Initialize();
+
         if(_ailments.ContainsKey(ailment.name)) {
             _ailments[ailment.name].StackWith(_entity, ailment);
         } else {

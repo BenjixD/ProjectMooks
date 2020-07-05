@@ -34,7 +34,7 @@ public class TurnManager : MonoBehaviour {
 		phases.Add(new BattlePhase(ui, field, callback));
 		phases.Add(new TurnEndPhase(field, callback));
 
-		GameManager.Instance.time.StartCoroutine(phases[_curPhase].RunPhase());
+		GameManager.Instance.time.GetController().StartCoroutine(phases[_curPhase].RunPhase());
 	}
 
 	public Phase GetPhase() {
@@ -54,6 +54,6 @@ public class TurnManager : MonoBehaviour {
 
 	private void StartNextPhase() {
 		_curPhase = (_curPhase + 1) % phases.Count;
-		GameManager.Instance.time.StartCoroutine(phases[_curPhase].RunPhase());
+		GameManager.Instance.time.GetController().StartCoroutine(phases[_curPhase].RunPhase());
 	}
 }
