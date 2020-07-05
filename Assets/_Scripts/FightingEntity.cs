@@ -70,15 +70,16 @@ public class FightingEntity : MonoBehaviour
         return _ailmentController;
     }
 
-    public void TryActionCommand(string message) {
+    public bool TryActionCommand(string message) {
         string[] splitCommand = message.Split(' ');
         foreach (ActionBase action in actions) {
             if (action.TryChooseAction(this, splitCommand)) {
-                return;
+                return true;
             }
         }
         
         Debug.Log("Invalid action command for player " + Name + ": " + message);
+        return false;
     }
 
     public ActionBase GetRecommendedAction() {
