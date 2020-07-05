@@ -26,8 +26,4 @@ public class QueuedAction {
     public List<FightingEntity> GetTargets() {
         return _action.GetTargets(this.user, _targetIds);
     }
-    
-    public FightResult ExecuteAction() {
-        return _action.ExecuteAction(user, GetTargets());
-    }
 }

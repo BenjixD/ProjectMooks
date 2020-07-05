@@ -15,7 +15,9 @@ MonoBehaviour:
   name: Attack
   actionType: 0
   description: 
+  animation: {fileID: 11400000, guid: 0339d2876fc0ede4e989a91c7e9b5b5f, type: 2}
   maxPP: 0
+  currPP: 0
   actionCost:
     HP: 0
     mana: 0
@@ -33,3 +35,7 @@ MonoBehaviour:
   commandKeyword: a
   commandArgs: 1
   userAnimName: super slam
+  _animTimeBeforeEffect: 3
+  _animTimeAfterEffect: 1.6
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}

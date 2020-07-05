@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewHeroSpell", menuName = "Actions/HeroSpell", order = 1)]
-public class HeroSpell : ActionBase {
-    protected override void Animate(AnimationController controller) {
+[CreateAssetMenu(fileName = "HeroTomeFlip", menuName = "ActionsAnimations/HeroTomeFlip")]
+public class HeroTomeFlip : ActionAnimation {
+    public override void Animate(AnimationController controller) {
         // Perform casting spell animation for hero
         int bookTrack = controller.TakeFreeTrack();
         controller.AddToTrack("idle pose", "magic attack start", false, 0);

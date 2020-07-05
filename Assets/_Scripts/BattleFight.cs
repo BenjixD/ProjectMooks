@@ -77,16 +77,15 @@ public class BattleFight : IDisposable
             Debug.LogError("Cannot find queued action: "  + attackerName);
             yield break;
         }
-        string attackName = attackerAction._action.name;
-        List<FightingEntity> targets = attackerAction._action.GetTargets(this.fighter, attackerAction.GetTargetIds());
+        ActionBase action = attackerAction.GetAction();
+        string attackName = action.name;
+        List<FightingEntity> targets = action.GetTargets(this.fighter, attackerAction.GetTargetIds());
+        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, EndFight));
+    }
 
-        yield return GameManager.Instance.time.StartCoroutine(doAnimation(this.fighter, attackerAction, targets));
-
-        FightResult fightResult = attackerAction.ExecuteAction();
-
-        this.CheckIfAnyEntityDied(fightResult, attackerAction._action);
-
-        this.onFightEnd(fightResult);
+    private void EndFight(FightResult fightResult, ActionBase action) {
+        CheckIfAnyEntityDied(fightResult, action);
+        onFightEnd(fightResult);
     }
 
     private void CheckIfAnyEntityDied(FightResult result, ActionBase action) {
@@ -102,10 +101,4 @@ public class BattleFight : IDisposable
         Messenger.Broadcast<FightResult>(Messages.OnFightEnd, result);
         Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);
     }
-
-    private IEnumerator doAnimation(FightingEntity a, QueuedAction attackerAction, List<FightingEntity> targets) {
-        // TODO: Put animation here
-        yield return GameManager.Instance.time.GetController().WaitForSeconds(1.0f);
-    }
-
 }

@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bde622594d2733b459717fcd736eebec, type: 3}
+  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
   m_Name: ClericHeal
   m_EditorClassIdentifier: 
   name: Heal
   actionType: 1
   description: 
+  animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
   maxPP: 3
   currPP: 0
   actionCost:
@@ -28,9 +29,10 @@ MonoBehaviour:
   effects:
     element: 0
     physicalScaling: 0
-    specialScaling: 0.5
+    specialScaling: 1
     heals: 1
     statusAilments: []
   commandKeyword: heal
   commandArgs: 1
-  userAnimName: 
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}

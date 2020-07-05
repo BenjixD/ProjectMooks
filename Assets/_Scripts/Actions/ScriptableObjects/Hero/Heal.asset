@@ -15,10 +15,12 @@ MonoBehaviour:
   name: Heal
   actionType: 1
   description: 
+  animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
   maxPP: 0
+  currPP: 0
   actionCost:
     HP: 0
-    mana: 12
+    mana: 4
     PP: 0
     stamina: 0
   targetInfo:
@@ -27,9 +29,10 @@ MonoBehaviour:
   effects:
     element: 0
     physicalScaling: 0
-    specialScaling: 0.5
+    specialScaling: 1
     heals: 1
     statusAilments: []
-  commandKeyword: heal
-  commandArgs: 1
-  userAnimName: 
+  commandKeyword: 
+  commandArgs: 0
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}

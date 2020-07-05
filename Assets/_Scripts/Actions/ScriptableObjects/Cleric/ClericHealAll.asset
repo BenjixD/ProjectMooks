@@ -10,27 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Attack
+  m_Name: ClericHealAll
   m_EditorClassIdentifier: 
-  name: Attack
-  actionType: 0
+  name: Heal
+  actionType: 1
   description: 
-  maxPP: 0
+  animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
+  maxPP: 1
+  currPP: 3
   actionCost:
     HP: 0
     mana: 0
-    PP: 0
+    PP: 1
     stamina: 0
   targetInfo:
-    targetTeam: 1
-    targetType: 0
+    targetTeam: 0
+    targetType: 1
   effects:
     element: 0
-    physicalScaling: 1
-    specialScaling: 0
-    heals: 0
+    physicalScaling: 0
+    specialScaling: 0.5
+    heals: 1
     statusAilments: []
-  commandKeyword: a
+  commandKeyword: heal
   commandArgs: 1
-  userAnimName: melee attack
-  userAnimNamesTest: []
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}

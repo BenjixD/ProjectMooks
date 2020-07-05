@@ -27,7 +27,7 @@ public class FightingEntity : MonoBehaviour
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
 
-
+    public Transform damagePopupLocation;
 
     protected QueuedAction _queuedAction;
     private AnimationController _animController;
