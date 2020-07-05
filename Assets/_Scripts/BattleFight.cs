@@ -80,13 +80,12 @@ public class BattleFight : IDisposable
         ActionBase action = attackerAction.GetAction();
         string attackName = action.name;
         List<FightingEntity> targets = action.GetTargets(this.fighter, attackerAction.GetTargetIds());
-        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets));
-        FightResult fightResult = action.lastFightResult;
-        this.CheckIfAnyEntityDied(fightResult, action);
-        this.onFightEnd(fightResult);
-        if (action.animation != null) {
-            yield return GameManager.Instance.time.GetController().WaitForSeconds(action.animation.timeAfterEffect);
-        }
+        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, EndFight));
+    }
+
+    private void EndFight(FightResult fightResult, ActionBase action) {
+        CheckIfAnyEntityDied(fightResult, action);
+        onFightEnd(fightResult);
     }
 
     private void CheckIfAnyEntityDied(FightResult result, ActionBase action) {

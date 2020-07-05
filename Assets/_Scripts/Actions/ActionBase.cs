@@ -85,8 +85,6 @@ public class ActionBase : ScriptableObject {
     [Header("References")]
     [SerializeField] protected GameObject damagePopupCanvasPrefab = null;
 
-    [HideInInspector] public FightResult lastFightResult;
-
     private void Awake() {
         if (CostsPP()) {
             currPP = maxPP;
@@ -184,20 +182,23 @@ public class ActionBase : ScriptableObject {
         return true;
     }
 
-    public IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets) {
-        if (!CheckCost(user)) {
-            lastFightResult = new FightResult(user, this);
-            yield break;
+    public IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, System.Action<FightResult, ActionBase> onFightEnd) {
+        FightResult result = new FightResult(user, this);
+        if (CheckCost(user)) {
+            PayCost(user);
+            if (animation != null) {
+                animation.Animate(user.GetAnimController());
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeBeforeEffect);
+            } else {
+                Debug.LogWarning("No animation set for " + user.name + "'s " + name);
+            }
+            result = ApplyEffect(user, targets);
+            OnPostEffect(result);
         }
-        PayCost(user);
+        onFightEnd(result, this);
         if (animation != null) {
-            animation.Animate(user.GetAnimController());
-            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeBeforeEffect);
-        } else {
-            Debug.LogWarning("No animation set for " + user.name + "'s " + name);
+            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeAfterEffect);
         }
-        lastFightResult = ApplyEffect(user, targets);
-        OnPostEffect(lastFightResult);
     }
 
     public List<FightingEntity> GetAllPossibleActiveTargets(FightingEntity user) {
