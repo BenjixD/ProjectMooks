@@ -13,10 +13,14 @@ public class PlayerCreationData {
 		this.job = job;
         this.stats = (PlayerStats)GameManager.Instance.models.GetAllJobActionLists().Find( actionList => actionList.job == job ).prefab.stats.Clone();
 
-        if (this.stats.maxHp.GetValue() <= 10) {
-            Debug.LogError("ERROR: " + this.job);
-        }
 
+        // TODO: This is a good automated test
+        for (int i = 0; i < (int)Job.LENGTH; i++) {
+            PlayerStats testStats = (PlayerStats)GameManager.Instance.models.GetAllJobActionLists().Find( actionList => actionList.job == (Job)i ).prefab.stats.Clone();
+            if (testStats == null || testStats.maxHp.GetValue() <= 10) {
+                Debug.LogError("ERROR: Job is not set correctly!  " + (Job)i);
+            }
+        }
 	}
 
 /*

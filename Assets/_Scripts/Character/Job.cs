@@ -8,5 +8,6 @@ public enum Job {
 	CLERIC,
 	LANCER,
 
-    BASIC_ENEMY
+    BASIC_ENEMY,
+    LENGTH
 }

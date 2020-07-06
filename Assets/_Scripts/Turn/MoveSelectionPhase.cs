@@ -176,8 +176,9 @@ public class MoveSelectionPhase : Phase {
                         break;
 
                     case TargetType.ALL:
+                        this._commandSelector.Initialize(0, 1, null); // Only one choice
                         this._ui.targetSelectionUI.InitializeTargetSelectionAll(possibleTargets);
-                    break;
+                        break;
 
                     default:
 
