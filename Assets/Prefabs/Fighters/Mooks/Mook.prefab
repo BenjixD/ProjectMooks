@@ -204,7 +204,7 @@ Transform:
   m_GameObject: {fileID: 5588856247799786281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.65, y: 0.65, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6405749658309340247}
   - {fileID: 942915696813994679}
@@ -223,16 +223,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145117c0f72560f4f8ab5e2cd6715f22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetId: 0
+  targetName: 
   Name: 
   stats:
     level: 1
-    statPoints: 0
     hp:
       stat: 0
       currentValue: 1
     maxHp:
       stat: 1
       currentValue: 1
+      divisor: 1
+      growth: 1
       baseValue: 1
     mana:
       stat: 2
@@ -240,32 +243,39 @@ MonoBehaviour:
     maxMana:
       stat: 3
       currentValue: 1
+      divisor: 1
+      growth: 1
       baseValue: 1
     physical:
       stat: 4
       currentValue: 1
+      divisor: 1
+      growth: 1
       baseValue: 1
     special:
       stat: 5
       currentValue: 1
+      divisor: 1
+      growth: 1
       baseValue: 1
     defence:
       stat: 6
       currentValue: 1
+      divisor: 1
+      growth: 1
       baseValue: 1
     resistance:
       stat: 7
       currentValue: 1
+      divisor: 1
+      growth: 1
       baseValue: 1
     speed:
       stat: 8
       currentValue: 1
+      divisor: 1
+      growth: 1
       baseValue: 1
-  job: 0
-  actions: []
-  isRare: 0
-  targetId: 0
-  targetName: 
   fighterMessageBox: {fileID: 4552004380264206020}
   damagePopupLocation: {fileID: 6405749658309340247}
 --- !u!114 &1519749899
