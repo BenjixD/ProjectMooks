@@ -164,6 +164,10 @@ public class ActionBase : ScriptableObject {
     }
 
     public virtual bool QueueAction(FightingEntity user, string[] splitCommand) {
+        if (splitCommand.Length <= 1) {
+            return false;
+        }
+
         if (targetInfo.targetType == TargetType.SINGLE) {
             int targetId = this.GetTargetIdFromString(splitCommand[1], user);
             if (targetId == -1) {
