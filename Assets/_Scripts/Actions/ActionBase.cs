@@ -164,17 +164,18 @@ public class ActionBase : ScriptableObject {
     }
 
     public virtual bool QueueAction(FightingEntity user, string[] splitCommand) {
-        if (splitCommand.Length <= 1) {
+        if (splitCommand.Length < 1) {
             return false;
         }
 
-        if (targetInfo.targetType == TargetType.SINGLE) {
+        if (targetInfo.targetType == TargetType.SINGLE && splitCommand.Length == 2) {
             int targetId = this.GetTargetIdFromString(splitCommand[1], user);
             if (targetId == -1) {
                 return false;
             }
             user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
-        } else if (targetInfo.targetType == TargetType.ALL) {
+            return true;
+        } else if (targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
             List<FightingEntity> possibleTargets = this.GetAllPossibleTargets(user);
             List<int> targetIds = new List<int>();
             for (int i = 0; i < possibleTargets.Count; i++) {
@@ -182,8 +183,10 @@ public class ActionBase : ScriptableObject {
             }
             
             user.SetQueuedAction(new QueuedAction(user, this, targetIds));
+            return true;
         }
-        return true;
+
+        return false;
     }
 
     public IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, System.Action<FightResult, ActionBase> onFightEnd) {
