@@ -116,7 +116,7 @@ public class ScriptableObjectDictionary : MonoBehaviour {
         return this.commonStatusAilments.Find(ailment => ailment.name == name);
     }
 
-    public StatBuffAilment GetStatBuffAilment(StatType stat, float value) {
+    public StatBuffAilment GetStatBuffAilment(Stat stat, float value) {
         StatBuffAilment ailment = (StatBuffAilment)this.commonStatusAilments.Find(ail => ail.name == "StatBuff");
         ailment = Instantiate(ailment);
         ailment.statType = stat;

@@ -106,7 +106,7 @@ public class RewardController : MonoBehaviour
 
         foreach (PlayerReward reward in rewards) {
             PlayerReward rewardInstance = Instantiate(reward);
-            rewardInstance.Initialize();
+            rewardInstance.Initialize(GameManager.Instance.gameState.playerParty.GetHeroFighter());
             this.currentRewards.Add(rewardInstance);
         }
 

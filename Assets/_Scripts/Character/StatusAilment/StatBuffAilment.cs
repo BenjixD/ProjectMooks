@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO: Add other stats, use in Player...
-[System.Serializable]
-public enum StatType {
-    PHYSICAL
-}
+
 [CreateAssetMenu(fileName = "StatBuffAilment", menuName = "StatusAilment/StatBuffAilment")]
 public class StatBuffAilment : StatusAilment {
 
 	public StatModifier.Type damageType = StatModifier.Type.ADD_PERCENTAGE;
 	public float val;
 
-    public StatType statType;
+    public Stat statType;
 
     private List<StatModifier> modifiers = new List<StatModifier>();
 
@@ -23,14 +20,20 @@ public class StatBuffAilment : StatusAilment {
 	}
 
 	public override void ApplyTo(FightingEntity p) {
+        if (!p.stats.GetModifiableStats().ContainsKey(statType)) {
+            return;
+        }
+
         this.ApplyHelper(p, this);
 	}
 
 	public override void Recover(FightingEntity p) {
 		//TODO: Possible Animation Modifications
         foreach (StatModifier modifier in this.modifiers) {
-            p.stats.physical.RemoveModifier(modifier);
+            p.stats.GetModifiableStats()[statType].RemoveModifier(modifier);
         }
+
+        modifiers.Clear();
 	}
 
 	public override void TickEffect(FightingEntity p) {
@@ -38,7 +41,10 @@ public class StatBuffAilment : StatusAilment {
 	}
 
     private void ApplyHelper(FightingEntity p, StatBuffAilment ailment) {
-        modifiers.Add(p.stats.physical.ApplyDeltaModifier(ailment.val, ailment.damageType));
+        Debug.Log(ailment.statType);
+        Debug.Log("Before: " + p.stats.GetModifiableStats()[ailment.statType].GetValue());
+        modifiers.Add(p.stats.GetModifiableStats()[ailment.statType].ApplyDeltaModifier(ailment.val, ailment.damageType));
+        Debug.Log("After: " + p.stats.GetModifiableStats()[ailment.statType].GetValue());
     }
 
 }

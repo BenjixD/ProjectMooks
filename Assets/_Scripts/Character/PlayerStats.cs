@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+// TODO: Break apart basic stats (HP) and modifiable stats (MAX_HP). They don't have even common logic to justify subclassing
 public enum Stat {
 	HP,
     MAX_HP,
@@ -239,6 +240,8 @@ public class PlayerStats: ICloneable {
         this.Initialize();
 	}
 
+
+    // TODO: Break apart basic stats (HP) and modifiable stats (MAX_HP). They don't have even common logic to justify subclassing
     private void Initialize() {
 		level = 1;
         this.modifiableStats = new Dictionary<Stat, PlayerStatWithModifiers>();
@@ -398,5 +401,4 @@ public class PlayerStats: ICloneable {
     public float GetDamageMultiplierResistence() {
         return ((float)100 / (100 + this.resistance.GetValue()));
     }
-    
 }
