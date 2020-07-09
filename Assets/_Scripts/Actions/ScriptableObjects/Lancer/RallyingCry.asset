@@ -21,7 +21,7 @@ MonoBehaviour:
   actionCost:
     HP: 0
     mana: 0
-    PP: 0
+    PP: 1
     stamina: 0
   targetInfo:
     targetTeam: 0
@@ -34,9 +34,6 @@ MonoBehaviour:
     statusAilments: []
   commandKeyword: rally
   commandArgs: 0
-  userAnimName: melee attack
-  _animTimeBeforeEffect: 0
-  _animTimeAfterEffect: 0
   damagePopupCanvasPrefab: {fileID: 0}
   _rallyingCryQTE: {fileID: 1867265765112976025, guid: 041fbdba7d0c55848a8832ff621ff6f8,
     type: 3}
