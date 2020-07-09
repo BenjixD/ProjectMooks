@@ -41,10 +41,7 @@ public class StatBuffAilment : StatusAilment {
 	}
 
     private void ApplyHelper(FightingEntity p, StatBuffAilment ailment) {
-        Debug.Log(ailment.statType);
-        Debug.Log("Before: " + p.stats.GetModifiableStats()[ailment.statType].GetValue());
         modifiers.Add(p.stats.GetModifiableStats()[ailment.statType].ApplyDeltaModifier(ailment.val, ailment.damageType));
-        Debug.Log("After: " + p.stats.GetModifiableStats()[ailment.statType].GetValue());
     }
 
 }

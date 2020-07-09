@@ -65,7 +65,6 @@ public class AilmentController {
     public void RemoveAllStatusAilments() {
         foreach (KeyValuePair<string, StatusAilment> entry in this._ailments) {
             StatusAilment ailment = entry.Value;
-            Debug.Log("Recover from: " + ailment.name);
             ailment.Recover(_entity);
             Object.Destroy(ailment);
         }

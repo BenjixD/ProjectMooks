@@ -67,7 +67,6 @@ public class FighterSlotUI : MonoBehaviour {
             this.ClearTargetsForSlot(slot);
         }
 
-        Debug.Log("Action targets count: " + action.GetTargets().Count);
         this.fighterToActionMap[slot] = action.GetTargets().Map((FightingEntity fighter) => fighter.fighterSlot);
 
         this.SetSlotUIForAction(action);
