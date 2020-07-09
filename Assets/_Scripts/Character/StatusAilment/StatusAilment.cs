@@ -13,17 +13,6 @@ public abstract class StatusAilment : ScriptableObject {
 	[Tooltip("Phase to trigger Status Ailment")]
 	public TurnPhase phase;
 
-    protected bool isInitialized = false;
-
-    public StatusAilment Initialize() {
-        if (isInitialized == true) {
-            return this;
-        }
-
-        this.isInitialized = true;
-        return this;
-    }
-
 	public void SetDuration(int duration) {
 		this.duration = duration;
 	}
