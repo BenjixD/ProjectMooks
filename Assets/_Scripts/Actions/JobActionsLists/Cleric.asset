@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14fb53d9f9719b1498cd0a900037d9e2, type: 3}
   m_Name: Cleric
   m_EditorClassIdentifier: 
-  job: 4
+  job: 3
   _actions:
   - {fileID: 11400000, guid: 76655ec1a20f5cb489620c1ce6b4a658, type: 2}
   - {fileID: 11400000, guid: 717d4c6dff5d3794399a46b0ca2748ee, type: 2}

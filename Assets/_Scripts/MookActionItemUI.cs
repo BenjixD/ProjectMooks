@@ -19,7 +19,8 @@ public class MookActionItemUI : MonoBehaviour
     public void Initialize(ActionBase action, int index) {
         this.action = action;
         this.SetText(this.action.name);
-        this.moveNumberText.SetText(action.GetCommandFormat());
+        int displayIndex = (index + 1);
+        this.moveNumberText.SetText(displayIndex + ": " + action.GetCommandFormat());
         if (action.CostsPP()) {
             resourceText.gameObject.SetActive(true);
             resourceText.SetText(action.currPP.ToString());

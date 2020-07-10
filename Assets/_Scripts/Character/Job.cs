@@ -4,10 +4,10 @@ using System.Collections.Generic;
 public enum Job {
     HERO,
 	WARRIOR,
-	MAGE,
     FIRE_MAGE,
 	CLERIC,
 	LANCER,
 
-    BASIC_ENEMY
+    BASIC_ENEMY,
+    LENGTH
 }

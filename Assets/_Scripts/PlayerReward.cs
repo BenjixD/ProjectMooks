@@ -18,7 +18,7 @@ public abstract class PlayerReward : ScriptableObject
     public abstract PlayerRewardType rewardType {get;}
 
 
-    public virtual void Initialize() {
+    public virtual void Initialize(Fighter player) {
         // Note: Randomization/dynamic description should be done here.
         // Be sure to instantiate the scriptable object before you call this
     }

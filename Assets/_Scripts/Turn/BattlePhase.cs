@@ -99,7 +99,7 @@ public class BattlePhase : Phase {
             
             BattleFight fight = new BattleFight(_field, fighters[i]);
             this.currentFight = fight;
-            yield return GameManager.Instance.time.StartCoroutine(fight.DoFight());
+            yield return GameManager.Instance.time.GetController().StartCoroutine(fight.DoFight());
 
             this._ui.battleOrderUI.PopFighter();
         }

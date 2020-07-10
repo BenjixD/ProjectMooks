@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: ResistanceDownAilment
   m_EditorClassIdentifier: 
   name: Resistance Down
-  defaultDuration: 0
-  infiniteDefaultDuration: 0
-  duration: 0
+  infiniteDuration: 0
+  duration: 3
   level: 1
   phase: 3
   stat: 5

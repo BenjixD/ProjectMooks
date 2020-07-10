@@ -43,6 +43,7 @@ public class FighterSlotUI : MonoBehaviour {
         List<FighterSlot> targets = this.fighterToActionMap[slot];
         foreach (FighterSlot targetSlot in targets) {
             if (targetSlot.fighter != null) {
+                Debug.Log("Clear UI arrow from: " + targetSlot.name);
                 targetSlot.ClearArrowsUIOfColor(slot.fighter.GetOrderColor());
             }
         }
@@ -64,10 +65,9 @@ public class FighterSlotUI : MonoBehaviour {
 
         if (this.fighterToActionMap[slot] != null) {
             this.ClearTargetsForSlot(slot);
-        } else {
-            Debug.Log("Action targets count: " + action.GetTargets().Count);
-            this.fighterToActionMap[slot] = action.GetTargets().Map((FightingEntity fighter) => fighter.fighterSlot);
         }
+
+        this.fighterToActionMap[slot] = action.GetTargets().Map((FightingEntity fighter) => fighter.fighterSlot);
 
         this.SetSlotUIForAction(action);
     }

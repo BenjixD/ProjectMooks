@@ -1,5 +1,6 @@
 
 
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Rewards", menuName = "Rewards/StatReward", order = 1)]
@@ -13,10 +14,12 @@ public class StatReward : PlayerRewardAilment
 
     // Randomized variables
     public float percentage {get; set;}
-    public StatType statType {get; set;}
+    public Stat statType {get; set;}
 
-    public override void Initialize() {
-        statType = StatType.PHYSICAL; // TODO: Randomize this
+    public override void Initialize(Fighter player) {
+        List<Stat> modifiableStats = new List<Stat>(player.stats.GetModifiableStats().Keys);
+        statType = modifiableStats[Random.Range(0, modifiableStats.Count)];
+
         StatBuffAilment statAilment =  GameManager.Instance.models.GetStatBuffAilment(this.statType, percentage);
         statAilment.val = Random.Range(minPercentage, maxPercentage);
 
@@ -34,7 +37,7 @@ public class StatReward : PlayerRewardAilment
         
     }
 
-    public static string GetStatDisplayName(StatType type) {
+    public static string GetStatDisplayName(Stat type) {
         return type.ToString() + " Up";
     }
 }

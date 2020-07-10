@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: DefendStatusAilment
   m_EditorClassIdentifier: 
   name: Defend
-  defaultDuration: 0
-  infiniteDefaultDuration: 0
-  duration: 0
+  infiniteDuration: 0
+  duration: 1
   level: 1
   phase: 3
   stat: 4

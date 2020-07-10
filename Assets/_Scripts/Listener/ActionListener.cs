@@ -28,7 +28,7 @@ public class ActionListener : TwitchChatListenerBase {
         if (username == _player.Name) {
             this.HandleMessage("!" + message);
             if(_player.TryActionCommand(message)) {
-                this.EchoMessage(String.Format(ActionListenerResponse.ValidAction, username, message));
+                this.EchoMessage(String.Format(ActionListenerResponse.ValidAction, username, _player.GetQueuedAction()._action.name + "!" ));
             } else {
                 this.EchoMessage(String.Format(ActionListenerResponse.InvalidAction, username));
             }

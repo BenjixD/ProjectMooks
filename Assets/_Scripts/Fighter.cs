@@ -26,7 +26,6 @@ public class Fighter
     // Mook: Generated based on PlayercreationData.
 
     public void Initialize(JobActionsList jobList, string name) {
-        Debug.Log("Job: " + jobList.job);
         this.playerCreationData = new PlayerCreationData(name, jobList.job);
     
         this.CommonInitialization(name);

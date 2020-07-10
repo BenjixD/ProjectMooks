@@ -187,6 +187,7 @@ public class TurnController : MonoBehaviour
                         break;
 
                     case TargetType.ALL:
+                        this.commandSelector.Initialize(0, 1, null); // only one choice
                         this.ui.targetSelectionUI.InitializeTargetSelectionAll(possibleTargets);
                     break;
 
