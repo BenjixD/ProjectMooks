@@ -38,6 +38,8 @@ public class FighterSlot : MonoBehaviour
         ArrowUI newArrow = Instantiate<ArrowUI>(targetPrefab, targetParent);
         newArrow.SetColor(arrowColor);
         targetArrows.Add(newArrow);
+        WorldspaceToScreenUI arrowPositioner = newArrow.GetComponent<WorldspaceToScreenUI>();
+        arrowPositioner.SetWorldPoint(fighter.GetComponent<FighterUIPositions>().arrows.position);
     }
 
     public void ClearArrowsUIOfColor(Color arrowColor) {
