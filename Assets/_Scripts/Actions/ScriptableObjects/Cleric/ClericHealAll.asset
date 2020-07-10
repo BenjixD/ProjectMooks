@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 
   animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
   maxPP: 1
-  currPP: 3
+  currPP: 1
   actionCost:
     HP: 0
     mana: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
     specialScaling: 0.5
     heals: 1
     statusAilments: []
-  commandKeyword: heal
-  commandArgs: 1
+  commandKeyword: healall
+  commandArgs: 0
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
     type: 3}
