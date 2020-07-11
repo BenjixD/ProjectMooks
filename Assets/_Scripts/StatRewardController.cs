@@ -25,8 +25,8 @@ public class StatRewardController : MonoBehaviour
         this.heroPlayer.stats.LevelUp();
 
         this.UpdateStatText();
-        Dictionary<Stat, PlayerStatWithModifiers> modifiableStats = this.heroPlayer.stats.GetModifiableStats();
-        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in modifiableStats) {
+        Dictionary<ModifiableStat, PlayerStatWithModifiers> modifiableStats = this.heroPlayer.stats.GetModifiableStats();
+        foreach (KeyValuePair<ModifiableStat, PlayerStatWithModifiers> statPair in modifiableStats) {
             PlayerStatWithModifiers stat = statPair.Value;
             StatRewardUI rewardInstance = Instantiate(statRewardUIPrefab, statRewardUIParent);
             rewardInstance.Initialize(heroPlayer.stats, stat.stat, this.LevelUpStat);

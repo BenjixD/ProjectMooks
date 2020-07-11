@@ -10,7 +10,7 @@ public class StatBuffAilment : StatusAilment {
 	public StatModifier.Type damageType = StatModifier.Type.ADD_PERCENTAGE;
 	public float val;
 
-    public Stat statType;
+    public ModifiableStat statType;
 
     private List<StatModifier> modifiers = new List<StatModifier>();
 

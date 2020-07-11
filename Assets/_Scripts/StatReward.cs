@@ -14,10 +14,10 @@ public class StatReward : PlayerRewardAilment
 
     // Randomized variables
     public float percentage {get; set;}
-    public Stat statType {get; set;}
+    public ModifiableStat statType {get; set;}
 
     public override void Initialize(Fighter player) {
-        List<Stat> modifiableStats = new List<Stat>(player.stats.GetModifiableStats().Keys);
+        List<ModifiableStat> modifiableStats = new List<ModifiableStat>(player.stats.GetModifiableStats().Keys);
         statType = modifiableStats[Random.Range(0, modifiableStats.Count)];
 
         StatBuffAilment statAilment =  GameManager.Instance.models.GetStatBuffAilment(this.statType, percentage);
@@ -35,7 +35,7 @@ public class StatReward : PlayerRewardAilment
         }
     }
 
-    public static string GetStatDisplayName(Stat type) {
+    public static string GetStatDisplayName(ModifiableStat type) {
         return type.ToString() + " Up";
     }
 }

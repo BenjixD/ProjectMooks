@@ -10,7 +10,7 @@ public class StatChangeStatusAilment : StatusAilment {
 	}
 
 	[Tooltip("Stat to change.")]
-	public Stat stat;
+	public ModifiableStat stat;
 	[Tooltip("Bonus Type")]
 	public Type type;
 	[Tooltip("[0,1] Percentage Bonus, or [0,) Flat Bonus")]
@@ -31,12 +31,7 @@ public class StatChangeStatusAilment : StatusAilment {
 	}
 
 	public override void ApplyTo(Fighter p) {
-        PlayerStat tmpStat = p.stats.GetStat(stat);
-        if (tmpStat.GetType() != typeof(PlayerStatWithModifiers)) {
-            Debug.LogError("Error: Should be stat with modifier");
-        } else {
-            this.playerStat = (PlayerStatWithModifiers)p.stats.GetStat(stat);
-        }
+        this.playerStat = p.stats.GetStat(stat);
 
 		//TODO: Possible Animation Modifications
 		switch(type) {
