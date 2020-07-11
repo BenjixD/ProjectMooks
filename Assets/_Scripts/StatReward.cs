@@ -33,8 +33,6 @@ public class StatReward : PlayerRewardAilment
             this.description += "%";
             this.name += "%";
         }
-        
-        
     }
 
     public static string GetStatDisplayName(Stat type) {

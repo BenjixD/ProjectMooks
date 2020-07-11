@@ -19,10 +19,16 @@ public class StatusBarsUI : MonoBehaviour
     private StatusBarUI[] statusBars = new StatusBarUI[PlayerParty.maxPlayers];
     private EnemyStatusBarUI[] enemyStatusBars = new EnemyStatusBarUI[EnemyParty.maxPlayers];
 
+    private int maxMookEnergy = 8;
+
     public void Initialize() {
         Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         Messenger.AddListener<QueuedAction>(Messages.OnSetQueuedAction, this.onSetQueuedAction);
         Messenger.AddListener(Messages.OnUpdateStatusBarsUI, this.UpdateStatusBars);
+
+
+        OutOfJuiceAilment outOfJuicePrefab = (OutOfJuiceAilment)GameManager.Instance.models.GetCommonStatusAilment("Out of Juice");
+        this.maxMookEnergy = outOfJuicePrefab.duration;
 
         this.buildStatusBars();
         this.UpdateStatusBars();
@@ -64,7 +70,8 @@ public class StatusBarsUI : MonoBehaviour
                 mookStatusBar.SetName(player.Name);
                 mookStatusBar.SetHP(player.stats.hp.GetValue(), player.stats.maxHp.GetValue());
                 // Note: Energy might be its own thing later, but for now, lets just use mana
-                mookStatusBar.SetEnergy(player.stats.mana.GetValue(), player.stats.maxMana.GetValue());
+                
+                mookStatusBar.SetEnergy(player.ailmentController.GetAilment("Out of Juice").duration, maxMookEnergy);
                 mookStatusBar.SetNameColor(player.GetOrderColor());
             }
 

@@ -284,7 +284,7 @@ public class ActionBase : ScriptableObject {
     protected List<StatusAilment> InflictStatuses(FightingEntity target) {
         List<StatusAilment> inflicted = new List<StatusAilment>();
         foreach(AilmentInfliction infliction in effects.statusAilments) {
-            if (target.GetAilmentController().TryInflictAilment(infliction)) {
+            if (target.ailmentController.TryInflictAilment(infliction)) {
                 inflicted.Add(infliction.statusAilment);
             }
         }

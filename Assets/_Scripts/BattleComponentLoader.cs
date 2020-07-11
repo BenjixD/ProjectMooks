@@ -20,13 +20,6 @@ public class BattleComponentLoader : MonoBehaviour {
 		GameManager.Instance.time.GetController().StartCoroutine(InitializeComponentsCR());
 	}
 
-    // TODO: move this somewhere else?
-    public void EvictMook(FightingEntity mookObject) {
-        GameManager.Instance.gameState.playerParty.EvictPlayer(mookObject.targetId);
-        Destroy(mookObject.gameObject);
-        this.ui.statusBarsUI.UpdateStatusBars();
-    }
-
 	// 
 	// Overwrittable for custom loading procedure
 	//

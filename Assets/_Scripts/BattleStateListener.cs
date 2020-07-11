@@ -75,6 +75,6 @@ public class BattleStateListener : MonoBehaviour {
         heroPlayer.DoDeathAnimation();
 
         StatusAilment reviveStatusAilmentPrefab = GameManager.Instance.models.GetCommonStatusAilment("Hero's Miracle");
-        heroPlayer.GetAilmentController().AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
+        heroPlayer.ailmentController.AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
     }
 }

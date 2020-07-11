@@ -25,7 +25,7 @@ public class ScriptableObjectDictionary : MonoBehaviour {
     [SerializeField] private List<ActionBase> commonMookActionPool = null;
 
     [SerializeField] private List<StatusAilment> commonStatusAilments = null;
-
+    
     public void Initialize() {
         foreach(JobActionsList jobActionsList in _playerJobActionsLists) {
             playerJobActions.Add(jobActionsList.job, jobActionsList.GetActions());

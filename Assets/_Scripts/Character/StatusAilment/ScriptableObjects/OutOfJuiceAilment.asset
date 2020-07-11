@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Out of Juice
   infiniteDuration: 0
-  duration: 8
+  duration: 3
   level: 0
   phase: 4
+  ailmentType: 0

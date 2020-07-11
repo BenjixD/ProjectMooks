@@ -20,19 +20,19 @@ public class ModifierAilment : StatusAilment {
         // do not decrement
     }
 
-	public override void ApplyTo(FightingEntity p) {
+	public override void ApplyTo(Fighter p) {
         this.duration = 31415926;
 	}
 
-    public override void StackWith(FightingEntity p, StatusAilment other)
+    public override void StackWith(Fighter p, StatusAilment other)
     {
     }
 
-    public override void Recover(FightingEntity p)
+    public override void Recover(Fighter p)
     {
     }
 
-    public override void TickEffect(FightingEntity p)
+    public override void TickEffect(Fighter p)
     {
     }
 }

@@ -13,6 +13,9 @@ public abstract class Party : MonoBehaviour {
 
     public void SetFighter(int index, Fighter fighter) {
         this.fighters[index] = fighter;
+        if (fighter != null) {
+            fighter.index = index;
+        }
     }
 
     public T[] GetFighters<T>() where T : Fighter {

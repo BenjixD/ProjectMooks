@@ -23,6 +23,8 @@ public class FightingEntity : MonoBehaviour
     public bool isRare { get { return this.persistentFighter.isRare; }}
 
 
+    public AilmentController ailmentController { get { return this.persistentFighter.ailmentController; }}
+
     // Message box to display messages. Leave null if you don't want it to be used.
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
@@ -32,7 +34,6 @@ public class FightingEntity : MonoBehaviour
     protected QueuedAction _queuedAction;
     private AnimationController _animController;
     protected FightingEntityAI _ai;
-    protected AilmentController _ailmentController;
 
     
 
@@ -43,7 +44,7 @@ public class FightingEntity : MonoBehaviour
 
     protected virtual void OnDestroy() {
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
-        _ailmentController.RemoveAllStatusAilments();
+        ailmentController.RemoveOnBattleEndAilments();
         for (int i = 0; i < actions.Count; i++) {
             Destroy(actions[i]);
         }
@@ -57,27 +58,12 @@ public class FightingEntity : MonoBehaviour
 
         _ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.battleComponents.field.GetTargetNameFromIndex(index);
-        _ailmentController = new AilmentController(this);
         Debug.Log("Initialize: " + Name);
-
-        // Sets the default energy for mooks to be always a constant
-        // TODO: Do this a more cleaner way
-        if (!this.isEnemy() && index != 0) {
-            OutOfJuiceAilment outOfJuicePrefab = (OutOfJuiceAilment)GameManager.Instance.models.GetCommonStatusAilment("Out of Juice");
-            this._ailmentController.AddStatusAilment(Instantiate(outOfJuicePrefab));
-            this.stats.mana.SetValue(outOfJuicePrefab.duration);
-            this.stats.maxMana.SetValue(outOfJuicePrefab.duration);
-        }
-
 	}
 
     // Getters / Setters 
     public string GetJobName() {
         return job.ToString();
-    }
-
-    public AilmentController GetAilmentController() {
-        return _ailmentController;
     }
 
     public bool TryActionCommand(string message) {
@@ -170,13 +156,13 @@ public class FightingEntity : MonoBehaviour
 
     // Modifer helpers
     public bool HasModifier(string modifier) {
-        return this._ailmentController.GetAilment(modifier) != null;
+        return this.ailmentController.GetAilment(modifier) != null;
     }
 
     // Adds a text-only ailment
     public void AddModifier(string modifier) {
         ModifierAilment ailment = (ModifierAilment)GameManager.Instance.models.GetCommonStatusAilment("ModifierAilment");
-        this._ailmentController.AddStatusAilment(Instantiate(ailment).SetName(modifier));
+        this.ailmentController.AddStatusAilment(Instantiate(ailment).SetName(modifier));
     }
 
     public void RemoveModifier(string modifier) {
@@ -185,7 +171,7 @@ public class FightingEntity : MonoBehaviour
         }
 
 
-        this._ailmentController.RemoveStatusAilment(modifier);
+        this.ailmentController.RemoveStatusAilment(modifier);
     }
 
     private void OnBattleEnd(BattleResult result) {
