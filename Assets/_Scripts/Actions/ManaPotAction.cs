@@ -4,11 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "ManaPotAction", menuName = "Actions/Mana Pot", order = 2)]
 public class ManaPotAction : ActionBase {
-    public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        if (!base.TryChooseAction(user, splitCommand)) {
-            return false;
-        }
-
+    public override bool QueueAction(FightingEntity user, string[] splitCommand) {
         // Can only use mana pot on Hero
         user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ 0 }));
         return true;
@@ -20,6 +16,7 @@ public class ManaPotAction : ActionBase {
         int attackDamage = user.stats.special.GetValue();
         
         foreach (FightingEntity target in targets) {
+            InstantiateDamagePopup(target, attackDamage);
             before = (PlayerStats)target.stats.Clone();
             target.stats.mana.ApplyDelta(attackDamage);
             after = (PlayerStats)target.stats.Clone();
