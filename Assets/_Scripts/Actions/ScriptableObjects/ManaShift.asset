@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Mana Shift
   actionType: 0
-  description: 
+  description: Shifts your mana
+  animation: {fileID: 0}
   maxPP: 2
-  currPP: 0
+  currPP: 2
   actionCost:
     HP: 0
     mana: 0
@@ -33,6 +34,6 @@ MonoBehaviour:
     statusAilments: []
   commandKeyword: shift
   commandArgs: 0
-  userAnimName: 
+  damagePopupCanvasPrefab: {fileID: 0}
   _manaShiftQTE: {fileID: 5498650744045303134, guid: 611ec3a2aff306b45893529da2226e01,
     type: 3}

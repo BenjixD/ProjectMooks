@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Explosion
   actionType: 0
-  description: 
+  description: Cast an explosion that will destroy the world if there is enough +
+    messages, or do nothing if there are too many - messages.
+  animation: {fileID: 0}
   maxPP: 1
+  currPP: 1
   actionCost:
     HP: 0
     mana: 0
@@ -32,6 +35,6 @@ MonoBehaviour:
     statusAilments: []
   commandKeyword: explosion
   commandArgs: 0
-  userAnimName: 
+  damagePopupCanvasPrefab: {fileID: 0}
   _explosionQTE: {fileID: 9026427991594010301, guid: ba5fc9297bc72374ca6ddf94dfd4e95f,
     type: 3}

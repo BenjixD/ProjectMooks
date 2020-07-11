@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Skewer
   actionType: 0
-  description: 
+  description: Skewer the enemy with your lance.
   animation: {fileID: 11400000, guid: 8b477148dad16594894ba7f787aea892, type: 2}
   maxPP: 0
   currPP: 0

@@ -102,8 +102,8 @@ MonoBehaviour:
       stat: 3
       currentValue: 1
       divisor: 20
-      growth: 40
-      baseValue: 280
+      growth: 1
+      baseValue: 1
     physical:
       stat: 4
       currentValue: 1
@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe321b222c7fb947850511a6dad0258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableReply: 0
   _player: {fileID: 0}
 --- !u!23 &2911693358557053094
 MeshRenderer:

@@ -158,7 +158,6 @@ public class MoveSelectionPhase : Phase {
     private void SetHeroAction() {
         HeroMenuAction menuAction = GetHeroMenuAction();
         menuAction.targetIndex = this._commandSelector.GetChoice();
-        this._ui.commandCardUI.SetConfirmed();
         menuAction.onBackCallback = this.OnActionChooseBackCallback;
 
         HeroActionChoice choice = menuAction.currentHeroChoices[menuAction.targetIndex];
@@ -168,6 +167,13 @@ public class MoveSelectionPhase : Phase {
             InitializeCommandCardActionUI(GetHeroActionChoices(ActionType.MAGIC));
         } else {
             ActionBase heroAction = choice.action;
+
+            if (!heroAction.CheckCost(this._field.GetHeroPlayer())){
+                return;
+            }
+
+            this._ui.commandCardUI.SetConfirmed();
+
             if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
                 List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(_field.GetHeroPlayer());
                 switch (heroAction.targetInfo.targetType) {

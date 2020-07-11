@@ -105,7 +105,10 @@ public class Fighter
                 }
             }
 
+
             List<ActionBase> commonMookActionPool = GameManager.Instance.models.GetCommonMookActionPool();
+            commonMookActionPool.Filter(action => actionPool.Find(actionB  => action.name == actionB.name) == null ); // Make sure no two of the same action
+
             int commonActionIndex = Random.Range(0, commonMookActionPool.Count);
             actions.Add(Object.Instantiate(commonMookActionPool[commonActionIndex]));
         }

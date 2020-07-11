@@ -85,6 +85,9 @@ public class ActionBase : ScriptableObject {
     [Header("References")]
     [SerializeField] protected GameObject damagePopupCanvasPrefab = null;
 
+    const string WRONG_NUMBER_OF_TARGETS = "Move failed due to wrong number of targets. ({0})";
+
+
     private void Awake() {
         if (CostsPP()) {
             currPP = maxPP;
@@ -122,22 +125,31 @@ public class ActionBase : ScriptableObject {
         return true;
     }
 
-    private bool CheckCost(FightingEntity user) {
+    public bool CheckCost(FightingEntity user) {
         PlayerStats stats = user.stats;
+
         if (stats.hp.GetValue() <= actionCost.HP) {
-            Debug.Log(user + " has insufficient HP use " + name);
+            string message = user.Name + " has insufficient HP use " + name;
+            Debug.Log(message);
+            this.tmp_MessagePlayer(user, message);
             return false;
         }
         if (stats.mana.GetValue() < actionCost.mana) {
-            Debug.Log(user + " has insufficient mana to use " + name);
+            string message = user.Name + " has insufficient mana use " + name;
+            Debug.Log(message);
+            this.tmp_MessagePlayer(user, message);
             return false;
         }
         if (CostsPP() && currPP < actionCost.PP) {
-            Debug.Log(user + " has insufficient PP to use " + name);
+            string message = user.Name + " has insufficient PP use " + name;
+            Debug.Log(message);
+            this.tmp_MessagePlayer(user, message);
             return false;
         }
         if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
-            Debug.Log(user + " has insufficient stamina to use " + name);
+            string message = user.Name + " has insufficient stamina use " + name;
+            Debug.Log(message);
+            this.tmp_MessagePlayer(user, message);
             return false;
         }
         return true;
@@ -165,6 +177,11 @@ public class ActionBase : ScriptableObject {
 
     public virtual bool QueueAction(FightingEntity user, string[] splitCommand) {
         if (splitCommand.Length < 1) {
+            this.tmp_MessagePlayer(user, string.Format(WRONG_NUMBER_OF_TARGETS, this.GetExampleCommandString()));
+            return false;
+        }
+
+        if (!CheckCost(user)) {
             return false;
         }
 
@@ -181,10 +198,13 @@ public class ActionBase : ScriptableObject {
             for (int i = 0; i < possibleTargets.Count; i++) {
                 targetIds.Add(i);
             }
+
             
             user.SetQueuedAction(new QueuedAction(user, this, targetIds));
             return true;
         }
+
+        this.tmp_MessagePlayer(user, string.Format(WRONG_NUMBER_OF_TARGETS, this.GetExampleCommandString()));
 
         return false;
     }
@@ -305,4 +325,23 @@ public class ActionBase : ScriptableObject {
         DamageType damageType = effects.heals ? DamageType.HEALING : DamageType.NORMAL;
         popup.Initialize(target, damage, damageType);
     }
+
+    // May not be needed after enum change
+    private void tmp_MessagePlayer(FightingEntity fighter, string message) {
+        ActionListener actionListener = fighter.GetComponent<ActionListener>();
+        if (actionListener != null && actionListener.enableReply) {
+            actionListener.EchoDirectMessage(fighter.Name, message);
+        }
+    }
+
+    private string GetExampleCommandString() {
+        if (targetInfo.targetType == TargetType.SINGLE) {
+            return "!" + this.name + " A/B/C/D";
+        } else if (targetInfo.targetType == TargetType.NONE || targetInfo.targetType == TargetType.ALL) {
+            return "!" + this.name;
+        }
+
+        return "";
+    }
+
 }
