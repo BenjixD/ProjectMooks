@@ -66,7 +66,7 @@ public class ActionBase : ScriptableObject {
     public ActionAnimation animation;
 
     [Header("Resources")]
-    [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
+    [Tooltip("Max PP for this action.")]
     public int maxPP;
     [HideInInspector] public int currPP;
     public ActionCost actionCost;
@@ -86,9 +86,7 @@ public class ActionBase : ScriptableObject {
     [SerializeField] protected GameObject damagePopupCanvasPrefab = null;
 
     private void Awake() {
-        if (CostsPP()) {
-            currPP = maxPP;
-        }
+        currPP = maxPP;
     }
 
     public bool CostsPP() {
@@ -132,7 +130,7 @@ public class ActionBase : ScriptableObject {
             Debug.Log(user + " has insufficient mana to use " + name);
             return false;
         }
-        if (CostsPP() && currPP < actionCost.PP) {
+        if (currPP < actionCost.PP) {
             Debug.Log(user + " has insufficient PP to use " + name);
             return false;
         }
@@ -154,6 +152,10 @@ public class ActionBase : ScriptableObject {
             Mook mook = (Mook) user;
             mook.stamina.SetStamina(mook.stamina.GetStamina() - actionCost.stamina);
         }
+    }
+
+    public void RestorePP() {
+        currPP = maxPP;
     }
     
     public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
