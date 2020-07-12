@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14fb53d9f9719b1498cd0a900037d9e2, type: 3}
   m_Name: StrongerGolem
   m_EditorClassIdentifier: 
-  job: 5
+  job: 6
   _actions:
   - {fileID: 11400000, guid: 5e0cce1dba257274b991e228e65187ba, type: 2}
   - {fileID: 11400000, guid: f9d16da280a313c4e97be2bc46eebda8, type: 2}
