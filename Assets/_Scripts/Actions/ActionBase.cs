@@ -176,12 +176,7 @@ public class ActionBase : ScriptableObject {
             user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
             return true;
         } else if (targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
-            List<FightingEntity> possibleTargets = this.GetAllPossibleTargets(user);
-            List<int> targetIds = new List<int>();
-            for (int i = 0; i < possibleTargets.Count; i++) {
-                targetIds.Add(i);
-            }
-            
+            List<int> targetIds = GetAllPossibleTargetIds(user);
             user.SetQueuedAction(new QueuedAction(user, this, targetIds));
             return true;
         }
@@ -227,6 +222,15 @@ public class ActionBase : ScriptableObject {
         }
 
         return potentialTargets;
+    }
+
+    public List<int> GetAllPossibleTargetIds(FightingEntity user) {
+        List<FightingEntity> possibleTargets = this.GetAllPossibleTargets(user);
+        List<int> targetIds = new List<int>();
+        for (int i = 0; i < possibleTargets.Count; i++) {
+            targetIds.Add(i);
+        }
+        return targetIds;
     }
 
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
