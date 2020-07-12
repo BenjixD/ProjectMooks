@@ -93,12 +93,12 @@ public class FightingEntity : MonoBehaviour
     }
 
     public void SetQueuedAction(QueuedAction queuedAction) {
-        _queuedAction = queuedAction;
 
-        if (_queuedAction == null) {
-            return;
+        if (queuedAction != null && !queuedAction._action.CheckCost(this)) {
+            queuedAction = null;
         }
-        
+
+        _queuedAction = queuedAction;
         Messenger.Broadcast<QueuedAction>(Messages.OnSetQueuedAction, _queuedAction);
     }
 

@@ -31,6 +31,8 @@ public class Messages {
 
     public static string OnUpdateStatusBarsUI = "OnUpdateStatusBarsUI"; //void
 
+    public static string OnRefreshWaitlistQueueUI = "OnRefreshWaitlistQueueUI"; //void
+
 }
 
 

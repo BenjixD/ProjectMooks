@@ -50,6 +50,10 @@ public class FighterSlotUI : MonoBehaviour {
     }
 
     private void onSetQueuedAction(QueuedAction action) {
+        if (action == null) {
+            return;
+        }
+
         FighterSlot slot = action.user.fighterSlot;
         if (!this.fighterToActionMap.ContainsKey(slot)) {
             Debug.LogError("ERROR: Slot not found!");

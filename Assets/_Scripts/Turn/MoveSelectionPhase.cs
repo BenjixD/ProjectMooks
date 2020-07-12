@@ -58,9 +58,22 @@ public class MoveSelectionPhase : Phase {
         this._playerActionCounter = 0;
         this._heroMenuActions.Clear();
         // Reset Player Commands
-        foreach (var player in this._field.GetAllFightingEntities()) {
-            player.ResetCommand();
+        PlayerObject heroPlayer = this._field.GetHeroPlayer();
+        foreach (FightingEntity player in this._field.GetAllFightingEntities()) {
+            if (player == heroPlayer || player.isEnemy()) {
+                player.ResetCommand();
+            } else {
+                // Experimental: Mooks keep their actions
+                QueuedAction lastAction = player.GetQueuedAction();
+                if (lastAction != null && lastAction._action != null && lastAction.CanQueueAction(lastAction._action)) {
+                    player.SetQueuedAction(lastAction);
+                } else {
+                    player.ResetCommand();
+                }
+            }
         }
+
+        Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);
     }
 
     protected override IEnumerator Run() {

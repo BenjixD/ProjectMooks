@@ -20,12 +20,14 @@ public class PlayerQueueUI : MonoBehaviour
         }
 
         Messenger.AddListener<string>(Messages.OnPlayerJoinQueue, this.onPlayerJoinQueue);
+        Messenger.AddListener(Messages.OnRefreshWaitlistQueueUI, this.RefreshUI);
         
         this.RefreshUI();
     }
 
     void OnDestroy() {
         Messenger.RemoveListener<string>(Messages.OnPlayerJoinQueue, this.onPlayerJoinQueue);
+        Messenger.RemoveListener(Messages.OnRefreshWaitlistQueueUI, this.RefreshUI);
     }
 
     public void RefreshUI() {

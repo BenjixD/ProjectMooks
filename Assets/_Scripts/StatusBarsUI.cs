@@ -73,6 +73,9 @@ public class StatusBarsUI : MonoBehaviour
                 
                 mookStatusBar.SetEnergy(player.ailmentController.GetAilment("Out of Juice").duration, maxMookEnergy);
                 mookStatusBar.SetNameColor(player.GetOrderColor());
+                if (player.GetQueuedAction() == null || player.GetQueuedAction()._action == null) {
+                    mookStatusBar.actionMenuUI.UnsetActions();
+                }
             }
 
             this.statusBars[i].gameObject.SetActive(true);
@@ -126,9 +129,10 @@ public class StatusBarsUI : MonoBehaviour
     private void OnBattleEnd(BattleResult result) {
         PlayerObject[] players = GameManager.Instance.battleComponents.field.GetPlayerObjects();
         for (int i = 1; i < players.Length; i++) {
+            // Experimental: Mooks keep their actions at the end of each turn
             // Mooks have energy
-            MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
-            mookStatusBar.actionMenuUI.UnsetActions();
+            //MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
+            //mookStatusBar.actionMenuUI.UnsetActions();
         }
 
         this.UpdateStatusBars();

@@ -36,7 +36,6 @@ public class ActionListener : TwitchChatListenerBase {
         }
     }
 
-
     public void HandleMessage(string message) {
         if (_player.fighterMessageBox != null) {
             this._player.fighterMessageBox.HandleMessage(message);

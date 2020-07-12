@@ -345,7 +345,7 @@ public class TurnController : MonoBehaviour
     }
 
     public void EvictMook(FightingEntity mookObject) {
-        GameManager.Instance.gameState.playerParty.EvictPlayer(mookObject.targetId);
+        GameManager.Instance.gameState.playerParty.EvictPlayer(mookObject.targetId, true);
         Destroy(mookObject.gameObject);
         this.ui.statusBarsUI.UpdateStatusBars();
     }

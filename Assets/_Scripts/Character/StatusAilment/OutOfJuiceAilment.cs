@@ -21,7 +21,7 @@ public class OutOfJuiceAilment : StatusAilment {
 	public override void Recover(Fighter p) {
 		//TODO: Possible Animation Modifications
         if (p.fighter != null && GameManager.Instance != null) {
-            GameManager.Instance.gameState.playerParty.EvictPlayer(p.index);
+            GameManager.Instance.gameState.playerParty.EvictPlayer(p.index, true);
             if (p.fighter != null) {
                 Destroy(p.fighter.gameObject);
             }
