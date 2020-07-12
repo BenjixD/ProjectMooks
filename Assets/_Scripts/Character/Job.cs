@@ -9,5 +9,7 @@ public enum Job {
 	LANCER,
 
     BASIC_ENEMY,
+    STRONGER_GOLEM,
+    BOSS_GOLEM,
     LENGTH
 }
