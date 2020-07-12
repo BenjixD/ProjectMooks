@@ -172,5 +172,40 @@ PrefabInstance:
       propertyPath: stats.maxMana.growth
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.speed.stat
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.resistance.stat
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.defence.stat
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.special.stat
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxMana.stat
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxHp.stat
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.mana.stat
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35f01a16f79c8c94ba5771a613681882, type: 3}

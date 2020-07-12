@@ -104,6 +104,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2870201eb095a8e468911c37e31819f9, type: 2}
   _enemyJobActionsLists:
   - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
+  - {fileID: 11400000, guid: 42bad647e392a4f46916047e3426344b, type: 2}
   zones:
   - {fileID: 11400000, guid: b26e2ed0a9f467549bb402a270ebe9cb, type: 2}
   - {fileID: 11400000, guid: 54c1caa855fade7429004903da097cb4, type: 2}
@@ -117,8 +118,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7ecf282388724c845bf917928408b9e7, type: 2}
   - {fileID: 11400000, guid: 02a72bb2a6200aa45b6e517a4a7c9998, type: 2}
   - {fileID: 11400000, guid: 14760af4492d60d4781a3f54349807b6, type: 2}
-  otherPermanentBuffs:
-  - {fileID: 11400000, guid: dda1f69e3e7314f4ebf7a393433ba0d6, type: 2}
 --- !u!114 &1133189571
 MonoBehaviour:
   m_ObjectHideFlags: 0

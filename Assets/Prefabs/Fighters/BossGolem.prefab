@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 620964168174642243}
   - component: {fileID: 5276004732689739412}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: BossGolem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,8 +95,8 @@ MonoBehaviour:
       stat: 0
       currentValue: 1
       divisor: 5
-      growth: 38
-      baseValue: 50
+      growth: 50
+      baseValue: 100
     maxMana:
       stat: 1
       currentValue: 1
@@ -107,32 +107,32 @@ MonoBehaviour:
       stat: 2
       currentValue: 1
       divisor: 1
-      growth: 1
+      growth: 3
       baseValue: 25
     special:
       stat: 3
       currentValue: 1
       divisor: 1
-      growth: 1
+      growth: 2
       baseValue: 13
     defence:
       stat: 4
       currentValue: 1
       divisor: 1
-      growth: 2
+      growth: 4
       baseValue: 25
     resistance:
       stat: 5
       currentValue: 1
       divisor: 1
-      growth: 2
+      growth: 4
       baseValue: 25
     speed:
       stat: 6
       currentValue: 1
       divisor: 1
       growth: 1
-      baseValue: 15
+      baseValue: 10
   fighterMessageBox: {fileID: 0}
   damagePopupLocation: {fileID: 2954470223884965009}
 --- !u!33 &5907855612439490822

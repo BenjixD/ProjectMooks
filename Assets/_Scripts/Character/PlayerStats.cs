@@ -92,6 +92,7 @@ public class PlayerStatWithModifiers : IPlayerStat {
 
 
     public PlayerStatWithModifiers(ModifiableStat stat, int value, int growth, int divisor = 1, Action<int> callback = null) {
+        this.stat = stat;
         this.baseValue = value;
         this.currentValue = this.baseValue;
         this.callback = callback;

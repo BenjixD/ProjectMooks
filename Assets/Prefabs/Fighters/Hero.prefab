@@ -89,47 +89,47 @@ MonoBehaviour:
     hp:
       stat: 0
       currentValue: 1
-    maxHp:
+    mana:
       stat: 1
+      currentValue: 1
+    maxHp:
+      stat: 0
       currentValue: 1
       divisor: 45
       growth: 90
       baseValue: 585
-    mana:
-      stat: 2
-      currentValue: 1
     maxMana:
-      stat: 3
+      stat: 1
       currentValue: 1
       divisor: 20
       growth: 1
-      baseValue: 1
+      baseValue: 40
     physical:
-      stat: 4
+      stat: 2
       currentValue: 1
       divisor: 1
       growth: 3
       baseValue: 58
     special:
-      stat: 5
+      stat: 3
       currentValue: 1
       divisor: 1
       growth: 3
       baseValue: 58
     defence:
-      stat: 6
+      stat: 4
       currentValue: 1
       divisor: 1
       growth: 3
       baseValue: 32
     resistance:
-      stat: 7
+      stat: 5
       currentValue: 1
       divisor: 1
       growth: 3
       baseValue: 32
     speed:
-      stat: 8
+      stat: 6
       currentValue: 1
       divisor: 1
       growth: 1
