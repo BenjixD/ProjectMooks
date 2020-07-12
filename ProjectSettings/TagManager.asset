@@ -44,6 +44,3 @@ TagManager:
   - name: Foreground
     uniqueID: 1076101875
     locked: 0
-  - name: WorldSpaceUI
-    uniqueID: 2260789771
-    locked: 0
