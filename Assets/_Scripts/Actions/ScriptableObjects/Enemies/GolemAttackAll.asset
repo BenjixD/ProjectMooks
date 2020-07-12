@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
+  m_Name: GolemAttackAll
+  m_EditorClassIdentifier: 
+  name: Attack
+  actionType: 0
+  description: 
+  animation: {fileID: 11400000, guid: 0339d2876fc0ede4e989a91c7e9b5b5f, type: 2}
+  maxPP: 0
+  currPP: 0
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 0
+    stamina: 0
+  targetInfo:
+    targetTeam: 1
+    targetType: 1
+  effects:
+    element: 0
+    physicalScaling: 0.7
+    specialScaling: 0
+    heals: 0
+    statusAilments: []
+  commandKeyword: a
+  commandArgs: 1
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}

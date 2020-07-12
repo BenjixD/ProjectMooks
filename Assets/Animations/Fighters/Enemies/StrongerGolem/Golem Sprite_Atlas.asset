@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3753d8e0a32664da3caff3774bb55f, type: 3}
   m_Name: Golem Sprite_Atlas
   m_EditorClassIdentifier: 
-  atlasFile: {fileID: 4900000, guid: 9b2faf50dca511849821258d2a8e666e, type: 3}
+  atlasFile: {fileID: 4900000, guid: ab799f4ae48ce4f4e8302dcf7a3441e1, type: 3}
   materials:
-  - {fileID: 2100000, guid: 4b221f8d17cdb064ea40a3419110d3da, type: 2}
+  - {fileID: 2100000, guid: ff84a01e4d358b84d83cca9aec4a7a07, type: 2}
