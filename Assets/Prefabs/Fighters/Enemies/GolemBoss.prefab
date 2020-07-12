@@ -24,11 +24,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4457472454935739248, guid: bd253d2dccf38f34c84fccef87996b23,
         type: 3}
-      propertyPath: stats.physical.growth
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4457472454935739248, guid: bd253d2dccf38f34c84fccef87996b23,
-        type: 3}
       propertyPath: stats.defence.baseValue
       value: 35
       objectReference: {fileID: 0}
@@ -40,12 +35,12 @@ PrefabInstance:
     - target: {fileID: 4457472454935739248, guid: bd253d2dccf38f34c84fccef87996b23,
         type: 3}
       propertyPath: stats.resistance.growth
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4457472454935739248, guid: bd253d2dccf38f34c84fccef87996b23,
         type: 3}
       propertyPath: stats.defence.growth
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5739580552655326664, guid: bd253d2dccf38f34c84fccef87996b23,
         type: 3}
