@@ -806,6 +806,7 @@ MonoBehaviour:
   nameText: {fileID: 5251062788522001776}
   hpText: {fileID: 0}
   hpBar: {fileID: 5251062788580202526}
+  statusConditionParent: {fileID: 0}
 --- !u!1 &5251062788580202524
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,7 +942,7 @@ Canvas:
   m_GameObject: {fileID: 9191365796621416697}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 2
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0

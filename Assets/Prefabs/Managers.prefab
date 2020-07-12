@@ -104,7 +104,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2870201eb095a8e468911c37e31819f9, type: 2}
   _enemyJobActionsLists:
   - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
-  - {fileID: 11400000, guid: 42bad647e392a4f46916047e3426344b, type: 2}
+  - {fileID: 11400000, guid: 059b559c8905fbd45bd16137cf002c47, type: 2}
+  - {fileID: 11400000, guid: 3e040534d70a1364aa5bc3ab3ad2cc35, type: 2}
   zones:
   - {fileID: 11400000, guid: b26e2ed0a9f467549bb402a270ebe9cb, type: 2}
   - {fileID: 11400000, guid: 54c1caa855fade7429004903da097cb4, type: 2}

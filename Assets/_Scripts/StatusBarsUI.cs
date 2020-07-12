@@ -97,6 +97,9 @@ public class StatusBarsUI : MonoBehaviour
             enemyStatusBars[i].SetFighter(enemy);
             enemyStatusBars[i].SetName(enemies[i].targetName);
             enemyStatusBars[i].SetHP(enemies[i].stats.hp.GetValue(), enemies[i].stats.maxHp.GetValue());
+            Vector3 barPosition = enemy.GetComponent<FighterUIPositions>().statusBar.position;
+            WorldspaceToScreenUI barPositioner = enemyStatusBars[i].GetComponent<WorldspaceToScreenUI>();
+            barPositioner.SetWorldPoint(barPosition);
 
             this.enemyStatusBars[i].gameObject.SetActive(true);
         }

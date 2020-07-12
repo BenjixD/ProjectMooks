@@ -1,0 +1,419 @@
+
+Golem Sprite.png
+size: 2017,1674
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Golem_Face
+  rotate: false
+  xy: 1856, 491
+  size: 136, 68
+  orig: 136, 68
+  offset: 0, 0
+  index: -1
+Golem_Head
+  rotate: false
+  xy: 767, 766
+  size: 285, 257
+  orig: 285, 257
+  offset: 0, 0
+  index: -1
+Golem_Head_1a
+  rotate: false
+  xy: 1335, 710
+  size: 321, 266
+  orig: 321, 266
+  offset: 0, 0
+  index: -1
+Golem_Head_Vine_1
+  rotate: true
+  xy: 575, 16
+  size: 62, 78
+  orig: 62, 78
+  offset: 0, 0
+  index: -1
+Golem_Head_Vine_2
+  rotate: false
+  xy: 1922, 376
+  size: 77, 113
+  orig: 77, 113
+  offset: 0, 0
+  index: -1
+Golem_Head_Vine_3
+  rotate: false
+  xy: 1800, 203
+  size: 60, 52
+  orig: 60, 52
+  offset: 0, 0
+  index: -1
+Golem_Head_Vine_4
+  rotate: false
+  xy: 468, 25
+  size: 105, 68
+  orig: 105, 68
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_1
+  rotate: false
+  xy: 765, 585
+  size: 303, 179
+  orig: 303, 179
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_1a
+  rotate: false
+  xy: 1773, 1170
+  size: 240, 285
+  orig: 240, 285
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_1d
+  rotate: false
+  xy: 2, 4
+  size: 303, 270
+  orig: 303, 270
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_1e
+  rotate: false
+  xy: 756, 333
+  size: 303, 250
+  orig: 303, 250
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_1f
+  rotate: false
+  xy: 1028, 116
+  size: 295, 205
+  orig: 295, 205
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_2
+  rotate: false
+  xy: 300, 365
+  size: 266, 300
+  orig: 266, 300
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_2a
+  rotate: false
+  xy: 767, 1025
+  size: 282, 314
+  orig: 282, 314
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_2b
+  rotate: true
+  xy: 450, 1342
+  size: 330, 477
+  orig: 330, 477
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_2c
+  rotate: false
+  xy: 1354, 1351
+  size: 417, 321
+  orig: 417, 321
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_2d
+  rotate: false
+  xy: 2, 1282
+  size: 446, 390
+  orig: 446, 390
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_2e
+  rotate: false
+  xy: 1335, 451
+  size: 308, 257
+  orig: 308, 257
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_2f
+  rotate: false
+  xy: 1051, 1037
+  size: 282, 302
+  orig: 282, 302
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_3
+  rotate: false
+  xy: 1645, 494
+  size: 209, 214
+  orig: 209, 214
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_3a
+  rotate: true
+  xy: 1773, 1457
+  size: 215, 242
+  orig: 215, 242
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_3b
+  rotate: true
+  xy: 1658, 725
+  size: 236, 198
+  orig: 236, 198
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_3c
+  rotate: true
+  xy: 1061, 323
+  size: 186, 259
+  orig: 186, 259
+  offset: 0, 0
+  index: -1
+Golem_Left_Arm_4
+  rotate: true
+  xy: 1856, 561
+  size: 160, 140
+  orig: 160, 140
+  offset: 0, 0
+  index: -1
+Golem_Left_Leg_1
+  rotate: false
+  xy: 1032, 11
+  size: 131, 103
+  orig: 131, 103
+  offset: 0, 0
+  index: -1
+Golem_Left_Leg_2
+  rotate: false
+  xy: 1165, 21
+  size: 138, 93
+  orig: 138, 93
+  offset: 0, 0
+  index: -1
+Golem_Left_Leg_3
+  rotate: false
+  xy: 1858, 723
+  size: 142, 100
+  orig: 142, 100
+  offset: 0, 0
+  index: -1
+Golem_Left_Leg_4
+  rotate: true
+  xy: 1744, 33
+  size: 162, 108
+  orig: 162, 108
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_1
+  rotate: true
+  xy: 576, 80
+  size: 291, 164
+  orig: 291, 164
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_1a
+  rotate: true
+  xy: 307, 95
+  size: 268, 267
+  orig: 268, 267
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_1d
+  rotate: true
+  xy: 539, 667
+  size: 278, 224
+  orig: 278, 224
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_1e
+  rotate: true
+  xy: 1070, 511
+  size: 267, 263
+  orig: 267, 263
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_1f
+  rotate: true
+  xy: 568, 373
+  size: 292, 186
+  orig: 292, 186
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_2
+  rotate: true
+  xy: 1054, 780
+  size: 255, 279
+  orig: 255, 279
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_2a
+  rotate: false
+  xy: 1584, 197
+  size: 214, 252
+  orig: 214, 252
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_2b
+  rotate: false
+  xy: 2, 765
+  size: 298, 515
+  orig: 298, 515
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_2c
+  rotate: false
+  xy: 929, 1341
+  size: 423, 331
+  orig: 423, 331
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_2d
+  rotate: false
+  xy: 1335, 978
+  size: 342, 183
+  orig: 342, 183
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_2e
+  rotate: false
+  xy: 1325, 195
+  size: 257, 254
+  orig: 257, 254
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_2f
+  rotate: true
+  xy: 742, 88
+  size: 243, 284
+  orig: 243, 284
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_3
+  rotate: true
+  xy: 1546, 3
+  size: 190, 196
+  orig: 190, 196
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_3a
+  rotate: true
+  xy: 1800, 993
+  size: 175, 215
+  orig: 175, 215
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_3c
+  rotate: true
+  xy: 1325, 12
+  size: 181, 219
+  orig: 181, 219
+  offset: 0, 0
+  index: -1
+Golem_Right_Arm_4
+  rotate: true
+  xy: 1858, 825
+  size: 166, 152
+  orig: 166, 152
+  offset: 0, 0
+  index: -1
+Golem_Right_Leg_1
+  rotate: false
+  xy: 1800, 381
+  size: 120, 108
+  orig: 120, 108
+  offset: 0, 0
+  index: -1
+Golem_Right_Leg_2
+  rotate: true
+  xy: 1800, 257
+  size: 122, 81
+  orig: 122, 81
+  offset: 0, 0
+  index: -1
+Golem_Right_Leg_3
+  rotate: false
+  xy: 742, 2
+  size: 152, 84
+  orig: 152, 84
+  offset: 0, 0
+  index: -1
+Golem_Right_Leg_4
+  rotate: false
+  xy: 302, 726
+  size: 212, 121
+  orig: 212, 121
+  offset: 0, 0
+  index: -1
+Golem_Torso_1
+  rotate: true
+  xy: 2, 276
+  size: 487, 296
+  orig: 487, 296
+  offset: 0, 0
+  index: -1
+Golem_Torso_2
+  rotate: true
+  xy: 302, 849
+  size: 431, 235
+  orig: 431, 235
+  offset: 0, 0
+  index: -1
+Golem_Torso_3
+  rotate: false
+  xy: 1679, 963
+  size: 110, 198
+  orig: 110, 198
+  offset: 0, 0
+  index: -1
+Golem_Torso_4
+  rotate: true
+  xy: 539, 947
+  size: 393, 226
+  orig: 393, 226
+  offset: 0, 0
+  index: -1
+Golem_Torso_Grass
+  rotate: false
+  xy: 1354, 1163
+  size: 410, 186
+  orig: 410, 186
+  offset: 0, 0
+  index: -1
+Golem_Torso_Rose
+  rotate: false
+  xy: 1883, 294
+  size: 88, 80
+  orig: 88, 80
+  offset: 0, 0
+  index: -1
+Golem_Torso_Vine_1
+  rotate: false
+  xy: 307, 6
+  size: 159, 87
+  orig: 159, 87
+  offset: 0, 0
+  index: -1
+Golem_Torso_Vine_2
+  rotate: false
+  xy: 896, 4
+  size: 134, 82
+  orig: 134, 82
+  offset: 0, 0
+  index: -1
+Golem_Torso_Vine_3
+  rotate: true
+  xy: 300, 678
+  size: 46, 62
+  orig: 46, 62
+  offset: 0, 0
+  index: -1
+Golem_Torso_Vine_4
+  rotate: false
+  xy: 655, 22
+  size: 55, 56
+  orig: 55, 56
+  offset: 0, 0
+  index: -1
+Golem_Torso_Vine_5
+  rotate: true
+  xy: 450, 1286
+  size: 54, 75
+  orig: 54, 75
+  offset: 0, 0
+  index: -1

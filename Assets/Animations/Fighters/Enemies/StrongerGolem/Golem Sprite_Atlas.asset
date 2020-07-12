@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3753d8e0a32664da3caff3774bb55f, type: 3}
+  m_Name: Golem Sprite_Atlas
+  m_EditorClassIdentifier: 
+  atlasFile: {fileID: 4900000, guid: ab799f4ae48ce4f4e8302dcf7a3441e1, type: 3}
+  materials:
+  - {fileID: 2100000, guid: ff84a01e4d358b84d83cca9aec4a7a07, type: 2}

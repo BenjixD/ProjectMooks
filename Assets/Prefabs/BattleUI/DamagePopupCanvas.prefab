@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8662012711160325658}
   - component: {fileID: 640532287936251464}
   - component: {fileID: 325069633188854067}
+  - component: {fileID: 1393773141649314519}
   m_Layer: 5
   m_Name: DamagePopupCanvas
   m_TagString: Untagged
@@ -28,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 4139539340987804469}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 7223674450201181141}
   m_Father: {fileID: 0}
@@ -48,7 +49,7 @@ Canvas:
   m_GameObject: {fileID: 4139539340987804469}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 2
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -90,6 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageText: {fileID: 8637408572084557053}
+  _worldToScreen: {fileID: 1393773141649314519}
   _opaqueTime: 1
   _fadeTime: 0.5
   _ascensionSpeed: 0.5
@@ -99,6 +101,19 @@ MonoBehaviour:
   _manaRecoveryColour:
     serializedVersion: 2
     rgba: 4293685760
+--- !u!114 &1393773141649314519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4139539340987804469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e32b98f8ec8274fa899455ef2c7eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiTransform: {fileID: 7223674450201181141}
 --- !u!1 &5903673806292270433
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,8 +207,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 0.75
-  m_fontSizeBase: 0.75
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 10
@@ -209,7 +224,7 @@ MonoBehaviour:
   m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 0
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0

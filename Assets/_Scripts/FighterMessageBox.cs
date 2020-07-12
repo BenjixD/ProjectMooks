@@ -2,11 +2,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class FighterMessageBox : MonoBehaviour
 {
     public Transform speechParent; 
-    public Text speechCanvasText;
+    public TextMeshProUGUI speechCanvasText;
 
 
     public float _chatBubbleAnimationTime = 5f;

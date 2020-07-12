@@ -85,7 +85,14 @@ public class BattlePhase : Phase {
             if (fighters[i].GetQueuedAction() == null) {
                 // This sets the enemy's action
                 // TODO: Will be moved after AI is merged.
-                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], fighters[i].GetRandomAction(), new List<int>{this._field.GetRandomPlayerObjectIndex()}  ));
+                ActionBase enemyAction = fighters[i].GetRandomAction();
+                List<int> targets = new List<int>();
+                if (enemyAction.targetInfo.targetType == TargetType.SINGLE) {
+                    targets = new List<int>{this._field.GetRandomPlayerObjectIndex()};
+                } else if (enemyAction.targetInfo.targetType == TargetType.ALL) {
+                    targets = enemyAction.GetAllPossibleTargetIds(fighters[i]);
+                }
+                fighters[i].SetQueuedAction(new QueuedAction(fighters[i], enemyAction, targets));
             }
 
             QueuedAction attackerAction = fighters[i].GetQueuedAction();
