@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Golem Sprite_SkeletonData
   m_EditorClassIdentifier: 
   atlasAssets:
-  - {fileID: 11400000, guid: 98a5ea7ae21beab4d808daaf2da628c6, type: 2}
+  - {fileID: 11400000, guid: 0c3d9f7458fedcf4594c2dacad0fde0d, type: 2}
   scale: 0.01
-  skeletonJSON: {fileID: 4900000, guid: 00d7d61049d29284c834ce41ab4fd68c, type: 3}
+  skeletonJSON: {fileID: 4900000, guid: 49693cc3afac88342ba521a71bf9df91, type: 3}
   skeletonDataModifiers: []
   fromAnimation: []
   toAnimation: []
