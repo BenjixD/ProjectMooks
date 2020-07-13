@@ -34,6 +34,7 @@ MonoBehaviour:
     statusAilments: []
   commandKeyword: shift
   commandArgs: 0
-  damagePopupCanvasPrefab: {fileID: 0}
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}
   _manaShiftQTE: {fileID: 5498650744045303134, guid: 611ec3a2aff306b45893529da2226e01,
     type: 3}

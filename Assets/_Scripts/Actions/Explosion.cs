@@ -23,16 +23,20 @@ public class Explosion : ActionBase {
     }
     
     public FightResult FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
+        PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
         int attackDamage = GetRawDamage(user.stats, power);
         
         foreach (FightingEntity target in targets) {
-            PlayerStats before, after;
             int damage = (int)(attackDamage * target.stats.GetDamageMultiplierResistence());
+            InstantiateDamagePopup(target, damage);
 
             before = (PlayerStats)target.stats.Clone();
             target.stats.hp.ApplyDelta(-damage);
             after = (PlayerStats)target.stats.Clone();
+
+            // TODOL
+            Debug.Log("exploding " + target.Name + " for damage: " + damage);
 
             receivers.Add(new DamageReceiver(target, before, after));
         }
