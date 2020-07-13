@@ -31,6 +31,10 @@ public class FighterSlot : MonoBehaviour
         }
 
         player.fighterSlot = this;
+
+        // Set arrows position based on fighter's specification
+        WorldspaceToScreenUI parentPositioner = targetParent.GetComponent<WorldspaceToScreenUI>();
+        parentPositioner.SetWorldPoint(fighter.GetComponent<FighterUIPositions>().arrows.position);
     }
 
 
@@ -38,8 +42,6 @@ public class FighterSlot : MonoBehaviour
         ArrowUI newArrow = Instantiate<ArrowUI>(targetPrefab, targetParent);
         newArrow.SetColor(arrowColor);
         targetArrows.Add(newArrow);
-        WorldspaceToScreenUI arrowPositioner = newArrow.GetComponent<WorldspaceToScreenUI>();
-        arrowPositioner.SetWorldPoint(fighter.GetComponent<FighterUIPositions>().arrows.position);
     }
 
     public void ClearArrowsUIOfColor(Color arrowColor) {
