@@ -345,7 +345,7 @@ public class TurnController : MonoBehaviour
     }
 
     public void EvictMook(FightingEntity mookObject) {
-        GameManager.Instance.gameState.playerParty.EvictPlayer(mookObject.targetId);
+        GameManager.Instance.gameState.playerParty.EvictPlayer(mookObject.targetId, true);
         Destroy(mookObject.gameObject);
         this.ui.statusBarsUI.UpdateStatusBars();
     }
@@ -358,7 +358,7 @@ public class TurnController : MonoBehaviour
         heroPlayer.DoDeathAnimation();
 
         StatusAilment reviveStatusAilmentPrefab = GameManager.Instance.models.GetCommonStatusAilment("Hero's Miracle");
-        heroPlayer.GetAilmentController().AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
+        heroPlayer.ailmentController.AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
     
     }
 
@@ -407,13 +407,13 @@ public class TurnController : MonoBehaviour
     // Triggers status ailments
     private void ApplyStatusAilments(TurnPhase bp) {
         foreach (var entity in field.GetAllFightingEntities()) {
-            entity.GetAilmentController().TickAilmentEffects(bp);
+            entity.ailmentController.TickAilmentEffects(bp);
         }
     }
 
     private void DecrementStatusAilmentDuration() {
         foreach(var entity in field.GetAllFightingEntities()) {
-            entity.GetAilmentController().DecrementAllAilmentsDuration();
+            entity.ailmentController.DecrementAllAilmentsDuration();
         }
     }
 

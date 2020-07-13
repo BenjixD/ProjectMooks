@@ -66,16 +66,20 @@ public class PlayerQueue : TwitchChatListenerBase {
 	public override void OnCommandReceived(string username, string message) {
 		switch(message) {
 			case "join":
-				if(Enqueue(username)) {
-					this.EchoMessage(String.Format(PlayerQueueResponse.ValidJoin, username));
-	                Messenger.Broadcast(Messages.OnPlayerJoinQueue, username);
-				} else {
-					this.EchoMessage(String.Format(PlayerQueueResponse.AlreadyJoin, username));
-				}
+                this.PlayerJoin(username);
 				break;
 			default:
 				Debug.Log("Unknown command: " + message);
 				break;
 		}
 	}
+
+    public void PlayerJoin(string username) {
+        if(Enqueue(username)) {
+            this.EchoMessage(String.Format(PlayerQueueResponse.ValidJoin, username));
+            Messenger.Broadcast(Messages.OnPlayerJoinQueue, username);
+        } else {
+            this.EchoMessage(String.Format(PlayerQueueResponse.AlreadyJoin, username));
+        }
+    }
 }

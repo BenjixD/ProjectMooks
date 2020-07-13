@@ -17,7 +17,7 @@ public class StatRewardUI : MonoBehaviour
     
     private Action<PlayerStatWithModifiers> callback; 
 
-    public void Initialize(PlayerStats playerStats, Stat stat, Action<PlayerStatWithModifiers> callback) {
+    public void Initialize(PlayerStats playerStats, ModifiableStat stat, Action<PlayerStatWithModifiers> callback) {
         this.playerStats = playerStats;
         this.theStat = (PlayerStatWithModifiers)playerStats.GetStat(stat);
         this.callback = callback;

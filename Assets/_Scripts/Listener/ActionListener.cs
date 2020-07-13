@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ActionListener : TwitchChatListenerBase {
     public class ActionListenerResponse {
-        public static string ValidAction = "@{0} is using {1}!";
+        public static string ValidAction = "@{0} is using {1}! ({2})";
         public static string InvalidAction = "@{0}, invalid move!";
     }
 
@@ -28,13 +28,13 @@ public class ActionListener : TwitchChatListenerBase {
         if (username == _player.Name) {
             this.HandleMessage("!" + message);
             if(_player.TryActionCommand(message)) {
-                this.EchoMessage(String.Format(ActionListenerResponse.ValidAction, username, _player.GetQueuedAction()._action.name + "!" ));
+                ActionBase action = _player.GetQueuedAction()._action;
+                this.EchoMessage(String.Format(ActionListenerResponse.ValidAction, username,action.name + "!", action.description));
             } else {
                 this.EchoMessage(String.Format(ActionListenerResponse.InvalidAction, username));
             }
         }
     }
-
 
     public void HandleMessage(string message) {
         if (_player.fighterMessageBox != null) {

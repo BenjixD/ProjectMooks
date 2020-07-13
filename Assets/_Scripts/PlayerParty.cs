@@ -40,7 +40,7 @@ public class PlayerParty : Party {
         }
     }
     
-    public void EvictPlayer(int index) {
+    public void EvictPlayer(int index, bool autoJoinQueueAgain = false) {
         Player player = this.GetFighters<Player>()[index];
         if (player == null) {
             return;
@@ -48,6 +48,12 @@ public class PlayerParty : Party {
 
         playerQueue.Remove(player.Name);
         this.SetFighter(index, null);
+
+        if (autoJoinQueueAgain == true) {
+            GameManager.Instance.gameState.playerParty.playerQueue.PlayerJoin(player.Name);
+        }
+
+        Messenger.Broadcast(Messages.OnRefreshWaitlistQueueUI);
     }
 
     public List<Player> GetPlayersPosition() {
@@ -77,6 +83,9 @@ public class PlayerParty : Party {
                 Player player = new Player();
                 player.Initialize(data, data.name);
                 player.stats.ApplyStatsBasedOnLevel(GameManager.Instance.gameState.playerParty.GetHeroFighter().stats.level - 2);
+
+                OutOfJuiceAilment outOfJuicePrefab = (OutOfJuiceAilment)GameManager.Instance.models.GetCommonStatusAilment("Out of Juice");
+                player.ailmentController.AddStatusAilment(Instantiate(outOfJuicePrefab));
                 //player.stats.ApplyStatsBasedOnLevel(1);
                 players.Add(player);
             }

@@ -25,7 +25,7 @@ public class ScriptableObjectDictionary : MonoBehaviour {
     [SerializeField] private List<ActionBase> commonMookActionPool = null;
 
     [SerializeField] private List<StatusAilment> commonStatusAilments = null;
-
+    
     public void Initialize() {
         foreach(JobActionsList jobActionsList in _playerJobActionsLists) {
             playerJobActions.Add(jobActionsList.job, jobActionsList.GetActions());
@@ -116,7 +116,7 @@ public class ScriptableObjectDictionary : MonoBehaviour {
         return this.commonStatusAilments.Find(ailment => ailment.name == name);
     }
 
-    public StatBuffAilment GetStatBuffAilment(Stat stat, float value) {
+    public StatBuffAilment GetStatBuffAilment(ModifiableStat stat, float value) {
         StatBuffAilment ailment = (StatBuffAilment)this.commonStatusAilments.Find(ail => ail.name == "StatBuff");
         ailment = Instantiate(ailment);
         ailment.statType = stat;

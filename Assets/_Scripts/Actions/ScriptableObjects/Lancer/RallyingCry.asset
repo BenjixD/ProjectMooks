@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Rallying Cry
   actionType: 0
-  description: 
+  description: Rifle up all twitch chatters. Deals more damage the more chat messages
+    are sent.
   animation: {fileID: 11400000, guid: 8b477148dad16594894ba7f787aea892, type: 2}
   maxPP: 1
   currPP: 1

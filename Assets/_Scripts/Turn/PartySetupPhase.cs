@@ -20,6 +20,7 @@ public class PartySetupPhase : Phase {
         PlayerObject heroPlayer = this._field.GetHeroPlayer();
         if (!heroPlayer.HasModifier(ModifierAilment.MODIFIER_DEATH)) {
             this._field.RequestRecruitNewParty();
+            Messenger.Broadcast(Messages.OnRefreshWaitlistQueueUI);
         }
     }
 

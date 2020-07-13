@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Attack
   actionType: 0
-  description: 
+  description: Basic attack.
   animation: {fileID: 11400000, guid: 2329cf145abb60a428ffaa6eec483cb7, type: 2}
   maxPP: 0
   currPP: 0

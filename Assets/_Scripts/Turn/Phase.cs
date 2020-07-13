@@ -58,13 +58,13 @@ public abstract class Phase : IDisposable {
 
     protected void ApplyStatusAilments(List<FightingEntity> entities) {
         foreach (var entity in entities) {
-            entity.GetAilmentController().TickAilmentEffects(_phase);
+            entity.ailmentController.TickAilmentEffects(_phase);
         }
     }
 
     protected void DecrementStatusAilmentDuration(List<FightingEntity> entities) {
         foreach(var entity in entities) {
-            entity.GetAilmentController().DecrementAllAilmentsDuration();
+            entity.ailmentController.DecrementAllAilmentsDuration();
         }
     }
 

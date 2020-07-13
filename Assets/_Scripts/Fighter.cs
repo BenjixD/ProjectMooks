@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class Fighter
 {
     public string Name;
+    public int index;
 
     public PlayerCreationData playerCreationData;
 
@@ -19,7 +20,9 @@ public class Fighter
 
     [SerializeField]
     protected float rareRate = 0.01f;
-    private List<PlayerReward> permanentRewards = new List<PlayerReward>();
+
+    public AilmentController ailmentController;
+
 
     // Hero: Need to know that it is the hero (job)
     // Enemy: Need to know that it is the enemy (job). Need to generate stats on the fly
@@ -38,7 +41,7 @@ public class Fighter
 
     private void CommonInitialization(string name) {
         this.Name = name;
-
+        this.ailmentController = new AilmentController(this);
         this.stats = (PlayerStats)this.playerCreationData.stats.Clone();
         this.stats.ResetStats();
         this.SetJobAndActions(this.playerCreationData.job);
@@ -50,29 +53,9 @@ public class Fighter
 
         instantiatedFighter.Initialize(targetId, this);
 
-        foreach (PlayerReward reward in this.GetPermanentRewards()) {
-
-            switch (reward.rewardType) {
-                case PlayerRewardType.AILMENT:
-                    PlayerRewardAilment ailmentReward = (PlayerRewardAilment)reward;
-                    instantiatedFighter.GetAilmentController().AddStatusAilment(GameObject.Instantiate(ailmentReward.ailment));
-                    break;
-
-                default:
-                    break;
-            }
-        }
 
         this.fighter = instantiatedFighter;
         return instantiatedFighter;
-    }
-
-    public List<PlayerReward> GetPermanentRewards() {
-        return this.permanentRewards;
-    }
-
-    public void AddPermanentReward(PlayerReward reward) {
-        this.permanentRewards.Add(reward);
     }
 
     public void SetJobAndActions(Job job) {
@@ -105,7 +88,10 @@ public class Fighter
                 }
             }
 
+
             List<ActionBase> commonMookActionPool = GameManager.Instance.models.GetCommonMookActionPool();
+            commonMookActionPool.Filter(action => actionPool.Find(actionB  => action.name == actionB.name) == null ); // Make sure no two of the same action
+
             int commonActionIndex = Random.Range(0, commonMookActionPool.Count);
             actions.Add(Object.Instantiate(commonMookActionPool[commonActionIndex]));
         }

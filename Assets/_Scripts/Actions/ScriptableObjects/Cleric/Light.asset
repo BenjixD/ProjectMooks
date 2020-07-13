@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Light
   actionType: 1
-  description: 
+  description: Deals damage with the power of light to a single enemy.
   animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
   maxPP: 0
   currPP: 0
@@ -42,8 +42,5 @@ MonoBehaviour:
       chance: 1
   commandKeyword: light
   commandArgs: 1
-  userAnimName: 
-  _animTimeBeforeEffect: 0
-  _animTimeAfterEffect: 0
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
     type: 3}
