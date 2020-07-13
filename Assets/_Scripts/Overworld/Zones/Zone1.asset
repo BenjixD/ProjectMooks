@@ -31,7 +31,6 @@ MonoBehaviour:
       minAmountOfEnemies: 1
       maxAmountOfEnemies: 1
       possibleEnemies:
-      - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
       - {fileID: 11400000, guid: 059b559c8905fbd45bd16137cf002c47, type: 2}
   - stageType: 0
     waveInfos:
@@ -50,7 +49,6 @@ MonoBehaviour:
       minAmountOfEnemies: 1
       maxAmountOfEnemies: 1
       possibleEnemies:
-      - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
       - {fileID: 11400000, guid: 059b559c8905fbd45bd16137cf002c47, type: 2}
   - stageType: 2
     waveInfos: []
@@ -72,11 +70,10 @@ MonoBehaviour:
       minAmountOfEnemies: 1
       maxAmountOfEnemies: 1
       possibleEnemies:
-      - {fileID: 11400000, guid: 5aeeb95751357cf4f94f3c4271ef2de5, type: 2}
       - {fileID: 11400000, guid: 059b559c8905fbd45bd16137cf002c47, type: 2}
   - stageType: 1
     waveInfos:
-    - averageLevel: 25
+    - averageLevel: 30
       minAmountOfEnemies: 1
       maxAmountOfEnemies: 1
       possibleEnemies:

@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum AilmentType{
+   PERSISTENT,
+   DESTROY_ON_BATTLE_END 
+};
 public abstract class StatusAilment : ScriptableObject {
 	public new string name;
 	[Tooltip("Set to true if duration defaults to endless (this flag takes precedence over the defaultDuration).")]
@@ -12,6 +17,8 @@ public abstract class StatusAilment : ScriptableObject {
 	public int level;
 	[Tooltip("Phase to trigger Status Ailment")]
 	public TurnPhase phase;
+
+    public AilmentType ailmentType = AilmentType.DESTROY_ON_BATTLE_END;
 
 	public void SetDuration(int duration) {
 		this.duration = duration;
@@ -27,8 +34,8 @@ public abstract class StatusAilment : ScriptableObject {
 		}
 	}
 
-	public abstract void StackWith(FightingEntity p, StatusAilment other);
-	public abstract void ApplyTo(FightingEntity p);
-	public abstract void Recover(FightingEntity p);
-	public abstract void TickEffect(FightingEntity p);
+	public abstract void StackWith(Fighter p, StatusAilment other);
+	public abstract void ApplyTo(Fighter p);
+	public abstract void Recover(Fighter p);
+	public abstract void TickEffect(Fighter p);
 }

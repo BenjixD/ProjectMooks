@@ -26,4 +26,8 @@ public class QueuedAction {
     public List<FightingEntity> GetTargets() {
         return _action.GetTargets(this.user, _targetIds);
     }
+
+    public bool CanQueueAction(ActionBase action) {
+        return action != null && _action.CheckCost(this.user) && (GetTargets().Count > 0 || _action.targetInfo.targetType == TargetType.NONE);
+    }
 }

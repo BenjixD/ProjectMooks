@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Defend
   actionType: 0
-  description: 
+  description: Defend (0.5x damage)
   animation: {fileID: 11400000, guid: 7ef2a3bdbce5511479122a70505d364e, type: 2}
   maxPP: 0
   currPP: 0

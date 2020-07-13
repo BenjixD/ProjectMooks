@@ -41,14 +41,20 @@ public class MookActionMenuUI : MonoBehaviour
 
     public void SetAction(QueuedAction action) {
         ActionBase actionToDo = action._action;
+        this.UnsetActions();
+        if (actionToDo == null) {
+            return;
+        }
+
         for (int i = 0; i < actions.Length; i++) {
             if (actions[i] != null) {
                 if (actions[i].action == actionToDo) {
                     actions[i].SetSelected(true);
                     emptyActions[i].SetActive(false);
                 } else {
-                    actions[i].gameObject.SetActive(false);
-                    emptyActions[i].SetActive(true);
+                    // Not necessary for auto queue (experimental feature)
+                    //actions[i].gameObject.SetActive(false);
+                    //emptyActions[i].SetActive(true);
 
                 }
             }

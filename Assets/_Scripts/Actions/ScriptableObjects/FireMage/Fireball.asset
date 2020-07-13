@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Fireball
   actionType: 1
-  description: 
+  description: Cast a fireball towards all enemies.
   animation: {fileID: 0}
   maxPP: 0
   currPP: 0

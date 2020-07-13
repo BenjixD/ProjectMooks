@@ -7,10 +7,11 @@ using System.Collections.ObjectModel;
 public class AilmentController {
     // Ongoing status ailments
     private Dictionary<string, StatusAilment> _ailments = new Dictionary<string, StatusAilment>();
-    private FightingEntity _entity;
+    // TODO: might be better to change to Fighter instead of FightingEntity...
+    private Fighter _entity;
 
-    public AilmentController(FightingEntity fe) {
-        _entity = fe;
+    public AilmentController(Fighter fe) {
+        this._entity = fe;
     }
 
     public StatusAilment GetAilment(string name) {
@@ -68,6 +69,16 @@ public class AilmentController {
         }
 
         _ailments.Clear();
+    }
+
+    public void RemoveOnBattleEndAilments() {
+        List<StatusAilment> ailments = new List<StatusAilment>(this._ailments.Values);
+        foreach (StatusAilment ailment in ailments) {
+            if (ailment.ailmentType == AilmentType.DESTROY_ON_BATTLE_END) {
+                ailment.Recover(_entity);
+                Object.Destroy(ailment);
+            }
+        }
     }
 
     public void DecrementAllAilmentsDuration() {

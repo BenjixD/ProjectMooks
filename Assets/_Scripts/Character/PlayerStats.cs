@@ -4,10 +4,8 @@ using UnityEngine;
 using System;
 
 // TODO: Break apart basic stats (HP) and modifiable stats (MAX_HP). They don't have even common logic to justify subclassing
-public enum Stat {
-	HP,
+public enum ModifiableStat {
     MAX_HP,
-	MANA,
     MAX_MANA,
 	PHYSICAL,
 	SPECIAL,
@@ -16,9 +14,21 @@ public enum Stat {
 	SPEED
 };
 
+public enum RawStat {
+    HP,
+    MANA
+}
+
+public interface IPlayerStat {
+    void SetValue(int value);
+    void ApplyDelta(int delta);
+
+    int GetValue();
+}
+
 [System.Serializable]
-public class PlayerStat : ICloneable {
-    public Stat stat; // Set in inspector pls
+public class PlayerRawStat : ICloneable, IPlayerStat {
+    public RawStat stat; // Set in inspector pls
 
     [SerializeField] // Note: the only reason it's serializable is for debugging purposes.
     protected int currentValue; // Updated on applying StatModifer
@@ -26,10 +36,10 @@ public class PlayerStat : ICloneable {
     protected int minValue = Int32.MinValue; // Usually only necessary for health/mana
     protected int maxValue = Int32.MaxValue;
 
-    public PlayerStat(){
+    public PlayerRawStat(){
     }
 
-    public PlayerStat(Stat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue) {
+    public PlayerRawStat(RawStat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue) {
         this.stat = stat;
         this.currentValue = value;
     }
@@ -40,21 +50,21 @@ public class PlayerStat : ICloneable {
         this.currentValue = Mathf.Clamp(this.currentValue, minValue, maxValue);
     }
 
-    public virtual void SetValue(int value) {
+    public void SetValue(int value) {
         this.currentValue = Mathf.Clamp(value, minValue, maxValue);
     }
 
-    public virtual void ApplyDelta(int delta) {
+    public void ApplyDelta(int delta) {
         this.SetValue(this.GetValue() + delta );
     }
 
-    public virtual int GetValue() {
+    public int GetValue() {
         return this.currentValue;
     }
 
-    public virtual object Clone()
+    public object Clone()
     {
-        PlayerStat stat = new PlayerStat(this.stat, this.currentValue);
+        PlayerRawStat stat = new PlayerRawStat(this.stat, this.currentValue);
         return stat;
     }
 
@@ -63,7 +73,11 @@ public class PlayerStat : ICloneable {
 // "baseValue" is max
 // current value cannot go higher than base value.
 [System.Serializable]
-public class PlayerStatWithModifiers : PlayerStat {
+public class PlayerStatWithModifiers : IPlayerStat {
+    public ModifiableStat stat;
+
+    [SerializeField] // Note: the only reason it's serializable is for debugging purposes.
+    protected int currentValue; // Updated on applying StatModifer
 
     public int originalBaseValue {get; set;}
     public int divisor = 1;
@@ -77,9 +91,10 @@ public class PlayerStatWithModifiers : PlayerStat {
     private Action<int> callback = null;
 
 
-    public PlayerStatWithModifiers(Stat stat, int value, int growth, int divisor = 1, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue, Action<int> callback = null)
-    : base(stat, value, minValue, maxValue) {
+    public PlayerStatWithModifiers(ModifiableStat stat, int value, int growth, int divisor = 1, Action<int> callback = null) {
+        this.stat = stat;
         this.baseValue = value;
+        this.currentValue = this.baseValue;
         this.callback = callback;
         this.originalBaseValue = this.baseValue;
         this.divisor = divisor;
@@ -94,12 +109,11 @@ public class PlayerStatWithModifiers : PlayerStat {
         this.baseValue = originalBaseValue + (level - 1) * growth;
     }
 
-    public override int GetValue() {
-
+    public int GetValue() {
         int runningValue = baseValue;
 
         foreach (StatModifier modifier in this.modifiers) {
-            runningValue = modifier.Apply(runningValue, this.baseValue, this.minValue, this.maxValue);
+            runningValue = modifier.Apply(runningValue, this.baseValue);
         }
 
         this.currentValue = runningValue;
@@ -112,18 +126,18 @@ public class PlayerStatWithModifiers : PlayerStat {
     }
 
     // Note: This FORCE sets the BASE value. Use sparingly.
-    public override void SetValue(int value) {
+    public void SetValue(int value) {
         this.ClearModifiers();
-        this.baseValue = Mathf.Clamp(value, minValue, maxValue);
+        this.baseValue = value;
     }
 
-    public override void ApplyDelta(int delta) {
+    public void ApplyDelta(int delta) {
         this.ApplyDeltaModifier(delta, StatModifier.Type.FLAT);
     }
 
-    public override object Clone()
+    public object Clone()
     {
-        PlayerStatWithModifiers stat = new PlayerStatWithModifiers(this.stat, this.baseValue, this.growth, this.divisor, this.minValue, this.maxValue, this.callback);
+        PlayerStatWithModifiers stat = new PlayerStatWithModifiers(this.stat, this.baseValue, this.growth, this.divisor, this.callback);
         PriorityList<StatModifier> clonedModifiers = new PriorityList<StatModifier>();
 
         foreach (StatModifier modifier in this.modifiers) {
@@ -186,7 +200,7 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
     }
 
     // Modifer is in its own class and virtual to enable more control in case you want to do something super special
-    public virtual int Apply(int runningValue, int baseValue, int minValue, int maxValue) {
+    public virtual int Apply(int runningValue, int baseValue) {
         long resValue = runningValue;
 		switch(this.type) {
 			case Type.ADD_PERCENTAGE:
@@ -200,7 +214,7 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 				break;
 		}
 
-        resValue = (long)Mathf.Clamp(resValue, minValue, maxValue);
+        // resValue = (long)Mathf.Clamp(resValue, minValue, maxValue);
 
         return (int)resValue;
     }
@@ -223,18 +237,19 @@ public class StatModifier : ICloneable, IComparable<StatModifier> {
 public class PlayerStats: ICloneable {
 	public int level = 1;
     public int statPoints{get; set;}
-    public PlayerStat hp = new PlayerStat(Stat.HP, 1);
-    public PlayerStatWithModifiers maxHp = new PlayerStatWithModifiers(Stat.MAX_HP, 1, 1);
-    public PlayerStat mana = new PlayerStat(Stat.MANA, 1);
-    public PlayerStatWithModifiers maxMana = new PlayerStatWithModifiers(Stat.MAX_MANA, 1, 1);
+    public PlayerRawStat hp = new PlayerRawStat(RawStat.HP, 1);
+    public PlayerRawStat mana = new PlayerRawStat(RawStat.MANA, 1);
 
-    public PlayerStatWithModifiers physical = new PlayerStatWithModifiers(Stat.PHYSICAL, 1, 1);
-    public PlayerStatWithModifiers special = new PlayerStatWithModifiers(Stat.SPECIAL, 1, 1);
-    public PlayerStatWithModifiers defence = new PlayerStatWithModifiers(Stat.DEFENSE, 1, 1);
-    public PlayerStatWithModifiers resistance = new PlayerStatWithModifiers(Stat.RESISTANCE, 1, 1);
-    public PlayerStatWithModifiers speed = new PlayerStatWithModifiers(Stat.SPEED, 1, 1);
+    public PlayerStatWithModifiers maxHp = new PlayerStatWithModifiers(ModifiableStat.MAX_HP, 1, 1);
+    public PlayerStatWithModifiers maxMana = new PlayerStatWithModifiers(ModifiableStat.MAX_MANA, 1, 1);
 
-    private Dictionary<Stat, PlayerStatWithModifiers> modifiableStats;
+    public PlayerStatWithModifiers physical = new PlayerStatWithModifiers(ModifiableStat.PHYSICAL, 1, 1);
+    public PlayerStatWithModifiers special = new PlayerStatWithModifiers(ModifiableStat.SPECIAL, 1, 1);
+    public PlayerStatWithModifiers defence = new PlayerStatWithModifiers(ModifiableStat.DEFENSE, 1, 1);
+    public PlayerStatWithModifiers resistance = new PlayerStatWithModifiers(ModifiableStat.RESISTANCE, 1, 1);
+    public PlayerStatWithModifiers speed = new PlayerStatWithModifiers(ModifiableStat.SPEED, 1, 1);
+
+    private Dictionary<ModifiableStat, PlayerStatWithModifiers> modifiableStats;
 
 	public PlayerStats() {
         this.Initialize();
@@ -244,14 +259,14 @@ public class PlayerStats: ICloneable {
     // TODO: Break apart basic stats (HP) and modifiable stats (MAX_HP). They don't have even common logic to justify subclassing
     private void Initialize() {
 		level = 1;
-        this.modifiableStats = new Dictionary<Stat, PlayerStatWithModifiers>();
-        this.modifiableStats.Add(Stat.MAX_HP, maxHp);
-        this.modifiableStats.Add(Stat.MAX_MANA, maxMana);
-        this.modifiableStats.Add(Stat.PHYSICAL, physical);
-        this.modifiableStats.Add(Stat.SPECIAL, special);
-        this.modifiableStats.Add(Stat.DEFENSE, defence);
-        this.modifiableStats.Add(Stat.RESISTANCE, resistance);
-        this.modifiableStats.Add(Stat.SPEED, speed);
+        this.modifiableStats = new Dictionary<ModifiableStat, PlayerStatWithModifiers>();
+        this.modifiableStats.Add(ModifiableStat.MAX_HP, maxHp);
+        this.modifiableStats.Add(ModifiableStat.MAX_MANA, maxMana);
+        this.modifiableStats.Add(ModifiableStat.PHYSICAL, physical);
+        this.modifiableStats.Add(ModifiableStat.SPECIAL, special);
+        this.modifiableStats.Add(ModifiableStat.DEFENSE, defence);
+        this.modifiableStats.Add(ModifiableStat.RESISTANCE, resistance);
+        this.modifiableStats.Add(ModifiableStat.SPEED, speed);
 
         this.SetupStatPair(hp, maxHp);
         this.SetupStatPair(mana, maxMana);
@@ -261,8 +276,8 @@ public class PlayerStats: ICloneable {
         PlayerStats stats = new PlayerStats();
         stats.level = this.level;
 
-        stats.hp = (PlayerStat)this.hp.Clone();
-        stats.mana = (PlayerStat)this.mana.Clone();
+        stats.hp = (PlayerRawStat)this.hp.Clone();
+        stats.mana = (PlayerRawStat)this.mana.Clone();
 
         stats.maxHp = (PlayerStatWithModifiers)this.maxHp.Clone();
         stats.maxMana = (PlayerStatWithModifiers)this.maxMana.Clone();
@@ -287,39 +302,48 @@ public class PlayerStats: ICloneable {
 		Debug.Log("SPEED: " + speed.GetValue());
 	}
 
-	public PlayerStat GetStat(Stat stat) {
+	public PlayerStatWithModifiers GetStat(ModifiableStat stat) {
 		switch(stat) {
-			case (Stat.HP):
-				return this.hp;
-            case (Stat.MAX_HP):
+            case (ModifiableStat.MAX_HP):
                 return this.maxHp;
-			case (Stat.MANA):
-				return this.mana;
-            case (Stat.MAX_MANA):
+            case (ModifiableStat.MAX_MANA):
                 return this.maxMana;
-			case (Stat.PHYSICAL):
+			case (ModifiableStat.PHYSICAL):
 				return this.physical;
-			case (Stat.SPECIAL):
+			case (ModifiableStat.SPECIAL):
 				return this.special;
-			case (Stat.DEFENSE):
+			case (ModifiableStat.DEFENSE):
 				return this.defence;
-			case (Stat.RESISTANCE):
+			case (ModifiableStat.RESISTANCE):
 				return this.resistance;
-			case (Stat.SPEED):
+			case (ModifiableStat.SPEED):
 				return this.speed;
 		}
 		Debug.LogWarning("Tried to retrieve invalid stat.");
-		return this.hp;
+		return this.maxHp;
 	}
 
-	public int GetStatValue(Stat stat) {
+    public PlayerRawStat GetRawStat(RawStat stat) {
+		switch(stat) {
+			case (RawStat.HP):
+				return this.hp;
+			case (RawStat.MANA):
+				return this.mana;
+		}
+
+        return this.hp;
+    }
+
+
+
+	public int GetStatValue(ModifiableStat stat) {
 		return this.GetStat(stat).GetValue();
 	}
 
 
 	// Resetter ------------------//
 	public void ResetStats() {
-        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+        foreach (KeyValuePair<ModifiableStat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
             PlayerStatWithModifiers stat = statPair.Value;
             stat.ClearModifiers();
             stat.GetValue();
@@ -334,7 +358,7 @@ public class PlayerStats: ICloneable {
     }
 
     // Level up stat. Used for hero.
-    public bool LevelUpStat(Stat stat) {
+    public bool LevelUpStat(ModifiableStat stat) {
 
         // TODO: FIX THIS
         if (!this.modifiableStats.ContainsKey(stat)) {
@@ -374,19 +398,19 @@ public class PlayerStats: ICloneable {
         this.RefreshStatsBasedOnLevel();
     }
 
-    public Dictionary<Stat, PlayerStatWithModifiers> GetModifiableStats() {
+    public Dictionary<ModifiableStat, PlayerStatWithModifiers> GetModifiableStats() {
         return this.modifiableStats;
     }
 
     public void RefreshStatsBasedOnLevel() {
-        foreach (KeyValuePair<Stat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
+        foreach (KeyValuePair<ModifiableStat, PlayerStatWithModifiers> statPair in this.modifiableStats) {
             PlayerStatWithModifiers statWithModifiers = statPair.Value;
             statWithModifiers.ApplyBaseValueBasedOnLevel(this.level);
         }
     }
 
     // Setup stat pairs for like hp/max hp and mana/max mana
-    private void SetupStatPair(PlayerStat curStat, PlayerStatWithModifiers maxStat) {
+    private void SetupStatPair(PlayerRawStat curStat, PlayerStatWithModifiers maxStat) {
         curStat.SetMinMax(0, maxStat.GetBaseValue());
         curStat.SetValue(maxStat.GetBaseValue());
         maxStat.SetCallback( (int maxValue) => curStat.SetMinMax(0, maxValue) );

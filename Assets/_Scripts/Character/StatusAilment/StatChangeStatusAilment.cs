@@ -10,7 +10,7 @@ public class StatChangeStatusAilment : StatusAilment {
 	}
 
 	[Tooltip("Stat to change.")]
-	public Stat stat;
+	public ModifiableStat stat;
 	[Tooltip("Bonus Type")]
 	public Type type;
 	[Tooltip("[0,1] Percentage Bonus, or [0,) Flat Bonus")]
@@ -21,7 +21,7 @@ public class StatChangeStatusAilment : StatusAilment {
     private PlayerStatWithModifiers playerStat;
     private StatModifier statModifier;
 
-	public override void StackWith(FightingEntity p, StatusAilment other) {
+	public override void StackWith(Fighter p, StatusAilment other) {
 		if(this.name == other.name) {
 			this.level = (int)Mathf.Max(this.level, other.level);
 			this.duration = (int)Mathf.Max(this.duration, other.duration);
@@ -30,13 +30,8 @@ public class StatChangeStatusAilment : StatusAilment {
 		}
 	}
 
-	public override void ApplyTo(FightingEntity p) {
-        PlayerStat tmpStat = p.stats.GetStat(stat);
-        if (tmpStat.GetType() != typeof(PlayerStatWithModifiers)) {
-            Debug.LogError("Error: Should be stat with modifier");
-        } else {
-            this.playerStat = (PlayerStatWithModifiers)p.stats.GetStat(stat);
-        }
+	public override void ApplyTo(Fighter p) {
+        this.playerStat = p.stats.GetStat(stat);
 
 		//TODO: Possible Animation Modifications
 		switch(type) {
@@ -52,13 +47,13 @@ public class StatChangeStatusAilment : StatusAilment {
 		Debug.Log("Defending: " + _flatChange + " damage");
 	}
 
-	public override void Recover(FightingEntity p) {
+	public override void Recover(Fighter p) {
 		//TODO: Possible Animation Modifications
 		Debug.Log("Recovering: " + _flatChange + " " + stat);
         this.playerStat.RemoveModifier(this.statModifier);
 	}
 
-	public override void TickEffect(FightingEntity p) {
+	public override void TickEffect(Fighter p) {
 
 	}
 }

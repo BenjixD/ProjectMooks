@@ -10,16 +10,16 @@ public class StatBuffAilment : StatusAilment {
 	public StatModifier.Type damageType = StatModifier.Type.ADD_PERCENTAGE;
 	public float val;
 
-    public Stat statType;
+    public ModifiableStat statType;
 
     private List<StatModifier> modifiers = new List<StatModifier>();
 
-	public override void StackWith(FightingEntity p, StatusAilment other) {
+	public override void StackWith(Fighter p, StatusAilment other) {
         StatBuffAilment otherAilment = (StatBuffAilment) other;
         this.ApplyHelper(p, otherAilment);
 	}
 
-	public override void ApplyTo(FightingEntity p) {
+	public override void ApplyTo(Fighter p) {
         if (!p.stats.GetModifiableStats().ContainsKey(statType)) {
             return;
         }
@@ -27,7 +27,7 @@ public class StatBuffAilment : StatusAilment {
         this.ApplyHelper(p, this);
 	}
 
-	public override void Recover(FightingEntity p) {
+	public override void Recover(Fighter p) {
 		//TODO: Possible Animation Modifications
         foreach (StatModifier modifier in this.modifiers) {
             p.stats.GetModifiableStats()[statType].RemoveModifier(modifier);
@@ -36,11 +36,11 @@ public class StatBuffAilment : StatusAilment {
         modifiers.Clear();
 	}
 
-	public override void TickEffect(FightingEntity p) {
+	public override void TickEffect(Fighter p) {
 
 	}
 
-    private void ApplyHelper(FightingEntity p, StatBuffAilment ailment) {
+    private void ApplyHelper(Fighter p, StatBuffAilment ailment) {
         modifiers.Add(p.stats.GetModifiableStats()[ailment.statType].ApplyDeltaModifier(ailment.val, ailment.damageType));
     }
 

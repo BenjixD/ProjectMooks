@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Heal
   actionType: 1
-  description: 
+  description: Heals an ally target.
   animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
   maxPP: 3
-  currPP: 0
+  currPP: 3
   actionCost:
     HP: 0
     mana: 0

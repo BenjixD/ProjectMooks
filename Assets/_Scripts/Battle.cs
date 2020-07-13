@@ -69,7 +69,7 @@ public class Battle : IDisposable
             }
 
             // Apply Status Ailment
-            fighters[i].GetAilmentController().TickAilmentEffects(_controller.turnPhase);
+            fighters[i].ailmentController.TickAilmentEffects(_controller.turnPhase);
 
             if (fighters[i].GetQueuedAction() == null) {
                 // This sets the enemy's action

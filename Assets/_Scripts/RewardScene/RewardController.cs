@@ -126,7 +126,7 @@ public class RewardController : MonoBehaviour
         switch (reward.rewardType) {
             case PlayerRewardType.AILMENT:
                 Player hero = GameManager.Instance.gameState.playerParty.GetHeroFighter();
-                hero.AddPermanentReward(reward);
+                hero.ailmentController.AddStatusAilment(((PlayerRewardAilment)reward).ailment);
             break;
 
             default:

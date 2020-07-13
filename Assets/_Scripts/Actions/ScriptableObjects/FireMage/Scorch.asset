@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Scorch
   actionType: 1
-  description: 
+  description: BBQ time!
   animation: {fileID: 0}
   maxPP: 0
   currPP: 0

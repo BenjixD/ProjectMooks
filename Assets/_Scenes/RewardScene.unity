@@ -669,13 +669,13 @@ MonoBehaviour:
       rewardRarity: 0
     weight: 0.5
     rewardWeights:
-    - value: {fileID: 11400000, guid: dda1f69e3e7314f4ebf7a393433ba0d6, type: 2}
+    - value: {fileID: 11400000, guid: 050e2f6c8e880de46bf005bd9134123d, type: 2}
       weight: 1
   - value:
       rewardRarity: 1
     weight: 0.5
     rewardWeights:
-    - value: {fileID: 11400000, guid: dda1f69e3e7314f4ebf7a393433ba0d6, type: 2}
+    - value: {fileID: 11400000, guid: 050e2f6c8e880de46bf005bd9134123d, type: 2}
       weight: 1
   ui: {fileID: 766768365}
 --- !u!114 &766768365

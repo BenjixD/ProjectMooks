@@ -41,7 +41,7 @@ public class BattleStateListener : MonoBehaviour {
             if (deadFighter.targetId == 0) {
                 OnHeroDeath(result);
             } else {
-                GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId);
+                GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId, true);
                 Destroy(deadFighter.gameObject);
             }
         }
@@ -75,6 +75,6 @@ public class BattleStateListener : MonoBehaviour {
         heroPlayer.DoDeathAnimation();
 
         StatusAilment reviveStatusAilmentPrefab = GameManager.Instance.models.GetCommonStatusAilment("Hero's Miracle");
-        heroPlayer.GetAilmentController().AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
+        heroPlayer.ailmentController.AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));
     }
 }
