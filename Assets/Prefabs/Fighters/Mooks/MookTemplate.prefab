@@ -1181,6 +1181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiTransform: {fileID: 2344061846908136017}
   _worldPointTransform: {fileID: 4926211612790820631}
+  continuouslyUpdate: 1
 --- !u!1 &8196777877987261252
 GameObject:
   m_ObjectHideFlags: 0
