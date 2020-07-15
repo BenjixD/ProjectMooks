@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Cleave
   actionType: 0
-  description: Deals medium damage to all enemies.
+  description: Deals light damage to all enemies.
   animation: {fileID: 11400000, guid: 2329cf145abb60a428ffaa6eec483cb7, type: 2}
   maxPP: 0
   currPP: 0
