@@ -30,7 +30,7 @@ MonoBehaviour:
   effects:
     element: 1
     physicalScaling: 0
-    specialScaling: 20
+    specialScaling: 10
     heals: 0
     statusAilments: []
   commandKeyword: explosion
