@@ -49,9 +49,9 @@ MonoBehaviour:
   _qteCommonCanvasPrefab: {fileID: 1689741904029012617, guid: c0aa9e4c5bcaa72429ba01323afd21a4,
     type: 3}
   _increaseString: +
-  _increaseValue: 0.01
+  _increaseValue: 0.1
   _decreaseString: '-'
-  _decreaseValue: 0.01
+  _decreaseValue: 0.1
   _startingPower: 0.3
   _explosionCanvasPrefab: {fileID: 6005107147819892754, guid: 19937301b80de6a40bd5ad2a5b658029,
     type: 3}
@@ -67,3 +67,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8328485bc4839d84e966b13e3b19bfea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableReply: 0

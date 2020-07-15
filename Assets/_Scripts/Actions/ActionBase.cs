@@ -316,18 +316,21 @@ public class ActionBase : ScriptableObject {
 
             before = (PlayerStats)target.stats.Clone();
             target.stats.hp.ApplyDelta(-damage);
-            after = (PlayerStats)target.stats.Clone();
-
             List<StatusAilment> inflicted = InflictStatuses(target);
+            after = (PlayerStats)target.stats.Clone();
 
             receivers.Add(new DamageReceiver(target, before, after, inflicted));
         }
         return new FightResult(user, this, receivers);
     }
 
-    protected virtual void InstantiateDamagePopup(FightingEntity target, int damage) {
-        DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
+    protected void InstantiateDamagePopup(FightingEntity target, int damage) {
         DamageType damageType = effects.heals ? DamageType.HEALING : DamageType.NORMAL;
+        InstantiateDamagePopup(target, damage, damageType);
+    }
+
+    protected void InstantiateDamagePopup(FightingEntity target, int damage, DamageType damageType) {
+        DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
         popup.Initialize(target, damage, damageType);
     }
 

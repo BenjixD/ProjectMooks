@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Rallying Cry
   actionType: 0
-  description: Rile up all twitch chatters. Deals more damage the more chat messages
-    are sent.
+  description: Rile up all twitch chatters, increasing party's physical and special
+    stats. Buff is stronger the more chat messages are sent.
   animation: {fileID: 11400000, guid: 8b477148dad16594894ba7f787aea892, type: 2}
   maxPP: 1
   currPP: 1
@@ -32,7 +32,15 @@ MonoBehaviour:
     physicalScaling: 0
     specialScaling: 0
     heals: 0
-    statusAilments: []
+    statusAilments:
+    - statusAilment: {fileID: 11400000, guid: 797f7f75411e000408e416f6ed766f50, type: 2}
+      duration: 0
+      infiniteDuration: 0
+      chance: 1
+    - statusAilment: {fileID: 11400000, guid: 1963aecd103e5ff49a1bb31ed53126a3, type: 2}
+      duration: 0
+      infiniteDuration: 0
+      chance: 1
   commandKeyword: rally
   commandArgs: 0
   damagePopupCanvasPrefab: {fileID: 0}

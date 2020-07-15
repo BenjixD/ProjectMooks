@@ -64,3 +64,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8328485bc4839d84e966b13e3b19bfea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableReply: 0

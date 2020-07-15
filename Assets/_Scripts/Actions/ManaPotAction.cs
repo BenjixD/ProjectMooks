@@ -16,7 +16,7 @@ public class ManaPotAction : ActionBase {
         int attackDamage = user.stats.special.GetValue();
         
         foreach (FightingEntity target in targets) {
-            InstantiateDamagePopup(target, attackDamage);
+            InstantiateDamagePopup(target, attackDamage, DamageType.MANA_RECOVERY);
             before = (PlayerStats)target.stats.Clone();
             target.stats.mana.ApplyDelta(attackDamage);
             after = (PlayerStats)target.stats.Clone();
@@ -25,10 +25,5 @@ public class ManaPotAction : ActionBase {
         }
 
         return new FightResult(user, this, receivers);
-    }
-
-    protected override void InstantiateDamagePopup(FightingEntity target, int damage) {
-        DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
-        popup.Initialize(target, damage, DamageType.MANA_RECOVERY);
     }
 }

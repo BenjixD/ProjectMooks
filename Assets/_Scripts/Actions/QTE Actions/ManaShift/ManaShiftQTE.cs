@@ -13,6 +13,13 @@ public class ManaShiftQTE : QuickTimeEvent {
     private ManaShiftUI _manaShiftUI;
     private float _totalPower = 0;
 
+    private ManaShift _action;
+
+    public void Initialize(FightingEntity user, List<FightingEntity> targets, ManaShift action) {
+        Initialize(user, targets);
+        _action = action;
+    }
+
     protected override void ProcessMessage(string message) {
         if (message == _increaseString) {
             _totalPower += _increaseValue;
@@ -27,7 +34,11 @@ public class ManaShiftQTE : QuickTimeEvent {
     }
 
     private void UpdatePower() {
-        _manaShiftUI.UpdatePower(_totalPower);
+        _manaShiftUI.UpdatePower(_action.GetManaRestored(_user, _totalPower));
+    }
+
+    protected override void ExecuteEffect() {
+        _action.FinishQTE(_user, _targets, _totalPower);
     }
 
     protected override void DestroyUI() {

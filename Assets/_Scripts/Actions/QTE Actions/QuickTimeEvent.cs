@@ -19,6 +19,9 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     private QteCommonUI _qteUI;
 
     protected bool _acceptingInput;
+
+    protected FightingEntity _user;
+    protected List<FightingEntity> _targets;
     
     private void Start() {
         StartCoroutine(StartQTE());
@@ -28,6 +31,11 @@ public abstract class QuickTimeEvent : MonoBehaviour {
         if (_acceptingInput) {
             ProcessMessage(message);
         }
+    }
+
+    protected void Initialize(FightingEntity user, List<FightingEntity> targets) {
+        _user = user;
+        _targets = targets;
     }
 
     protected abstract void ProcessMessage(string message);
@@ -66,14 +74,18 @@ public abstract class QuickTimeEvent : MonoBehaviour {
         StartCoroutine(EndQTE());
     }
 
+    protected virtual void ExecuteEffect() {
+
+    }
+
     private IEnumerator EndQTE() {
         _acceptingInput = false;
         _qteUI.DeactivateTimer();
         yield return new WaitForSeconds(_windDownDuration);
         GameManager.Instance.time.UnPause();
+        ExecuteEffect();
         DestroyUI();
         Destroy(gameObject);
-        // TODO: execute move
     }
 
     protected virtual void DestroyUI() {

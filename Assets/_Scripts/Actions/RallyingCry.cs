@@ -13,18 +13,22 @@ public class RallyingCry : ActionBase {
     }
 
     public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
-        Instantiate(_rallyingCryQTE);
-
-        // TODO: integration with battle controller
-        FinishQTE(user, targets, 0);
-
+        RallyingCryQTE qte = Instantiate(_rallyingCryQTE).GetComponent<RallyingCryQTE>();
+        qte.Initialize(user, targets, this);
         return new FightResult(user, this);
     }
     
     public FightResult FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
+        PlayerStats before, after;
+        List<DamageReceiver> receivers = new List<DamageReceiver>();
+        
         foreach (FightingEntity target in targets) {
-            // TODO: apply rallying cry effect
+            before = (PlayerStats)target.stats.Clone();
+            // TODO: increase strength of buff based on power
+            List<StatusAilment> inflicted = InflictStatuses(target);
+            after = (PlayerStats)target.stats.Clone();
+            receivers.Add(new DamageReceiver(target, before, after, inflicted));
         }
-        return new FightResult(user, this);
+        return new FightResult(user, this, receivers);
     }
 }

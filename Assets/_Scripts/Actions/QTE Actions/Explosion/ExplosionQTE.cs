@@ -19,12 +19,11 @@ public class ExplosionQTE : QuickTimeEvent {
     private GameObject _explosionCanvasPrefab = null;
     private ExplosionUI _explosionUI;
 
-    private PlayerStats _userStats;
-    private Explosion _explosionAction;
+    private Explosion _action;
 
-    public void Initialize(PlayerStats userStats, Explosion action) {
-        _userStats = userStats;
-        _explosionAction = action;
+    public void Initialize(FightingEntity user, List<FightingEntity> targets, Explosion action) {
+        Initialize(user, targets);
+        _action = action;
     }
 
     protected override void ProcessMessage(string message) {
@@ -46,12 +45,16 @@ public class ExplosionQTE : QuickTimeEvent {
 
     private void UpdatePowerMeter() {
         int rawDamage = 0;
-        if (_userStats == null || _explosionAction == null) {
+        if (_user == null || _action == null) {
             Debug.LogWarning("Explosion damage can't be approximated as user stats or the Explosion action are missng.");
         } else {
-            rawDamage = _explosionAction.GetRawDamage(_userStats, _explosionPower);
+            rawDamage = _action.GetRawDamage(_user.stats, _explosionPower);
         }
         _explosionUI.UpdatePower(_explosionPower, rawDamage);
+    }
+
+    protected override void ExecuteEffect() {
+        _action.FinishQTE(_user, _targets, _explosionPower);
     }
 
     protected override void DestroyUI() {

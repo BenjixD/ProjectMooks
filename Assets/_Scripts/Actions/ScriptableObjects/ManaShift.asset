@@ -29,7 +29,7 @@ MonoBehaviour:
   effects:
     element: 0
     physicalScaling: 0
-    specialScaling: 0
+    specialScaling: 0.2
     heals: 0
     statusAilments: []
   commandKeyword: shift

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Protect
   actionType: 0
-  description: For one turn, increases party's defense while decreasing your own.
+  description: For one turn, increases allies' defense while decreasing your own.
   animation: {fileID: 0}
   maxPP: 0
   currPP: 0

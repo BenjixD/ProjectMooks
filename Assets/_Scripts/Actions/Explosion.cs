@@ -14,11 +14,7 @@ public class Explosion : ActionBase {
 
     public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         ExplosionQTE qte = Instantiate(_explosionQTE).GetComponent<ExplosionQTE>();
-        qte.Initialize(user.stats, this);
-
-        // TODO: integration with battle controller
-        FinishQTE(user, targets, 0);
-
+        qte.Initialize(user, targets, this);
         return new FightResult(user, this);
     }
     
@@ -35,18 +31,15 @@ public class Explosion : ActionBase {
             target.stats.hp.ApplyDelta(-damage);
             after = (PlayerStats)target.stats.Clone();
 
-            // TODOL
-            Debug.Log("exploding " + target.Name + " for damage: " + damage);
-
             receivers.Add(new DamageReceiver(target, before, after));
         }
 
-        return new FightResult(user, this);
+        return new FightResult(user, this, receivers);
     }
 
     // Return damage based on explosion power and user's stats (without accounting for the targets' resistances)
     public int GetRawDamage(PlayerStats stats, float power) {     
-        // TODO: balance damage formula
-        return (int) (power * stats.special.GetValue());
+        int damage = (int) (stats.physical.GetValue() * effects.physicalScaling + stats.special.GetValue() * effects.specialScaling);
+        return (int) (power * damage);
     }
 }
