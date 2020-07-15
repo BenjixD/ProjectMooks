@@ -8,7 +8,7 @@ public class Explosion : ActionBase {
 
     public override bool QueueAction(FightingEntity user, string[] splitCommand) {
         List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
-        user.SetQueuedAction(new QueuedAction(user, this, targetIds));
+        user.SetQueuedAction(this, targetIds);
         return true;
     }
 

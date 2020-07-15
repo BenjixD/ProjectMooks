@@ -630,7 +630,7 @@ MonoBehaviour:
       stat: 1
       currentValue: 1
     maxHp:
-      stat: 1
+      stat: 0
       currentValue: 1
       divisor: 1
       growth: 1

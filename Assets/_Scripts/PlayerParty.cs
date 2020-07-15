@@ -82,7 +82,7 @@ public class PlayerParty : Party {
             if(data != null) {
                 Player player = new Player();
                 player.Initialize(data, data.name);
-                player.stats.ApplyStatsBasedOnLevel(GameManager.Instance.gameState.playerParty.GetHeroFighter().stats.level - 2);
+                player.stats.ApplyStatsBasedOnLevel(GameManager.Instance.gameState.playerParty.GetHeroFighter().stats.level);
 
                 OutOfJuiceAilment outOfJuicePrefab = (OutOfJuiceAilment)GameManager.Instance.models.GetCommonStatusAilment("Out of Juice");
                 player.ailmentController.AddStatusAilment(Instantiate(outOfJuicePrefab));

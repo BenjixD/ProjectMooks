@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class ActionListener : TwitchChatListenerBase {
     public class ActionListenerResponse {
-        public static string ValidAction = "@{0} is using {1}! ({2})";
+        public static string ValidAction = "@{0} is going to use {1}! ({2})";
+        public static string QueuedUpAction = "@{0} queued up {1} for next turn! ({2})";
         public static string InvalidAction = "@{0}, invalid move!";
     }
 
@@ -29,7 +30,11 @@ public class ActionListener : TwitchChatListenerBase {
             this.HandleMessage("!" + message);
             if(_player.TryActionCommand(message)) {
                 ActionBase action = _player.GetQueuedAction()._action;
-                this.EchoMessage(String.Format(ActionListenerResponse.ValidAction, username,action.name + "!", action.description));
+                if (GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions()) {
+                    this.EchoMessage(String.Format(ActionListenerResponse.ValidAction, username, action.name, action.description));
+                } else {
+                    this.EchoMessage(String.Format(ActionListenerResponse.QueuedUpAction, username, action.name, action.description));
+                }
             } else {
                 this.EchoMessage(String.Format(ActionListenerResponse.InvalidAction, username));
             }

@@ -35,7 +35,7 @@ public class HerosMiracleAilment : StatusAilment {
             p.stats.hp.ApplyDelta(reviveHP);
             p.fighter.gameObject.SetActive(true);
         } else {
-            p.fighter.SetQueuedAction(new QueuedAction(p.fighter, nothingAction, new List<int>{ p.index }  ));	
+            p.fighter.SetQueuedAction(nothingAction, new List<int>{ p.index });	
         }
 
 	}

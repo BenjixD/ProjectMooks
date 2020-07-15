@@ -125,22 +125,22 @@ PrefabInstance:
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.physical.growth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.special.growth
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.defence.growth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.resistance.growth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
@@ -150,7 +150,7 @@ PrefabInstance:
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.maxHp.baseValue
-      value: 75
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
@@ -206,6 +206,11 @@ PrefabInstance:
         type: 3}
       propertyPath: stats.mana.stat
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.speed.growth
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35f01a16f79c8c94ba5771a613681882, type: 3}

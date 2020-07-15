@@ -107,19 +107,23 @@ public class ActionBase : ScriptableObject {
     private bool CheckKeyword(string keyword) {
         return keyword == commandKeyword;
     }
-    private bool CheckArgQuantity(int argQuantity) {
+    private bool CheckArgQuantity(int argQuantity, FightingEntity user) {
+        bool res = argQuantity == commandArgs;
+        if (!res) {
+            this.tmp_MessagePlayer(user, string.Format(WRONG_NUMBER_OF_TARGETS, this.GetExampleCommandString()));
+        }
         return argQuantity == commandArgs;
     }
 
     protected bool BasicValidation(string[] splitCommand, FightingEntity user) {
         if (splitCommand.Length == 0 || 
             !CheckKeyword(splitCommand[0]) || 
-            !CheckArgQuantity(splitCommand.Length - 1) || 
-            !GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions() || 
+            !CheckArgQuantity(splitCommand.Length - 1, user) || 
+            //!GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions() ||  // Mooks can now input actions inbetween turns
             !CheckCost(user) ) {
-            Debug.Log(GameManager.Instance.battleComponents.turnManager.GetPhase().GetType().Name);
             return false;
         }
+
         return true;
     }
 
@@ -178,7 +182,7 @@ public class ActionBase : ScriptableObject {
     }
 
     public virtual bool QueueAction(FightingEntity user, string[] splitCommand) {
-        if (splitCommand.Length < 1) {
+        if (!CheckArgQuantity(splitCommand.Length - 1, user)) {
             this.tmp_MessagePlayer(user, string.Format(WRONG_NUMBER_OF_TARGETS, this.GetExampleCommandString()));
             return false;
         }
@@ -192,11 +196,11 @@ public class ActionBase : ScriptableObject {
             if (targetId == -1) {
                 return false;
             }
-            user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ targetId }));
+            user.SetQueuedAction(this, new List<int>{ targetId });
             return true;
         } else if (targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
             List<int> targetIds = GetAllPossibleTargetIds(user);
-            user.SetQueuedAction(new QueuedAction(user, this, targetIds));
+            user.SetQueuedAction(this, targetIds);
             return true;
         }
 
@@ -312,12 +316,16 @@ public class ActionBase : ScriptableObject {
             }
             InstantiateDamagePopup(target, damage);
 
-            Debug.Log("Damage Done to: " + target.Name + " " + damage );
-
             before = (PlayerStats)target.stats.Clone();
             target.stats.hp.ApplyDelta(-damage);
             List<StatusAilment> inflicted = InflictStatuses(target);
             after = (PlayerStats)target.stats.Clone();
+
+            // TODO: Unit test this
+            //if (before.hp.GetValue() - after.hp.GetValue() != damage) {
+            //    Debug.LogError("ERROR: Logging stats doesn't match real thing!: " + after.hp.GetValue() + " " + before.hp.GetValue() + " " + damage);
+            //}
+
 
             receivers.Add(new DamageReceiver(target, before, after, inflicted));
         }

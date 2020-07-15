@@ -6,7 +6,7 @@ using UnityEngine;
 public class ManaPotAction : ActionBase {
     public override bool QueueAction(FightingEntity user, string[] splitCommand) {
         // Can only use mana pot on Hero
-        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ 0 }));
+        user.SetQueuedAction( this, new List<int>{ 0 });
         return true;
     }
 

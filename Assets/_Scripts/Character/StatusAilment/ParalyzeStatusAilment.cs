@@ -33,8 +33,7 @@ public class ParalyzeStatusAilment : StatusAilment {
 
 		float roll = Random.Range(0f, 1f);
 		if(roll <= chance) {
-			Debug.Log("PARALYZING");
-			p.fighter.SetQueuedAction(new QueuedAction(p.fighter, action, new List<int>(){p.index}));	
+			p.fighter.SetQueuedAction(action, new List<int>(){p.index});	
 		}
 	}
 }
