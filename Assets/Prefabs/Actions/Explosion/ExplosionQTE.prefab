@@ -48,10 +48,42 @@ MonoBehaviour:
   _guidance: send + to increase power and - to decrease power!
   _qteCommonCanvasPrefab: {fileID: 1689741904029012617, guid: c0aa9e4c5bcaa72429ba01323afd21a4,
     type: 3}
-  _increaseString: +
-  _increaseValue: 0.1
-  _decreaseString: '-'
-  _decreaseValue: 0.1
+  _increaseChar: 43
+  _decreaseChar: 45
+  _cutoffLength: 8
+  _messageValue:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.05
+      inSlope: 0.10717654
+      outSlope: 0.10717654
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.117616855
+      value: 0.06260577
+      inSlope: 0.0501057
+      outSlope: 0.0501057
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.25087553
+      outWeight: 0.036676314
+    - serializedVersion: 3
+      time: 1
+      value: 0.075
+      inSlope: 0.006900584
+      outSlope: 0.006900584
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.050661
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _startingPower: 0.3
   _explosionCanvasPrefab: {fileID: 6005107147819892754, guid: 19937301b80de6a40bd5ad2a5b658029,
     type: 3}
