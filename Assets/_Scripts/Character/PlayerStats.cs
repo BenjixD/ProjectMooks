@@ -42,6 +42,8 @@ public class PlayerRawStat : ICloneable, IPlayerStat {
     public PlayerRawStat(RawStat stat, int value, int minValue = Int32.MinValue, int maxValue = Int32.MaxValue) {
         this.stat = stat;
         this.currentValue = value;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
     }
 
     public void SetMinMax(int min, int max) {
@@ -64,7 +66,7 @@ public class PlayerRawStat : ICloneable, IPlayerStat {
 
     public object Clone()
     {
-        PlayerRawStat stat = new PlayerRawStat(this.stat, this.currentValue);
+        PlayerRawStat stat = new PlayerRawStat(this.stat, this.currentValue, minValue, maxValue);
         return stat;
     }
 
@@ -412,7 +414,7 @@ public class PlayerStats: ICloneable {
     // Setup stat pairs for like hp/max hp and mana/max mana
     private void SetupStatPair(PlayerRawStat curStat, PlayerStatWithModifiers maxStat) {
         curStat.SetMinMax(0, maxStat.GetBaseValue());
-        curStat.SetValue(maxStat.GetBaseValue());
+        //curStat.SetValue(maxStat.GetBaseValue());
         maxStat.SetCallback( (int maxValue) => curStat.SetMinMax(0, maxValue) );
         //maxStat.divisor = 3;
     }

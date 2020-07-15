@@ -142,6 +142,10 @@ public class StatusBarsUI : MonoBehaviour
     }
 
     private void onSetQueuedAction(QueuedAction action) {
+        if (action == null) {
+            Debug.LogError("Should not be broadcasted null");
+        }
+
         foreach (StatusBarUI statusBar in this.statusBars) {
             if (statusBar.GetName() == action.user.Name) {
                 if (statusBar.GetType() == typeof(MookStatusBarUI)) {

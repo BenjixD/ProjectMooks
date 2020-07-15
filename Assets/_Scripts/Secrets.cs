@@ -16,14 +16,14 @@ public class Secrets {
 
         TextAsset textAsset = Resources.Load("secrets") as TextAsset;
         string text = textAsset.text;
-        Debug.Log("Secrets: " + text);
+        // Debug.Log("Secrets: " + text);
         JSONObject obj = new JSONObject(text);
 
         JSONObject oauthObj = obj["oauth"];
 
         if (oauthObj) {
             oauthToken = oauthObj.str;
-            Debug.Log("oAuth token: " + oauthToken);
+        //    Debug.Log("oAuth token: " + oauthToken);
             isInitialized = true;
         }
 
@@ -31,7 +31,7 @@ public class Secrets {
 
         if (clientIDObj) {
             clientId = clientIDObj.str;
-            Debug.Log("Client-id: " + clientId);
+        //    Debug.Log("Client-id: " + clientId);
         }
 
 

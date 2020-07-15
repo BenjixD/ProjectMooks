@@ -30,6 +30,9 @@ public class FightResult {
     public List<DamageReceiver> receivers;
     public ActionBase action;
 
+    const string MookFightMessageDamage = "{0} used {1} to deal {2} to {3}!";
+    const string MookFightMessageGeneric = "{0} used {1}!";
+
     public FightResult(FightingEntity fighter, ActionBase action) {
         this.fighter = fighter;
         this.action = action;
@@ -48,16 +51,38 @@ public class FightResult {
         this.receivers = new List<DamageReceiver>();
         this.receivers.Add(receiver);
     }
+
+    public string GetAnnouncerMessage() {
+        string message = "";
+        bool hasWrittenMessage = false;
+        if (action.targetInfo.targetTeam == TargetTeam.ENEMY_TEAM && action.targetInfo.targetType == TargetType.SINGLE) {
+            int damage = receivers[0].before.hp.GetValue() - receivers[0].after.hp.GetValue();
+            if (damage > 0) {
+                message = string.Format(MookFightMessageDamage, fighter.Name, action.name, damage, receivers[0].fighter.Name );
+                hasWrittenMessage = true;
+            }
+        }
+
+        if (!hasWrittenMessage) {
+            message = string.Format(MookFightMessageGeneric, fighter.Name, action.name);
+            hasWrittenMessage = true;
+        }
+
+
+        return message;
+    }
 }
 
 public class BattleFight : IDisposable
 {
     public FightingEntity fighter;
     private BattleField _field {get; set;}
+    private QueuedAction queuedAction;
 
-    public BattleFight(BattleField field, FightingEntity fighter) {
+    public BattleFight(BattleField field, FightingEntity fighter, QueuedAction action) {
         this._field = field;
         this.fighter = fighter;
+        this.queuedAction = action;
     }
 
     public void Dispose() {
@@ -69,9 +94,9 @@ public class BattleFight : IDisposable
         //     this.getEnemyAction();
         // }
 
-        Messenger.Broadcast<FightResult>(Messages.OnFightStart, new FightResult(this.fighter, this.fighter.GetQueuedAction().GetAction()));
+        Messenger.Broadcast<FightResult>(Messages.OnFightStart, new FightResult(this.fighter, queuedAction.GetAction()));
 
-        QueuedAction attackerAction = this.fighter.GetQueuedAction();
+        QueuedAction attackerAction = queuedAction;
         string attackerName = this.fighter.Name;
         if (attackerAction == null) {
             Debug.LogError("Cannot find queued action: "  + attackerName);
@@ -80,11 +105,25 @@ public class BattleFight : IDisposable
         ActionBase action = attackerAction.GetAction();
         string attackName = action.name;
         List<FightingEntity> targets = action.GetTargets(this.fighter, attackerAction.GetTargetIds());
+        if (targets.Count == 1) {
+            Debug.Log(this.fighter.Name + " Execute Action: " + attackName + targets[0].targetId);
+        }
+
         yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, EndFight));
     }
 
+
+
     private void EndFight(FightResult fightResult, ActionBase action) {
         CheckIfAnyEntityDied(fightResult, action);
+
+        // Mooks should broadcast their fights for clarity
+        if (!fighter.isEnemy() && !fighter.IsHero()) {
+            // TODO: do in more clean way
+            ActionListener actionListener = fighter.GetComponent<ActionListener>();
+            actionListener.EchoMessage(fightResult.GetAnnouncerMessage());
+        } 
+
         onFightEnd(fightResult);
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class TwitchChatListenerBase : MonoBehaviour, TwitchChatListener
 {
 
-    public bool enableReply;
+    public bool enableReply = true;
 
     public virtual void Awake() {
         TwitchChatBroadcaster.Instance.addListener(this);

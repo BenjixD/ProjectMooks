@@ -7,7 +7,7 @@ public class ManaShift : ActionBase {
     [SerializeField] private GameObject _manaShiftQTE = null;
 
     public override bool QueueAction(FightingEntity user, string[] splitCommand) {
-        user.SetQueuedAction(new QueuedAction(user, this, new List<int>{ GameManager.Instance.battleComponents.field.GetHeroPlayer().targetId } ));
+        user.SetQueuedAction(this, new List<int>{ GameManager.Instance.battleComponents.field.GetHeroPlayer().targetId });
         return true;
     }
 
