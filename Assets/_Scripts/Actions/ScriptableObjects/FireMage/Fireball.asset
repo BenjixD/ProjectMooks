@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Fireball
   actionType: 1
-  description: Cast a fireball towards all enemies.
+  description: Cast a fireball, dealing light fire damage to all enemies.
   animation: {fileID: 0}
   maxPP: 0
   currPP: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   effects:
     element: 1
     physicalScaling: 0
-    specialScaling: 0.8
+    specialScaling: 0.5
     heals: 0
     statusAilments: []
   commandKeyword: fireball
