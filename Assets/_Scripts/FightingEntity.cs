@@ -53,10 +53,10 @@ public class FightingEntity : MonoBehaviour
         this.Name = persistentFighter.Name;
         this.persistentFighter = persistentFighter;
         this.stats = persistentFighter.stats;
+        this._queuedAction = new QueuedAction(this);
 
         _ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.battleComponents.field.GetTargetNameFromIndex(index);
-        Debug.Log("Initialize: " + Name);
 	}
 
     // Getters / Setters 
@@ -72,8 +72,13 @@ public class FightingEntity : MonoBehaviour
 
         if (shortCut) {
             int index = int.Parse(firstCommand[4].ToString()) - 1;
-            ActionBase action = this.actions[index];
-            return action.QueueAction(this, splitCommand);
+
+            if (index < this.actions.Count) {
+                ActionBase action = this.actions[index];
+                return action.QueueAction(this, splitCommand);
+            } else {
+                return false;
+            }
         } else {
             foreach (ActionBase action in actions) {
                 if (action.TryChooseAction(this, splitCommand)) {
@@ -90,13 +95,8 @@ public class FightingEntity : MonoBehaviour
         return _ai.GetSuggestion();
     }
 
-    public void SetQueuedAction(QueuedAction queuedAction) {
-
-        if (queuedAction != null && !queuedAction._action.CheckCost(this)) {
-            queuedAction = null;
-        }
-
-        _queuedAction = queuedAction;
+    public void SetQueuedAction(ActionBase action, List<int> targetIds) {
+        _queuedAction.SetAction(action, targetIds);
         Messenger.Broadcast<QueuedAction>(Messages.OnSetQueuedAction, _queuedAction);
     }
 
@@ -105,11 +105,11 @@ public class FightingEntity : MonoBehaviour
     }
 
     public bool HasSetCommand() {
-        return _queuedAction != null;
+        return _queuedAction.GetIsSet();
     }
 
     public void ResetCommand() {
-        _queuedAction = null;
+        _queuedAction.Reset();
     }
 
     public bool isEnemy() {
@@ -173,7 +173,6 @@ public class FightingEntity : MonoBehaviour
     }
 
     private void OnBattleEnd(BattleResult result) {
-        Debug.Log("AI: " + Name + " " + _ai);
         List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
         _ai.ReviewFightResult(myFights);
     }

@@ -90,7 +90,13 @@ public class Fighter
 
 
             List<ActionBase> commonMookActionPool = GameManager.Instance.models.GetCommonMookActionPool();
-            commonMookActionPool.Filter(action => actionPool.Find(actionB  => action.name == actionB.name) == null ); // Make sure no two of the same action
+
+            // Filter common moves if already have
+            for (int i = commonMookActionPool.Count-1; i >= 0; i--) {
+                if (actionPool.Find(action => action.name == commonMookActionPool[i].name ) != null) {
+                    commonMookActionPool.RemoveAt(i);
+                } 
+            }
 
             int commonActionIndex = Random.Range(0, commonMookActionPool.Count);
             actions.Add(Object.Instantiate(commonMookActionPool[commonActionIndex]));

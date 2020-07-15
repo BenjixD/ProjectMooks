@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1519749899, guid: 35f01a16f79c8c94ba5771a613681882, type: 3}
       propertyPath: enableReply
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 625841003950948007, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
@@ -105,12 +105,12 @@ PrefabInstance:
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.maxHp.baseValue
-      value: 150
+      value: 125
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.maxHp.growth
-      value: 1
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
@@ -155,22 +155,27 @@ PrefabInstance:
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.physical.growth
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.special.growth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.defence.growth
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.resistance.growth
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
+        type: 3}
+      propertyPath: stats.maxHp.stat
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35f01a16f79c8c94ba5771a613681882, type: 3}

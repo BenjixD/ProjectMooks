@@ -69,7 +69,7 @@ public class PlayerQueue : TwitchChatListenerBase {
                 this.PlayerJoin(username);
 				break;
 			default:
-				Debug.Log("Unknown command: " + message);
+				// Debug.Log("Unknown command: " + message);
 				break;
 		}
 	}

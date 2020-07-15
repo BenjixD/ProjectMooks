@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 7091001244129940285}
   - component: {fileID: 1932972382320172078}
   m_Layer: 0
-  m_Name: Mook
+  m_Name: MookTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -378,7 +378,7 @@ MonoBehaviour:
       stat: 1
       currentValue: 1
     maxHp:
-      stat: 1
+      stat: 0
       currentValue: 1
       divisor: 1
       growth: 1

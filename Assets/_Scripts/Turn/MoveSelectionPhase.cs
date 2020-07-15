@@ -66,7 +66,7 @@ public class MoveSelectionPhase : Phase {
                 // Experimental: Mooks keep their actions
                 QueuedAction lastAction = player.GetQueuedAction();
                 if (lastAction != null && lastAction._action != null && lastAction.CanQueueAction(lastAction._action)) {
-                    player.SetQueuedAction(lastAction);
+                    player.SetQueuedAction(lastAction._action, lastAction._targetIds);
                 } else {
                     player.ResetCommand();
                 }
@@ -209,7 +209,7 @@ public class MoveSelectionPhase : Phase {
             } else {
                 HeroActionConfirmed();
                 GetHeroMenuAction().onBackCallback = this.OnActionChooseBackCallback;
-                this._field.GetHeroPlayer().SetQueuedAction(new QueuedAction(this._field.GetHeroPlayer(), heroAction, new List<int>()));
+                this._field.GetHeroPlayer().SetQueuedAction(heroAction, new List<int>());
                 CheckExecuteTurn();
                 this._heroMenuActions.Push(new HeroMenuAction(MenuState.WAITING));
             }
@@ -231,12 +231,12 @@ public class MoveSelectionPhase : Phase {
             case TargetType.SINGLE:
                 List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(this._field.GetHeroPlayer());
                 FightingEntity target = possibleTargets[menuAction.targetIndex];
-                this._field.GetHeroPlayer().SetQueuedAction(new QueuedAction(this._field.GetHeroPlayer(), heroAction, new List<int>{target.targetId}  ));
+                this._field.GetHeroPlayer().SetQueuedAction(heroAction, new List<int>{target.targetId}  );
                 break;
 
             case TargetType.ALL:
                 List<int> allEnemies = this._field.GetActiveEnemyObjects().Map((EnemyObject enemy) => enemy.targetId);
-                this._field.GetHeroPlayer().SetQueuedAction(new QueuedAction(this._field.GetHeroPlayer(), heroAction, allEnemies ));
+                this._field.GetHeroPlayer().SetQueuedAction( heroAction, allEnemies );
             break;
 
             default:
@@ -316,12 +316,12 @@ public class MoveSelectionPhase : Phase {
     private void OnActionChooseBackCallback() {
         this._ui.targetSelectionUI.ClearSelection();
         InitializeCommandCardActionUI(GetHeroMenuAction().currentHeroChoices);
-        this._field.GetHeroPlayer().SetQueuedAction(null);
+        this._field.GetHeroPlayer().ResetCommand();
     }
 
     private void OnTargetChooseBackCallback() {
         this._ui.targetIconsUI.ClearTargetsForFighter(this._field.GetHeroPlayer());
-        this._field.GetHeroPlayer().SetQueuedAction(null);
+        this._field.GetHeroPlayer().ResetCommand();
         GoBackToLastHeroAction();
     }
 }

@@ -159,38 +159,38 @@ MonoBehaviour:
       stat: 0
       currentValue: 1
       divisor: 45
-      growth: 90
-      baseValue: 585
+      growth: 50
+      baseValue: 175
     maxMana:
       stat: 1
       currentValue: 1
       divisor: 20
-      growth: 1
+      growth: 20
       baseValue: 40
     physical:
       stat: 2
       currentValue: 1
       divisor: 1
-      growth: 3
-      baseValue: 58
+      growth: 2
+      baseValue: 50
     special:
       stat: 3
       currentValue: 1
       divisor: 1
-      growth: 3
-      baseValue: 58
+      growth: 2
+      baseValue: 50
     defence:
       stat: 4
       currentValue: 1
       divisor: 1
-      growth: 3
-      baseValue: 32
+      growth: 2
+      baseValue: 25
     resistance:
       stat: 5
       currentValue: 1
       divisor: 1
-      growth: 3
-      baseValue: 32
+      growth: 2
+      baseValue: 25
     speed:
       stat: 6
       currentValue: 1
@@ -198,7 +198,6 @@ MonoBehaviour:
       growth: 1
       baseValue: 20
   fighterMessageBox: {fileID: 0}
-  damagePopupLocation: {fileID: 9024349159757698357}
 --- !u!114 &2080289099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe321b222c7fb947850511a6dad0258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableReply: 0
+  enableReply: 1
   _player: {fileID: 0}
 --- !u!23 &2911693358557053094
 MeshRenderer:

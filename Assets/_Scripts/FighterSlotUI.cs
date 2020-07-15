@@ -77,6 +77,10 @@ public class FighterSlotUI : MonoBehaviour {
     }
 
     private void SetSlotUIForAction(QueuedAction action) {
+        if (!GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions()) {
+            return;
+        }
+
         FightingEntity user = action.user;
 
         List<FightingEntity> targets = action.GetTargets();

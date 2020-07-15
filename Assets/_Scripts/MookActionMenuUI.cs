@@ -40,11 +40,13 @@ public class MookActionMenuUI : MonoBehaviour
     }
 
     public void SetAction(QueuedAction action) {
-        ActionBase actionToDo = action._action;
         this.UnsetActions();
-        if (actionToDo == null) {
+
+        if (action._action == null) {
             return;
         }
+
+        ActionBase actionToDo = action._action;
 
         for (int i = 0; i < actions.Length; i++) {
             if (actions[i] != null) {
