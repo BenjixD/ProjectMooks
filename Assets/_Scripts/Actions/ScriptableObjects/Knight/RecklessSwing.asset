@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: WarriorAttack
+  m_Name: RecklessSwing
   m_EditorClassIdentifier: 
-  name: Attack
+  name: Reckless Swing
   actionType: 0
-  description: Basic attack.
+  description: "Deals heavy damage to one enemy. Costs 30 HP to use.\r"
   animation: {fileID: 11400000, guid: 2329cf145abb60a428ffaa6eec483cb7, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:
-    HP: 0
+    HP: 30
     mana: 0
     PP: 0
     stamina: 0
@@ -28,11 +28,11 @@ MonoBehaviour:
     targetType: 0
   effects:
     element: 0
-    physicalScaling: 1
+    physicalScaling: 1.5
     specialScaling: 0
     heals: 0
     statusAilments: []
-  commandKeyword: a
+  commandKeyword: reckless
   commandArgs: 1
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
     type: 3}
