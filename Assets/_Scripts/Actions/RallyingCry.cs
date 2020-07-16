@@ -18,7 +18,7 @@ public class RallyingCry : ActionBase {
         return new FightResult(user, this);
     }
     
-    public FightResult FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
+    public void FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
         PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
         
@@ -29,6 +29,8 @@ public class RallyingCry : ActionBase {
             after = (PlayerStats)target.stats.Clone();
             receivers.Add(new DamageReceiver(target, before, after, inflicted));
         }
-        return new FightResult(user, this, receivers);
+        
+        FightResult result = new FightResult(user, this, receivers);
+        _battleFight.EndFight(result, this);
     }
 }

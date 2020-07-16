@@ -18,7 +18,7 @@ public class Explosion : ActionBase {
         return new FightResult(user, this);
     }
     
-    public FightResult FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
+    public void FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
         PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
         int attackDamage = GetRawDamage(user.stats, power);
@@ -33,8 +33,9 @@ public class Explosion : ActionBase {
 
             receivers.Add(new DamageReceiver(target, before, after));
         }
-
-        return new FightResult(user, this, receivers);
+        
+        FightResult result = new FightResult(user, this, receivers);
+        _battleFight.EndFight(result, this);
     }
 
     // Return damage based on explosion power and user's stats (without accounting for the targets' resistances)

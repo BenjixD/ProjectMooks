@@ -17,12 +17,13 @@ public class ManaShift : ActionBase {
         return new FightResult(user, this);
     }
 
-    public FightResult FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
+    public void FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
         int manaRestored = GetManaRestored(user, power);
         InstantiateDamagePopup(targets[0], manaRestored, DamageType.MANA_RECOVERY);
         PlayerStats heroStats = targets[0].stats;
         heroStats.mana.ApplyDelta(manaRestored);
-        return new FightResult(user, this);
+        FightResult result = new FightResult(user, this);
+        _battleFight.EndFight(result, this);
     }
 
     public int GetManaRestored(FightingEntity user, float power) {

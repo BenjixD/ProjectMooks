@@ -84,6 +84,7 @@ public class ActionBase : ScriptableObject {
 
     [Header("References")]
     [SerializeField] protected GameObject damagePopupCanvasPrefab = null;
+    protected BattleFight _battleFight; // The BattleFight in which this action is being used
 
     const string WRONG_NUMBER_OF_TARGETS = "Move failed due to wrong number of targets. ({0})";
 
@@ -209,7 +210,8 @@ public class ActionBase : ScriptableObject {
         return false;
     }
 
-    public IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, System.Action<FightResult, ActionBase> onFightEnd) {
+    public virtual IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, BattleFight battleFight) {
+        _battleFight = battleFight;
         FightResult result = new FightResult(user, this);
         if (CheckCost(user)) {
             PayCost(user);
@@ -222,7 +224,7 @@ public class ActionBase : ScriptableObject {
             result = ApplyEffect(user, targets);
             OnPostEffect(result);
         }
-        onFightEnd(result, this);
+        _battleFight.EndFight(result, this);
         if (animation != null) {
             yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeAfterEffect);
         }
