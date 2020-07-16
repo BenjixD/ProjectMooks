@@ -45,8 +45,9 @@ public abstract class QuickTimeEvent : MonoBehaviour {
         _qteUI = Instantiate(_qteCommonCanvasPrefab).GetComponent<QteCommonUI>();
         _qteUI.SetGuidance(_guidance);
         StartCoroutine(Countdown());
+        _acceptingInput = true;
         yield return new WaitForSeconds(_warmupDuration);
-        OpenInput();
+        StartCoroutine(BeginTimer());
     }
 
     private IEnumerator Countdown() {
@@ -57,11 +58,6 @@ public abstract class QuickTimeEvent : MonoBehaviour {
             remaining -= 1;
         }
         _qteUI.EndWarmup();
-    }
-
-    protected virtual void OpenInput() {
-        _acceptingInput = true;
-        StartCoroutine(BeginTimer());
     }
 
     private IEnumerator BeginTimer() {

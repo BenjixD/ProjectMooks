@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063e9b2d6a047614584b782f203b45f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputDuration: 10
+  _inputDuration: 15
   _guidance: send + to increase power and - to decrease power!
   _qteCommonCanvasPrefab: {fileID: 1689741904029012617, guid: c0aa9e4c5bcaa72429ba01323afd21a4,
     type: 3}
