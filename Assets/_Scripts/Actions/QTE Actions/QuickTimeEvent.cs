@@ -9,9 +9,9 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     [SerializeField, TextArea, Tooltip("Instructional text for this QTE that is displayed to the players.")]
     private string _guidance = null;
     [Tooltip("Duration during which players can see the instructional text and prepare to give input.")]
-    private float _warmupDuration = 3;
+    private float _warmupDuration = 5;
     [Tooltip("Duration to wait after input is closed before executing action, so that players can see the results of the QTE.")]
-    private float _windDownDuration = 1;
+    private float _windDownDuration = 2;
 
     [Header("References (QuickTimeEvent)")]
     [SerializeField, Tooltip("Reference to the QteCommonCanvas prefab.")]
@@ -45,9 +45,8 @@ public abstract class QuickTimeEvent : MonoBehaviour {
         _qteUI = Instantiate(_qteCommonCanvasPrefab).GetComponent<QteCommonUI>();
         _qteUI.SetGuidance(_guidance);
         StartCoroutine(Countdown());
-        _acceptingInput = true;
         yield return new WaitForSeconds(_warmupDuration);
-        StartCoroutine(BeginTimer());
+        OpenInput();
     }
 
     private IEnumerator Countdown() {
@@ -58,6 +57,11 @@ public abstract class QuickTimeEvent : MonoBehaviour {
             remaining -= 1;
         }
         _qteUI.EndWarmup();
+    }
+
+    protected virtual void OpenInput() {
+        _acceptingInput = true;
+        StartCoroutine(BeginTimer());
     }
 
     private IEnumerator BeginTimer() {
