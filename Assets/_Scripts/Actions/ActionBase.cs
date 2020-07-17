@@ -200,7 +200,7 @@ public class ActionBase : ScriptableObject {
             user.SetQueuedAction(this, new List<int>{ targetId });
             return true;
         } else if (targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
-            List<int> targetIds = GetAllPossibleTargetIds(user);
+            List<int> targetIds = GetAllPossibleTargets(user).Map(target => target.targetId);
             user.SetQueuedAction(this, targetIds);
             return true;
         }
@@ -251,21 +251,16 @@ public class ActionBase : ScriptableObject {
         return potentialTargets;
     }
 
-    public List<int> GetAllPossibleTargetIds(FightingEntity user) {
-        List<FightingEntity> possibleTargets = this.GetAllPossibleTargets(user);
-        List<int> targetIds = new List<int>();
-        for (int i = 0; i < possibleTargets.Count; i++) {
-            targetIds.Add(i);
-        }
-        return targetIds;
-    }
-
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
-        List<FightingEntity> potentialTargets = GetAllPossibleTargets(user);
+        List<FightingEntity> potentialTargets = GetAllPossibleActiveTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
-        foreach (int target in targetIds) {
-            if (target < potentialTargets.Count && potentialTargets[target] != null && !potentialTargets[target].HasModifier(ModifierAilment.MODIFIER_UNTARGETTABLE)) {
-                targets.Add(potentialTargets[target]);
+        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
+            targets = potentialTargets;
+        } else {
+            foreach (int target in targetIds) {
+                if (target < potentialTargets.Count && potentialTargets[target] != null && !potentialTargets[target].HasModifier(ModifierAilment.MODIFIER_UNTARGETTABLE)) {
+                    targets.Add(potentialTargets[target]);
+                }
             }
         }
 
