@@ -42,7 +42,7 @@ public class MookActionMenuUI : MonoBehaviour
     public void SetAction(QueuedAction action) {
         this.UnsetActions();
 
-        if (action._action == null) {
+        if (!action.GetIsSet()) {
             return;
         }
 

@@ -110,6 +110,7 @@ public class FightingEntity : MonoBehaviour
 
     public void ResetCommand() {
         _queuedAction.Reset();
+        Messenger.Broadcast<QueuedAction>(Messages.OnSetQueuedAction, _queuedAction);
     }
 
     public bool isEnemy() {
