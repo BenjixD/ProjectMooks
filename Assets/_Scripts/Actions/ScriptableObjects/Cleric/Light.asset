@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Light
   actionType: 1
-  description: Deals damage with the power of light to a single enemy.
+  description: Deals light holy damage to a single enemy.
   animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
   maxPP: 0
   currPP: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   effects:
     element: 4
     physicalScaling: 0
-    specialScaling: 0.3
+    specialScaling: 0.5
     heals: 0
     statusAilments:
     - statusAilment: {fileID: 11400000, guid: bd8a5883a0bf1874193a604c84dbab90, type: 2}

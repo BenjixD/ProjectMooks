@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public enum Job {
     HERO,
-	WARRIOR,
+	KNIGHT,
     FIRE_MAGE,
 	CLERIC,
 	LANCER,

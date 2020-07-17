@@ -43,7 +43,7 @@ public class ActionListener : TwitchChatListenerBase {
 
     public void HandleMessage(string message) {
         if (_player.fighterMessageBox != null) {
-            this._player.fighterMessageBox.HandleMessage(message);
+            this._player.fighterMessageBox.HandleMessage(_player.GetOrderColor(), _player.Name, message);
         }
     }
 }

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ExplosionQTE : QuickTimeEvent {
     [Header("Explosion Parameters")]
-    [SerializeField] private string _increaseString = null;
-    [SerializeField, Tooltip("Flat percent increase in power per increase message.")]
-    private float _increaseValue = 0;
-    [SerializeField, Tooltip("Flat percent decrease in power per decrease message.")]
-    private string _decreaseString = null;
-    [SerializeField] private float _decreaseValue = 0;
+    [SerializeField] private char _increaseChar = '+';
+    [SerializeField] private char _decreaseChar = '-';
+    [SerializeField, Tooltip("Character count beyond which characters offer no additional value.")]
+    private int _cutoffLength = 0;
+    [SerializeField, Tooltip("Function returning flat percent change given number of input characters. Normalized for messages of count 1 to cutoffLength.")]
+    private AnimationCurve _messageValue = null;
     [SerializeField, Range(0, 1), Tooltip("Starting power of the explosion measured in percent.")]
     private float _startingPower = 0;
     private float _explosionPower = 0;
@@ -19,20 +19,15 @@ public class ExplosionQTE : QuickTimeEvent {
     private GameObject _explosionCanvasPrefab = null;
     private ExplosionUI _explosionUI;
 
-    private PlayerStats _userStats;
-    private Explosion _explosionAction;
+    private Explosion _action;
 
-    public void Initialize(PlayerStats userStats, Explosion action) {
-        _userStats = userStats;
-        _explosionAction = action;
+    public void Initialize(FightingEntity user, List<FightingEntity> targets, Explosion action) {
+        Initialize(user, targets);
+        _action = action;
     }
 
     protected override void ProcessMessage(string message) {
-        if (message == _increaseString) {
-            _explosionPower += _increaseValue;
-        } else if (message == _decreaseString) {
-            _explosionPower -= _decreaseValue;
-        }
+        _explosionPower += CalculateValue(message);
         _explosionPower = Mathf.Clamp(_explosionPower, 0, 1);
         UpdatePowerMeter();
     }
@@ -44,14 +39,38 @@ public class ExplosionQTE : QuickTimeEvent {
         UpdatePowerMeter();
     }
 
+    private float CalculateValue(string message) {
+        int netCount = 0;
+        foreach (char c in message) {
+            if (c == _increaseChar) {
+                netCount++;
+            } else if (c == _decreaseChar) {
+                netCount--;
+            }
+        }
+        if (netCount == 0) {
+            return 0;
+        }
+        float input = Mathf.InverseLerp(1, _cutoffLength, Mathf.Abs(netCount));
+        float value = _messageValue.Evaluate(input);
+        if (netCount < 0) {
+            value = -value;
+        }
+        return value;
+    }
+
     private void UpdatePowerMeter() {
         int rawDamage = 0;
-        if (_userStats == null || _explosionAction == null) {
+        if (_user == null || _action == null) {
             Debug.LogWarning("Explosion damage can't be approximated as user stats or the Explosion action are missng.");
         } else {
-            rawDamage = _explosionAction.GetRawDamage(_userStats, _explosionPower);
+            rawDamage = _action.GetRawDamage(_user.stats, _explosionPower);
         }
         _explosionUI.UpdatePower(_explosionPower, rawDamage);
+    }
+
+    protected override void ExecuteEffect() {
+        _action.FinishQTE(_user, _targets, _explosionPower);
     }
 
     protected override void DestroyUI() {

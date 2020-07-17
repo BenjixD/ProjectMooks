@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3730404372981821774}
   - component: {fileID: 3730404372981821769}
   - component: {fileID: 3730404372981821768}
-  - component: {fileID: 4114445255009598645}
   m_Layer: 0
   m_Name: ArrowUI
   m_TagString: Untagged
@@ -90,18 +89,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowImage: {fileID: 3730404372981821769}
   curArrowColor: {r: 0, g: 0, b: 0, a: 0}
---- !u!114 &4114445255009598645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3730404372981821770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24e32b98f8ec8274fa899455ef2c7eb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _uiTransform: {fileID: 3730404372981821771}
-  _worldPointTransform: {fileID: 0}
-  _worldPoint: {x: 0, y: 0, z: 0}

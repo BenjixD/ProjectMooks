@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 7653705990527184201}
   - component: {fileID: 7653705990527184203}
   - component: {fileID: 7653705990527184200}
+  - component: {fileID: 4644832367538466513}
   m_Layer: 0
   m_Name: ArrowsParent
   m_TagString: Untagged
@@ -224,9 +225,23 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 0.5, y: 0.5}
-  m_Spacing: {x: 0.1, y: 0}
+  m_Spacing: {x: 65, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &4644832367538466513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7653705990527184206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e32b98f8ec8274fa899455ef2c7eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiTransform: {fileID: 7653705990527184201}
+  _worldPointTransform: {fileID: 0}
 --- !u!1001 &6481350630521818743
 PrefabInstance:
   m_ObjectHideFlags: 0

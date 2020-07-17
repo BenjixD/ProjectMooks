@@ -30,11 +30,12 @@ MonoBehaviour:
   effects:
     element: 1
     physicalScaling: 0
-    specialScaling: 0
+    specialScaling: 10
     heals: 0
     statusAilments: []
   commandKeyword: explosion
   commandArgs: 0
-  damagePopupCanvasPrefab: {fileID: 0}
+  damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
+    type: 3}
   _explosionQTE: {fileID: 9026427991594010301, guid: ba5fc9297bc72374ca6ddf94dfd4e95f,
     type: 3}

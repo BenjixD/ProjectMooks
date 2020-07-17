@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Scorch
   actionType: 1
-  description: BBQ time!
+  description: Deals medium fire damage to a single enemy and inflicts a burn.
   animation: {fileID: 0}
   maxPP: 0
   currPP: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   effects:
     element: 1
     physicalScaling: 0
-    specialScaling: 0.75
+    specialScaling: 1
     heals: 0
     statusAilments:
     - statusAilment: {fileID: 11400000, guid: 4859a5e1b4883ac43b16090a253a5df4, type: 2}

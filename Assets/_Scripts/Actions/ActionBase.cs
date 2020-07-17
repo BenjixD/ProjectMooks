@@ -66,7 +66,7 @@ public class ActionBase : ScriptableObject {
     public ActionAnimation animation;
 
     [Header("Resources")]
-    [Tooltip("Max number of uses for this action. Leave at 0 for unlimited uses.")]
+    [Tooltip("Max PP for this action.")]
     public int maxPP;
     [HideInInspector] public int currPP;
     public ActionCost actionCost;
@@ -89,9 +89,7 @@ public class ActionBase : ScriptableObject {
 
 
     private void Awake() {
-        if (CostsPP()) {
-            currPP = maxPP;
-        }
+        currPP = maxPP;
     }
 
     public bool CostsPP() {
@@ -144,7 +142,7 @@ public class ActionBase : ScriptableObject {
             this.tmp_MessagePlayer(user, message);
             return false;
         }
-        if (CostsPP() && currPP < actionCost.PP) {
+        if (currPP < actionCost.PP) {
             string message = user.Name + " has insufficient PP use " + name;
             Debug.Log(message);
             this.tmp_MessagePlayer(user, message);
@@ -170,6 +168,10 @@ public class ActionBase : ScriptableObject {
             Mook mook = (Mook) user;
             mook.stamina.SetStamina(mook.stamina.GetStamina() - actionCost.stamina);
         }
+    }
+
+    public void RestorePP() {
+        currPP = maxPP;
     }
     
     public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
@@ -316,6 +318,7 @@ public class ActionBase : ScriptableObject {
 
             before = (PlayerStats)target.stats.Clone();
             target.stats.hp.ApplyDelta(-damage);
+            List<StatusAilment> inflicted = InflictStatuses(target);
             after = (PlayerStats)target.stats.Clone();
 
             // TODO: Unit test this
@@ -323,16 +326,19 @@ public class ActionBase : ScriptableObject {
             //    Debug.LogError("ERROR: Logging stats doesn't match real thing!: " + after.hp.GetValue() + " " + before.hp.GetValue() + " " + damage);
             //}
 
-            List<StatusAilment> inflicted = InflictStatuses(target);
 
             receivers.Add(new DamageReceiver(target, before, after, inflicted));
         }
         return new FightResult(user, this, receivers);
     }
 
-    protected virtual void InstantiateDamagePopup(FightingEntity target, int damage) {
-        DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
+    protected void InstantiateDamagePopup(FightingEntity target, int damage) {
         DamageType damageType = effects.heals ? DamageType.HEALING : DamageType.NORMAL;
+        InstantiateDamagePopup(target, damage, damageType);
+    }
+
+    protected void InstantiateDamagePopup(FightingEntity target, int damage, DamageType damageType) {
+        DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
         popup.Initialize(target, damage, damageType);
     }
 
