@@ -252,15 +252,14 @@ public class ActionBase : ScriptableObject {
     }
 
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
-        List<FightingEntity> potentialTargets = GetAllPossibleActiveTargets(user);
-        List<FightingEntity> targets = new List<FightingEntity>();
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
-            targets = potentialTargets;
-        } else {
-            foreach (int target in targetIds) {
-                if (target < potentialTargets.Count && potentialTargets[target] != null && !potentialTargets[target].HasModifier(ModifierAilment.MODIFIER_UNTARGETTABLE)) {
-                    targets.Add(potentialTargets[target]);
-                }
+           return GetAllPossibleActiveTargets(user);
+        }
+        List<FightingEntity> potentialTargets = GetAllPossibleTargets(user);
+        List<FightingEntity> targets = new List<FightingEntity>();
+        foreach (int target in targetIds) {
+            if (target < potentialTargets.Count && potentialTargets[target] != null && !potentialTargets[target].HasModifier(ModifierAilment.MODIFIER_UNTARGETTABLE)) {
+                targets.Add(potentialTargets[target]);
             }
         }
 
