@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Defend
   actionType: 0
-  description: Defend (0.5x damage)
+  description: Raise your defense for one turn.
   animation: {fileID: 11400000, guid: 7ef2a3bdbce5511479122a70505d364e, type: 2}
   maxPP: 0
   currPP: 0

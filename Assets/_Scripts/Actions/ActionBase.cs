@@ -354,9 +354,9 @@ public class ActionBase : ScriptableObject {
 
     private string GetExampleCommandString() {
         if (targetInfo.targetType == TargetType.SINGLE) {
-            return "!" + this.name + " A/B/C/D";
+            return "!" + this.commandKeyword + " A/B/C/D";
         } else if (targetInfo.targetType == TargetType.NONE || targetInfo.targetType == TargetType.ALL) {
-            return "!" + this.name;
+            return "!" + this.commandKeyword;
         }
 
         return "";
