@@ -58,12 +58,6 @@ public class BattlePhase : Phase {
             queuedActions.Add((QueuedAction)fighter.GetQueuedAction().Clone());
         }
 
-        foreach (QueuedAction action in queuedActions) {
-            if (action._targetIds.Count == 1) {
-                Debug.Log(  action.user.Name + "| Action: "  + action._action.name + " " + action._targetIds[0]);
-            }
-        }
-
         result = new BattleResult(fighters);
 
         // Call Base Implementation
@@ -145,6 +139,12 @@ public class BattlePhase : Phase {
     private void SetUnsetMookCommands() {
         foreach (var player in this._field.GetActivePlayerObjects()) {
             if (!player.HasSetCommand()) {
+
+                if (player.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION)) {
+                    // TODO later
+                    return;
+                }
+
                 ActionBase action = player.GetRecommendedAction();
 
                 switch (action.targetInfo.targetType) {

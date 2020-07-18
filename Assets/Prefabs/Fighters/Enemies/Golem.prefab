@@ -7,6 +7,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
+      propertyPath: stats.physical.growth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
+      propertyPath: stats.special.growth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
+      propertyPath: stats.defence.growth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
+      propertyPath: stats.resistance.growth
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5907855612439490822, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: m_Mesh

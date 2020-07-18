@@ -49,7 +49,7 @@ public class FightingEntity : MonoBehaviour
     }
     
     public void Initialize(int index, Fighter persistentFighter) {
-        this.targetId = index;
+        this.targetId = persistentFighter.index;
         this.Name = persistentFighter.Name;
         this.persistentFighter = persistentFighter;
         this.stats = persistentFighter.stats;
@@ -105,7 +105,7 @@ public class FightingEntity : MonoBehaviour
     }
 
     public bool HasSetCommand() {
-        return _queuedAction.GetIsSet();
+        return _queuedAction.GetIsSet() || this.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
     }
 
     public void ResetCommand() {

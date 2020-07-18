@@ -15,25 +15,34 @@ public class HerosMiracleAilment : StatusAilment {
 
 	public override void ApplyTo(Fighter p) {
 		//TODO: Possible Animation Modifications
+        Debug.Log("HERO'S AILMENT DURATION: " + this.duration);
 	}
 
 	public override void Recover(Fighter p) {
 		//TODO: Possible Animation Modifications
+
+        if (p.fighter != null && p.fighter.gameObject != null) {
+            p.fighter.RemoveModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
+            p.fighter.RemoveModifier(ModifierAilment.MODIFIER_DEATH);
+            p.fighter.RemoveModifier(ModifierAilment.MODIFIER_UNTARGETTABLE);
+            p.fighter.gameObject.SetActive(true);
+        }
+
+        //TODO: Play Animation
+        // Temp animation will be to just set gameObject active 
+        p.stats.hp.ApplyDelta(reviveHP);
+        //p.ailmentController.RemoveStatusAilment(this.name);
 	}
 
 	public override void TickEffect(Fighter p) {
+        Debug.Log("HERO's AILMENT TICK: " + this.duration);
+
         if (p.fighter == null) {
             Debug.LogError("ERROR: FightingEntity is null");
         }
 
         if (this.duration <= 1) {
-            p.fighter.RemoveModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
-            p.fighter.RemoveModifier(ModifierAilment.MODIFIER_DEATH);
-            p.fighter.RemoveModifier(ModifierAilment.MODIFIER_UNTARGETTABLE);
-            //TODO: Play Animation
-            // Temp animation will be to just set gameObject active 
-            p.stats.hp.ApplyDelta(reviveHP);
-            p.fighter.gameObject.SetActive(true);
+            this.Recover(p);
         } else {
             p.fighter.SetQueuedAction(nothingAction, new List<int>{ p.index });	
         }

@@ -60,6 +60,13 @@ public class MoveSelectionPhase : Phase {
         // Reset Player Commands
         PlayerObject heroPlayer = this._field.GetHeroPlayer();
         foreach (FightingEntity player in this._field.GetAllFightingEntities()) {
+
+            if (player.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION)) {
+                ActionBase action = GameManager.Instance.models.GetCommonAction("Nothing");
+                player.SetQueuedAction(action, new List<int>( player.targetId ) );
+                continue;
+            }
+
             if (player == heroPlayer || player.isEnemy()) {
                 player.ResetCommand();
             } else {
@@ -87,9 +94,14 @@ public class MoveSelectionPhase : Phase {
 
     // Helper Coroutines
     IEnumerator HeroMoveSelection() {
-        this._heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
-        
-        InitializeCommandCardActionUI(GetHeroActionChoices(ActionType.BASIC));
+        FightingEntity hero = this._field.GetHeroPlayer();
+        if (!hero.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION)) {
+            this._heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
+            InitializeCommandCardActionUI(GetHeroActionChoices(ActionType.BASIC));
+        } else {
+            this.HeroActionConfirmed();
+            this._heroMenuActions.Push(new HeroMenuAction(MenuState.WAITING));
+        }
 
         while(true) {
             HeroMenuAction menuAction = this.GetHeroMenuAction();
@@ -126,7 +138,7 @@ public class MoveSelectionPhase : Phase {
                 _playerActionCounter = this.maxTimeBeforeAction;
             }
 
-            if (this._field.GetHeroPlayer().HasSetCommand()) {
+            if (hero.HasSetCommand()) {
                 _playerActionCounter += Time.deltaTime;
             }
             
