@@ -4152,6 +4152,169 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4894d71946a9ee42be7016eea4cfcef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &731719695
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 731719703}
+  - component: {fileID: 731719696}
+  - component: {fileID: 731719702}
+  - component: {fileID: 731719701}
+  - component: {fileID: 731719700}
+  - component: {fileID: 731719699}
+  - component: {fileID: 731719698}
+  - component: {fileID: 731719697}
+  m_Layer: 0
+  m_Name: UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &731719696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731719695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627e6b8c9cdf1cb4baac689e1109d301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  commandCardUI: {fileID: 731719702}
+  statusBarsUI: {fileID: 731719701}
+  targetSelectionUI: {fileID: 731719700}
+  battleOrderUI: {fileID: 731719699}
+  playerQueueUI: {fileID: 731719698}
+  targetIconsUI: {fileID: 731719697}
+  tmp_TimerText: {fileID: 848687487}
+  focusOverlay: {fileID: 2079914404}
+--- !u!114 &731719697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731719695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59c662bbbd0ee0d44b24917803984628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetParents:
+  - {fileID: 37002796}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  targetPrefab: {fileID: 3730404372981821768, guid: 3c36efa2ecc2702499f14c9c10135fa4,
+    type: 3}
+--- !u!114 &731719698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731719695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713f3ce974aacfb4ca994291abe7fd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  queueParent: {fileID: 2043238973}
+  textPrefab: {fileID: 1289209193584220019, guid: 7914b9f364f452b4eba506087415dbfe,
+    type: 3}
+  maxInstantiatedTexts: 10
+--- !u!114 &731719699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731719695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e32c2fcabdde55f4484441a8f0175254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnOrderParent: {fileID: 331770712}
+  turnTextPrefab: {fileID: 2033945094015275285, guid: ceadf06dec054464fa98ab50d1b11c24,
+    type: 3}
+  arrowPrefab: {fileID: 3567863162334547644, guid: 834127297ec1fa0499ccc854dee550c5,
+    type: 3}
+  turnOrderHeaderText: {fileID: 5064211774145369693}
+--- !u!114 &731719700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731719695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed6110fdf0f7b12409b115ba141da521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSelectionColor: {r: 1, g: 0.91147983, b: 0, a: 1}
+--- !u!114 &731719701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731719695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d03d92a63185084394a72f38d8bcb8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStatusBarParent: {fileID: 1521284972}
+  enemyStatusBarParent:
+  - {fileID: 4980740264360901000}
+  - {fileID: 1690205968}
+  - {fileID: 439386961}
+  - {fileID: 1139253896}
+  manaStatusBarPrefab: {fileID: 8596212721209844495, guid: 234c0917aeb1fec44b958b38f3c742c1,
+    type: 3}
+  mookStatusBarPrefab: {fileID: 3745334081149257683, guid: e322220aa83cb364f897b79509adceff,
+    type: 3}
+  enemyStatusBarPrefab: {fileID: 5866088846057815438, guid: 7a07bb55722b5314ba59dda95359e170,
+    type: 3}
+--- !u!114 &731719702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731719695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a8764a590f2e1f4d80950c119eb27d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actionMenu: {fileID: 55232360}
+  _actionMenuTextParent: {fileID: 55232360}
+  _commandTextPrefab: {fileID: 6507765818431734940, guid: 19b439d16e172c84abe6c65160f3df2b,
+    type: 3}
+--- !u!4 &731719703
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731719695}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2026179243}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &747342469
 GameObject:
   m_ObjectHideFlags: 0
@@ -8532,7 +8695,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1296698427}
   - component: {fileID: 1296698429}
-  - component: {fileID: 1296698428}
   m_Layer: 0
   m_Name: FocusCamera
   m_TagString: MainCamera
@@ -8554,14 +8716,6 @@ Transform:
   m_Father: {fileID: 629737123}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 5.0150003, y: 0, z: 0}
---- !u!81 &1296698428
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1296698426}
-  m_Enabled: 1
 --- !u!20 &1296698429
 Camera:
   m_ObjectHideFlags: 0
@@ -11930,15 +12084,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2026179243}
   - component: {fileID: 2026179245}
-  - component: {fileID: 2026179247}
-  - component: {fileID: 2026179246}
   - component: {fileID: 2026179248}
-  - component: {fileID: 2026179249}
-  - component: {fileID: 2026179250}
   - component: {fileID: 2026179251}
-  - component: {fileID: 2026179252}
-  - component: {fileID: 2026179253}
-  - component: {fileID: 2026179254}
   - component: {fileID: 2026179255}
   - component: {fileID: 2026179244}
   - component: {fileID: 2026179256}
@@ -11960,7 +12107,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 731719703}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11976,6 +12124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba64df1a94ef4d4d9b71127a83bc39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ui: {fileID: 731719696}
 --- !u!114 &2026179245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11991,41 +12140,6 @@ MonoBehaviour:
   choice: 0
   maxChoice: 1
   inverse: 0
---- !u!114 &2026179246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026179242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a8764a590f2e1f4d80950c119eb27d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _actionMenu: {fileID: 55232360}
-  _actionMenuTextParent: {fileID: 55232360}
-  _commandTextPrefab: {fileID: 6507765818431734940, guid: 19b439d16e172c84abe6c65160f3df2b,
-    type: 3}
---- !u!114 &2026179247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026179242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627e6b8c9cdf1cb4baac689e1109d301, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  commandCardUI: {fileID: 2026179246}
-  statusBarsUI: {fileID: 2026179249}
-  targetSelectionUI: {fileID: 2026179250}
-  battleOrderUI: {fileID: 2026179252}
-  playerQueueUI: {fileID: 2026179253}
-  targetIconsUI: {fileID: 2026179254}
-  tmp_TimerText: {fileID: 848687487}
 --- !u!114 &2026179248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12048,43 +12162,6 @@ MonoBehaviour:
   - {fileID: 2056659467}
   - {fileID: 1753506206}
   - {fileID: 827462943}
---- !u!114 &2026179249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026179242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d03d92a63185084394a72f38d8bcb8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerStatusBarParent: {fileID: 1521284972}
-  enemyStatusBarParent:
-  - {fileID: 4980740264360901000}
-  - {fileID: 1690205968}
-  - {fileID: 439386961}
-  - {fileID: 1139253896}
-  manaStatusBarPrefab: {fileID: 8596212721209844495, guid: 234c0917aeb1fec44b958b38f3c742c1,
-    type: 3}
-  mookStatusBarPrefab: {fileID: 3745334081149257683, guid: e322220aa83cb364f897b79509adceff,
-    type: 3}
-  enemyStatusBarPrefab: {fileID: 5866088846057815438, guid: 7a07bb55722b5314ba59dda95359e170,
-    type: 3}
---- !u!114 &2026179250
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026179242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed6110fdf0f7b12409b115ba141da521, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetSelectionColor: {r: 1, g: 0.91147983, b: 0, a: 1}
 --- !u!114 &2026179251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12097,59 +12174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ffc45f9c89fdda43b121cf59be696be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2026179252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026179242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e32c2fcabdde55f4484441a8f0175254, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  turnOrderParent: {fileID: 331770712}
-  turnTextPrefab: {fileID: 2033945094015275285, guid: ceadf06dec054464fa98ab50d1b11c24,
-    type: 3}
-  arrowPrefab: {fileID: 3567863162334547644, guid: 834127297ec1fa0499ccc854dee550c5,
-    type: 3}
-  turnOrderHeaderText: {fileID: 5064211774145369693}
---- !u!114 &2026179253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026179242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 713f3ce974aacfb4ca994291abe7fd5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  queueParent: {fileID: 2043238973}
-  textPrefab: {fileID: 1289209193584220019, guid: 7914b9f364f452b4eba506087415dbfe,
-    type: 3}
-  maxInstantiatedTexts: 10
---- !u!114 &2026179254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026179242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59c662bbbd0ee0d44b24917803984628, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetParents:
-  - {fileID: 37002796}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  targetPrefab: {fileID: 3730404372981821768, guid: 3c36efa2ecc2702499f14c9c10135fa4,
-    type: 3}
 --- !u!114 &2026179255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12963,6 +12987,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c188c0af658e2c44e9eb06057f85dfcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionTime: 0.25
+  transitionColorFrom: {r: 0, g: 0, b: 0, a: 0}
+  transitionColorTo: {r: 0, g: 0, b: 0, a: 0.5019608}
+  image: {fileID: 2079914405}
 --- !u!114 &2079914405
 MonoBehaviour:
   m_ObjectHideFlags: 0

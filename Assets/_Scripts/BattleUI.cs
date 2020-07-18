@@ -22,6 +22,8 @@ public class BattleUI : MonoBehaviour
 
     public BasicText tmp_TimerText;
 
+    public FocusOverlay focusOverlay;
+
     public void Initialize() {
         this.commandCardUI.Initialize();
         this.statusBarsUI.Initialize();
@@ -29,5 +31,6 @@ public class BattleUI : MonoBehaviour
         this.battleOrderUI.Initialize();
         this.playerQueueUI.Initialize();
         this.targetIconsUI.Initialize();
+        this.focusOverlay.Initialize();
     }
 }

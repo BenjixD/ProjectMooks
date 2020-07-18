@@ -23,6 +23,7 @@ public class BattlePhase : Phase {
 
     protected BattleUI _ui {get; set; }
     protected BattleField _field {get; set;}
+
     private BattleResult result;
 
     // Keep a copy of the actions here because Mooks can change their actions mid-fight
@@ -108,9 +109,14 @@ public class BattlePhase : Phase {
                 continue;
             }
             
-            BattleFight fight = new BattleFight(_field, fighters[i], attackerAction);
+            BattleFight fight = new BattleFight(_field, fighters[i], attackerAction, this._ui);
             this.currentFight = fight;
+
+            yield return GameManager.Instance.time.GetController().StartCoroutine( this._ui.focusOverlay.EnableOverlay() );
+
             yield return GameManager.Instance.time.GetController().StartCoroutine(fight.DoFight());
+
+            yield return GameManager.Instance.time.GetController().StartCoroutine( this._ui.focusOverlay.DisableOverlay() );
 
             this._ui.battleOrderUI.PopFighter();
         }

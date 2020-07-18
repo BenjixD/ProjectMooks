@@ -1,25 +1,66 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FocusOverlay : MonoBehaviour
 {
-
     const string FOCUS_LAYER_NAME = "Focus Layer";
+
+    public float transitionTime = 0.25f;
+
+    public Color transitionColorFrom;
+    public Color transitionColorTo;
+    public Image image;
+
 
     private Dictionary<GameObject, int> previousLayers;
 
-    public void EnableOverlay() {
-        this.gameObject.SetActive(true);
+    public void Initialize() {
+        this.previousLayers = new Dictionary<GameObject, int>();
     }
 
-    public void DisableOverlay() {
+
+    public IEnumerator EnableOverlay() {
+        this.gameObject.SetActive(true);
+
+        float counter = 0;
+        float t = 0;
+        this.image.color = Color.Lerp(this.transitionColorFrom, this.transitionColorTo, t);
+        yield return null;
+
+        while (counter < this.transitionTime) {
+            counter += GameManager.Instance.time.deltaTime;
+            t = counter / this.transitionTime;
+            this.image.color = Color.Lerp(this.transitionColorFrom, this.transitionColorTo, t);
+
+
+            yield return null;
+        }
+    }
+
+    public IEnumerator DisableOverlay() {
+        float counter = 0;
+
+
+        float t = 0;
+        this.image.color = Color.Lerp(this.transitionColorTo, this.transitionColorFrom, t);
+        yield return null;
+
+        while (counter < this.transitionTime) {
+            counter += GameManager.Instance.time.deltaTime;
+            t = counter / this.transitionTime;
+            this.image.color = Color.Lerp(this.transitionColorTo, this.transitionColorFrom, t);
+
+            yield return null;
+        }
+
         this.UnsetAllFocusOverlays(); 
         this.gameObject.SetActive(false);
     }
 
-    public void SetFocusLayer(GameObject obj, bool setChildren = false) {
-        if (previousLayers.ContainsKey(obj)) {
+    public void AddToFocusLayer(GameObject obj, bool setChildren = false) {
+        if (obj == null || previousLayers.ContainsKey(obj)) {
             return;
         }
 
@@ -28,7 +69,7 @@ public class FocusOverlay : MonoBehaviour
     }
 
     public void RecSetFocusLayer(GameObject obj, bool setChildren) {
-        obj.layer = LayerMask.GetMask(FOCUS_LAYER_NAME);
+        obj.layer = LayerMask.NameToLayer(FOCUS_LAYER_NAME);
 
         if (!setChildren) {
             return;
@@ -40,13 +81,14 @@ public class FocusOverlay : MonoBehaviour
     }
 
     private void UnsetAllFocusOverlays() {
-        foreach (KeyValuePair<GameObject, int> pair in previousLayers) {
-            UnsetFocusLayer(pair.Key, false); // true might have unintended side effects
+        List<GameObject> keys = new List<GameObject>(this.previousLayers.Keys);
+        foreach (GameObject key in keys) {
+            RemoveFromFocusLayer(key, false); // true might have unintended side effects
         }
     }
 
-    private void UnsetFocusLayer(GameObject obj, bool setChildren = false) {
-        if (!previousLayers.ContainsKey(obj)) {
+    public void RemoveFromFocusLayer(GameObject obj, bool setChildren = false) {
+        if (obj == null || !previousLayers.ContainsKey(obj)) {
             return;
         }
 
