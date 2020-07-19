@@ -10,7 +10,7 @@ public enum PlayerRewardType {
 }
 public abstract class PlayerReward : ScriptableObject
 {
-    public string name;
+    public new string name;
     public string description;
     public RewardRarity rarity;
     public List<RewardAffinity> affinityTypes;

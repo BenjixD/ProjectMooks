@@ -4,8 +4,8 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "Nothing", menuName = "Actions/Nothing", order = 2)]
 public class NothingAction : ActionBase {
-    public override bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        return false;
+    public override ActionChoiceResult TryChooseAction(FightingEntity user, string[] splitCommand) {
+        return new ActionChoiceResult(ActionChoiceResult.State.CANNOT_BE_QUEUED, new List<string>{"Not a valid move"});
     }
 
     public override FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {

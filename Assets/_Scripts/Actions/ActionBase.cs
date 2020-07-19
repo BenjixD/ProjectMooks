@@ -58,6 +58,51 @@ public class DeathResult {
     }
 }
 
+public class ActionChoiceResult {
+    public enum State {
+        QUEUED,
+        INVALID_SYNTAX,
+        INVALID_TARGET,
+        INSUFFICIENT_COST,
+        UNMATCHED,
+        CANNOT_BE_QUEUED
+    }
+    
+    public State state;
+    public List<string> messages;
+
+    public ActionChoiceResult() {
+        this.state = State.QUEUED;
+        this.messages = new List<string>();
+    }
+
+    public ActionChoiceResult(State state) {
+        this.state = state;
+        this.messages = new List<string>();
+    }
+
+    public ActionChoiceResult(State state, List<string> messages) {
+        this.state = state;
+        this.messages = messages;
+    }
+
+    public void SetState(State state) {
+        this.state = state;
+    }
+
+    public void AddMessage(string message) {
+        this.messages.Add(message);
+    }
+
+    public string GetAmalgamatedMessage() {
+        string s = "";
+        foreach(string msg in messages) {
+            s += msg + "\n";
+        }
+        return s;
+    }
+}
+
 [CreateAssetMenu(fileName = "NewAction", menuName = "Actions/ActionBase", order = 1)]
 public class ActionBase : ScriptableObject {
     public new string name;
@@ -86,9 +131,15 @@ public class ActionBase : ScriptableObject {
     [SerializeField] protected GameObject damagePopupCanvasPrefab = null;
     protected BattleFight _battleFight; // The BattleFight in which this action is being used
 
-    const string WRONG_NUMBER_OF_TARGETS = "Move failed due to wrong number of targets. ({0})";
-
-
+    public class Messages {
+        public const string KEYWORD_UNMATCHED = "Move keyword ({0}) does not match provided: ({1})";
+        public const string INCORRECT_ARGUMENTS = "Invalid arguments for move ({0}), expected: ({1})";
+        public const string INSUFFICIENT_COST = "Insufficient ({0}) to use move ({1}), expected: ({2})";
+        public const string WRONG_NUMBER_OF_TARGETS = "Move ({0}) failed due to wrong number of targets. ({1})";
+        public const string TARGET_DOES_NOT_EXIST = "Move ({0}) failed due to invalid target. ({1})";
+        public const string QUEUED_MOVE = "Move ({0}) has been queued! ({1})";
+    }
+    
     private void Awake() {
         currPP = maxPP;
     }
@@ -105,23 +156,59 @@ public class ActionBase : ScriptableObject {
         return command;
     }
 
-    private bool CheckKeyword(string keyword) {
-        return keyword == commandKeyword;
-    }
-    private bool CheckArgQuantity(int argQuantity, FightingEntity user) {
-        bool res = argQuantity == commandArgs;
-        if (!res) {
-            this.tmp_MessagePlayer(user, string.Format(WRONG_NUMBER_OF_TARGETS, this.GetExampleCommandString()));
+    private bool CheckKeyword(string keyword, ActionChoiceResult response) {
+        bool res = keyword == commandKeyword;
+        if(!res) {
+            response.SetState(ActionChoiceResult.State.UNMATCHED);
+            response.AddMessage(string.Format(Messages.KEYWORD_UNMATCHED, commandKeyword, keyword));
         }
-        return argQuantity == commandArgs;
+        return res;
     }
 
-    protected bool BasicValidation(string[] splitCommand, FightingEntity user) {
-        if (splitCommand.Length == 0 || 
-            !CheckKeyword(splitCommand[0]) || 
-            !CheckArgQuantity(splitCommand.Length - 1, user) || 
-            //!GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions() ||  // Mooks can now input actions inbetween turns
-            !CheckCost(user) ) {
+    private bool CheckArgQuantity(int argQuantity, FightingEntity user, ActionChoiceResult response) {
+        bool res = argQuantity == commandArgs;
+        if(!res) {
+            response.SetState(ActionChoiceResult.State.INVALID_SYNTAX);
+            response.AddMessage(string.Format(Messages.INCORRECT_ARGUMENTS, commandKeyword, this.GetExampleCommandString()));
+        }
+        return res;
+    }
+
+    private bool CheckValidTarget(FightingEntity user, string[] splitCommand, ActionChoiceResult response) {
+        bool res = false;   
+        if (targetInfo.targetType == TargetType.SINGLE && splitCommand.Length == 2) {
+            int targetId = this.GetTargetIdFromString(splitCommand[1], user);
+            res = targetId != -1;
+        }
+        else if(targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
+            res = true;
+        }
+
+        if(!res) {
+            response.SetState(ActionChoiceResult.State.INVALID_TARGET);
+            response.AddMessage(string.Format(Messages.WRONG_NUMBER_OF_TARGETS, commandKeyword, this.GetExampleCommandString()));
+        }
+        return res;
+    }
+
+    private bool CheckCost(FightingEntity user, ActionChoiceResult response) {
+        PlayerStats stats = user.stats;
+
+        if (stats.hp.GetValue() <= actionCost.HP) {
+            response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "HP", commandKeyword, actionCost.HP));
+            return false;
+        } else if(stats.mana.GetValue() < actionCost.mana) {
+            response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "MANA", commandKeyword, actionCost.mana));
+            return false;
+        } else if(currPP < actionCost.PP) {
+            response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "PP", commandKeyword, actionCost.PP));
+            return false;
+        } else if(user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
+            response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "STAMINA", commandKeyword, actionCost.stamina));
             return false;
         }
 
@@ -129,33 +216,7 @@ public class ActionBase : ScriptableObject {
     }
 
     public bool CheckCost(FightingEntity user) {
-        PlayerStats stats = user.stats;
-
-        if (stats.hp.GetValue() <= actionCost.HP) {
-            string message = user.Name + " has insufficient HP use " + name;
-            Debug.Log(message);
-            this.tmp_MessagePlayer(user, message);
-            return false;
-        }
-        if (stats.mana.GetValue() < actionCost.mana) {
-            string message = user.Name + " has insufficient mana use " + name;
-            Debug.Log(message);
-            this.tmp_MessagePlayer(user, message);
-            return false;
-        }
-        if (currPP < actionCost.PP) {
-            string message = user.Name + " has insufficient PP use " + name;
-            Debug.Log(message);
-            this.tmp_MessagePlayer(user, message);
-            return false;
-        }
-        if (user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
-            string message = user.Name + " has insufficient stamina use " + name;
-            Debug.Log(message);
-            this.tmp_MessagePlayer(user, message);
-            return false;
-        }
-        return true;
+        return CheckCost(user, new ActionChoiceResult());
     }
 
     private void PayCost(FightingEntity user) {
@@ -175,39 +236,30 @@ public class ActionBase : ScriptableObject {
         currPP = maxPP;
     }
     
-    public virtual bool TryChooseAction(FightingEntity user, string[] splitCommand) {
-        if (!BasicValidation(splitCommand, user)) {
-            return false;
+    public virtual ActionChoiceResult TryChooseAction(FightingEntity user, string[] splitCommand) {
+        ActionChoiceResult res = new ActionChoiceResult();
+        if(CheckKeyword(splitCommand.Length == 0 ? "" : splitCommand[0], res) &&
+            CheckArgQuantity(splitCommand.Length - 1, user, res) &&
+            CheckCost(user, res) &&
+            CheckValidTarget(user, splitCommand, res)) {
+            res.SetState(ActionChoiceResult.State.QUEUED);
+            res.AddMessage(string.Format(Messages.QUEUED_MOVE, commandKeyword, description));
+            QueueAction(user, splitCommand);
         }
-        return QueueAction(user, splitCommand);
+
+        return res;
     }
 
     public virtual bool QueueAction(FightingEntity user, string[] splitCommand) {
-        if (!CheckArgQuantity(splitCommand.Length - 1, user)) {
-            this.tmp_MessagePlayer(user, string.Format(WRONG_NUMBER_OF_TARGETS, this.GetExampleCommandString()));
-            return false;
-        }
-
-        if (!CheckCost(user)) {
-            return false;
-        }
-
         if (targetInfo.targetType == TargetType.SINGLE && splitCommand.Length == 2) {
             int targetId = this.GetTargetIdFromString(splitCommand[1], user);
-            if (targetId == -1) {
-                return false;
-            }
             user.SetQueuedAction(this, new List<int>{ targetId });
-            return true;
         } else if (targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
             List<int> targetIds = GetAllPossibleActiveTargets(user).Map(target => target.targetId);
             user.SetQueuedAction(this, targetIds);
-            return true;
         }
 
-        this.tmp_MessagePlayer(user, string.Format(WRONG_NUMBER_OF_TARGETS, this.GetExampleCommandString()));
-
-        return false;
+        return true;
     }
 
     public virtual IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, BattleFight battleFight) {
@@ -338,14 +390,6 @@ public class ActionBase : ScriptableObject {
         popup.Initialize(target, damage, damageType);
     }
 
-    // May not be needed after enum change
-    private void tmp_MessagePlayer(FightingEntity fighter, string message) {
-        ActionListener actionListener = fighter.GetComponent<ActionListener>();
-        if (actionListener != null && actionListener.enableReply) {
-            actionListener.EchoDirectMessage(fighter.Name, message);
-        }
-    }
-
     private string GetExampleCommandString() {
         if (targetInfo.targetType == TargetType.SINGLE) {
             return "!" + this.commandKeyword + " A/B/C/D";
@@ -355,5 +399,4 @@ public class ActionBase : ScriptableObject {
 
         return "";
     }
-
 }
