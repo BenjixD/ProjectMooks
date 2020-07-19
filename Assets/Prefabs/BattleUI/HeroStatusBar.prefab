@@ -193,6 +193,8 @@ MonoBehaviour:
   hpText: {fileID: 5168588077246259318}
   hpBar: {fileID: 3295945127776471362}
   statusConditionParent: {fileID: 3295945128300203552}
+  statusIconPrefab: {fileID: 2331227846922804761, guid: e70d727772609544fa4805e8fa42d2d6,
+    type: 3}
   manaBar: {fileID: 6156744700258635017}
   manaText: {fileID: 4572888058918183997}
 --- !u!1001 &2749119667821077499
@@ -337,25 +339,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusConditionIcon
       objectReference: {fileID: 0}
+    - target: {fileID: 836360442277492237, guid: ab4a606cccccb3241b9f60b54c15edd9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 131.42407
       objectReference: {fileID: 0}
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -14.120846
       objectReference: {fileID: 0}
     - target: {fileID: 3253242114834352847, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}

@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: ResistanceDownAilment
   m_EditorClassIdentifier: 
   name: Resistance Down
+  icon: {fileID: 21300000, guid: 639ee1cd6680c3e45b6bcaf634174eb3, type: 3}
   infiniteDuration: 0
   duration: 3
   level: 1
   phase: 3
+  ailmentType: 1
   stat: 5
   type: 0
   modifier: -0.2

@@ -1,13 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-public class StatusAilmentIcon : MonoBehaviour
-{
-    
+public class StatusAilmentIcon : MonoBehaviour {
     public StatusAilment statusAilment;
 
+    [Header("References")]
+    [SerializeField] private Image _icon = null;
+    [SerializeField] private TextMeshProUGUI _durationText = null;
+
     public void SetStatusAilment(StatusAilment ailment) {
-        this.statusAilment = ailment;
+        statusAilment = ailment;
+        if (ailment.icon != null) {
+            _icon.sprite = ailment.icon;
+        } else {
+            Debug.Log(ailment.name + " has no icon");
+        }
+        if (ailment.infiniteDuration) {
+            _durationText.text = "";
+        } else {
+            _durationText.text = ailment.duration.ToString();
+        }
     }
 }

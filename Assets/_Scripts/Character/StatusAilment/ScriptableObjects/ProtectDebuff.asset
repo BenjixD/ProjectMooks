@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ProtectDebuff
   m_EditorClassIdentifier: 
   name: Protecting
+  icon: {fileID: 21300000, guid: 9b78c6c30ba702c4683d20caaa109988, type: 3}
   infiniteDuration: 0
   duration: 1
   level: 1

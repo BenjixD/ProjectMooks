@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: RallyingCrySpecUp
   m_EditorClassIdentifier: 
   name: Special Up
+  icon: {fileID: 21300000, guid: ecfd024fa96ba93478966651ca58bf89, type: 3}
   infiniteDuration: 0
   duration: 3
   level: 1
