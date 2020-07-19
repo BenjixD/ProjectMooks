@@ -15,8 +15,6 @@ public class StatusAilmentIcon : MonoBehaviour {
         statusAilment = ailment;
         if (ailment.icon != null) {
             _icon.sprite = ailment.icon;
-        } else {
-            Debug.Log(ailment.name + " has no icon");
         }
         if (ailment.infiniteDuration) {
             _durationText.text = "";

@@ -18,7 +18,6 @@ public class StatusBarUI : MonoBehaviour
     public StatusAilmentIcon statusIconPrefab;
     protected List<StatusAilmentIcon> statusConditionIcons = new List<StatusAilmentIcon>();
 
-
     public virtual void SetFighter(FightingEntity fighter) {
         this.fighter = fighter;
     }
