@@ -100,6 +100,8 @@ public class Fighter
 
             int commonActionIndex = Random.Range(0, commonMookActionPool.Count);
             actions.Add(Object.Instantiate(commonMookActionPool[commonActionIndex]));
+
+
         }
     }
 

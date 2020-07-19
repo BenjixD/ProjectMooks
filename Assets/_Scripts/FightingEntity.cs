@@ -43,9 +43,9 @@ public class FightingEntity : MonoBehaviour
     protected virtual void OnDestroy() {
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         ailmentController.RemoveOnBattleEndAilments();
-        for (int i = 0; i < actions.Count; i++) {
-            Destroy(actions[i]);
-        }
+        //for (int i = 0; i < actions.Count; i++) {
+        //    Destroy(actions[i]);
+        //}
     }
     
     public void Initialize(int index, Fighter persistentFighter) {
