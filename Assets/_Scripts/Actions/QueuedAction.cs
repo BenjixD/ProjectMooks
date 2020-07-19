@@ -9,6 +9,7 @@ public class QueuedAction : ICloneable {
     public ActionBase _action;
     public List<int> _targetIds;
     public TargetType _targetIdType = 0;
+    public bool isAutoQueued = false;
 
     private bool isSet = false;
 
@@ -21,7 +22,6 @@ public class QueuedAction : ICloneable {
     public QueuedAction(FightingEntity user, ActionBase action, List<int> targetIds) {
         this.user = user;
         this._targetIds = new List<int>();
-        this.SetAction(action, targetIds);
     }
 
     public ActionBase GetAction() {
@@ -40,9 +40,10 @@ public class QueuedAction : ICloneable {
         return action != null && _action.CheckCost(this.user) && (GetTargets().Count > 0 || _action.targetInfo.targetType == TargetType.NONE);
     }
 
-    public void SetAction(ActionBase action, List<int> targetIds) {
+    public void SetAction(ActionBase action, List<int> targetIds, bool autoQueued = false) {
         _action = action;
         _targetIds = new List<int>(targetIds);
+        this.isAutoQueued = autoQueued;
         this.isSet = true;
     }
 
@@ -54,6 +55,7 @@ public class QueuedAction : ICloneable {
         _targetIds.Clear();
         this._action = null;
         this.isSet = false;
+        this.isAutoQueued = false;
     }
 
     public object Clone()

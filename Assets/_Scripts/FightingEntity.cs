@@ -95,8 +95,8 @@ public class FightingEntity : MonoBehaviour
         return _ai.GetSuggestion();
     }
 
-    public void SetQueuedAction(ActionBase action, List<int> targetIds) {
-        _queuedAction.SetAction(action, targetIds);
+    public void SetQueuedAction(ActionBase action, List<int> targetIds, bool isAutoQueued = false) {
+        _queuedAction.SetAction(action, targetIds, isAutoQueued);
         Messenger.Broadcast<QueuedAction>(Messages.OnSetQueuedAction, _queuedAction);
     }
 
