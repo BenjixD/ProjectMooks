@@ -124,7 +124,7 @@ public class BattlePhase : Phase {
                 if (enemyAction.targetInfo.targetType == TargetType.SINGLE) {
                     targets = new List<int>{this._field.GetRandomPlayerObjectIndex()};
                 } else if (enemyAction.targetInfo.targetType == TargetType.ALL) {
-                    targets = enemyAction.GetAllPossibleTargetIds(fighter);
+                    targets = enemyAction.GetAllPossibleTargets(fighter).Map(target => target.targetId);
                 }
                 fighter.SetQueuedAction(enemyAction, targets);
             }

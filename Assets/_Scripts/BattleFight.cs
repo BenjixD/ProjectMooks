@@ -111,19 +111,18 @@ public class BattleFight : IDisposable
             Debug.Log(this.fighter.Name + " Execute Action: " + attackName + targets[0].targetId);
         }
 
-
         this._ui.focusOverlay.AddToFocusLayer(fighter.gameObject);
 
         foreach (FightingEntity target in targets) {
             this._ui.focusOverlay.AddToFocusLayer(target.gameObject);
         }
 
-        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, EndFight));
+        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, this));
     }
 
 
 
-    private void EndFight(FightResult fightResult, ActionBase action) {
+    public void EndFight(FightResult fightResult, ActionBase action) {
         CheckIfAnyEntityDied(fightResult, action);
 
         // Mooks should broadcast their fights for clarity

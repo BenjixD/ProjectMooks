@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Protect
   actionType: 0
   description: For one turn, increases allies' defense while decreasing your own.
-  animation: {fileID: 0}
+  animation: {fileID: 11400000, guid: fcbc08b91b535fa419007298bf235a39, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:

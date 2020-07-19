@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Mana Pot
   actionType: 0
-  description: Heals the hero's mana
+  description: Restores some of the hero's mana.
   animation: {fileID: 0}
   maxPP: 1
   currPP: 1

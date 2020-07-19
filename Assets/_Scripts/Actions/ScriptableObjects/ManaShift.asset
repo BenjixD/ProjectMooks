@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Mana Shift
   actionType: 0
-  description: Shifts your mana
-  animation: {fileID: 0}
+  description: Restores the hero's mana with the mooks' energy.
+  animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
   maxPP: 2
   currPP: 2
   actionCost:

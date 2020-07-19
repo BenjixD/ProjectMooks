@@ -211,6 +211,8 @@ MonoBehaviour:
   hpText: {fileID: 2075911164903723062}
   hpBar: {fileID: 8559110805508094210}
   statusConditionParent: {fileID: 8559110804984364640}
+  statusIconPrefab: {fileID: 2331227846922804761, guid: e70d727772609544fa4805e8fa42d2d6,
+    type: 3}
   energyParent: {fileID: 1010138800613031240}
   energyTokenPrefab: {fileID: 4179385565063920462, guid: 6e6dc215a5818b84aa5089f7bbb35cb9,
     type: 3}
@@ -1310,6 +1312,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 836360442277492237, guid: ab4a606cccccb3241b9f60b54c15edd9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 836360442277492238, guid: ab4a606cccccb3241b9f60b54c15edd9,
         type: 3}

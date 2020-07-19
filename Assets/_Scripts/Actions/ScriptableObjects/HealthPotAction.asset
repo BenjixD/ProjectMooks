@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Health Pot
   actionType: 1
-  description: Heals a target
+  description: Restores HP to one ally.
+  animation: {fileID: 0}
   maxPP: 1
+  currPP: 1
   actionCost:
     HP: 0
     mana: 0
@@ -32,8 +34,5 @@ MonoBehaviour:
     statusAilments: []
   commandKeyword: health
   commandArgs: 1
-  userAnimName: 
-  _animTimeBeforeEffect: 0
-  _animTimeAfterEffect: 0
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
     type: 3}

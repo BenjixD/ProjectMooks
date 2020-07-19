@@ -298,6 +298,36 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3624735768585712700, guid: e18a1e30f66218a4d898b54a43b3395c,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624735768585712700, guid: e18a1e30f66218a4d898b54a43b3395c,
+        type: 3}
+      propertyPath: m_ReferencePixelsPerUnit
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624735768585712700, guid: e18a1e30f66218a4d898b54a43b3395c,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624735768585712700, guid: e18a1e30f66218a4d898b54a43b3395c,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624735768585712700, guid: e18a1e30f66218a4d898b54a43b3395c,
+        type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3624735768585712700, guid: e18a1e30f66218a4d898b54a43b3395c,
+        type: 3}
+      propertyPath: m_DynamicPixelsPerUnit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6730245615298952308, guid: e18a1e30f66218a4d898b54a43b3395c,
         type: 3}
       propertyPath: m_Name

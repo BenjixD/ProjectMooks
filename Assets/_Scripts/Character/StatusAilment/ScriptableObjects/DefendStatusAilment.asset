@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: DefendStatusAilment
   m_EditorClassIdentifier: 
   name: Defend
+  icon: {fileID: 21300000, guid: d587cc6a15d8fae438055be48317edb4, type: 3}
   infiniteDuration: 0
   duration: 1
   level: 1
   phase: 3
+  ailmentType: 1
   stat: 4
   type: 1
   modifier: 20
