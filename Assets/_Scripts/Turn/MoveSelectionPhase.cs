@@ -276,7 +276,7 @@ public class MoveSelectionPhase : Phase {
         bool startTurn = timeOutIfChatTooSlow || GetAllUnsetFighters().Count == 0;
         if (startTurn) {
             this._playerActionCounter = 0;
-
+            this._ui.tmp_TimerText.gameObject.SetActive(false);
         } else {
             UpdateStateText();
         }
@@ -284,6 +284,8 @@ public class MoveSelectionPhase : Phase {
     }
 
     private void UpdateStateText() {
+        this._ui.tmp_TimerText.gameObject.SetActive(true);
+
         // Currently not in the UI, but may add something similar later
         if (!this._field.GetHeroPlayer().HasSetCommand()) {
             this._ui.tmp_TimerText.text.SetText("Waiting on streamer input");
