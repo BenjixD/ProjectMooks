@@ -200,7 +200,7 @@ public class ActionBase : ScriptableObject {
             user.SetQueuedAction(this, new List<int>{ targetId });
             return true;
         } else if (targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
-            List<int> targetIds = GetAllPossibleTargets(user).Map(target => target.targetId);
+            List<int> targetIds = GetAllPossibleActiveTargets(user).Map(target => target.targetId);
             user.SetQueuedAction(this, targetIds);
             return true;
         }
