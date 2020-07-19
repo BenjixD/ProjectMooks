@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: ParalyzeStatusAilment
   m_EditorClassIdentifier: 
   name: Paralysis
+  icon: {fileID: 21300000, guid: 798d2de986828b3439093e4b35189fbd, type: 3}
   infiniteDuration: 0
   duration: 3
   level: 1
   phase: 3
+  ailmentType: 1
   chance: 0.3
   action: {fileID: 11400000, guid: e3e0d5d0ee9a94410ad206d7e2750bed, type: 2}

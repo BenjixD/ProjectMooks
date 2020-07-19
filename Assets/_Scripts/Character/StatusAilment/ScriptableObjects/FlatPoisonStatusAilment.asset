@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: FlatPoisonStatusAilment
   m_EditorClassIdentifier: 
   name: Poison
+  icon: {fileID: 21300000, guid: 86af3873290e6784598f8f0b4c7075c1, type: 3}
   infiniteDuration: 0
   duration: 3
   level: 1
   phase: 4
+  ailmentType: 1
   damageType: 1
   val: 5

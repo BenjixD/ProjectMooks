@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: RallyingCryPhysUp
   m_EditorClassIdentifier: 
   name: Physical Up
+  icon: {fileID: 21300000, guid: 2957028a0733ece4a806389b49f87155, type: 3}
   infiniteDuration: 0
   duration: 3
   level: 1

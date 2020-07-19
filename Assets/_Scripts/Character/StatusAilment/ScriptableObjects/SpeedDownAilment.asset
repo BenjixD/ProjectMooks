@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: SpeedDownAilment
   m_EditorClassIdentifier: 
   name: Speed Down
+  icon: {fileID: 21300000, guid: 356084b0c16febb43850a82915e21e42, type: 3}
   infiniteDuration: 0
   duration: 3
   level: 1
   phase: 3
+  ailmentType: 1
   stat: 6
   type: 0
   modifier: -0.2
