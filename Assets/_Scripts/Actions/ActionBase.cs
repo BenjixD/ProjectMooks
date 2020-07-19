@@ -84,6 +84,7 @@ public class ActionBase : ScriptableObject {
 
     [Header("References")]
     [SerializeField] protected GameObject damagePopupCanvasPrefab = null;
+    protected BattleFight _battleFight; // The BattleFight in which this action is being used
 
     const string WRONG_NUMBER_OF_TARGETS = "Move failed due to wrong number of targets. ({0})";
 
@@ -199,7 +200,7 @@ public class ActionBase : ScriptableObject {
             user.SetQueuedAction(this, new List<int>{ targetId });
             return true;
         } else if (targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
-            List<int> targetIds = GetAllPossibleTargetIds(user);
+            List<int> targetIds = GetAllPossibleActiveTargets(user).Map(target => target.targetId);
             user.SetQueuedAction(this, targetIds);
             return true;
         }
@@ -209,7 +210,8 @@ public class ActionBase : ScriptableObject {
         return false;
     }
 
-    public IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, System.Action<FightResult, ActionBase> onFightEnd) {
+    public virtual IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, BattleFight battleFight) {
+        _battleFight = battleFight;
         FightResult result = new FightResult(user, this);
         if (CheckCost(user)) {
             PayCost(user);
@@ -222,7 +224,7 @@ public class ActionBase : ScriptableObject {
             result = ApplyEffect(user, targets);
             OnPostEffect(result);
         }
-        onFightEnd(result, this);
+        _battleFight.EndFight(result, this);
         if (animation != null) {
             yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeAfterEffect);
         }
@@ -249,16 +251,10 @@ public class ActionBase : ScriptableObject {
         return potentialTargets;
     }
 
-    public List<int> GetAllPossibleTargetIds(FightingEntity user) {
-        List<FightingEntity> possibleTargets = this.GetAllPossibleTargets(user);
-        List<int> targetIds = new List<int>();
-        for (int i = 0; i < possibleTargets.Count; i++) {
-            targetIds.Add(i);
-        }
-        return targetIds;
-    }
-
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
+        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
+           return GetAllPossibleActiveTargets(user);
+        }
         List<FightingEntity> potentialTargets = GetAllPossibleTargets(user);
         List<FightingEntity> targets = new List<FightingEntity>();
         foreach (int target in targetIds) {
@@ -352,9 +348,9 @@ public class ActionBase : ScriptableObject {
 
     private string GetExampleCommandString() {
         if (targetInfo.targetType == TargetType.SINGLE) {
-            return "!" + this.name + " A/B/C/D";
+            return "!" + this.commandKeyword + " A/B/C/D";
         } else if (targetInfo.targetType == TargetType.NONE || targetInfo.targetType == TargetType.ALL) {
-            return "!" + this.name;
+            return "!" + this.commandKeyword;
         }
 
         return "";

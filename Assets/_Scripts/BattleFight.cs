@@ -109,12 +109,12 @@ public class BattleFight : IDisposable
             Debug.Log(this.fighter.Name + " Execute Action: " + attackName + targets[0].targetId);
         }
 
-        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, EndFight));
+        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, this));
     }
 
 
 
-    private void EndFight(FightResult fightResult, ActionBase action) {
+    public void EndFight(FightResult fightResult, ActionBase action) {
         CheckIfAnyEntityDied(fightResult, action);
 
         // Mooks should broadcast their fights for clarity
