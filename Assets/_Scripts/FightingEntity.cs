@@ -123,6 +123,9 @@ public class FightingEntity : MonoBehaviour
     public bool isEnemy() {
         return this.GetType() == typeof(EnemyObject);
     }
+    public bool IsHeroTeam() {
+        return !this.isEnemy();
+    }
 
     public bool IsHero() {
         return !this.isEnemy() && this.targetId == 0;
