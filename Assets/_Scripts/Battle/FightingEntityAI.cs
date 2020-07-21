@@ -75,7 +75,11 @@ public class FightingEntityAI {
 	private void InitializeMovesetScore(List<ActionBase> actions, float precision) {
 		_movesetScore = new SortedSet<Tuple<float, ActionBase>>(new ActionWeight());
 		foreach(ActionBase action in actions) {
-			_movesetScore.Add(new Tuple<float, ActionBase>(precision * (BoxMuller.GetRandom()/2 + 1), action));
+            float weight = precision * (BoxMuller.GetRandom()/2 + 1);
+            if (!action.CheckCost(this._char)) {
+                weight = 0;
+            }
+			_movesetScore.Add(new Tuple<float, ActionBase>(weight, action));
 		}
 	}
 
@@ -123,7 +127,13 @@ public class FightingEntityAI {
 
 		if(chosenAction != null) {
 			_movesetScore.Remove(chosenAction);
-			float score = chosenAction.Item1 + feedback * _weight * _precision;
+
+            float score = chosenAction.Item1 + feedback * _weight * _precision;
+
+          	if (!action.CheckCost(this._char)) {
+                score = 0;
+            }
+
 			if(score < 0) {
 				score = 0;
 			}

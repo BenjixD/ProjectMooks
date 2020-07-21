@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Ice
   actionType: 1
-  description: Call down the power of ice on a single target.
+  description: Deals heavy ice damage to a single target.
   animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
   maxPP: 0
   currPP: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
   effects:
     element: 2
     physicalScaling: 0
-    specialScaling: 1.25
+    specialScaling: 1.5
     heals: 0
     statusAilments: []
   commandKeyword: 

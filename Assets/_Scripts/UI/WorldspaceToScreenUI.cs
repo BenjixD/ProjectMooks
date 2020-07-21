@@ -7,9 +7,10 @@ public class WorldspaceToScreenUI : MonoBehaviour {
     [SerializeField] private Transform _uiTransform = null;
     [Tooltip("Optional transform to set the world point to.")]
     [SerializeField] private Transform _worldPointTransform = null;
+    [Tooltip("Set to true to update _uiTransform's position every frame.")]
+    public bool continuouslyUpdate = false;
     private Vector3 _worldPoint = Vector3.zero;
     private Camera _cam;
-    private bool _continuouslyUpdate = false;
 
     private void Awake() {
         _cam = Camera.main;
@@ -20,7 +21,7 @@ public class WorldspaceToScreenUI : MonoBehaviour {
     }
 
     private void Update() {
-        if (_continuouslyUpdate) {
+        if (continuouslyUpdate) {
             UpdatePosition();
         }
     }
@@ -33,7 +34,7 @@ public class WorldspaceToScreenUI : MonoBehaviour {
     }
 
     public void SetUpdate(bool update) {
-        _continuouslyUpdate = update;
+        continuouslyUpdate = update;
     }
 
 

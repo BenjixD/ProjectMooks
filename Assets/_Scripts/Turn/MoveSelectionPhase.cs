@@ -60,13 +60,20 @@ public class MoveSelectionPhase : Phase {
         // Reset Player Commands
         PlayerObject heroPlayer = this._field.GetHeroPlayer();
         foreach (FightingEntity player in this._field.GetAllFightingEntities()) {
+
+            if (player.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION)) {
+                ActionBase action = GameManager.Instance.models.GetCommonAction("Nothing");
+                player.SetQueuedAction(action, new List<int>( player.targetId ) );
+                continue;
+            }
+
             if (player == heroPlayer || player.isEnemy()) {
                 player.ResetCommand();
             } else {
                 // Experimental: Mooks keep their actions
                 QueuedAction lastAction = player.GetQueuedAction();
                 if (lastAction != null && lastAction._action != null && lastAction.CanQueueAction(lastAction._action)) {
-                    player.SetQueuedAction(lastAction._action, lastAction._targetIds);
+                    player.SetQueuedAction(lastAction._action, lastAction._targetIds, true);
                 } else {
                     player.ResetCommand();
                 }
@@ -87,9 +94,14 @@ public class MoveSelectionPhase : Phase {
 
     // Helper Coroutines
     IEnumerator HeroMoveSelection() {
-        this._heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
-        
-        InitializeCommandCardActionUI(GetHeroActionChoices(ActionType.BASIC));
+        FightingEntity hero = this._field.GetHeroPlayer();
+        if (!hero.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION)) {
+            this._heroMenuActions.Push(new HeroMenuAction(MenuState.MOVE));
+            InitializeCommandCardActionUI(GetHeroActionChoices(ActionType.BASIC));
+        } else {
+            this.HeroActionConfirmed();
+            this._heroMenuActions.Push(new HeroMenuAction(MenuState.WAITING));
+        }
 
         while(true) {
             HeroMenuAction menuAction = this.GetHeroMenuAction();
@@ -126,7 +138,7 @@ public class MoveSelectionPhase : Phase {
                 _playerActionCounter = this.maxTimeBeforeAction;
             }
 
-            if (this._field.GetHeroPlayer().HasSetCommand()) {
+            if (hero.HasSetCommand()) {
                 _playerActionCounter += Time.deltaTime;
             }
             
@@ -261,10 +273,10 @@ public class MoveSelectionPhase : Phase {
 
         bool timeOutIfChatTooSlow = (this._field.GetHeroPlayer().HasSetCommand() && _playerActionCounter >= this.maxTimeBeforeAction);
         //bool timeOutIfChatTooSlow = false;
-        bool startTurn = timeOutIfChatTooSlow || HasEveryoneEnteredActions();
+        bool startTurn = timeOutIfChatTooSlow || GetAllUnsetFighters().Count == 0;
         if (startTurn) {
             this._playerActionCounter = 0;
-
+            this._ui.tmp_TimerText.gameObject.SetActive(false);
         } else {
             UpdateStateText();
         }
@@ -272,23 +284,32 @@ public class MoveSelectionPhase : Phase {
     }
 
     private void UpdateStateText() {
+        this._ui.tmp_TimerText.gameObject.SetActive(true);
+
         // Currently not in the UI, but may add something similar later
         if (!this._field.GetHeroPlayer().HasSetCommand()) {
             this._ui.tmp_TimerText.text.SetText("Waiting on streamer input");
             this._ui.tmp_TimerText.gameObject.SetActive(true);
         } else {
             int timer = (int)(this.maxTimeBeforeAction - this._playerActionCounter);
-            this._ui.tmp_TimerText.text.SetText("Waiting on Chat: " + timer);
+
+            string timerTextStr = "Waiting on Chat: " + timer + " | ";
+            foreach (FightingEntity fighter in GetAllUnsetFighters()) {
+                timerTextStr += fighter.Name + " ";
+            }
+
+            this._ui.tmp_TimerText.text.SetText(timerTextStr);
         }
     }
 
-    private bool HasEveryoneEnteredActions() {
+    private List<FightingEntity> GetAllUnsetFighters () {
+        List<FightingEntity> fighters = new List<FightingEntity>();
         foreach (var player in this._field.GetActivePlayerObjects()) {
-            if (player.HasSetCommand() == false) {
-                return false;
+            if (player.HasSetCommand() == false || (player.HasSetCommand() == true && player.GetQueuedAction().isAutoQueued)) {
+                fighters.Add(player);
             }
         }
-        return true;
+        return fighters;
     }
 
     private void GoBackToLastHeroAction() {

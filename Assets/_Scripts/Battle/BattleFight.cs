@@ -78,11 +78,13 @@ public class BattleFight : IDisposable
     public FightingEntity fighter;
     private BattleField _field {get; set;}
     private QueuedAction queuedAction;
+    private BattleUI _ui;
 
-    public BattleFight(BattleField field, FightingEntity fighter, QueuedAction action) {
+    public BattleFight(BattleField field, FightingEntity fighter, QueuedAction action, BattleUI ui) {
         this._field = field;
         this.fighter = fighter;
         this.queuedAction = action;
+        this._ui = ui;
     }
 
     public void Dispose() {
@@ -109,12 +111,18 @@ public class BattleFight : IDisposable
             Debug.Log(this.fighter.Name + " Execute Action: " + attackName + targets[0].targetId);
         }
 
-        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, EndFight));
+        this._ui.focusOverlay.AddToFocusLayer(fighter.gameObject);
+
+        foreach (FightingEntity target in targets) {
+            this._ui.focusOverlay.AddToFocusLayer(target.gameObject);
+        }
+
+        yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, this));
     }
 
 
 
-    private void EndFight(FightResult fightResult, ActionBase action) {
+    public void EndFight(FightResult fightResult, ActionBase action) {
         CheckIfAnyEntityDied(fightResult, action);
 
         // Mooks should broadcast their fights for clarity

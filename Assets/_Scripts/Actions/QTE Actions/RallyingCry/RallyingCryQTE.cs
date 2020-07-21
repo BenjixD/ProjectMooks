@@ -19,8 +19,14 @@ public class RallyingCryQTE : QuickTimeEvent {
     [SerializeField, Tooltip("Reference to the RallyingCryCanvas prefab.")]
     private GameObject _rallyingCryCanvasPrefab = null;
     private RallyingCryUI _rallyingCryUI;
-
     private float _totalPower = 0;
+
+    private RallyingCry _action;
+
+    public void Initialize(FightingEntity user, List<FightingEntity> targets, RallyingCry action) {
+        Initialize(user, targets);
+        _action = action;
+    }
 
     protected override void ProcessMessage(string message) {
         _totalPower += GetMessageValue(message);
@@ -58,6 +64,10 @@ public class RallyingCryQTE : QuickTimeEvent {
         float input = Mathf.InverseLerp(_properCryMinLength, _cutoffLength, length);
         float percentPower = _messageValue.Evaluate(input);
         return percentPower * _maxCryValue;
+    }
+
+    protected override void ExecuteEffect() {
+        _action.FinishQTE(_user, _targets, _totalPower);
     }
 
     protected override void DestroyUI() {

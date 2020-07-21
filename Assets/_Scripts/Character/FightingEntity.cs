@@ -43,13 +43,13 @@ public class FightingEntity : MonoBehaviour
     protected virtual void OnDestroy() {
         Messenger.RemoveListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
         ailmentController.RemoveOnBattleEndAilments();
-        for (int i = 0; i < actions.Count; i++) {
-            Destroy(actions[i]);
-        }
+        //for (int i = 0; i < actions.Count; i++) {
+        //    Destroy(actions[i]);
+        //}
     }
     
     public void Initialize(int index, Fighter persistentFighter) {
-        this.targetId = index;
+        this.targetId = persistentFighter.index;
         this.Name = persistentFighter.Name;
         this.persistentFighter = persistentFighter;
         this.stats = persistentFighter.stats;
@@ -64,39 +64,47 @@ public class FightingEntity : MonoBehaviour
         return job.ToString();
     }
 
-    public bool TryActionCommand(string message) {
+    public ActionBase GetActionFromName(string name) {
+        foreach(ActionBase action in actions) {
+            if(action.commandKeyword == name) {
+                return action;
+            }
+        }
+        return null;
+    }
+
+    public ActionChoiceResult TryActionCommand(string message) {
         string[] splitCommand = message.Split(' ');
         string firstCommand = splitCommand[0];
 
         bool shortCut = firstCommand.Length >= 5 && firstCommand.Substring(0, 4) == "move" && firstCommand[4] >= '1' && firstCommand[4] <= '4';
+        ActionBase action = null;
 
         if (shortCut) {
             int index = int.Parse(firstCommand[4].ToString()) - 1;
-
             if (index < this.actions.Count) {
-                ActionBase action = this.actions[index];
-                return action.QueueAction(this, splitCommand);
-            } else {
-                return false;
+                action = this.actions[index];
+                splitCommand[0] = action.commandKeyword;
             }
         } else {
-            foreach (ActionBase action in actions) {
-                if (action.TryChooseAction(this, splitCommand)) {
-                    return true;
-                }
-            }
+            action = GetActionFromName(firstCommand);
         }
-        
-        Debug.Log("Invalid action command for player " + Name + ": " + message);
-        return false;
+
+        if(action != null) {
+            return action.TryChooseAction(this, splitCommand);
+        }
+        else {
+            Debug.Log("Invalid action command for player " + Name + ": " + message);
+            return new ActionChoiceResult(ActionChoiceResult.State.UNMATCHED);
+        }
     }
 
     public ActionBase GetRecommendedAction() {
         return _ai.GetSuggestion();
     }
 
-    public void SetQueuedAction(ActionBase action, List<int> targetIds) {
-        _queuedAction.SetAction(action, targetIds);
+    public void SetQueuedAction(ActionBase action, List<int> targetIds, bool isAutoQueued = false) {
+        _queuedAction.SetAction(action, targetIds, isAutoQueued);
         Messenger.Broadcast<QueuedAction>(Messages.OnSetQueuedAction, _queuedAction);
     }
 
@@ -105,11 +113,12 @@ public class FightingEntity : MonoBehaviour
     }
 
     public bool HasSetCommand() {
-        return _queuedAction.GetIsSet();
+        return _queuedAction.GetIsSet() || this.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
     }
 
     public void ResetCommand() {
         _queuedAction.Reset();
+        Messenger.Broadcast<QueuedAction>(Messages.OnSetQueuedAction, _queuedAction);
     }
 
     public bool isEnemy() {

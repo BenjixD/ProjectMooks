@@ -23,6 +23,7 @@ public class BattlePhase : Phase {
 
     protected BattleUI _ui {get; set; }
     protected BattleField _field {get; set;}
+
     private BattleResult result;
 
     // Keep a copy of the actions here because Mooks can change their actions mid-fight
@@ -55,12 +56,6 @@ public class BattlePhase : Phase {
         queuedActions = new List<QueuedAction>();
         foreach (FightingEntity fighter in fighters) {
             queuedActions.Add((QueuedAction)fighter.GetQueuedAction().Clone());
-        }
-
-        foreach (QueuedAction action in queuedActions) {
-            if (action._targetIds.Count == 1) {
-                Debug.Log(  action.user.Name + "| Action: "  + action._action.name + " " + action._targetIds[0]);
-            }
         }
 
         result = new BattleResult(fighters);
@@ -108,9 +103,14 @@ public class BattlePhase : Phase {
                 continue;
             }
             
-            BattleFight fight = new BattleFight(_field, fighters[i], attackerAction);
+            BattleFight fight = new BattleFight(_field, fighters[i], attackerAction, this._ui);
             this.currentFight = fight;
+
+            yield return GameManager.Instance.time.GetController().StartCoroutine( this._ui.focusOverlay.EnableOverlay() );
+
             yield return GameManager.Instance.time.GetController().StartCoroutine(fight.DoFight());
+
+            yield return GameManager.Instance.time.GetController().StartCoroutine( this._ui.focusOverlay.DisableOverlay() );
 
             this._ui.battleOrderUI.PopFighter();
         }
@@ -124,7 +124,7 @@ public class BattlePhase : Phase {
                 if (enemyAction.targetInfo.targetType == TargetType.SINGLE) {
                     targets = new List<int>{this._field.GetRandomPlayerObjectIndex()};
                 } else if (enemyAction.targetInfo.targetType == TargetType.ALL) {
-                    targets = enemyAction.GetAllPossibleTargetIds(fighter);
+                    targets = enemyAction.GetAllPossibleTargets(fighter).Map(target => target.targetId);
                 }
                 fighter.SetQueuedAction(enemyAction, targets);
             }
@@ -139,6 +139,12 @@ public class BattlePhase : Phase {
     private void SetUnsetMookCommands() {
         foreach (var player in this._field.GetActivePlayerObjects()) {
             if (!player.HasSetCommand()) {
+
+                if (player.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION)) {
+                    // TODO later
+                    return;
+                }
+
                 ActionBase action = player.GetRecommendedAction();
 
                 switch (action.targetInfo.targetType) {

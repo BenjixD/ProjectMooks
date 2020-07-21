@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class ActionListener : TwitchChatListenerBase {
     public class ActionListenerResponse {
-        public static string ValidAction = "@{0} is going to use {1}! ({2})";
-        public static string QueuedUpAction = "@{0} queued up {1} for next turn! ({2})";
-        public static string InvalidAction = "@{0}, invalid move!";
+        public static string ThisTurnAction = "@{0}, (this turn): {1}";
+        public static string NextTurnAction = "@{0}, (next turn): {1}";
+        public static string InvalidAction = "@{0}: Invalid command!";
+        public static string GenericResponse = "@{0}: {1}";
     }
 
     [SerializeField]
@@ -28,22 +29,28 @@ public class ActionListener : TwitchChatListenerBase {
     public override void OnCommandReceived(string username, string message) {
         if (username == _player.Name) {
             this.HandleMessage("!" + message);
-            if(_player.TryActionCommand(message)) {
-                ActionBase action = _player.GetQueuedAction()._action;
-                if (GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions()) {
-                    this.EchoMessage(String.Format(ActionListenerResponse.ValidAction, username, action.name, action.description));
-                } else {
-                    this.EchoMessage(String.Format(ActionListenerResponse.QueuedUpAction, username, action.name, action.description));
-                }
-            } else {
-                this.EchoMessage(String.Format(ActionListenerResponse.InvalidAction, username));
+            ActionChoiceResult res = _player.TryActionCommand(message);
+            switch(res.state) {
+                case ActionChoiceResult.State.UNMATCHED:
+                    this.EchoMessage(string.Format(ActionListenerResponse.InvalidAction, username));
+                    break;
+                case ActionChoiceResult.State.QUEUED:
+                    if(GameManager.Instance.battleComponents.turnManager.GetPhase().CanInputActions()) {
+                        this.EchoMessage(string.Format(ActionListenerResponse.ThisTurnAction, username, res.GetAmalgamatedMessage()));
+                    } else {
+                        this.EchoMessage(string.Format(ActionListenerResponse.NextTurnAction, username, res.GetAmalgamatedMessage()));
+                    }
+                    break;
+                default:
+                    this.EchoMessage(string.Format(ActionListenerResponse.GenericResponse, username, res.GetAmalgamatedMessage()));
+                    break;
             }
         }
     }
 
     public void HandleMessage(string message) {
         if (_player.fighterMessageBox != null) {
-            this._player.fighterMessageBox.HandleMessage(message);
+            this._player.fighterMessageBox.HandleMessage(_player.GetOrderColor(), _player.Name, message);
         }
     }
 }

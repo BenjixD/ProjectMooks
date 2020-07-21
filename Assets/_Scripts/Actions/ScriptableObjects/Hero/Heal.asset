@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Heal
   actionType: 1
-  description: Heal a single target.
+  description: Restores a moderate amount of HP to an ally.
   animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
   maxPP: 0
   currPP: 0

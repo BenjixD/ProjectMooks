@@ -109,7 +109,8 @@ MonoBehaviour:
   zones:
   - {fileID: 11400000, guid: b26e2ed0a9f467549bb402a270ebe9cb, type: 2}
   - {fileID: 11400000, guid: 54c1caa855fade7429004903da097cb4, type: 2}
-  commonActions: []
+  commonActions:
+  - {fileID: 11400000, guid: 95f3a662e37fbb54694506171fc9112c, type: 2}
   commonMookActionPool:
   - {fileID: 11400000, guid: 5206479e459a1d54884e683c0c5738cd, type: 2}
   - {fileID: 11400000, guid: 87ecb072cac21214cac72e8a6961b514, type: 2}

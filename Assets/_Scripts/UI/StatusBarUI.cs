@@ -15,6 +15,7 @@ public class StatusBarUI : MonoBehaviour
 
     protected FightingEntity fighter;
 
+    public StatusAilmentIcon statusIconPrefab;
     protected List<StatusAilmentIcon> statusConditionIcons = new List<StatusAilmentIcon>();
 
     public virtual void SetFighter(FightingEntity fighter) {
@@ -51,20 +52,25 @@ public class StatusBarUI : MonoBehaviour
         this.SetSliderValue(this.hpBar, hp, maxHP);
     }
 
+    public void SetStatusAilmentIcons(List<StatusAilment> ailments) {
+        // Replace any existing icons with passed in icons
+        int iconsToReplace = Mathf.Min(ailments.Count, statusConditionIcons.Count);
+        for (int i = 0; i < iconsToReplace; i++) {
+            statusConditionIcons[i].SetStatusAilment(ailments[i]);
+        }
 
-    // TODO: Trigger status ailment icon using these functions upon receiving the status effect
-    public void AddStatusAilmentIcon(StatusAilmentIcon prefab, StatusAilment ailment) {
-        StatusAilmentIcon statusIcon = Instantiate<StatusAilmentIcon>(prefab, statusConditionParent);
-        statusIcon.SetStatusAilment(ailment);
-        this.statusConditionIcons.Add(statusIcon);
-    }
-
-    public void RemoveStatusAilmentIcon(StatusAilment ailment) {
-        for (int i = 0; i < statusConditionIcons.Count; i++) {
-            if (statusConditionIcons[i].statusAilment == ailment) {
+        if (ailments.Count < statusConditionIcons.Count) {
+            // Remove remaining icons
+            for (int i = statusConditionIcons.Count - 1; i >= ailments.Count; i--) {
                 Destroy(statusConditionIcons[i].gameObject);
-                this.statusConditionIcons.RemoveAt(i);
-                break;
+                statusConditionIcons.RemoveAt(i);
+            }
+        } else if (ailments.Count > statusConditionIcons.Count) {
+            // Create new icons as needed
+            for (int i = iconsToReplace; i < ailments.Count; i++) {
+                StatusAilmentIcon statusIcon = Instantiate<StatusAilmentIcon>(statusIconPrefab, statusConditionParent);
+                statusIcon.SetStatusAilment(ailments[i]);
+                statusConditionIcons.Add(statusIcon);
             }
         }
     }

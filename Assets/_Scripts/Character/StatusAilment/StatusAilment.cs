@@ -9,10 +9,10 @@ public enum AilmentType{
 };
 public abstract class StatusAilment : ScriptableObject {
 	public new string name;
+	public Sprite icon;
 	[Tooltip("Set to true if duration defaults to endless (this flag takes precedence over the defaultDuration).")]
 	public bool infiniteDuration = false;
 	[Tooltip("Duration used if the action inflicting this status ailment doesn't specify duration. Can leave this at 0.")]
-
 	public int duration;
 	public int level;
 	[Tooltip("Phase to trigger Status Ailment")]

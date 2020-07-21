@@ -9,5 +9,5 @@ public class AilmentInfliction {
     public int duration;
     [Tooltip("Set to true to instead have endless duration.")]
     public bool infiniteDuration;
-    [Range(0, 1)] public float chance;
+    [Range(0, 1)] public float chance = 1;
 }

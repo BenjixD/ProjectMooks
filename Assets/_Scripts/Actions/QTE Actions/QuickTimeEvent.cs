@@ -9,9 +9,9 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     [SerializeField, TextArea, Tooltip("Instructional text for this QTE that is displayed to the players.")]
     private string _guidance = null;
     [Tooltip("Duration during which players can see the instructional text and prepare to give input.")]
-    private float _warmupDuration = 3;
+    private float _warmupDuration = 5;
     [Tooltip("Duration to wait after input is closed before executing action, so that players can see the results of the QTE.")]
-    private float _windDownDuration = 1;
+    private float _windDownDuration = 2;
 
     [Header("References (QuickTimeEvent)")]
     [SerializeField, Tooltip("Reference to the QteCommonCanvas prefab.")]
@@ -19,6 +19,9 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     private QteCommonUI _qteUI;
 
     protected bool _acceptingInput;
+
+    protected FightingEntity _user;
+    protected List<FightingEntity> _targets;
     
     private void Start() {
         StartCoroutine(StartQTE());
@@ -28,6 +31,11 @@ public abstract class QuickTimeEvent : MonoBehaviour {
         if (_acceptingInput) {
             ProcessMessage(message);
         }
+    }
+
+    protected void Initialize(FightingEntity user, List<FightingEntity> targets) {
+        _user = user;
+        _targets = targets;
     }
 
     protected abstract void ProcessMessage(string message);
@@ -66,14 +74,18 @@ public abstract class QuickTimeEvent : MonoBehaviour {
         StartCoroutine(EndQTE());
     }
 
+    protected virtual void ExecuteEffect() {
+
+    }
+
     private IEnumerator EndQTE() {
         _acceptingInput = false;
         _qteUI.DeactivateTimer();
         yield return new WaitForSeconds(_windDownDuration);
         GameManager.Instance.time.UnPause();
+        ExecuteEffect();
         DestroyUI();
         Destroy(gameObject);
-        // TODO: execute move
     }
 
     protected virtual void DestroyUI() {
