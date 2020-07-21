@@ -61,21 +61,14 @@ public class AilmentController {
         Object.Destroy(status);
     }
 
-    public void RemoveAllStatusAilments() {
-        foreach (KeyValuePair<string, StatusAilment> entry in this._ailments) {
-            StatusAilment ailment = entry.Value;
-            ailment.Recover(_entity);
-            Object.Destroy(ailment);
-        }
-
-        _ailments.Clear();
-    }
-
     public void RemoveOnBattleEndAilments() {
         List<StatusAilment> ailments = new List<StatusAilment>(this._ailments.Values);
         foreach (StatusAilment ailment in ailments) {
             if (ailment.ailmentType == AilmentType.DESTROY_ON_BATTLE_END) {
+                Debug.Log("Remove on battle end: " + ailment.name);
+                this._ailments.Remove(ailment.name);
                 ailment.Recover(_entity);
+                
                 Object.Destroy(ailment);
             }
         }
@@ -113,7 +106,7 @@ public class AilmentController {
     }
 
     public void TickAilmentEffects(TurnPhase bp) {
-        foreach(KeyValuePair<string, StatusAilment> entry in _ailments) {
+        foreach(KeyValuePair<string, StatusAilment> entry in _ailments.ToList()) {
             if(entry.Value.phase == bp) {
                 entry.Value.TickEffect(_entity);    
             }

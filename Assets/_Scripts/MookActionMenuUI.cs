@@ -42,7 +42,7 @@ public class MookActionMenuUI : MonoBehaviour
     public void SetAction(QueuedAction action) {
         this.UnsetActions();
 
-        if (action._action == null) {
+        if (!action.GetIsSet()) {
             return;
         }
 
@@ -51,7 +51,11 @@ public class MookActionMenuUI : MonoBehaviour
         for (int i = 0; i < actions.Length; i++) {
             if (actions[i] != null) {
                 if (actions[i].action == actionToDo) {
-                    actions[i].SetSelected(true);
+                    if (action.isAutoQueued) {
+                        actions[i].SetAutoQueued();
+                    } else {
+                        actions[i].SetSelected(true);
+                    }
                     emptyActions[i].SetActive(false);
                 } else {
                     // Not necessary for auto queue (experimental feature)

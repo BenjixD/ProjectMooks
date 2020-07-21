@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(BattleUI))]
 [RequireComponent(typeof(BattleField))]
 [RequireComponent(typeof(TurnManager))]
 [RequireComponent(typeof(CommandSelector))]
@@ -11,7 +10,7 @@ using UnityEngine.Events;
 public class BattleComponentLoader : MonoBehaviour {
 	public TurnManager turnManager {get;set;}
 	public BattleField field {get;set;}
-	public BattleUI ui {get;set;}
+	public BattleUI ui;
 	public CommandSelector commandSelector {get;set;}
 	public StageController stageController {get;set;}
 
@@ -26,12 +25,12 @@ public class BattleComponentLoader : MonoBehaviour {
 	protected virtual IEnumerator InitializeComponentsCR() {
 		turnManager = GetComponent<TurnManager>();
 		field = GetComponent<BattleField>();
-		ui = GetComponent<BattleUI>();
 		stageController = GetComponent<StageController>();
 		commandSelector = GetComponent<CommandSelector>();
 
 		field.Initialize();
 		ui.Initialize();
+
 		turnManager.Initialize(field, ui, commandSelector, stageController);
 		yield return null;
 	}

@@ -11,7 +11,7 @@ public class OutOfJuiceAilment : StatusAilment {
 
 	public override void StackWith(Fighter p, StatusAilment other) {
 		// Doesn't stack
-        Debug.LogError("Should not attempt to apply two Hero's Miracles");
+        Debug.LogError("Should not attempt to apply two of these");
 	}
 
 	public override void ApplyTo(Fighter p) {
@@ -21,12 +21,9 @@ public class OutOfJuiceAilment : StatusAilment {
 	public override void Recover(Fighter p) {
 		//TODO: Possible Animation Modifications
         if (p.fighter != null && GameManager.Instance != null) {
-            GameManager.Instance.gameState.playerParty.EvictPlayer(p.index, true);
-            if (p.fighter != null) {
-                Destroy(p.fighter.gameObject);
-            }
 
-            Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);    
+            p.stats.hp.SetValue(0);
+            Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, new DeathResult(p.fighter, new DamageReceiver(p.fighter, null, null), null));
         }
 	}
 

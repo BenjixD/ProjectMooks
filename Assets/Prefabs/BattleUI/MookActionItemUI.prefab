@@ -713,6 +713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unselectedColor: {r: 0, g: 0, b: 0, a: 0.5019608}
   selectedColor: {r: 0.52156866, g: 0.91372555, b: 0.44705886, a: 0.7490196}
+  autoQueuedColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0.7490196}
   moveNumberText: {fileID: 4648369204131843454}
   actionText: {fileID: 4648369205035689524}
   resourceText: {fileID: 5530674893048177228}

@@ -57,8 +57,9 @@ public abstract class Party : MonoBehaviour {
     public int GetRandomActiveIndex(bool getTargetableOnly = true) {
         List<Fighter> fighters = GetActiveFighters<Fighter>();
         if (getTargetableOnly) {
-            fighters.Filter( fighter => !fighter.fighter.HasModifier(ModifierAilment.MODIFIER_UNTARGETTABLE) );
+            fighters = fighters.Filter( fighter => !fighter.fighter.HasModifier(ModifierAilment.MODIFIER_UNTARGETTABLE) );
         }
+
         return fighters[Random.Range(0, fighters.Count)].fighter.targetId;
     }
 
