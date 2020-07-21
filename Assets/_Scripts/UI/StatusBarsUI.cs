@@ -75,7 +75,7 @@ public class StatusBarsUI : MonoBehaviour
                 
                 mookStatusBar.SetEnergy(player.ailmentController.GetAilment("Out of Juice").duration, maxMookEnergy);
                 mookStatusBar.SetNameColor(player.GetOrderColor());
-                if (player.GetQueuedAction() == null || player.GetQueuedAction()._action == null) {
+                if (!player.HasSetCommand()) {
                     mookStatusBar.actionMenuUI.UnsetActions();
                 }
             }

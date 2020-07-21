@@ -8,6 +8,8 @@ public class MookActionItemUI : MonoBehaviour
 {
     public Color unselectedColor;
     public Color selectedColor;
+    public Color autoQueuedColor;
+
     public TextMeshProUGUI moveNumberText;
     public TextMeshProUGUI actionText;
     public TextMeshProUGUI resourceText;
@@ -31,6 +33,10 @@ public class MookActionItemUI : MonoBehaviour
 
     public void SetSelected(bool isSelected) {
         this.background.color = isSelected ? selectedColor : unselectedColor;
+    }
+
+    public void SetAutoQueued() {
+        this.background.color = this.autoQueuedColor;
     }
 
     private void SetText(string text) {

@@ -17,7 +17,7 @@ public class PlayerCreationData {
         // TODO: This is a good automated test
         for (int i = 0; i < (int)Job.LENGTH; i++) {
             PlayerStats testStats = (PlayerStats)GameManager.Instance.models.GetAllJobActionLists().Find( actionList => actionList.job == (Job)i ).prefab.stats.Clone();
-            if (testStats == null || testStats.maxHp.GetValue() <= 10) {
+            if (testStats == null || testStats.maxHp.GetValue() <= 2) {
                 Debug.LogError("ERROR: Job is not set correctly!  " + (Job)i);
             }
         }

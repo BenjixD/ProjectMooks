@@ -50,7 +50,7 @@ public class FighterSlotUI : MonoBehaviour {
     }
 
     private void onSetQueuedAction(QueuedAction action) {
-        if (action == null) {
+        if (!action.GetIsSet()) {
             return;
         }
 

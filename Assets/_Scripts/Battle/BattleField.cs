@@ -14,6 +14,7 @@ public class BattleField : MonoBehaviour
 
     public int currentWaveIndex {get; set;}
 
+
     public void Initialize() {
 
         this.InitializePlayers();
