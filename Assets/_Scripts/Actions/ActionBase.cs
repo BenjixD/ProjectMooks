@@ -268,8 +268,8 @@ public class ActionBase : ScriptableObject {
         if (CheckCost(user)) {
             PayCost(user);
             if (animation != null) {
-                animation.Animate(user.GetAnimController());
-                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeBeforeEffect);
+                GameManager.Instance.time.GetController().StartCoroutine(animation.Animate(user, targets));
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimWindup());
             } else {
                 Debug.LogWarning("No animation set for " + user.name + "'s " + name);
             }
@@ -278,7 +278,7 @@ public class ActionBase : ScriptableObject {
         }
         _battleFight.EndFight(result, this);
         if (animation != null) {
-            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeAfterEffect);
+            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimCooldown());
         }
     }
 

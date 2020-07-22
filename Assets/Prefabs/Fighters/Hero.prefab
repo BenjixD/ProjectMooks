@@ -355,3 +355,4 @@ MonoBehaviour:
   chatbox: {fileID: 0}
   statusBar: {fileID: 0}
   arrows: {fileID: 7600650899138052181}
+  fighterRadius: 1.5

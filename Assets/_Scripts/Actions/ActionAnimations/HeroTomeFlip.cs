@@ -4,8 +4,9 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "HeroTomeFlip", menuName = "ActionsAnimations/HeroTomeFlip")]
 public class HeroTomeFlip : ActionAnimation {
-    public override void Animate(AnimationController controller) {
+    protected override void AnimateUser(FightingEntity user) {
         // Perform casting spell animation for hero
+        AnimationController controller = user.GetAnimController();
         int bookTrack = controller.TakeFreeTrack();
         controller.AddToTrack("idle pose", "magic attack start", false, 0);
         controller.AddToTrack(bookTrack, "book open", false, 0.5f);

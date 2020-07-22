@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: GolemSlam
   m_EditorClassIdentifier: 
   userAnimName: super slam
-  timeBeforeEffect: 3
-  timeAfterEffect: 1.6
+  targetHitEffect: {fileID: 0}
+  slideIn: 1
+  slideDuration: 0.8
+  meleeReach: 10
+  _timeBeforeEffect: 3
+  _timeAfterEffect: 1.6

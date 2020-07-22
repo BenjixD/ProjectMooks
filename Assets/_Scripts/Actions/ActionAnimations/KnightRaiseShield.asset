@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: KnightRaiseShield
   m_EditorClassIdentifier: Assembly-CSharp::KnightRaiseShield
   userAnimName: KnightRaiseShield
-  timeBeforeEffect: 0
-  timeAfterEffect: 0
+  targetHitEffect: {fileID: 0}
+  slideIn: 0
+  slideDuration: 0.5
+  meleeReach: 5
+  _timeBeforeEffect: 1
+  _timeAfterEffect: 2

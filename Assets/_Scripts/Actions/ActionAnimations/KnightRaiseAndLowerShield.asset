@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: KnightRaiseAndLowerShield
   m_EditorClassIdentifier: 
   userAnimName: 
-  timeBeforeEffect: 1
-  timeAfterEffect: 3
+  targetHitEffect: {fileID: 0}
+  slideIn: 0
+  slideDuration: 0.5
+  meleeReach: 5
+  _timeBeforeEffect: 1
+  _timeAfterEffect: 3

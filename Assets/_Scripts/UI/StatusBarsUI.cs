@@ -100,7 +100,7 @@ public class StatusBarsUI : MonoBehaviour
             enemyStatusBars[i].SetName(enemies[i].targetName);
             enemyStatusBars[i].SetHP(enemies[i].stats.hp.GetValue(), enemies[i].stats.maxHp.GetValue());
             enemyStatusBars[i].SetStatusAilmentIcons(enemy.ailmentController.GetAllAilments().Map(entry => entry.Value));
-            Vector3 barPosition = enemy.GetComponent<FighterUIPositions>().statusBar.position;
+            Vector3 barPosition = enemy.GetComponent<FighterPositions>().statusBar.position;
             WorldspaceToScreenUI barPositioner = enemyStatusBars[i].GetComponent<WorldspaceToScreenUI>();
             barPositioner.SetWorldPoint(barPosition);
 

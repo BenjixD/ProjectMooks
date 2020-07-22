@@ -34,7 +34,7 @@ public class FighterSlot : MonoBehaviour
 
         // Set arrows position based on fighter's specification
         WorldspaceToScreenUI parentPositioner = targetParent.GetComponent<WorldspaceToScreenUI>();
-        parentPositioner.SetWorldPoint(fighter.GetComponent<FighterUIPositions>().arrows.position);
+        parentPositioner.SetWorldPoint(fighter.GetComponent<FighterPositions>().arrows.position);
     }
 
 
