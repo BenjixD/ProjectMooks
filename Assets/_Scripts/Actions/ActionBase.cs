@@ -286,22 +286,20 @@ public class ActionBase : ScriptableObject {
         return this.GetAllPossibleTargets(user).Filter( (FightingEntity entity) => entity != null );
     }
 
-    public List<FightingEntity> GetAllPossibleTargets(FightingEntity user) {
+    public List<int> GetAllPossibleTargetIds() {
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
-            return GameManager.Instance.battleComponents.field.GetAllFightingEntities();
-        }
-        List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetEnemyObjects());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetPlayerObjects());
-
-        if (user.isEnemy()) {
-            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
-        } else {
-            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? players : enemies;
+            Debug.LogWarning("WARNING: Shouldn't use this function for both teams!");
         }
 
-        return potentialTargets;
+        List<int> targetIds = new List<int>();
+
+        for (int i = 0; i < PlayerParty.maxPlayers; i++ ) {
+            targetIds.Add(i);
+        }
+
+        return targetIds;
     }
+
 
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
@@ -399,4 +397,23 @@ public class ActionBase : ScriptableObject {
 
         return "";
     }
+
+    private List<FightingEntity> GetAllPossibleTargets(FightingEntity user) {
+        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
+            return GameManager.Instance.battleComponents.field.GetAllFightingEntities();
+        }
+        List<FightingEntity> potentialTargets;
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetEnemyObjects());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetPlayerObjects());
+
+        if (user.isEnemy()) {
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
+        } else {
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? players : enemies;
+        }
+
+        return potentialTargets;
+    }
+
+
 }
