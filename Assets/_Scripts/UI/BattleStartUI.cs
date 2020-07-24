@@ -19,6 +19,8 @@ public class BattleStartUI : MonoBehaviour {
     public float textTransitionTime = 0.5f;
     public float textWaitTime = 1f;
 
+    public float totalAnimationTime = 1f;
+
 
     public CanvasGroup textCanvasGroup;
     private float radius;
@@ -48,8 +50,13 @@ public class BattleStartUI : MonoBehaviour {
         }
 
         yield return GameManager.Instance.time.GetController().StartCoroutine(AnimateText());
-        gameObject.SetActive (false);
+        GameManager.Instance.time.GetController().StartCoroutine(DisableGameObject());
 	}
+
+    private IEnumerator DisableGameObject() {
+        yield return GameManager.Instance.time.GetController().WaitForSecondsCor(this.totalAnimationTime);
+        gameObject.SetActive (false);
+    }
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.P)) {

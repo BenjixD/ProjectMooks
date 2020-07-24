@@ -3270,7 +3270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &531518966
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7977,8 +7977,8 @@ MonoBehaviour:
   speed: 15000
   maxRadius: 30000
   particles: {fileID: 1752116406}
-  textTransitionTime: 0.5
-  textWaitTime: 0.75
+  textTransitionTime: 0.25
+  textWaitTime: 0
   textCanvasGroup: {fileID: 531518967}
 --- !u!120 &1079807778
 LineRenderer:
@@ -10681,8 +10681,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 10
-      minScalar: 7
+      scalar: 13
+      minScalar: 10
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -18527,6 +18527,7 @@ MonoBehaviour:
   transitionColorFrom: {r: 0, g: 0, b: 0, a: 0}
   transitionColorTo: {r: 0, g: 0, b: 0, a: 0.5019608}
   image: {fileID: 2079914405}
+  nonFocusedAlpha: 0.25
 --- !u!114 &2079914405
 MonoBehaviour:
   m_ObjectHideFlags: 0
