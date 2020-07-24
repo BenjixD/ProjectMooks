@@ -58,20 +58,12 @@ public class BattleStartUI : MonoBehaviour {
         gameObject.SetActive (false);
     }
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            this.PlayAnimation();
-        }
-    }
-
-	void Reset(){
+	void Reset() {
 		radius = 100;
-        this.isPlayingRing =false;
+        this.isPlayingRing = false;
 	}
 
-
-    void CreatePoints ()
-    {
+    void CreatePoints() {
         float x;
         float y;
 		float z = 0;

@@ -37,7 +37,7 @@ public class HeroMenuAction {
 
 [System.Serializable]
 public class MoveSelectionPhase : Phase {
-    public float maxTimeBeforeAction = 25f;
+    public float maxTimeBeforeAction = 30f;
 
     protected BattleUI _ui {get; set; }
     protected BattleField _field {get; set;}
@@ -59,6 +59,9 @@ public class MoveSelectionPhase : Phase {
         this._heroMenuActions.Clear();
         // Reset Player Commands
         PlayerObject heroPlayer = this._field.GetHeroPlayer();
+
+        int mookCount = 0;
+        int autoQueuedMookCount = 0;
         foreach (FightingEntity player in this._field.GetAllFightingEntities()) {
 
             if (player.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION)) {
@@ -67,17 +70,24 @@ public class MoveSelectionPhase : Phase {
                 continue;
             }
 
+
             if (player == heroPlayer || player.isEnemy()) {
                 player.ResetCommand();
             } else {
+                mookCount++;
                 // Experimental: Mooks keep their actions
                 QueuedAction lastAction = player.GetQueuedAction();
                 if (lastAction != null && lastAction._action != null && lastAction.CanQueueAction(lastAction._action)) {
                     player.SetQueuedAction(lastAction._action, lastAction._targetIds, true);
+                    autoQueuedMookCount++;
                 } else {
                     player.ResetCommand();
                 }
             }
+        }
+
+        if (autoQueuedMookCount == mookCount) {
+            this._playerActionCounter = maxTimeBeforeAction / 2f; // Advance faster if mooks are autoqueued!
         }
 
         Messenger.Broadcast(Messages.OnUpdateStatusBarsUI);
