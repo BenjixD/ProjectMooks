@@ -48,7 +48,8 @@ public class ActionAnimation : ScriptableObject {
             if (target != null) {
                 FighterPositions positions = target.GetComponent<FighterPositions>();
                 if (targetHitEffect != null && positions != null) {
-                    Instantiate(targetHitEffect, positions.damagePopup);
+                    GameObject hitEffect = Instantiate(targetHitEffect, positions.damagePopup);
+                    hitEffect.transform.localScale = target.transform.localScale;
                 }
                 if (targetFlash) {
                     GameManager.Instance.time.GetController().StartCoroutine(target.GetAnimController().Flash());

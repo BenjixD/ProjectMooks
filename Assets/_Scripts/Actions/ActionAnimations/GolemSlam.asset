@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: GolemSlam
   m_EditorClassIdentifier: 
   userAnimName: super slam
-  targetHitEffect: {fileID: 0}
+  targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
+    type: 3}
+  targetFlash: 1
   slideType: 1
   slideDuration: 0.8
-  meleeReach: 8
+  meleeReach: 12
   _timeBeforeEffect: 3
   _timeAfterEffect: 1.6
