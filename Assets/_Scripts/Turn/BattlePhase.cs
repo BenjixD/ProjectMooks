@@ -74,7 +74,8 @@ public class BattlePhase : Phase {
 
     protected override IEnumerator Run() {
         this._ui.battleOrderUI.SetTurnOrder(fighters);
-        yield return GameManager.Instance.time.GetController().WaitForSeconds(0.5f);
+        yield return GameManager.Instance.time.GetController().StartCoroutine(this._ui.battleStartUI.PlayAnimation());
+
         this._ui.targetIconsUI.ClearTargetArrows();
 
         for (int i = 0; i < fighters.Count; i++) {

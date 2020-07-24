@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class StartRoundUI : MonoBehaviour {
+public class BattleStartUI : MonoBehaviour {
     public int segments = 50;
     public float speed = 1000f;
 
