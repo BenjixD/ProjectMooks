@@ -15,7 +15,6 @@ public class WorldspaceToScreenUI : MonoBehaviour {
     private void Awake() {
         _cam = Camera.main;
         if (_worldPointTransform != null) {
-            _worldPoint = _worldPointTransform.position;
             UpdatePosition();
         }
     }
@@ -25,6 +24,15 @@ public class WorldspaceToScreenUI : MonoBehaviour {
             UpdatePosition();
         }
     }
+    
+    public void SetWorldPoint(Transform transform) {
+        _worldPointTransform = transform;
+        if (_cam != null) {
+            UpdatePosition();
+        }
+        SetUpdate(true);
+    }
+
     public void SetWorldPoint(Vector3 point) {
         _worldPoint = point;
         if (_cam != null) {
@@ -39,6 +47,10 @@ public class WorldspaceToScreenUI : MonoBehaviour {
 
 
     private void UpdatePosition() {
-        _uiTransform.position = _cam.WorldToScreenPoint(_worldPoint);
+        if (_worldPointTransform != null) {
+            _uiTransform.position = _cam.WorldToScreenPoint(_worldPointTransform.position);
+        } else {
+            _uiTransform.position = _cam.WorldToScreenPoint(_worldPoint);
+        }
     }
 }

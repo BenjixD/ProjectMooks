@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   userAnimName: melee attack
   targetHitEffect: {fileID: 0}
-  slideIn: 1
+  slideType: 1
   slideDuration: 0.5
-  meleeReach: 5
+  meleeReach: 8
   _timeBeforeEffect: 0.35
   _timeAfterEffect: 0.5

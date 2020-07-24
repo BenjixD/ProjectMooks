@@ -14,10 +14,13 @@ public class ActionAnimation : ScriptableObject {
     public string userAnimName;
     [Tooltip("The prefab that will be instantiated atop the target(s).")]
     public GameObject targetHitEffect;
+    [Tooltip("Set to true to make the target(s) flash when the effect happens.")]
+    public bool targetFlash = true;
     [Tooltip("The type of slide that should precede this animation: none, a small slide forward, or a long slide into melee range of the target(s).")]
     public SlideType slideType;
     [Tooltip("Time it takes for the user to slide to the target(s).")]
     public float slideDuration = 0.5f;
+    private float stepForwardDistance = 5f;     // The distance of the STEP_FORWARD slide type
     [Tooltip("The distance to stop away from the target(s) after a slide and before attacking.")]
     public float meleeReach = 10f;
     [SerializeField, Tooltip("Time into the user animation before the effect takes place.")]
@@ -33,50 +36,37 @@ public class ActionAnimation : ScriptableObject {
         // Perform slide
         if (slideType != SlideType.NONE) {
             SetSlidePositions(user, targets, ref userDestination);
-            float elapsedTime = 0;
-            float t = 0;
-            while (user.transform.position != userDestination) {
-                elapsedTime += GameManager.Instance.time.deltaTime;
-                t = Mathf.SmoothStep(0, 1, elapsedTime / slideDuration);
-                user.transform.position = Vector3.Lerp(userStartingPos, userDestination, t);
-                yield return null;
-            }
+            yield return GameManager.Instance.time.GetController().StartCoroutine(Slide(user.transform, userStartingPos, userDestination));
         }
 
         // Perform action animation
         AnimateUser(user);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeBeforeEffect);
 
-        // Perform hit effect animations on target(s)
-        if (targetHitEffect != null) {
-            foreach (FightingEntity target in targets) {
+        // Perform hit visuals on target(s)
+        foreach (FightingEntity target in targets) {
+            if (target != null) {
                 FighterPositions positions = target.GetComponent<FighterPositions>();
-                if (positions != null) {
+                if (targetHitEffect != null && positions != null) {
                     Instantiate(targetHitEffect, positions.damagePopup);
                 }
-                // TODOL: make targets flash white
+                if (targetFlash) {
+                    GameManager.Instance.time.GetController().StartCoroutine(target.GetAnimController().Flash());
+                }
             }
         }
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeAfterEffect);
 
         // Slide back to starting position if necessary
         if (slideType != SlideType.NONE) {
-            float elapsedTime = 0;
-            float t = 0;
-            while (user.transform.position != userStartingPos) {
-                elapsedTime += GameManager.Instance.time.deltaTime;
-                t = Mathf.SmoothStep(0, 1, elapsedTime / slideDuration);
-                user.transform.position = Vector3.Lerp(userDestination, userStartingPos, t);
-                yield return null;
-            }
+            yield return GameManager.Instance.time.GetController().StartCoroutine(Slide(user.transform, userDestination, userStartingPos));
         }
     }
 
     private void SetSlidePositions(FightingEntity user, List<FightingEntity> targets, ref Vector3 userDestination) {
         if (slideType == SlideType.STEP_FORWARD) {
-            // TODOL
             userDestination = user.transform.position;
-            userDestination += user.IsHeroTeam() ? new Vector3(-5f, 0, 0) : -new Vector3(-5f, 0, 0);
+            userDestination.x += user.IsHeroTeam() ? -stepForwardDistance : stepForwardDistance;
         } else if (slideType == SlideType.MELEE) {
             float averageTargetRadius = 0;
             foreach (FightingEntity target in targets) {
@@ -90,6 +80,17 @@ public class ActionAnimation : ScriptableObject {
             userDestination.x += user.IsHeroTeam() ? distance : -distance;
         } else {
             Debug.Log("No slide position specified for SlideType " + slideType);
+        }
+    }
+
+    private IEnumerator Slide(Transform transform, Vector3 start, Vector3 end) {
+        float elapsedTime = 0;
+        float t = 0;
+        while (transform.position != end) {
+            elapsedTime += GameManager.Instance.time.deltaTime;
+            t = Mathf.SmoothStep(0, 1, elapsedTime / slideDuration);
+            transform.position = Vector3.Lerp(start, end, t);
+            yield return null;
         }
     }
 

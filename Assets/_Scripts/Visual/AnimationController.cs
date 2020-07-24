@@ -10,6 +10,8 @@ public class AnimationController : MonoBehaviour {
     private Dictionary<string, int> _defaultAnimTracks = new Dictionary<string, int>();
     private HashSet<string> _animations = new HashSet<string>();
     private int _freeTrackIndex;    // Index of the earliest free track
+    private MeshRenderer _meshRenderer;
+	private MaterialPropertyBlock _block;
 
     private void Start() {
         _skeletonAnimation = GetComponent<SkeletonAnimation>();
@@ -26,6 +28,10 @@ public class AnimationController : MonoBehaviour {
             _defaultAnimTracks.Add(_defaultAnims[i], i);
             _freeTrackIndex++;
         }
+
+        _meshRenderer = GetComponent<MeshRenderer>();
+        _block = new MaterialPropertyBlock();
+        _meshRenderer.SetPropertyBlock(_block);
     }
 
     private bool AnimationExists(string animationName) {
@@ -84,6 +90,17 @@ public class AnimationController : MonoBehaviour {
         }
         if (trackIndex < _freeTrackIndex) {
             _freeTrackIndex = trackIndex;
+        }
+    }
+
+    public IEnumerator Flash() {
+        int fillPhase = Shader.PropertyToID("_FillPhase");
+        _block.SetFloat(fillPhase, 1f);
+        _meshRenderer.SetPropertyBlock(_block);
+        yield return GameManager.Instance.time.GetController().WaitForSeconds(0.1f);
+        if (this != null) {
+            _block.SetFloat(fillPhase, 0f);
+            _meshRenderer.SetPropertyBlock(_block);
         }
     }
 }
