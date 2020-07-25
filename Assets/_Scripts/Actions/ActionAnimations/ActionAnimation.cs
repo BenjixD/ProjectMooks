@@ -99,7 +99,6 @@ public class ActionAnimation : ScriptableObject {
     }
 
     protected virtual void AnimateTargetEffects(FightingEntity user, List<FightingEntity> targets) {
-        Debug.Log("TARGET EFFECTS");
         foreach (FightingEntity target in targets) {
             if (target != null) {
                 InstantiateHitEffect(target);

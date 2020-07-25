@@ -11,7 +11,7 @@ public class AnimationController : MonoBehaviour {
     private HashSet<string> _animations = new HashSet<string>();
     private int _freeTrackIndex;    // Index of the earliest free track
     private MeshRenderer _meshRenderer;
-	private MaterialPropertyBlock _block;
+    private MaterialPropertyBlock _block;
 
     private void Start() {
         _skeletonAnimation = GetComponent<SkeletonAnimation>();
