@@ -9,15 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 988f6c24acdfaa2459c8c9b8ee0a2d9f, type: 3}
-  m_Name: KnightRaiseAndLowerShield
+  m_Script: {fileID: 11500000, guid: 3077ad366cc905c449f186e7bac9834e, type: 3}
+  m_Name: RallyingCryAnim
   m_EditorClassIdentifier: 
-  userAnimName: 
+  userAnimName: melee attack
   targetHitEffect: {fileID: 7885482589527698955, guid: 1dd3f2ea3a5fb4e408f7e75448f1d55d,
     type: 3}
-  targetFlash: 1
+  targetFlash: 0
+  delayHitEffects: 1
   slideType: 0
   slideDuration: 0.5
-  meleeReach: 5
-  _timeBeforeEffect: 1
-  _timeAfterEffect: 3
+  meleeReach: 8
+  _timeBeforeEffect: 0.35
+  _timeAfterEffect: 0.5

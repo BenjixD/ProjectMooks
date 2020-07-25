@@ -10,4 +10,12 @@ public class KnightRaiseAndLowerShield : ActionAnimation {
         controller.AddToTrack("idle", "defend end", false, 2f);
         controller.AddToTrack("idle", "idle", true, 0);
     }
+
+    protected override void AnimateTargetEffects(FightingEntity user, List<FightingEntity> targets) {
+        foreach (FightingEntity target in targets) {
+            if (target != null && target != user) {
+                InstantiateHitEffect(target);
+            }
+        }
+    }
 }

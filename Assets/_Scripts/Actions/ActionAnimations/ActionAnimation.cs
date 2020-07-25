@@ -16,6 +16,8 @@ public class ActionAnimation : ScriptableObject {
     public GameObject targetHitEffect;
     [Tooltip("Set to true to make the target(s) flash when the effect happens.")]
     public bool targetFlash = true;
+    [Tooltip("Set to true to add a slight delay between the action effect and the effect animation. Useful for QTE animations.")]
+    public bool delayHitEffects;
     [Tooltip("The type of slide that should precede this animation: none, a small slide forward, or a long slide into melee range of the target(s).")]
     public SlideType slideType;
     [Tooltip("Time it takes for the user to slide to the target(s).")]
@@ -24,11 +26,11 @@ public class ActionAnimation : ScriptableObject {
     [Tooltip("The distance to stop away from the target(s) after a slide and before attacking.")]
     public float meleeReach = 10f;
     [SerializeField, Tooltip("Time into the user animation before the effect takes place.")]
-    private float _timeBeforeEffect;
+    protected float _timeBeforeEffect;
     [SerializeField, Tooltip("Time to wait after the action effect takes place.")]
-    private float _timeAfterEffect;
+    protected float _timeAfterEffect;
 
-    public IEnumerator Animate(FightingEntity user, List<FightingEntity> targets) {
+    public virtual IEnumerator Animate(FightingEntity user, List<FightingEntity> targets) {
         // Determine the start and end positions for the melee slide
         Vector3 userStartingPos = user.transform.position;
         Vector3 userDestination = Vector3.zero;
@@ -42,29 +44,21 @@ public class ActionAnimation : ScriptableObject {
         // Perform action animation
         AnimateUser(user);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeBeforeEffect);
+        if (delayHitEffects) {
+            yield return GameManager.Instance.time.GetController().WaitForSeconds(0.05f);
+        }
 
         // Perform hit visuals on target(s)
-        foreach (FightingEntity target in targets) {
-            if (target != null) {
-                FighterPositions positions = target.GetComponent<FighterPositions>();
-                if (targetHitEffect != null && positions != null) {
-                    GameObject hitEffect = Instantiate(targetHitEffect, positions.damagePopup);
-                    hitEffect.transform.localScale = target.transform.localScale;
-                }
-                if (targetFlash) {
-                    GameManager.Instance.time.GetController().StartCoroutine(target.GetAnimController().Flash());
-                }
-            }
-        }
+        AnimateTargetEffects(user, targets);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeAfterEffect);
 
         // Slide back to starting position if necessary
-        if (slideType != SlideType.NONE) {
+        if (slideType != SlideType.NONE && user != null) {
             yield return GameManager.Instance.time.GetController().StartCoroutine(Slide(user.transform, userDestination, userStartingPos));
         }
     }
 
-    private void SetSlidePositions(FightingEntity user, List<FightingEntity> targets, ref Vector3 userDestination) {
+    protected virtual void SetSlidePositions(FightingEntity user, List<FightingEntity> targets, ref Vector3 userDestination) {
         if (slideType == SlideType.STEP_FORWARD) {
             userDestination = user.transform.position;
             userDestination.x += user.IsHeroTeam() ? -stepForwardDistance : stepForwardDistance;
@@ -84,7 +78,7 @@ public class ActionAnimation : ScriptableObject {
         }
     }
 
-    private IEnumerator Slide(Transform transform, Vector3 start, Vector3 end) {
+    protected IEnumerator Slide(Transform transform, Vector3 start, Vector3 end) {
         float elapsedTime = 0;
         float t = 0;
         while (transform.position != end) {
@@ -101,6 +95,30 @@ public class ActionAnimation : ScriptableObject {
         if (track != -1) {
             controller.AddToTrack(track, userAnimName, false, 0);
             controller.EndTrackAnims(track);
+        }
+    }
+
+    protected virtual void AnimateTargetEffects(FightingEntity user, List<FightingEntity> targets) {
+        Debug.Log("TARGET EFFECTS");
+        foreach (FightingEntity target in targets) {
+            if (target != null) {
+                InstantiateHitEffect(target);
+                TargetFlash(target);
+            }
+        }
+    }
+
+    protected virtual void InstantiateHitEffect(FightingEntity target) {
+        FighterPositions positions = target.GetComponent<FighterPositions>();
+        if (targetHitEffect != null && positions != null) {
+            GameObject hitEffect = Instantiate(targetHitEffect, positions.damagePopup);
+            hitEffect.transform.localScale = target.transform.localScale;
+        }
+    }
+
+    protected void TargetFlash(FightingEntity target) {
+        if (targetFlash) {
+            GameManager.Instance.time.GetController().StartCoroutine(target.GetAnimController().Flash());
         }
     }
 

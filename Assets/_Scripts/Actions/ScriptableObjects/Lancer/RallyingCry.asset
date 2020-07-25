@@ -16,7 +16,7 @@ MonoBehaviour:
   actionType: 0
   description: Rile up all twitch chatters, increasing party's physical and special
     stats. Buff is stronger the more chat messages are sent.
-  animation: {fileID: 11400000, guid: 8b477148dad16594894ba7f787aea892, type: 2}
+  animation: {fileID: 11400000, guid: 1c4f061900265a549bdd84b7cde68340, type: 2}
   maxPP: 1
   currPP: 1
   actionCost:
