@@ -225,7 +225,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 0.5, y: 0.5}
-  m_Spacing: {x: 65, y: 0}
+  m_Spacing: {x: 40, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!114 &4644832367538466513
@@ -242,6 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiTransform: {fileID: 7653705990527184201}
   _worldPointTransform: {fileID: 0}
+  continuouslyUpdate: 0
 --- !u!1001 &6481350630521818743
 PrefabInstance:
   m_ObjectHideFlags: 0
