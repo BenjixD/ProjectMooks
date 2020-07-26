@@ -17,12 +17,11 @@ public class BattleStateListener : MonoBehaviour {
 
     private void OnEntityDeath(DeathResult result) {
         FightingEntity deadFighter = result.deadEntity.fighter;
-        // TODO: Play death animation
+        GameManager.Instance.time.GetController().StartCoroutine(deadFighter.Die());
 
         bool isEnemy = deadFighter.isEnemy();
         if (isEnemy) {
             GameManager.Instance.gameState.enemyParty.SetFighter(deadFighter.targetId, null);
-            Destroy(deadFighter.gameObject);
 
             bool stillHasEnemies = false;
             EnemyObject[] enemies = GameManager.Instance.battleComponents.field.GetEnemyObjects();
@@ -42,7 +41,6 @@ public class BattleStateListener : MonoBehaviour {
                 OnHeroDeath(result);
             } else {
                 GameManager.Instance.gameState.playerParty.EvictPlayer(deadFighter.targetId, true);
-                Destroy(deadFighter.gameObject);
             }
         }
 
@@ -72,7 +70,7 @@ public class BattleStateListener : MonoBehaviour {
 
         PlayerObject heroPlayer = GameManager.Instance.battleComponents.field.GetHeroPlayer();
 
-        heroPlayer.DoDeathAnimation();
+        heroPlayer.ApplyHeroDeathModifiers();
 
         StatusAilment reviveStatusAilmentPrefab = GameManager.Instance.models.GetCommonStatusAilment("Hero's Miracle");
         heroPlayer.ailmentController.AddStatusAilment(Instantiate(reviveStatusAilmentPrefab));

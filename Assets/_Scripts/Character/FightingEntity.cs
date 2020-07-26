@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -58,6 +59,16 @@ public class FightingEntity : MonoBehaviour
         _ai = new FightingEntityAI(this);
         this.targetName = GameManager.Instance.battleComponents.field.GetTargetNameFromIndex(index);
 	}
+
+    public IEnumerator Die() {
+        yield return GameManager.Instance.time.GetController().StartCoroutine(_animController.Fade());
+        if (IsHero()) {
+            // Important for Hero death
+            this.gameObject.SetActive(false);
+        } else {
+            Destroy(gameObject);
+        }
+    }
 
     // Getters / Setters 
     public string GetJobName() {
@@ -124,6 +135,10 @@ public class FightingEntity : MonoBehaviour
     public bool isEnemy() {
         return this.GetType() == typeof(EnemyObject);
     }
+    
+    public bool IsHeroTeam() {
+        return !this.isEnemy();
+    }
 
     public bool IsHero() {
         return !this.isEnemy() && this.targetId == 0;
@@ -149,16 +164,10 @@ public class FightingEntity : MonoBehaviour
         }
     }
 
-    public void DoDeathAnimation() {
-
+    public void ApplyHeroDeathModifiers() {
         this.AddModifier(ModifierAilment.MODIFIER_DEATH);
         this.AddModifier(ModifierAilment.MODIFIER_UNTARGETTABLE);
         this.AddModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
-
-        // TODO: Death animation
-
-        // Important for Hero death
-        this.gameObject.SetActive(false);
     }
 
     // Modifer helpers

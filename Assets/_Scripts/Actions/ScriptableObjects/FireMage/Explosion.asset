@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Explosion
   actionType: 0
-  description: Cast an explosion that will destroy the world if there is enough +
-    messages, or do nothing if there are too many - messages.
+  description: Deals fire damage to all fighters. Power increases with each + sent
+    in chat and decreases with each -. Deals double damage to enemies.
   animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
   maxPP: 1
   currPP: 1

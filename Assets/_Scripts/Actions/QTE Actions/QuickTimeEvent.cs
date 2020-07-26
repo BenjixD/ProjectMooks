@@ -11,7 +11,7 @@ public abstract class QuickTimeEvent : MonoBehaviour {
     [Tooltip("Duration during which players can see the instructional text and prepare to give input.")]
     private float _warmupDuration = 5;
     [Tooltip("Duration to wait after input is closed before executing action, so that players can see the results of the QTE.")]
-    private float _windDownDuration = 2;
+    private float _windDownDuration = 1.5f;
 
     [Header("References (QuickTimeEvent)")]
     [SerializeField, Tooltip("Reference to the QteCommonCanvas prefab.")]
