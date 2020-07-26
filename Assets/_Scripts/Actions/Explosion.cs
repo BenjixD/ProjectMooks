@@ -25,6 +25,9 @@ public class Explosion : ActionBase {
         
         foreach (FightingEntity target in targets) {
             int damage = (int)(attackDamage * target.stats.GetDamageMultiplierResistence());
+            if (!target.IsHeroTeam()) {
+                damage *= 2;
+            }
             InstantiateDamagePopup(target, damage);
 
             before = (PlayerStats)target.stats.Clone();

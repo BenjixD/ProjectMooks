@@ -169,7 +169,7 @@ public class ActionBase : ScriptableObject {
         bool res = argQuantity == commandArgs;
         if(!res) {
             response.SetState(ActionChoiceResult.State.INVALID_SYNTAX);
-            response.AddMessage(string.Format(Messages.INCORRECT_ARGUMENTS, commandKeyword, this.GetExampleCommandString()));
+            response.AddMessage(string.Format(Messages.INCORRECT_ARGUMENTS, name, this.GetExampleCommandString()));
         }
         return res;
     }
@@ -186,7 +186,7 @@ public class ActionBase : ScriptableObject {
 
         if(!res) {
             response.SetState(ActionChoiceResult.State.INVALID_TARGET);
-            response.AddMessage(string.Format(Messages.WRONG_NUMBER_OF_TARGETS, commandKeyword, this.GetExampleCommandString()));
+            response.AddMessage(string.Format(Messages.WRONG_NUMBER_OF_TARGETS, name, this.GetExampleCommandString()));
         }
         return res;
     }
@@ -196,19 +196,19 @@ public class ActionBase : ScriptableObject {
 
         if (stats.hp.GetValue() <= actionCost.HP) {
             response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
-            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "HP", commandKeyword, actionCost.HP));
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "HP", name, actionCost.HP));
             return false;
         } else if(stats.mana.GetValue() < actionCost.mana) {
             response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
-            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "MANA", commandKeyword, actionCost.mana));
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "MANA", name, actionCost.mana));
             return false;
         } else if(currPP < actionCost.PP) {
             response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
-            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "PP", commandKeyword, actionCost.PP));
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "PP", name, actionCost.PP));
             return false;
         } else if(user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
             response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
-            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "STAMINA", commandKeyword, actionCost.stamina));
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "STAMINA", name, actionCost.stamina));
             return false;
         }
 
@@ -243,7 +243,7 @@ public class ActionBase : ScriptableObject {
             CheckCost(user, res) &&
             CheckValidTarget(user, splitCommand, res)) {
             res.SetState(ActionChoiceResult.State.QUEUED);
-            res.AddMessage(string.Format(Messages.QUEUED_MOVE, commandKeyword, description));
+            res.AddMessage(string.Format(Messages.QUEUED_MOVE, name, description));
             QueueAction(user, splitCommand);
         }
 
