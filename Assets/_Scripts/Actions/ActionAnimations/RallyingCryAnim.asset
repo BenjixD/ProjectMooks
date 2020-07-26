@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3077ad366cc905c449f186e7bac9834e, type: 3}
-  m_Name: KnightMeleeAttack
+  m_Name: RallyingCryAnim
   m_EditorClassIdentifier: 
   userAnimName: melee attack
-  targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
+  targetHitEffect: {fileID: 7885482589527698955, guid: 1dd3f2ea3a5fb4e408f7e75448f1d55d,
     type: 3}
-  targetFlash: 1
-  slideType: 1
+  targetFlash: 0
+  delayHitEffects: 1
+  slideType: 0
   slideDuration: 0.5
   meleeReach: 8
-  _timeBeforeEffect: 1
-  _timeAfterEffect: 0.7
+  _timeBeforeEffect: 0.35
+  _timeAfterEffect: 0.5

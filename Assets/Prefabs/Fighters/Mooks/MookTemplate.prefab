@@ -799,6 +799,7 @@ MonoBehaviour:
   chatbox: {fileID: 4926211612790820631}
   statusBar: {fileID: 0}
   arrows: {fileID: 3170568838394034925}
+  fighterRadius: 1.5
 --- !u!1 &6527956858110799728
 GameObject:
   m_ObjectHideFlags: 0

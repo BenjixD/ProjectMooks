@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Light
   actionType: 1
   description: Deals light holy damage to a single enemy.
-  animation: {fileID: 11400000, guid: 908e691c9df61e24f8962d8481e1abc8, type: 2}
+  animation: {fileID: 11400000, guid: e2a54a6b284e80e4aa2d54ed49a31c47, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:

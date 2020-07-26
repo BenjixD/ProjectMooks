@@ -4,7 +4,8 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "KnightRaiseShield", menuName = "ActionsAnimations/KnightRaiseShield")]
 public class KnightRaiseShield : ActionAnimation {
-    public override void Animate(AnimationController controller) {
+    protected override void AnimateUser(FightingEntity user) {
+        AnimationController controller = user.GetAnimController();
         controller.AddToTrack("idle", "defend start", false, 0);
     }
 }
