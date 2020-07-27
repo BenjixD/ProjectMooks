@@ -32,12 +32,14 @@ public class FightingEntity : MonoBehaviour
 
     protected QueuedAction _queuedAction;
     private AnimationController _animController;
+    private SoundController _soundController;
     protected FightingEntityAI _ai;
 
     
 
     protected virtual void Awake() {
         _animController = GetComponent<AnimationController>();
+        _soundController = GetComponent<SoundController>();
         Messenger.AddListener<BattleResult>(Messages.OnBattleEnd, this.OnBattleEnd);
     }
 
@@ -150,6 +152,10 @@ public class FightingEntity : MonoBehaviour
 
     public AnimationController GetAnimController() {
         return _animController;
+    }
+
+    public SoundController GetSoundController() {
+        return _soundController;
     }
 
     public List<ActionBase> GetFilteredActions(ActionType actionType) {
