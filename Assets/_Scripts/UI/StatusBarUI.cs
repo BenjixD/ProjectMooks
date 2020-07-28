@@ -53,25 +53,26 @@ public class StatusBarUI : MonoBehaviour
     }
 
     public void SetStatusAilmentIcons(List<StatusAilment> ailments) {
-        // Replace any existing icons with passed in icons
-        int iconsToReplace = Mathf.Min(ailments.Count, statusConditionIcons.Count);
-        for (int i = 0; i < iconsToReplace; i++) {
-            statusConditionIcons[i].SetStatusAilment(ailments[i]);
+        int iconsSet = 0;
+        for (int i = 0; i < ailments.Count; i++) {
+            if (ailments[i].icon != null) {
+                // Replace existing icon if one exists, otherwise, create new icon
+                if (iconsSet < statusConditionIcons.Count) {
+                    statusConditionIcons[iconsSet].SetStatusAilment(ailments[i]);
+                    iconsSet++;
+                } else {
+                    StatusAilmentIcon statusIcon = Instantiate<StatusAilmentIcon>(statusIconPrefab, statusConditionParent);
+                    statusIcon.SetStatusAilment(ailments[i]);
+                    statusConditionIcons.Add(statusIcon);
+                    iconsSet++;
+                }
+            }
         }
 
-        if (ailments.Count < statusConditionIcons.Count) {
-            // Remove remaining icons
-            for (int i = statusConditionIcons.Count - 1; i >= ailments.Count; i--) {
-                Destroy(statusConditionIcons[i].gameObject);
-                statusConditionIcons.RemoveAt(i);
-            }
-        } else if (ailments.Count > statusConditionIcons.Count) {
-            // Create new icons as needed
-            for (int i = iconsToReplace; i < ailments.Count; i++) {
-                StatusAilmentIcon statusIcon = Instantiate<StatusAilmentIcon>(statusIconPrefab, statusConditionParent);
-                statusIcon.SetStatusAilment(ailments[i]);
-                statusConditionIcons.Add(statusIcon);
-            }
+        // Clean extraneous icons
+        for (int i = statusConditionIcons.Count - 1; i > iconsSet; i--) {
+            Destroy(statusConditionIcons[i].gameObject);
+            statusConditionIcons.RemoveAt(i);
         }
     }
 
