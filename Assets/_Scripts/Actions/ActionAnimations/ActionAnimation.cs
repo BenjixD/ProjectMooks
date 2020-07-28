@@ -16,6 +16,8 @@ public class ActionAnimation : ScriptableObject {
     public GameObject targetHitEffect;
     [Tooltip("Set to true to make the target(s) flash when the effect happens.")]
     public bool targetFlash = true;
+    [Tooltip("Strength of camera shake on effect, if any.")]
+    public ShakeStrength shakeStrength;
     [Tooltip("Set to true to add a slight delay between the action effect and the effect animation. Useful for QTE animations.")]
     public bool delayHitEffects;
     [Tooltip("The type of slide that should precede this animation: none, a small slide forward, or a long slide into melee range of the target(s).")]
@@ -99,6 +101,9 @@ public class ActionAnimation : ScriptableObject {
     }
 
     protected virtual void AnimateTargetEffects(FightingEntity user, List<FightingEntity> targets) {
+        if (shakeStrength != ShakeStrength.NONE) {
+            GameManager.Instance.battleComponents.GetCameraController().Shake(shakeStrength);
+        }
         foreach (FightingEntity target in targets) {
             if (target != null) {
                 InstantiateHitEffect(target);
