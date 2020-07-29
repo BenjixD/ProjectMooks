@@ -63,14 +63,14 @@ public class StatusBarsUI : MonoBehaviour
                 heroStatusBar.SetHP(player.stats.hp.GetValue(), player.stats.maxHp.GetValue());
                 heroStatusBar.SetMana(player.stats.mana.GetValue(), player.stats.maxMana.GetValue());
                 heroStatusBar.SetNameColor(player.GetOrderColor());
-                heroStatusBar.SetStatusAilmentIcons(player.ailmentController.GetAllAilments().Map(entry => entry.Value).Filter(ailment => ailment.showIcon == true));
+                heroStatusBar.SetStatusAilmentIcons(player.ailmentController.GetAllAilments().Map(entry => entry.Value).Filter(ailment => ailment.icon != null));
             } else {
                 // Mooks have energy
                 MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
                 mookStatusBar.SetFighter(player);
                 mookStatusBar.SetName(player.Name);
                 mookStatusBar.SetHP(player.stats.hp.GetValue(), player.stats.maxHp.GetValue());
-                mookStatusBar.SetStatusAilmentIcons(player.ailmentController.GetAllAilments().Map(entry => entry.Value).Filter(ailment => ailment.showIcon == true));
+                mookStatusBar.SetStatusAilmentIcons(player.ailmentController.GetAllAilments().Map(entry => entry.Value).Filter(ailment => ailment.icon != null));
                 // Note: Energy might be its own thing later, but for now, lets just use mana
                 
                 mookStatusBar.SetEnergy(player.ailmentController.GetAilment("Out of Juice").duration, maxMookEnergy);
@@ -99,7 +99,7 @@ public class StatusBarsUI : MonoBehaviour
             enemyStatusBars[i].SetFighter(enemy);
             enemyStatusBars[i].SetName(enemies[i].targetName);
             enemyStatusBars[i].SetHP(enemies[i].stats.hp.GetValue(), enemies[i].stats.maxHp.GetValue());
-            enemyStatusBars[i].SetStatusAilmentIcons(enemy.ailmentController.GetAllAilments().Map(entry => entry.Value).Filter(ailment => ailment.showIcon == true));
+            enemyStatusBars[i].SetStatusAilmentIcons(enemy.ailmentController.GetAllAilments().Map(entry => entry.Value).Filter(ailment => ailment.icon != null));
             Transform barMarker = enemy.GetComponent<FighterPositions>().statusBar;
             WorldspaceToScreenUI barPositioner = enemyStatusBars[i].GetComponent<WorldspaceToScreenUI>();
             barPositioner.SetWorldPoint(barMarker);
