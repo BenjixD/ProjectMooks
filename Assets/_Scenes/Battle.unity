@@ -5455,7 +5455,7 @@ PrefabInstance:
     - target: {fileID: 3331093689872416248, guid: 2ffa8b312dcf35b4d836510056ff8480,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1607.02
+      value: 956.51
       objectReference: {fileID: 0}
     - target: {fileID: 3331093689872416248, guid: 2ffa8b312dcf35b4d836510056ff8480,
         type: 3}
@@ -5465,7 +5465,7 @@ PrefabInstance:
     - target: {fileID: 3331093689872416248, guid: 2ffa8b312dcf35b4d836510056ff8480,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 611.9549
+      value: 1913.0173
       objectReference: {fileID: 0}
     - target: {fileID: 3331093689872416248, guid: 2ffa8b312dcf35b4d836510056ff8480,
         type: 3}
@@ -7979,6 +7979,7 @@ MonoBehaviour:
   particles: {fileID: 1752116406}
   textTransitionTime: 0.25
   textWaitTime: 0
+  totalAnimationTime: 1
   textCanvasGroup: {fileID: 531518967}
 --- !u!120 &1079807778
 LineRenderer:
