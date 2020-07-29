@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Spine.Unity;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,8 @@ public class FocusOverlay : MonoBehaviour
     public Color transitionColorFrom;
     public Color transitionColorTo;
     public Image image;
+
+    public float nonFocusedAlpha = 0.5f;
 
 
     private Dictionary<GameObject, int> previousLayers;
@@ -59,9 +62,17 @@ public class FocusOverlay : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    public void AddToFocusLayer(GameObject obj, bool setChildren = false) {
+    public void AddToFocusLayer(GameObject obj, bool isFocused, bool setChildren = false) {
         if (obj == null || previousLayers.ContainsKey(obj)) {
             return;
+        }
+
+        if (!isFocused) {
+            SkeletonAnimation[] skeletonAnimations = obj.GetComponentsInChildren<SkeletonAnimation>();
+
+            foreach (SkeletonAnimation skeletonAnimation in skeletonAnimations) {
+                skeletonAnimation.skeleton.SetColor(new Color(1, 1, 1, this.nonFocusedAlpha));
+            }
         }
 
         previousLayers[obj] = obj.layer;
@@ -85,11 +96,19 @@ public class FocusOverlay : MonoBehaviour
         foreach (GameObject key in keys) {
             RemoveFromFocusLayer(key, false); // true might have unintended side effects
         }
+
+        this.previousLayers.Clear();
     }
 
     public void RemoveFromFocusLayer(GameObject obj, bool setChildren = false) {
         if (obj == null || !previousLayers.ContainsKey(obj)) {
             return;
+        }
+
+        SkeletonAnimation[] skeletonAnimations = obj.GetComponentsInChildren<SkeletonAnimation>();
+
+        foreach (SkeletonAnimation skeletonAnimation in skeletonAnimations) {
+            skeletonAnimation.skeleton.SetColor(Color.white);
         }
 
         RecUnsetFocusLayer(obj, previousLayers[obj], setChildren);

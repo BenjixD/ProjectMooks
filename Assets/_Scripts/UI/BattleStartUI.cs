@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class StartRoundUI : MonoBehaviour {
+public class BattleStartUI : MonoBehaviour {
     public int segments = 50;
     public float speed = 1000f;
 
@@ -18,6 +18,8 @@ public class StartRoundUI : MonoBehaviour {
 
     public float textTransitionTime = 0.5f;
     public float textWaitTime = 1f;
+
+    public float totalAnimationTime = 1f;
 
 
     public CanvasGroup textCanvasGroup;
@@ -48,23 +50,20 @@ public class StartRoundUI : MonoBehaviour {
         }
 
         yield return GameManager.Instance.time.GetController().StartCoroutine(AnimateText());
-        gameObject.SetActive (false);
+        GameManager.Instance.time.GetController().StartCoroutine(DisableGameObject());
 	}
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            this.PlayAnimation();
-        }
+    private IEnumerator DisableGameObject() {
+        yield return GameManager.Instance.time.GetController().WaitForSecondsCor(this.totalAnimationTime);
+        gameObject.SetActive (false);
     }
 
-	void Reset(){
+	void Reset() {
 		radius = 100;
-        this.isPlayingRing =false;
+        this.isPlayingRing = false;
 	}
 
-
-    void CreatePoints ()
-    {
+    void CreatePoints() {
         float x;
         float y;
 		float z = 0;

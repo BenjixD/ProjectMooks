@@ -24,7 +24,9 @@ public class BattleUI : MonoBehaviour
 
     public FocusOverlay focusOverlay;
 
-    public StartRoundUI roundStartUI;
+    public RoundStartUI roundStartUI;
+
+    public BattleStartUI battleStartUI;
 
     public void Initialize() {
         this.commandCardUI.Initialize();
@@ -35,5 +37,6 @@ public class BattleUI : MonoBehaviour
         this.targetIconsUI.Initialize();
         this.focusOverlay.Initialize();
         this.roundStartUI.Initialize();
+        this.battleStartUI.Initialize();
     }
 }
