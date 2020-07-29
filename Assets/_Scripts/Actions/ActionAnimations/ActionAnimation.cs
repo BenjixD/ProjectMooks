@@ -42,6 +42,7 @@ public class ActionAnimation : ScriptableObject {
         }
 
         // Perform action animation
+        user.PlaySound("action");
         AnimateUser(user);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeBeforeEffect);
         if (delayHitEffects) {
@@ -49,6 +50,9 @@ public class ActionAnimation : ScriptableObject {
         }
 
         // Perform hit visuals on target(s)
+        foreach(FightingEntity t in targets) {
+            t.PlaySound("hit");
+        }
         AnimateTargetEffects(user, targets);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeAfterEffect);
 
