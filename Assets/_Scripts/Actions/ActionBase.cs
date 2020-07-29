@@ -245,6 +245,7 @@ public class ActionBase : ScriptableObject {
             res.SetState(ActionChoiceResult.State.QUEUED);
             res.AddMessage(string.Format(Messages.QUEUED_MOVE, name, description));
             QueueAction(user, splitCommand);
+            user.PlaySound("confirm"); //TODO: Look towards consolidating use here
         }
 
         return res;
@@ -267,8 +268,6 @@ public class ActionBase : ScriptableObject {
         FightResult result = new FightResult(user, this);
         if (CheckCost(user)) {
             PayCost(user);
-            // Play Sound
-            PlaySound(user);
             // Play Animation
             if (animation != null) {
                 GameManager.Instance.time.GetController().StartCoroutine(animation.Animate(user, targets));
@@ -381,11 +380,6 @@ public class ActionBase : ScriptableObject {
             receivers.Add(new DamageReceiver(target, before, after, inflicted));
         }
         return new FightResult(user, this, receivers);
-    }
-
-    protected virtual void PlaySound(FightingEntity user) {
-        SoundController sc = user.GetSoundController();
-        sc.PlayClip(sc.GetRandomClipFromKey("action"));
     }
 
     protected void InstantiateDamagePopup(FightingEntity target, int damage) {

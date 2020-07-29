@@ -196,6 +196,13 @@ public class FightingEntity : MonoBehaviour
         this.ailmentController.RemoveStatusAilment(modifier);
     }
 
+    public void PlaySound(string key) {
+        SoundClip clip = _soundController.GetRandomClipFromKey(key);
+        if(clip != null) {
+            _soundController.PlayClip(clip);
+        }
+    }
+
     private void OnBattleEnd(BattleResult result) {
         List<FightResult> myFights = result.results.Where(r => (r.fighter == this)).ToList();
         _ai.ReviewFightResult(myFights);

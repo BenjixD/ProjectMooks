@@ -33,9 +33,4 @@ public class RallyingCry : ActionBase {
         FightResult result = new FightResult(user, this, receivers);
         _battleFight.EndFight(result, this);
     }
-
-    protected override void PlaySound(FightingEntity user) {
-        SoundController sc = user.GetSoundController();
-        sc.PlayClip(sc.GetRandomClipFromKey("rallying_cry"));
-    }
 }

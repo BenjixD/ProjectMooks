@@ -12,6 +12,7 @@ public class SoundController : MonoBehaviour {
 
 	void Awake() {
 		// Populate _clipsMap
+		_clipsMap = new Dictionary<string, List<SoundClip>>();
 		foreach(SoundClip c in clips) {
 			if(!_clipsMap.ContainsKey(c.key)) {
 				_clipsMap.Add(c.key, new List<SoundClip>());
@@ -22,7 +23,7 @@ public class SoundController : MonoBehaviour {
 
 	public SoundClip GetRandomClipFromKey(string key) {
 		if(_clipsMap.ContainsKey(key)){
-			return _clipsMap[key][Random.Range(0, _clipsMap[key].Count - 1)];
+			return _clipsMap[key][Random.Range(0, _clipsMap[key].Count)];
 		}
 		Debug.LogWarning("Trying to get non-existent audioclip: " + key);
 		return null;
