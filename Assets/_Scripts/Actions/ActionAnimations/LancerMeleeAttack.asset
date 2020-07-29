@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: LancerMeleeAttack
   m_EditorClassIdentifier: 
   userAnimName: melee attack
-  timeBeforeEffect: 0.35
-  timeAfterEffect: 0.5
+  targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
+    type: 3}
+  targetFlash: 1
+  slideType: 1
+  slideDuration: 0.5
+  meleeReach: 8
+  _timeBeforeEffect: 0.35
+  _timeAfterEffect: 0.5

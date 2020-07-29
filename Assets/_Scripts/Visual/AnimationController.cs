@@ -10,6 +10,9 @@ public class AnimationController : MonoBehaviour {
     private Dictionary<string, int> _defaultAnimTracks = new Dictionary<string, int>();
     private HashSet<string> _animations = new HashSet<string>();
     private int _freeTrackIndex;    // Index of the earliest free track
+    private MeshRenderer _meshRenderer;
+    private MaterialPropertyBlock _block;
+    private float _dieFadeTime = 0.3f;
 
     private void Start() {
         _skeletonAnimation = GetComponent<SkeletonAnimation>();
@@ -26,6 +29,10 @@ public class AnimationController : MonoBehaviour {
             _defaultAnimTracks.Add(_defaultAnims[i], i);
             _freeTrackIndex++;
         }
+
+        _meshRenderer = GetComponent<MeshRenderer>();
+        _block = new MaterialPropertyBlock();
+        _meshRenderer.GetPropertyBlock(_block);
     }
 
     private bool AnimationExists(string animationName) {
@@ -84,6 +91,32 @@ public class AnimationController : MonoBehaviour {
         }
         if (trackIndex < _freeTrackIndex) {
             _freeTrackIndex = trackIndex;
+        }
+    }
+
+    public IEnumerator Flash() {
+        int fillPhase = Shader.PropertyToID("_FillPhase");
+        _block.SetFloat(fillPhase, 1f);
+        _meshRenderer.SetPropertyBlock(_block);
+        yield return GameManager.Instance.time.GetController().WaitForSeconds(0.1f);
+        if (this != null) {
+            _block.SetFloat(fillPhase, 0f);
+            _meshRenderer.SetPropertyBlock(_block);
+        }
+    }
+    
+    public IEnumerator Fade() {
+        int fillColour = Shader.PropertyToID("_FillColor");
+        _block.SetColor(fillColour, Color.black);
+        int fillPhase = Shader.PropertyToID("_FillPhase");
+        float elapsedTime = 0;
+        float fillAmt = 0;
+        while (elapsedTime / _dieFadeTime <= 1) {
+            elapsedTime += GameManager.Instance.time.deltaTime;
+            fillAmt = Mathf.Lerp(0, 1, elapsedTime / _dieFadeTime);
+            _block.SetFloat(fillPhase, fillAmt);
+            _meshRenderer.SetPropertyBlock(_block);
+            yield return null;
         }
     }
 }

@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: HeroTomeFlip
   m_EditorClassIdentifier: 
   userAnimName: 
-  timeBeforeEffect: 3
-  timeAfterEffect: 1
+  targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
+    type: 3}
+  targetFlash: 1
+  slideType: 0
+  slideDuration: 0.5
+  meleeReach: 5
+  _timeBeforeEffect: 3
+  _timeAfterEffect: 1

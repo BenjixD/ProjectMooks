@@ -169,7 +169,7 @@ public class ActionBase : ScriptableObject {
         bool res = argQuantity == commandArgs;
         if(!res) {
             response.SetState(ActionChoiceResult.State.INVALID_SYNTAX);
-            response.AddMessage(string.Format(Messages.INCORRECT_ARGUMENTS, commandKeyword, this.GetExampleCommandString()));
+            response.AddMessage(string.Format(Messages.INCORRECT_ARGUMENTS, name, this.GetExampleCommandString()));
         }
         return res;
     }
@@ -186,7 +186,7 @@ public class ActionBase : ScriptableObject {
 
         if(!res) {
             response.SetState(ActionChoiceResult.State.INVALID_TARGET);
-            response.AddMessage(string.Format(Messages.WRONG_NUMBER_OF_TARGETS, commandKeyword, this.GetExampleCommandString()));
+            response.AddMessage(string.Format(Messages.WRONG_NUMBER_OF_TARGETS, name, this.GetExampleCommandString()));
         }
         return res;
     }
@@ -196,19 +196,19 @@ public class ActionBase : ScriptableObject {
 
         if (stats.hp.GetValue() <= actionCost.HP) {
             response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
-            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "HP", commandKeyword, actionCost.HP));
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "HP", name, actionCost.HP));
             return false;
         } else if(stats.mana.GetValue() < actionCost.mana) {
             response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
-            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "MANA", commandKeyword, actionCost.mana));
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "MANA", name, actionCost.mana));
             return false;
         } else if(currPP < actionCost.PP) {
             response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
-            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "PP", commandKeyword, actionCost.PP));
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "PP", name, actionCost.PP));
             return false;
         } else if(user is Mook && ((Mook) user).stamina.GetStamina() < actionCost.stamina) {
             response.SetState(ActionChoiceResult.State.INSUFFICIENT_COST);
-            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "STAMINA", commandKeyword, actionCost.stamina));
+            response.AddMessage(string.Format(Messages.INSUFFICIENT_COST, "STAMINA", name, actionCost.stamina));
             return false;
         }
 
@@ -243,8 +243,9 @@ public class ActionBase : ScriptableObject {
             CheckCost(user, res) &&
             CheckValidTarget(user, splitCommand, res)) {
             res.SetState(ActionChoiceResult.State.QUEUED);
-            res.AddMessage(string.Format(Messages.QUEUED_MOVE, commandKeyword, description));
+            res.AddMessage(string.Format(Messages.QUEUED_MOVE, name, description));
             QueueAction(user, splitCommand);
+            user.PlaySound("confirm"); //TODO: Look towards consolidating use here
         }
 
         return res;
@@ -267,9 +268,10 @@ public class ActionBase : ScriptableObject {
         FightResult result = new FightResult(user, this);
         if (CheckCost(user)) {
             PayCost(user);
+            // Play Animation
             if (animation != null) {
-                animation.Animate(user.GetAnimController());
-                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeBeforeEffect);
+                GameManager.Instance.time.GetController().StartCoroutine(animation.Animate(user, targets));
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimWindup());
             } else {
                 Debug.LogWarning("No animation set for " + user.name + "'s " + name);
             }
@@ -278,7 +280,7 @@ public class ActionBase : ScriptableObject {
         }
         _battleFight.EndFight(result, this);
         if (animation != null) {
-            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.timeAfterEffect);
+            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimCooldown());
         }
     }
 
@@ -286,22 +288,20 @@ public class ActionBase : ScriptableObject {
         return this.GetAllPossibleTargets(user).Filter( (FightingEntity entity) => entity != null );
     }
 
-    public List<FightingEntity> GetAllPossibleTargets(FightingEntity user) {
+    public List<int> GetAllPossibleTargetIds() {
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
-            return GameManager.Instance.battleComponents.field.GetAllFightingEntities();
-        }
-        List<FightingEntity> potentialTargets;
-        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetEnemyObjects());
-        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetPlayerObjects());
-
-        if (user.isEnemy()) {
-            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
-        } else {
-            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? players : enemies;
+            Debug.LogWarning("WARNING: Shouldn't use this function for both teams!");
         }
 
-        return potentialTargets;
+        List<int> targetIds = new List<int>();
+
+        for (int i = 0; i < PlayerParty.maxPlayers; i++ ) {
+            targetIds.Add(i);
+        }
+
+        return targetIds;
     }
+
 
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
@@ -399,4 +399,23 @@ public class ActionBase : ScriptableObject {
 
         return "";
     }
+
+    private List<FightingEntity> GetAllPossibleTargets(FightingEntity user) {
+        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
+            return GameManager.Instance.battleComponents.field.GetAllFightingEntities();
+        }
+        List<FightingEntity> potentialTargets;
+        List<FightingEntity> enemies = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetEnemyObjects());
+        List<FightingEntity> players = new List<FightingEntity>(GameManager.Instance.battleComponents.field.GetPlayerObjects());
+
+        if (user.isEnemy()) {
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? enemies : players;
+        } else {
+            potentialTargets = targetInfo.targetTeam == TargetTeam.MY_TEAM ? players : enemies;
+        }
+
+        return potentialTargets;
+    }
+
+
 }

@@ -7,7 +7,7 @@ public class Explosion : ActionBase {
     [SerializeField] private GameObject _explosionQTE = null;
 
     public override bool QueueAction(FightingEntity user, string[] splitCommand) {
-        List<int> targetIds = this.GetAllPossibleTargets(user).Map((FightingEntity target) => target.targetId );
+        List<int> targetIds = this.GetAllPossibleTargetIds();
         user.SetQueuedAction(this, targetIds);
         return true;
     }

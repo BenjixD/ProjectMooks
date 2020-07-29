@@ -74,7 +74,8 @@ public class BattlePhase : Phase {
 
     protected override IEnumerator Run() {
         this._ui.battleOrderUI.SetTurnOrder(fighters);
-        yield return GameManager.Instance.time.GetController().WaitForSeconds(0.5f);
+        yield return GameManager.Instance.time.GetController().StartCoroutine(this._ui.battleStartUI.PlayAnimation());
+
         this._ui.targetIconsUI.ClearTargetArrows();
 
         for (int i = 0; i < fighters.Count; i++) {
@@ -124,7 +125,7 @@ public class BattlePhase : Phase {
                 if (enemyAction.targetInfo.targetType == TargetType.SINGLE) {
                     targets = new List<int>{this._field.GetRandomPlayerObjectIndex()};
                 } else if (enemyAction.targetInfo.targetType == TargetType.ALL) {
-                    targets = enemyAction.GetAllPossibleTargets(fighter).Map(target => target.targetId);
+                    targets = enemyAction.GetAllPossibleTargetIds();
                 }
                 fighter.SetQueuedAction(enemyAction, targets);
             }

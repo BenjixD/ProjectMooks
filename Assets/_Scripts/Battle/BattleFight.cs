@@ -111,11 +111,27 @@ public class BattleFight : IDisposable
             Debug.Log(this.fighter.Name + " Execute Action: " + attackName + targets[0].targetId);
         }
 
-        this._ui.focusOverlay.AddToFocusLayer(fighter.gameObject);
+    
+
+        List<FightingEntity> focusedFighters = new List<FightingEntity>();
+        focusedFighters.Add(fighter);
+
 
         foreach (FightingEntity target in targets) {
-            this._ui.focusOverlay.AddToFocusLayer(target.gameObject);
+            focusedFighters.Add(target);
         }
+
+
+        List<FightingEntity> unfocusedFighters = this._field.GetAllFightingEntities().Filter(fighter => !focusedFighters.Contains(fighter));
+
+        foreach (FightingEntity focusedFighter in focusedFighters) {
+            this._ui.focusOverlay.AddToFocusLayer(focusedFighter.gameObject, true);
+        }
+
+        foreach (FightingEntity unfocusedFighter in unfocusedFighters) {
+            this._ui.focusOverlay.AddToFocusLayer(unfocusedFighter.gameObject, false);
+        }
+
 
         yield return GameManager.Instance.time.GetController().StartCoroutine(action.ExecuteAction(fighter, targets, this));
     }

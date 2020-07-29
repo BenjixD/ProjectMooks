@@ -38,7 +38,7 @@ public class DamagePopup : MonoBehaviour {
         }
 
         // Set position
-        FighterUIPositions uiPositions = target.GetComponent<FighterUIPositions>();
+        FighterPositions uiPositions = target.GetComponent<FighterPositions>();
         if (uiPositions != null) {
             _worldPosition = uiPositions.damagePopup.position;
         } else {
