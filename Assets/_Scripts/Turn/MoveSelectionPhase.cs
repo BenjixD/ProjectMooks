@@ -220,6 +220,7 @@ public class MoveSelectionPhase : Phase {
                 HeroActionConfirmed();
                 GetHeroMenuAction().onBackCallback = this.OnActionChooseBackCallback;
                 this._field.GetHeroPlayer().SetQueuedAction(heroAction, new List<int>());
+                CheckExecuteTurn();
                 this._field.GetHeroPlayer().PlaySound("confirm"); //TODO: Look towards consolidating use here
                 this._heroMenuActions.Push(new HeroMenuAction(MenuState.WAITING));
             }
