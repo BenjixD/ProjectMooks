@@ -38,8 +38,6 @@ public class BattleField : MonoBehaviour
             DeathResult deathResult = new DeathResult(hero, new DamageReceiver(hero, hero.stats, hero.stats), null);
             Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, deathResult);
         }
-
-
     }
 
     // Field helper functions ===

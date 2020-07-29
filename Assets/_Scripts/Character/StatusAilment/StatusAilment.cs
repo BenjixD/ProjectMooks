@@ -22,6 +22,8 @@ public abstract class StatusAilment : ScriptableObject {
 
     public bool isDestroying = false;
 
+    public bool showIcon = true;
+
 	public void SetDuration(int duration) {
 		this.duration = duration;
 	}
