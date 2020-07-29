@@ -66,6 +66,7 @@ public class AilmentController {
         foreach (StatusAilment ailment in ailments) {
             if (ailment.ailmentType == AilmentType.DESTROY_ON_BATTLE_END) {
                 Debug.Log("Remove on battle end: " + ailment.name);
+                ailment.isDestroying = true;
                 this._ailments.Remove(ailment.name);
                 ailment.Recover(_entity);
                 

@@ -119,4 +119,12 @@ public class AnimationController : MonoBehaviour {
             yield return null;
         }
     }
+
+    public void UnFade() {
+        int fillColour = Shader.PropertyToID("_FillColor");
+        _block.SetColor(fillColour, Color.white);
+        int fillPhase = Shader.PropertyToID("_FillPhase");
+        _block.SetFloat(fillPhase, 0.03f);
+        _meshRenderer.SetPropertyBlock(_block);
+    }
 }

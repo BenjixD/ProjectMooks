@@ -12,6 +12,7 @@ public class StatusAilmentIcon : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI _durationText = null;
 
     public void SetStatusAilment(StatusAilment ailment) {
+        this.gameObject.name = ailment.name;
         statusAilment = ailment;
         if (ailment.icon != null) {
             _icon.sprite = ailment.icon;
