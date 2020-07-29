@@ -20,7 +20,7 @@ public enum BattleType {
 
 public enum EventType {
     CAMP_GROUNDS,
-    LIBRARY
+    SHRINE
 }
 
 public class StageNode : MonoBehaviour {

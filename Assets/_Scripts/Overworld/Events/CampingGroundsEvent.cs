@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CampingGrounds : EventStage {
+public class CampingGroundsEvent : EventStage {
     protected override void BeginEvent() {
         List<Player> partyFighters = GameManager.Instance.gameState.playerParty.GetActiveFighters<Player>();
         foreach (Player fighter in partyFighters) {

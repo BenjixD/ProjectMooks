@@ -212,8 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _eventPrefabs:
-  - {fileID: 4898605610877541148, guid: 96c30301923cf354ba8081ae1ff098c0, type: 3}
-  - {fileID: 4898605610877541148, guid: 96c30301923cf354ba8081ae1ff098c0, type: 3}
+  - {fileID: -7618383643626820223, guid: 26d214a1c3bbf9d4fb84f6c7e14c14b7, type: 3}
+  - {fileID: 8327410719921139989, guid: 9dee107f7e711fd4dbacefee756f90b8, type: 3}
 --- !u!114 &1357655215
 MonoBehaviour:
   m_ObjectHideFlags: 0
