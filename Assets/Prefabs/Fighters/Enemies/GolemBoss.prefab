@@ -62,6 +62,11 @@ PrefabInstance:
       propertyPath: stats.speed.baseValue
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4457472454935739248, guid: bd253d2dccf38f34c84fccef87996b23,
+        type: 3}
+      propertyPath: Name
+      value: Ancient Golem
+      objectReference: {fileID: 0}
     - target: {fileID: 5739580552655326664, guid: bd253d2dccf38f34c84fccef87996b23,
         type: 3}
       propertyPath: m_Name

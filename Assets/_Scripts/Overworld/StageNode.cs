@@ -60,9 +60,14 @@ public class StageNode : MonoBehaviour {
         }
     }
 
+    private void SetIcon(Sprite icon) {
+        _icon.enabled = true;
+        _icon.sprite = icon;
+    }
+
     public void SetStage(BattleType type) {
         _stageCategory = StageCategory.BATTLE;
-        _icon.sprite = _battleIcon;
+        SetIcon(_battleIcon);
         switch(type) {
             case BattleType.EASY_BATTLE:
                 _background.sprite = _easyNode;
@@ -86,7 +91,7 @@ public class StageNode : MonoBehaviour {
         _stageCategory = StageCategory.EVENT;
         _eventType = type;
         EventStage eventStage = GameManager.Instance.eventManager.GetEvent(type);
-        _icon.sprite = eventStage.icon;
+        SetIcon(eventStage.icon);
         // TODO: temporary info display, beautify later
         _infoText.gameObject.SetActive(true);
         _infoText.text = eventStage.eventName;
