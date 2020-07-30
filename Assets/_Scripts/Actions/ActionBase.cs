@@ -245,6 +245,7 @@ public class ActionBase : ScriptableObject {
             res.SetState(ActionChoiceResult.State.QUEUED);
             res.AddMessage(string.Format(Messages.QUEUED_MOVE, name, description));
             QueueAction(user, splitCommand);
+            user.PlaySound("confirm"); //TODO: Look towards consolidating use here
         }
 
         return res;
@@ -267,6 +268,7 @@ public class ActionBase : ScriptableObject {
         FightResult result = new FightResult(user, this);
         if (CheckCost(user)) {
             PayCost(user);
+            // Play Animation
             if (animation != null) {
                 GameManager.Instance.time.GetController().StartCoroutine(animation.Animate(user, targets));
                 yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimWindup());

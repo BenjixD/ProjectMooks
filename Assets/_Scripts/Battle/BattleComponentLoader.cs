@@ -13,10 +13,18 @@ public class BattleComponentLoader : MonoBehaviour {
 	public BattleUI ui;
 	public CommandSelector commandSelector {get;set;}
 	public StageController stageController {get;set;}
-
+	private CameraController _cameraController;
+	
 	void Start() {
 		GameManager.Instance.battleComponents = this;
 		GameManager.Instance.time.GetController().StartCoroutine(InitializeComponentsCR());
+	}
+
+	public CameraController GetCameraController() {
+		if (_cameraController == null) {
+			_cameraController = Camera.main.GetComponent<CameraController>();
+		}
+		return _cameraController;
 	}
 
 	// 

@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Attack
   actionType: 0
   description: 
-  animation: {fileID: 11400000, guid: 0339d2876fc0ede4e989a91c7e9b5b5f, type: 2}
+  animation: {fileID: 11400000, guid: ffd267505520efd4984f75d68d8dd632, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:
