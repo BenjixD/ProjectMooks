@@ -1,32 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &8289126736048606848
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3719585593550505283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdb6a2821ea714abfa387fac1309b250, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  clips:
-  - key: action
-    name: action1
-    source: {fileID: 8300000, guid: 3e39c8321933f4ce2a831cd446fab29e, type: 3}
-  - key: action
-    name: action2
-    source: {fileID: 8300000, guid: 8dca6c85918af46008b1eecf8737e2f8, type: 3}
-  - key: confirm
-    name: confirm1
-    source: {fileID: 8300000, guid: 541e044d3caf442a7810311007ac17f7, type: 3}
-  - key: hit
-    name: hit1
-    source: {fileID: 8300000, guid: a301b3bea385649ea9da4cb862a9e2b0, type: 3}
-  volume: 0.5
-  audioSource: {fileID: 4717711133828381846}
 --- !u!82 &4717711133828381846
 AudioSource:
   m_ObjectHideFlags: 0
@@ -123,6 +96,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8289126736048606848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3719585593550505283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb6a2821ea714abfa387fac1309b250, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - key: action
+    name: action1
+    source: {fileID: 8300000, guid: 3e39c8321933f4ce2a831cd446fab29e, type: 3}
+  - key: action
+    name: action2
+    source: {fileID: 8300000, guid: 8dca6c85918af46008b1eecf8737e2f8, type: 3}
+  - key: confirm
+    name: confirm1
+    source: {fileID: 8300000, guid: 541e044d3caf442a7810311007ac17f7, type: 3}
+  - key: hit
+    name: hit1
+    source: {fileID: 8300000, guid: a301b3bea385649ea9da4cb862a9e2b0, type: 3}
+  volume: 0.5
+  audioSource: {fileID: 4717711133828381846}
 --- !u!1001 &9084046624927854186
 PrefabInstance:
   m_ObjectHideFlags: 0
