@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: d8f55d2867150e844b7c3a0008071299, type: 3}
   m_Name: KnightRaiseShield
   m_EditorClassIdentifier: Assembly-CSharp::KnightRaiseShield
-  userAnimName: KnightRaiseShield
+  userAnimName: 
   targetHitEffect: {fileID: 0}
-  targetFlash: 0
+  targetFlash: 1
+  shakeStrength: 0
+  delayHitEffects: 0
   slideType: 0
   slideDuration: 0.5
-  meleeReach: 5
-  _timeBeforeEffect: 1
-  _timeAfterEffect: 2
+  meleeReach: 10
+  _timeBeforeEffect: 0
+  _timeAfterEffect: 0
