@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Armor_Material
-  m_Shader: {fileID: 4800000, guid: ff6baa4d50f9da342b70b8f233bc85e7, type: 3}
+  m_Shader: {fileID: 4800000, guid: f18d538d3506a52499b2c22c44f48b76, type: 3}
   m_ShaderKeywords: _USE8NEIGHBOURHOOD_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -29,7 +29,7 @@ Material:
     - _OutlineMipLevel: 0
     - _OutlineReferenceTexWidth: 1024
     - _OutlineSmoothness: 1
-    - _OutlineWidth: 3
+    - _OutlineWidth: 0
     - _StencilComp: 8
     - _StencilRef: 1
     - _StraightAlphaInput: 0

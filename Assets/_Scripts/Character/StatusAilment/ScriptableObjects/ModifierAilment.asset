@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: ModifierAilment
   m_EditorClassIdentifier: 
   name: ModifierAilment
-  infiniteDuration: 0
+  icon: {fileID: 0}
+  infiniteDuration: 1
   duration: 3
   level: 0
   phase: 5
+  ailmentType: 1
+  isDestroying: 0
+  showIcon: 0

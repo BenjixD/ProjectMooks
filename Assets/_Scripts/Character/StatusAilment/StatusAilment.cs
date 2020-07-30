@@ -20,6 +20,8 @@ public abstract class StatusAilment : ScriptableObject {
 
     public AilmentType ailmentType = AilmentType.DESTROY_ON_BATTLE_END;
 
+    public bool isDestroying = false;
+
 	public void SetDuration(int duration) {
 		this.duration = duration;
 	}

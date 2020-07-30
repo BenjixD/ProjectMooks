@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: HerosMiracleAilment
   m_EditorClassIdentifier: 
   name: Hero's Miracle
+  icon: {fileID: 0}
   infiniteDuration: 0
   duration: 7
   level: 0
   phase: 0
   ailmentType: 1
+  isDestroying: 0
+  showIcon: 1
   nothingAction: {fileID: 11400000, guid: 95f3a662e37fbb54694506171fc9112c, type: 2}
   reviveHP: 1
