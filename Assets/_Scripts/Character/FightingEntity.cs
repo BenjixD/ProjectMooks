@@ -66,6 +66,7 @@ public class FightingEntity : MonoBehaviour
         yield return GameManager.Instance.time.GetController().StartCoroutine(_animController.Fade());
         if (IsHero()) {
             // Important for Hero death
+            this._animController.UnFade();
             this.gameObject.SetActive(false);
         } else {
             Destroy(gameObject);

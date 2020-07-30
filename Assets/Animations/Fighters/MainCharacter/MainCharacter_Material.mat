@@ -56,11 +56,11 @@ Material:
     - _BumpScale: 1
     - _Cull: 0
     - _CustomRenderQueue: 0
-    - _Cutoff: 0.1
+    - _Cutoff: 0
     - _DstBlend: 10
     - _EmissionPower: 2
     - _EnableExternalAlpha: 0
-    - _FillPhase: 0
+    - _FillPhase: 0.018
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _Hue: 0

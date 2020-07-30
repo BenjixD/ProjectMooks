@@ -31,6 +31,13 @@ public class BattleField : MonoBehaviour
                 Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, deathResult);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.O)) {
+            FightingEntity hero = this.GetHeroPlayer();
+            hero.stats.hp.SetValue(0);
+            DeathResult deathResult = new DeathResult(hero, new DamageReceiver(hero, hero.stats, hero.stats), null);
+            Messenger.Broadcast<DeathResult>(Messages.OnEntityDeath, deathResult);
+        }
     }
 
     // Field helper functions ===

@@ -25,24 +25,24 @@ public class HerosMiracleAilment : StatusAilment {
             p.fighter.RemoveModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION);
             p.fighter.RemoveModifier(ModifierAilment.MODIFIER_DEATH);
             p.fighter.RemoveModifier(ModifierAilment.MODIFIER_UNTARGETTABLE);
-            p.fighter.gameObject.SetActive(true);
+            if (!isDestroying) {
+                p.fighter.gameObject.SetActive(true);
+            }
         }
 
         //TODO: Play Animation
         // Temp animation will be to just set gameObject active 
         p.stats.hp.ApplyDelta(reviveHP);
-        //p.ailmentController.RemoveStatusAilment(this.name);
 	}
 
 	public override void TickEffect(Fighter p) {
-        Debug.Log("HERO's AILMENT TICK: " + this.duration);
-
         if (p.fighter == null) {
             Debug.LogError("ERROR: FightingEntity is null");
         }
 
         if (this.duration <= 1) {
-            this.Recover(p);
+            //this.Recover(p);
+            p.ailmentController.RemoveStatusAilment(this.name);
         } else {
             p.fighter.SetQueuedAction(nothingAction, new List<int>{ p.index });	
         }
