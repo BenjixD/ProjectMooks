@@ -100,8 +100,15 @@ public class RewardController : MonoBehaviour
             allRewards.AddRange(rewardPool.GetPoolWeights());
         }
 
+        Debug.Log("Rewards:");
+        for (int i = 0; i < allRewards.Count; i++) {
+            Debug.Log(allRewards[i].value.name + " " + allRewards[i].weight);
+        }
+
         finalRewardPool = new RandomPool<PlayerReward>(allRewards);
         
+        
+
         List<PlayerReward> rewards = finalRewardPool.PickN(numRewards);
 
         foreach (PlayerReward reward in rewards) {
@@ -123,10 +130,14 @@ public class RewardController : MonoBehaviour
     }
 
     public void ApplyReward(PlayerReward reward) {
+
+        Player hero = GameManager.Instance.gameState.playerParty.GetHeroFighter();
         switch (reward.rewardType) {
             case PlayerRewardType.AILMENT:
-                Player hero = GameManager.Instance.gameState.playerParty.GetHeroFighter();
                 hero.ailmentController.AddStatusAilment(((PlayerRewardAilment)reward).ailment);
+            break;
+            case PlayerRewardType.ACTION:
+                hero.actions.Add(((PlayerRewardAction)reward).action);
             break;
 
             default:

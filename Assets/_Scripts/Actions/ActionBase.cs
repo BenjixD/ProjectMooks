@@ -266,11 +266,14 @@ public class ActionBase : ScriptableObject {
     public virtual IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, BattleFight battleFight) {
         _battleFight = battleFight;
         FightResult result = new FightResult(user, this);
+
+        Coroutine animationCor = null;
+
         if (CheckCost(user)) {
             PayCost(user);
             // Play Animation
             if (animation != null) {
-                GameManager.Instance.time.GetController().StartCoroutine(animation.Animate(user, targets));
+                animationCor = GameManager.Instance.time.GetController().StartCoroutine(animation.Animate(user, targets));
                 yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimWindup());
             } else {
                 Debug.LogWarning("No animation set for " + user.name + "'s " + name);
@@ -281,6 +284,10 @@ public class ActionBase : ScriptableObject {
         _battleFight.EndFight(result, this);
         if (animation != null) {
             yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimCooldown());
+        }
+
+        if (animationCor != null) {
+            yield return animationCor;
         }
     }
 

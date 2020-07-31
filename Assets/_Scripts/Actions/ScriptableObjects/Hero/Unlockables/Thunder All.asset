@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Thunder
+  m_Name: Thunder All
   m_EditorClassIdentifier: 
-  name: Thunder
+  name: Thunder All
   actionType: 1
   description: Deals light lightning damage to a single target. May inflict paralysis.
   animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
@@ -25,7 +25,7 @@ MonoBehaviour:
     stamina: 0
   targetInfo:
     targetTeam: 1
-    targetType: 0
+    targetType: 1
   effects:
     element: 3
     physicalScaling: 0

@@ -2,19 +2,19 @@
 
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Rewards", menuName = "Rewards/PlayerRewardAiment", order = 0)]
-public class PlayerRewardAilment : PlayerReward
+[CreateAssetMenu(fileName = "Rewards", menuName = "Rewards/PlayerRewardAction", order = 0)]
+public class PlayerRewardAction : PlayerReward
 {
 
     public override PlayerRewardType rewardType {
-        get { return PlayerRewardType.AILMENT; }
+        get { return PlayerRewardType.ACTION; }
     }
 
-    public StatusAilment ailment;
+    public ActionBase action;
 
     public override void Initialize(Fighter player) {
         // Note: Randomization/dynamic description should be done here.
         // Be sure to instantiate the scriptable object before you call this
-        this.ailment = Instantiate(ailment);
+        this.action = Instantiate(action);
     }
 }

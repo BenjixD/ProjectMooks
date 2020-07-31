@@ -9,33 +9,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Thunder
+  m_Script: {fileID: 11500000, guid: 4689e2ec6be9a2d4f9162fbac888cf41, type: 3}
+  m_Name: DoubleAttack
   m_EditorClassIdentifier: 
-  name: Thunder
-  actionType: 1
-  description: Deals light lightning damage to a single target. May inflict paralysis.
-  animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
+  name: Double Attack
+  actionType: 0
+  description: Attack, but double.
+  animation: {fileID: 11400000, guid: 4b9ea0309b85cc14ba17c21fede1acb2, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:
     HP: 0
-    mana: 2
+    mana: 0
     PP: 0
     stamina: 0
   targetInfo:
     targetTeam: 1
     targetType: 0
   effects:
-    element: 3
-    physicalScaling: 0
-    specialScaling: 0.5
+    element: 0
+    physicalScaling: 0.75
+    specialScaling: 0
     heals: 0
-    statusAilments:
-    - statusAilment: {fileID: 11400000, guid: b1474899134994879b06bd74bd935c73, type: 2}
-      duration: 3
-      infiniteDuration: 0
-      chance: 0.3
+    statusAilments: []
   commandKeyword: 
   commandArgs: 0
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Thunder
+  m_Name: Fire All
   m_EditorClassIdentifier: 
-  name: Thunder
+  name: Fire All
   actionType: 1
-  description: Deals light lightning damage to a single target. May inflict paralysis.
+  description: Deals medium fire damage to a single target. May inflict burn.
   animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
   maxPP: 0
   currPP: 0
@@ -25,17 +25,17 @@ MonoBehaviour:
     stamina: 0
   targetInfo:
     targetTeam: 1
-    targetType: 0
+    targetType: 1
   effects:
-    element: 3
+    element: 1
     physicalScaling: 0
-    specialScaling: 0.5
+    specialScaling: 1
     heals: 0
     statusAilments:
-    - statusAilment: {fileID: 11400000, guid: b1474899134994879b06bd74bd935c73, type: 2}
-      duration: 3
+    - statusAilment: {fileID: 11400000, guid: 4859a5e1b4883ac43b16090a253a5df4, type: 2}
+      duration: 5
       infiniteDuration: 0
-      chance: 0.3
+      chance: 0.4
   commandKeyword: 
   commandArgs: 0
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
