@@ -21,6 +21,5 @@ MonoBehaviour:
   slideType: 1
   slideDuration: 0.5
   meleeReach: 10
-  _timeBeforeEffect: 1.1
+  _timeBeforeEffect: 1
   _timeAfterEffect: 1
-  _actionAnimRepeats: 1

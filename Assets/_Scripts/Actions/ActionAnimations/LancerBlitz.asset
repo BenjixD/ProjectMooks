@@ -23,4 +23,3 @@ MonoBehaviour:
   meleeReach: 18
   _timeBeforeEffect: 0.35
   _timeAfterEffect: 0.5
-  _actionAnimRepeats: 3
