@@ -10,9 +10,9 @@ public class ActionEffects {
     public float physicalScaling;
     [Tooltip("Special stat scaling. A value of 1 will result in 100% of the user's special stat being added to the damage.")]
     public float specialScaling;
-    [Tooltip("Percent of max HP to add to effect as physical damage (mitigated by def).")]
+    [Range(0, 1), Tooltip("Percent of max HP to add to effect as physical damage (mitigated by def).")]
     public float mhpPercentPhys;
-    [Tooltip("Percent of max HP to add to effect as special damage (mitigated by res).")]
+    [Range(0, 1), Tooltip("Percent of max HP to add to effect as special damage (mitigated by res).")]
     public float mhpPercentSpec;
     [Tooltip("Set to true if this effect can heal the target.")]
     public bool heals = false;

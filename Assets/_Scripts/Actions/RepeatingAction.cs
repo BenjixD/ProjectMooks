@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * An action that repeats its effect multiple times.
+ */
 [CreateAssetMenu(fileName = "NewRepeatingAction", menuName = "Actions/Repeating Action", order = 5)]
 public class RepeatingAction : ActionBase {
     [SerializeField, Tooltip("Number of times to repeat the action.")]
