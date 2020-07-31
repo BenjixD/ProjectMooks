@@ -337,6 +337,14 @@ public class ActionBase : ScriptableObject {
         return this.GetTargets(user, new List<int>{targetId});
     }
 
+    // Return targets that should be focused during this action
+    public List<FightingEntity> GetFocusedTargets(FightingEntity user, List<int> targetIds){ 
+        if (targetInfo.targetType == TargetType.RANDOM) {
+           return GetAllPossibleActiveTargets(user);
+        }
+        return GetTargets(user, targetIds);
+    }
+
     // Returns a list of targets based on this move's target info. Do not use for single target actions.
     public List<FightingEntity> GetNewTargets(FightingEntity user) {
         if (targetInfo.targetType == TargetType.RANDOM) {
