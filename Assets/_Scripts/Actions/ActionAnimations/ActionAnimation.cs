@@ -31,8 +31,6 @@ public class ActionAnimation : ScriptableObject {
     protected float _timeBeforeEffect;
     [SerializeField, Tooltip("Time to wait after the action effect takes place.")]
     protected float _timeAfterEffect;
-    [SerializeField, Tooltip("Number of times to play the action animation. Will usually be 1; increase this number for RepeatingActions.")]
-    private float _actionAnimRepeats = 1;
 
     public virtual IEnumerator Animate(FightingEntity user, List<FightingEntity> targets) {
         // Save the start position for the melee slide
@@ -43,10 +41,8 @@ public class ActionAnimation : ScriptableObject {
             yield return GameManager.Instance.time.GetController().StartCoroutine(SlideIn(user, targets));
         }
 
-        for (int i = 0; i < _actionAnimRepeats; i++) {
-            // Perform action animation
-            yield return GameManager.Instance.time.GetController().StartCoroutine(AnimateAction(user, targets));
-        }
+        // Perform action animation
+        yield return GameManager.Instance.time.GetController().StartCoroutine(AnimateAction(user, targets));
 
         // Slide back to starting position if necessary
         if (slideType != SlideType.NONE && user != null) {
@@ -86,7 +82,7 @@ public class ActionAnimation : ScriptableObject {
         }
     }
 
-    protected IEnumerator AnimateAction(FightingEntity user, List<FightingEntity> targets) {
+    public IEnumerator AnimateAction(FightingEntity user, List<FightingEntity> targets) {
         // Perform user's animation
         user.PlaySound("action");
         AnimateUser(user);

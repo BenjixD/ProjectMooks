@@ -21,7 +21,6 @@ public class RepeatingAction : ActionBase {
                 yield return GameManager.Instance.time.GetController().StartCoroutine(animation.SlideIn(user, targets));
             }
 
-            // float timeBetweenEffects = animation.GetAnimCooldown(false) + animation.GetAnimWindup(false);
             List<FightingEntity> potentialTargets = targets;
             for (int i = 0; i < _numHits; i++) {
                 potentialTargets = targets.Filter(target => target != null);
@@ -30,18 +29,12 @@ public class RepeatingAction : ActionBase {
                 }
                 List<FightingEntity> currTargets = SetTargets(user, targets);
                 // Play animation
-                yield return GameManager.Instance.time.GetController().StartCoroutine(PlayAnimation(user, targets));
+                GameManager.Instance.time.GetController().StartCoroutine(animation.AnimateAction(user, currTargets));
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimWindup(false));
                 result = ApplyEffect(user, currTargets);
                 OnPostEffect(result);
                 _battleFight.EndFight(result, this);
-
-                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimCooldown());
-
-                // TODOL
-                // Add delay before next hit, if there is one
-                // if (i !=_numHits) {
-                    // yield return GameManager.Instance.time.GetController().WaitForSeconds(timeBetweenEffects);
-                // }
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimCooldown(false));
             }
 
             // Slide back

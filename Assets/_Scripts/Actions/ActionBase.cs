@@ -286,7 +286,6 @@ public class ActionBase : ScriptableObject {
             yield return GameManager.Instance.time.GetController().StartCoroutine(PlayAnimation(user, targets));
             result = ApplyEffect(user, targets);
             OnPostEffect(result);
-            // TODOL: below stuff moved inside if?
             _battleFight.EndFight(result, this);
             if (animation != null) {
                 yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimCooldown());
