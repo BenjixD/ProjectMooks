@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
-  m_Name: Cleave
+  m_Name: ShieldBash
   m_EditorClassIdentifier: 
   name: Shield Bash
   actionType: 0
   description: Deals light damage to one enemy and stuns them for 3 turns.
   animation: {fileID: 11400000, guid: 805e2fac153e1d84090edc2ea25ea4e7, type: 2}
   maxPP: 2
-  currPP: 0
+  currPP: 2
   actionCost:
     HP: 0
     mana: 0
@@ -26,10 +26,13 @@ MonoBehaviour:
   targetInfo:
     targetTeam: 1
     targetType: 0
+    randomTargets: 0
   effects:
     element: 0
     physicalScaling: 0.5
     specialScaling: 0
+    mhpPercentPhys: 0
+    mhpPercentSpec: 0
     heals: 0
     statusAilments:
     - statusAilment: {fileID: 11400000, guid: b1474899134994879b06bd74bd935c73, type: 2}
@@ -37,6 +40,6 @@ MonoBehaviour:
       infiniteDuration: 0
       chance: 1
   commandKeyword: bash
-  commandArgs: 0
+  commandArgs: 1
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
     type: 3}

@@ -99,7 +99,7 @@ public class BattlePhase : Phase {
             QueuedAction attackerAction = queuedActions[i];
 
             // This can happen if target dies mid-battle
-            if (attackerAction._action.GetTargets(fighters[i], attackerAction.GetTargetIds()).Count == 0) {
+            if (attackerAction._action.TargetsDead(fighters[i], attackerAction.GetTargetIds())) {
                 Debug.Log("Skip attacker's turn: " + fighters[i].Name);
                 this._ui.battleOrderUI.PopFighter();
                 yield return GameManager.Instance.time.GetController().WaitForSeconds(1.0f);

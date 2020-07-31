@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,7 +24,7 @@ public class Explosion : ActionBase {
         int attackDamage = GetRawDamage(user.stats, power);
         
         foreach (FightingEntity target in targets) {
-            int damage = (int)(attackDamage * target.stats.GetDamageMultiplierResistence());
+            int damage = GetDamageToTarget(user, target);
             if (!target.IsHeroTeam()) {
                 damage *= 2;
             }

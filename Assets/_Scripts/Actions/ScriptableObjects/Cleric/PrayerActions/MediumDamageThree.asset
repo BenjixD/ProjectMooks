@@ -9,35 +9,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b6ef2f870480a54bb2fb5883be7363e, type: 3}
-  m_Name: ManaShift
+  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
+  m_Name: MediumDamageThree
   m_EditorClassIdentifier: 
-  name: Mana Shift
-  actionType: 0
-  description: Restores the hero's mana with the mooks' energy.
-  animation: {fileID: 11400000, guid: e7958f5673bb8f8498757d8f2f4a6fcd, type: 2}
-  maxPP: 2
-  currPP: 2
+  name: Smite Multiple
+  actionType: 1
+  description: Deals medium holy damage to three random enemies.
+  animation: {fileID: 11400000, guid: e2a54a6b284e80e4aa2d54ed49a31c47, type: 2}
+  maxPP: 0
+  currPP: 0
   actionCost:
     HP: 0
     mana: 0
-    PP: 1
+    PP: 0
     stamina: 0
   targetInfo:
-    targetTeam: 0
-    targetType: 3
-    randomTargets: 0
+    targetTeam: 1
+    targetType: 2
+    randomTargets: 3
   effects:
-    element: 0
+    element: 4
     physicalScaling: 0
-    specialScaling: 0.2
+    specialScaling: 1
     mhpPercentPhys: 0
     mhpPercentSpec: 0
     heals: 0
     statusAilments: []
-  commandKeyword: shift
+  commandKeyword: 
   commandArgs: 0
   damagePopupCanvasPrefab: {fileID: 4139539340987804469, guid: 5de1bbab1e574d54786a080cb328c88a,
-    type: 3}
-  _manaShiftQTE: {fileID: 5498650744045303134, guid: 611ec3a2aff306b45893529da2226e01,
     type: 3}

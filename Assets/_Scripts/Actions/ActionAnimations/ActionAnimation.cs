@@ -31,19 +31,63 @@ public class ActionAnimation : ScriptableObject {
     protected float _timeBeforeEffect;
     [SerializeField, Tooltip("Time to wait after the action effect takes place.")]
     protected float _timeAfterEffect;
+    [SerializeField, Tooltip("Number of times to play the action animation. Will usually be 1; increase this number for RepeatingActions.")]
+    private float _actionAnimRepeats = 1;
 
     public virtual IEnumerator Animate(FightingEntity user, List<FightingEntity> targets) {
-        // Determine the start and end positions for the melee slide
+        // Save the start position for the melee slide
         Vector3 userStartingPos = user.transform.position;
-        Vector3 userDestination = Vector3.zero;
         
         // Perform slide
         if (slideType != SlideType.NONE) {
-            SetSlidePositions(user, targets, ref userDestination);
-            yield return GameManager.Instance.time.GetController().StartCoroutine(Slide(user.transform, userStartingPos, userDestination));
+            yield return GameManager.Instance.time.GetController().StartCoroutine(SlideIn(user, targets));
         }
 
-        // Perform action animation
+        for (int i = 0; i < _actionAnimRepeats; i++) {
+            // Perform action animation
+            yield return GameManager.Instance.time.GetController().StartCoroutine(AnimateAction(user, targets));
+        }
+
+        // Slide back to starting position if necessary
+        if (slideType != SlideType.NONE && user != null) {
+            yield return GameManager.Instance.time.GetController().StartCoroutine(Slide(user.transform, user.transform.position, userStartingPos));
+        }
+    }
+
+    public virtual IEnumerator SlideIn(FightingEntity user, List<FightingEntity> targets) {
+        if (slideType == SlideType.STEP_FORWARD) {
+            Vector3 destination = user.transform.position;
+            destination.x += user.IsHeroTeam() ? -stepForwardDistance : stepForwardDistance;
+            yield return GameManager.Instance.time.GetController().StartCoroutine(Slide(user.transform, user.transform.position, destination));
+        } else if (slideType == SlideType.MELEE) {
+            Vector3 destination = Vector3.zero;
+            float averageTargetRadius = 0;
+            foreach (FightingEntity target in targets) {
+                destination += target.transform.position;
+                averageTargetRadius += target.GetComponent<FighterPositions>().fighterRadius;
+            }
+            destination /= targets.Count;
+            averageTargetRadius /= targets.Count;
+            // Distance target and destination based on the reach of this attack and the width of the target
+            float distance = meleeReach + averageTargetRadius;
+            destination.x += user.IsHeroTeam() ? distance : -distance;
+            yield return GameManager.Instance.time.GetController().StartCoroutine(Slide(user.transform, user.transform.position, destination));
+        }
+    }
+
+    public IEnumerator Slide(Transform transform, Vector3 start, Vector3 end) {
+        float elapsedTime = 0;
+        float t = 0;
+        while (transform.position != end) {
+            elapsedTime += GameManager.Instance.time.deltaTime;
+            t = Mathf.SmoothStep(0, 1, elapsedTime / slideDuration);
+            transform.position = Vector3.Lerp(start, end, t);
+            yield return null;
+        }
+    }
+
+    protected IEnumerator AnimateAction(FightingEntity user, List<FightingEntity> targets) {
+        // Perform user's animation
         user.PlaySound("action");
         AnimateUser(user);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeBeforeEffect);
@@ -57,42 +101,6 @@ public class ActionAnimation : ScriptableObject {
         }
         AnimateTargetEffects(user, targets);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeAfterEffect);
-
-        // Slide back to starting position if necessary
-        if (slideType != SlideType.NONE && user != null) {
-            yield return GameManager.Instance.time.GetController().StartCoroutine(Slide(user.transform, userDestination, userStartingPos));
-        }
-    }
-
-    protected virtual void SetSlidePositions(FightingEntity user, List<FightingEntity> targets, ref Vector3 userDestination) {
-        if (slideType == SlideType.STEP_FORWARD) {
-            userDestination = user.transform.position;
-            userDestination.x += user.IsHeroTeam() ? -stepForwardDistance : stepForwardDistance;
-        } else if (slideType == SlideType.MELEE) {
-            float averageTargetRadius = 0;
-            foreach (FightingEntity target in targets) {
-                userDestination += target.transform.position;
-                averageTargetRadius += target.GetComponent<FighterPositions>().fighterRadius;
-            }
-            userDestination /= targets.Count;
-            averageTargetRadius /= targets.Count;
-            // Distance target and destination based on the reach of this attack and the width of the target
-            float distance = meleeReach + averageTargetRadius;
-            userDestination.x += user.IsHeroTeam() ? distance : -distance;
-        } else {
-            Debug.Log("No slide position specified for SlideType " + slideType);
-        }
-    }
-
-    protected IEnumerator Slide(Transform transform, Vector3 start, Vector3 end) {
-        float elapsedTime = 0;
-        float t = 0;
-        while (transform.position != end) {
-            elapsedTime += GameManager.Instance.time.deltaTime;
-            t = Mathf.SmoothStep(0, 1, elapsedTime / slideDuration);
-            transform.position = Vector3.Lerp(start, end, t);
-            yield return null;
-        }
     }
 
     protected virtual void AnimateUser(FightingEntity user) {
@@ -130,17 +138,17 @@ public class ActionAnimation : ScriptableObject {
         }
     }
 
-    public float GetAnimWindup() {
+    public float GetAnimWindup(bool includeSlideTime = true) {
         float time = _timeBeforeEffect;
-        if (slideType != SlideType.NONE) {
+        if (slideType != SlideType.NONE && includeSlideTime) {
             time += slideDuration;
         }
         return time;
     }
 
-    public float GetAnimCooldown() {
+    public float GetAnimCooldown(bool includeSlideTime = true) {
         float time = _timeAfterEffect;
-        if (slideType != SlideType.NONE) {
+        if (slideType != SlideType.NONE && includeSlideTime) {
             time += slideDuration;
         }
         return time;
