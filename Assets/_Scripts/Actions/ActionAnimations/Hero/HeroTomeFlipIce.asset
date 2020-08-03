@@ -9,15 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3077ad366cc905c449f186e7bac9834e, type: 3}
-  m_Name: HeroMeleeAttack
+  m_Script: {fileID: 11500000, guid: ca2fbdbb5ec9ac148b9551d140edd234, type: 3}
+  m_Name: HeroTomeFlipIce
   m_EditorClassIdentifier: 
-  userAnimName: melee attack
+  userAnimName: 
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
   targetFlash: 1
-  slideType: 1
+  shakeStrength: 0
+  delayHitEffects: 0
+  slideType: 0
   slideDuration: 0.5
-  meleeReach: 8
-  _timeBeforeEffect: 0.7
-  _timeAfterEffect: 0.3
+  meleeReach: 5
+  _timeBeforeEffect: 3
+  _timeAfterEffect: 1
+  particleHitEffectPrefab: {fileID: 100004, guid: 417d95259df90e4488eb927fde45cba3,
+    type: 3}

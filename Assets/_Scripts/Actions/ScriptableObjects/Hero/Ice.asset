@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Ice
   actionType: 1
   description: Deals heavy ice damage to a single target.
-  animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
+  animation: {fileID: 11400000, guid: 8c7bf4f9db0c722468584bdb8a8a71ca, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:
