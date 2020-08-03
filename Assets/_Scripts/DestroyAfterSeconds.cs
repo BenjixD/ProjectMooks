@@ -5,7 +5,7 @@ using UnityEngine;
 public class DestroyAfterSeconds : MonoBehaviour
 {
 
-    public float duration;
+    public float duration = 5;
 
     private float counter = 0;
 

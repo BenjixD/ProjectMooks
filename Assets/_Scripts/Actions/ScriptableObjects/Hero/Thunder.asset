@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Thunder
   actionType: 1
   description: Deals light lightning damage to a single target. May inflict paralysis.
-  animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
+  animation: {fileID: 11400000, guid: 376f45b417ffe834687299e9aac1ce45, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:

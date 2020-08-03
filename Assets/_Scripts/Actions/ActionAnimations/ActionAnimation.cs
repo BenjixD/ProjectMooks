@@ -134,7 +134,7 @@ public class ActionAnimation : ScriptableObject {
 
     protected virtual void InstantiateParticleEffect(FightingEntity target) {
         FighterPositions positions = target.GetComponent<FighterPositions>();
-        if (targetHitEffect != null && positions != null) {
+        if (particleHitEffectPrefab != null && positions != null) {
             GameObject hitEffect = Instantiate(particleHitEffectPrefab, positions.damagePopup);
             ParticleSystemsHelper psh = hitEffect.GetComponent<ParticleSystemsHelper>();
             hitEffect.GetComponent<DestroyAfterSeconds>().duration = GetAnimWindup();

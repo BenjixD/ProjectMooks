@@ -17,6 +17,7 @@ public class PlayerQueue : TwitchChatListenerBase {
 		} else {
             List<Job> mookJobs = GameManager.Instance.models.getMookJobs();
             Job mookJob = mookJobs[UnityEngine.Random.Range(0, mookJobs.Count)];
+            mookJob = Job.CLERIC;
 
 			LinkedListNode<PlayerCreationData> node = _waitingQueue.AddLast(new PlayerCreationData(username, mookJob));
 			_inQueue.Add(username, node);
