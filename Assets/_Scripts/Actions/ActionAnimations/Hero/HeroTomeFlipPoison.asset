@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 148948ed54ea2e949b071988755ae756, type: 3}
-  m_Name: ClericCastLight
+  m_Script: {fileID: 11500000, guid: ca2fbdbb5ec9ac148b9551d140edd234, type: 3}
+  m_Name: HeroTomeFlipPoison
   m_EditorClassIdentifier: 
   userAnimName: 
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
@@ -22,6 +22,6 @@ MonoBehaviour:
   slideDuration: 0.5
   meleeReach: 5
   _timeBeforeEffect: 2.5
-  _timeAfterEffect: 1.25
-  particleHitEffectPrefab: {fileID: 100006, guid: 8b940ede2c20ec44ba870a2cdd277051,
+  _timeAfterEffect: 1
+  particleHitEffectPrefab: {fileID: 100004, guid: 7867af58a6ec48846ae807eb4022fbaa,
     type: 3}

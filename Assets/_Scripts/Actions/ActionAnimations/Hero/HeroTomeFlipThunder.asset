@@ -21,7 +21,7 @@ MonoBehaviour:
   slideType: 0
   slideDuration: 0.5
   meleeReach: 5
-  _timeBeforeEffect: 3
+  _timeBeforeEffect: 2.5
   _timeAfterEffect: 1
   particleHitEffectPrefab: {fileID: 100000, guid: a4af0d82b00381c48bc30b65c57ba3f8,
     type: 3}
