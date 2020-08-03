@@ -11,13 +11,17 @@ public class EventStage : MonoBehaviour {
     [Tooltip("Map icon for this event.")]
     public Sprite icon;
     [SerializeField] protected TextMeshProUGUI _descriptionText = null;
-    [SerializeField] private GameObject _continueButton = null;
+    [SerializeField] protected GameObject _continueButton = null;
     private string _mapScene = "WorldMap";
 
     private void Start() {
         DontDestroyOnLoad(gameObject);
-        _continueButton.GetComponent<Button>().onClick.AddListener(ReturnToMap);
+        InitializeContinueButton();
         ProcessEvent();
+    }
+
+    protected virtual void InitializeContinueButton() {
+        _continueButton.GetComponent<Button>().onClick.AddListener(ReturnToMap);
     }
 
     private void ProcessEvent() {

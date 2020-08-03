@@ -214,6 +214,7 @@ MonoBehaviour:
   _eventPrefabs:
   - {fileID: -7618383643626820223, guid: 26d214a1c3bbf9d4fb84f6c7e14c14b7, type: 3}
   - {fileID: 8327410719921139989, guid: 9dee107f7e711fd4dbacefee756f90b8, type: 3}
+  - {fileID: 1463776809722009755, guid: e3f47c896e039684eaac9802218c03a2, type: 3}
 --- !u!114 &1357655215
 MonoBehaviour:
   m_ObjectHideFlags: 0

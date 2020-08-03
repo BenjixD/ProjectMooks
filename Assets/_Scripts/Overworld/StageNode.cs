@@ -19,8 +19,9 @@ public enum BattleType {
 }
 
 public enum EventType {
-    CAMP_GROUNDS,
-    SHRINE
+    CAMP,
+    SHRINE,
+    TRAIN
 }
 
 public class StageNode : MonoBehaviour {
