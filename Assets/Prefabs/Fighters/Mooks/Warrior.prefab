@@ -284,7 +284,7 @@ PrefabInstance:
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.physical.growth
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
