@@ -17,13 +17,6 @@ MonoBehaviour:
   columns:
   - stageType: 2
     waveInfos: []
-  - stageType: 0
-    waveInfos:
-    - averageLevel: 1
-      minAmountOfEnemies: 1
-      maxAmountOfEnemies: 1
-      possibleEnemies:
-      - {fileID: 11400000, guid: 059b559c8905fbd45bd16137cf002c47, type: 2}
   - stageType: 2
     waveInfos: []
   - stageType: 2
@@ -31,4 +24,9 @@ MonoBehaviour:
   - stageType: 2
     waveInfos: []
   - stageType: 1
-    waveInfos: []
+    waveInfos:
+    - averageLevel: 1
+      minAmountOfEnemies: 1
+      maxAmountOfEnemies: 1
+      possibleEnemies:
+      - {fileID: 11400000, guid: 3e040534d70a1364aa5bc3ab3ad2cc35, type: 2}
