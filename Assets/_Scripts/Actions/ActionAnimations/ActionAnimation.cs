@@ -12,6 +12,10 @@ public enum SlideType {
 public class ActionAnimation : ScriptableObject {
     [Tooltip("The name of the default animation played for the user of this action. Alternatively, you can override Animate().")]
     public string userAnimName;
+
+    [Header("Impact Properties")]
+    [Tooltip("The key for the user's sound that plays when the effect happens.")]
+    public string effectSoundName;
     [Tooltip("The prefab that will be instantiated atop the target(s).")]
     public GameObject targetHitEffect;
     [Tooltip("Set to true to make the target(s) flash when the effect happens.")]
@@ -20,6 +24,12 @@ public class ActionAnimation : ScriptableObject {
     public ShakeStrength shakeStrength;
     [Tooltip("Set to true to add a slight delay between the action effect and the effect animation. Useful for QTE animations.")]
     public bool delayHitEffects;
+    [SerializeField, Tooltip("Time into the user animation before the effect takes place.")]
+    protected float _timeBeforeEffect;
+    [SerializeField, Tooltip("Time to wait after the action effect takes place.")]
+    protected float _timeAfterEffect;
+
+    [Header("Slide Properties")]
     [Tooltip("The type of slide that should precede this animation: none, a small slide forward, or a long slide into melee range of the target(s).")]
     public SlideType slideType;
     [Tooltip("Time it takes for the user to slide to the target(s).")]
@@ -27,10 +37,6 @@ public class ActionAnimation : ScriptableObject {
     private float stepForwardDistance = 5f;     // The distance of the STEP_FORWARD slide type
     [Tooltip("The distance to stop away from the target(s) after a slide and before attacking.")]
     public float meleeReach = 10f;
-    [SerializeField, Tooltip("Time into the user animation before the effect takes place.")]
-    protected float _timeBeforeEffect;
-    [SerializeField, Tooltip("Time to wait after the action effect takes place.")]
-    protected float _timeAfterEffect;
 
     public virtual IEnumerator Animate(FightingEntity user, List<FightingEntity> targets) {
         // Determine the start and end positions for the melee slide
@@ -53,6 +59,7 @@ public class ActionAnimation : ScriptableObject {
 
         // Perform hit visuals on target(s)
         foreach(FightingEntity t in targets) {
+            user.PlaySound(effectSoundName);
             t.PlaySound("hit");
         }
         AnimateTargetEffects(user, targets);
