@@ -25,11 +25,14 @@ MonoBehaviour:
     stamina: 0
   targetInfo:
     targetTeam: 0
-    targetType: 0
+    targetType: 3
+    randomTargets: 0
   effects:
     element: 0
     physicalScaling: 0
     specialScaling: 0.2
+    mhpPercentPhys: 0
+    mhpPercentSpec: 0
     heals: 0
     statusAilments: []
   commandKeyword: shift

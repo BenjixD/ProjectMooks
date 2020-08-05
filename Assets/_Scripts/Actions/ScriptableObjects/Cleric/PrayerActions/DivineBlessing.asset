@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
+  m_Name: DivineBlessing
+  m_EditorClassIdentifier: 
+  name: Divine Blessing
+  actionType: 1
+  description: Increases party's DEF, RES, and SPD by 20% for 3 turns.
+  animation: {fileID: 11400000, guid: 498e823ad438df941b683f04139d81be, type: 2}
+  maxPP: 0
+  currPP: 0
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 0
+    stamina: 0
+  targetInfo:
+    targetTeam: 0
+    targetType: 1
+    randomTargets: 0
+  effects:
+    element: 0
+    physicalScaling: 0
+    specialScaling: 0
+    mhpPercentPhys: 0
+    mhpPercentSpec: 0
+    heals: 0
+    statusAilments:
+    - statusAilment: {fileID: 11400000, guid: 99911dfacc730974e9e3035f59162de3, type: 2}
+      duration: 3
+      infiniteDuration: 0
+      chance: 1
+    - statusAilment: {fileID: 11400000, guid: f3ea3876657a2634b92688000148ba17, type: 2}
+      duration: 3
+      infiniteDuration: 0
+      chance: 1
+    - statusAilment: {fileID: 11400000, guid: 67f9a4c700feae6478255d548c3a32de, type: 2}
+      duration: 3
+      infiniteDuration: 0
+      chance: 1
+  commandKeyword: 
+  commandArgs: 0
+  damagePopupCanvasPrefab: {fileID: 0}

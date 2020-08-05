@@ -12,9 +12,9 @@ public enum ShakeStrength {
 public class CameraController : MonoBehaviour {
     
     [Header("Shake Settings")]
-    [SerializeField] private float _shakeDuration;
+    [SerializeField] private float _shakeDuration = 0;
     [SerializeField, Tooltip("The magnitude of a MEDIUM strength shake.")]
-    private float _shakeMagnitude;
+    private float _shakeMagnitude = 0;
     [SerializeField, Tooltip("The percent difference between each level of shake strength.")]
     private float _strengthDelta = 0.5f;
     private IEnumerator _lastShake;

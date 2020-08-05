@@ -63,14 +63,14 @@ public class StatusBarsUI : MonoBehaviour
                 heroStatusBar.SetHP(player.stats.hp.GetValue(), player.stats.maxHp.GetValue());
                 heroStatusBar.SetMana(player.stats.mana.GetValue(), player.stats.maxMana.GetValue());
                 heroStatusBar.SetNameColor(player.GetOrderColor());
-                heroStatusBar.SetStatusAilmentIcons(player.ailmentController.GetAllAilments().Map(entry => entry.Value).Filter(ailment => ailment.icon != null));
+                heroStatusBar.SetStatusAilmentIcons(player.ailmentController.GetAllAilments().Map(entry => entry.Value));
             } else {
                 // Mooks have energy
                 MookStatusBarUI mookStatusBar = (MookStatusBarUI)statusBars[i];
                 mookStatusBar.SetFighter(player);
                 mookStatusBar.SetName(player.Name);
                 mookStatusBar.SetHP(player.stats.hp.GetValue(), player.stats.maxHp.GetValue());
-                mookStatusBar.SetStatusAilmentIcons(player.ailmentController.GetAllAilments().Map(entry => entry.Value).Filter(ailment => ailment.icon != null));
+                mookStatusBar.SetStatusAilmentIcons(player.ailmentController.GetAllAilments().Map(entry => entry.Value));
                 // Note: Energy might be its own thing later, but for now, lets just use mana
                 
                 mookStatusBar.SetEnergy(player.ailmentController.GetAilment("Out of Juice").duration, maxMookEnergy);
