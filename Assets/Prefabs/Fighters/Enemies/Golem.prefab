@@ -41,7 +41,7 @@ PrefabInstance:
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
@@ -102,7 +102,7 @@ PrefabInstance:
         type: 3}
       propertyPath: clips.Array.data[3].source
       value: 
-      objectReference: {fileID: 8300000, guid: 967ec5a3feb90554680801fe4ad1c2bd, type: 3}
+      objectReference: {fileID: 8300000, guid: 21f4cd25e249d6c44b49a329baa9bdb1, type: 3}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[4].key
@@ -117,22 +117,22 @@ PrefabInstance:
         type: 3}
       propertyPath: clips.Array.data[4].source
       value: 
-      objectReference: {fileID: 8300000, guid: 21f4cd25e249d6c44b49a329baa9bdb1, type: 3}
+      objectReference: {fileID: 8300000, guid: 967ec5a3feb90554680801fe4ad1c2bd, type: 3}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[5].key
-      value: attack_effect
+      value: hit
       objectReference: {fileID: 0}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[5].name
-      value: impact1
+      value: hit2
       objectReference: {fileID: 0}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[5].source
       value: 
-      objectReference: {fileID: 8300000, guid: e25297258cf435c4582c4a2c02786e6a, type: 3}
+      objectReference: {fileID: 8300000, guid: e557e1f0c88d6e34db4e02bdc2187c7c, type: 3}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[6].key
@@ -141,26 +141,41 @@ PrefabInstance:
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[6].name
-      value: impact2
+      value: impact1
       objectReference: {fileID: 0}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[6].source
       value: 
-      objectReference: {fileID: 8300000, guid: 12f044f9b8f82d547a92a012e1522921, type: 3}
+      objectReference: {fileID: 8300000, guid: e25297258cf435c4582c4a2c02786e6a, type: 3}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[7].key
-      value: big_attack_effect
+      value: attack_effect
       objectReference: {fileID: 0}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[7].name
-      value: big_impact
+      value: impact2
       objectReference: {fileID: 0}
     - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: clips.Array.data[7].source
+      value: 
+      objectReference: {fileID: 8300000, guid: 12f044f9b8f82d547a92a012e1522921, type: 3}
+    - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
+        type: 3}
+      propertyPath: clips.Array.data[8].key
+      value: big_attack_effect
+      objectReference: {fileID: 0}
+    - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
+        type: 3}
+      propertyPath: clips.Array.data[8].name
+      value: big_impact
+      objectReference: {fileID: 0}
+    - target: {fileID: 8011948441640658809, guid: ab21418be80c1cf41853d1e28cb6b341,
+        type: 3}
+      propertyPath: clips.Array.data[8].source
       value: 
       objectReference: {fileID: 8300000, guid: 6e77a8f2f2cc07341aa46a7f289daf1f, type: 3}
     - target: {fileID: 8249197650680591220, guid: ab21418be80c1cf41853d1e28cb6b341,
