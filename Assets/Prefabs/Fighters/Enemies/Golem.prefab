@@ -23,6 +23,9 @@ PrefabInstance:
       propertyPath: stats.resistance.growth
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 42403278, guid: ab21418be80c1cf41853d1e28cb6b341, type: 3}
+      propertyPath: Name
+      value: Golem
     - target: {fileID: 2265522960521730003, guid: ab21418be80c1cf41853d1e28cb6b341,
         type: 3}
       propertyPath: fighterRadius

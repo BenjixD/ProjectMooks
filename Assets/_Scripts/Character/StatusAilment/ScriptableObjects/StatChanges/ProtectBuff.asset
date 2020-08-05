@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00319b932a1e934428b556664d130c55, type: 3}
-  m_Name: ProtectDebuff
+  m_Name: ProtectBuff
   m_EditorClassIdentifier: 
-  name: Protecting
-  icon: {fileID: 21300000, guid: 6b9831539912f99429276eedf22a7ed0, type: 3}
+  name: Being Protected
+  icon: {fileID: 21300000, guid: d587cc6a15d8fae438055be48317edb4, type: 3}
   infiniteDuration: 0
   duration: 1
   level: 1
   phase: 3
   ailmentType: 1
+  isDestroying: 0
   stat: 4
   type: 0
-  modifier: -0.4
+  modifier: 0.4
