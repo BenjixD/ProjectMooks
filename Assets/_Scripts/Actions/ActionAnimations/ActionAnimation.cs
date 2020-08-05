@@ -115,7 +115,7 @@ public class ActionAnimation : ScriptableObject {
 
         foreach (FightingEntity target in targets) {
             if (target != null) {
-                InstantiateParticleEffect(target);
+                InstantiateParticleEffect(user, target);
             }
         }
     }
@@ -132,14 +132,17 @@ public class ActionAnimation : ScriptableObject {
         }
     }
 
-    protected virtual void InstantiateParticleEffect(FightingEntity target) {
-        FighterPositions positions = target.GetComponent<FighterPositions>();
-        if (particleHitEffectPrefab != null && positions != null) {
-            GameObject hitEffect = Instantiate(particleHitEffectPrefab, positions.damagePopup);
+    protected virtual void InstantiateParticleEffect(FightingEntity user, FightingEntity target) {
+        FighterPositions userPositions = user.GetComponent<FighterPositions>();
+        FighterPositions targetPositions = target.GetComponent<FighterPositions>();
+        if (particleHitEffectPrefab != null && userPositions != null && targetPositions != null) {
+            GameObject hitEffect = Instantiate(particleHitEffectPrefab, targetPositions.damagePopup);
             ParticleSystemsHelper psh = hitEffect.GetComponent<ParticleSystemsHelper>();
             hitEffect.GetComponent<DestroyAfterSeconds>().duration = GetAnimWindup();
+            psh.SetDestroyDuration(GetAnimWindup());
             psh.SetRenderOrder(target.sortingOrder + 1);
-            //hitEffect.transform.localScale = target.transform.localScale;
+            psh.PositionEffect(userPositions.damagePopup, targetPositions.damagePopup);
+            psh.Play();
         }
     }
 
