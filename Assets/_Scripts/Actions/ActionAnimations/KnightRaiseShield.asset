@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KnightRaiseShield
   userAnimName: 
   targetHitEffect: {fileID: 0}
-  targetFlash: 1
+  targetFlash: 0
   shakeStrength: 0
   delayHitEffects: 0
   slideType: 0
@@ -22,3 +22,4 @@ MonoBehaviour:
   meleeReach: 10
   _timeBeforeEffect: 0
   _timeAfterEffect: 0
+  _actionAnimRepeats: 1

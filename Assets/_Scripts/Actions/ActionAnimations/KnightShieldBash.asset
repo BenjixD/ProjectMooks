@@ -9,18 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 988f6c24acdfaa2459c8c9b8ee0a2d9f, type: 3}
-  m_Name: KnightRaiseAndLowerShield
+  m_Script: {fileID: 11500000, guid: 4051a964954ce6f459f8e834e9ee24d1, type: 3}
+  m_Name: KnightShieldBash
   m_EditorClassIdentifier: 
   userAnimName: 
-  targetHitEffect: {fileID: 7885482589527698955, guid: 1dd3f2ea3a5fb4e408f7e75448f1d55d,
+  targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
-  targetFlash: 0
+  targetFlash: 1
   shakeStrength: 0
   delayHitEffects: 0
-  slideType: 0
+  slideType: 1
   slideDuration: 0.5
-  meleeReach: 5
+  meleeReach: 10
   _timeBeforeEffect: 1
-  _timeAfterEffect: 3
-  _actionAnimRepeats: 1
+  _timeAfterEffect: 1

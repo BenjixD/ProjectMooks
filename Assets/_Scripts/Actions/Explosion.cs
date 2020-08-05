@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,10 +21,10 @@ public class Explosion : ActionBase {
     public void FinishQTE(FightingEntity user, List<FightingEntity> targets, float power) {
         PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
-        int attackDamage = GetRawDamage(user.stats, power);
+        int rawDamage = GetRawDamage(user.stats, power);
         
         foreach (FightingEntity target in targets) {
-            int damage = (int)(attackDamage * target.stats.GetDamageMultiplierResistence());
+            int damage = (int) (rawDamage * target.stats.GetDamageMultiplierResistance());
             if (!target.IsHeroTeam()) {
                 damage *= 2;
             }
