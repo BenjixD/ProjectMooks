@@ -40,7 +40,7 @@ PrefabInstance:
     - target: {fileID: 4457472454935739248, guid: bd253d2dccf38f34c84fccef87996b23,
         type: 3}
       propertyPath: stats.physical.growth
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4457472454935739248, guid: bd253d2dccf38f34c84fccef87996b23,
         type: 3}
@@ -51,6 +51,11 @@ PrefabInstance:
         type: 3}
       propertyPath: stats.maxHp.growth
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4457472454935739248, guid: bd253d2dccf38f34c84fccef87996b23,
+        type: 3}
+      propertyPath: Name
+      value: Autumn Golem
       objectReference: {fileID: 0}
     - target: {fileID: 5739580552655326664, guid: bd253d2dccf38f34c84fccef87996b23,
         type: 3}

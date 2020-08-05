@@ -15,7 +15,10 @@ MonoBehaviour:
   userAnimName: super slam
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
+  effectSoundName: attack_effect
   targetFlash: 1
+  shakeStrength: 0
+  delayHitEffects: 0
   slideType: 1
   slideDuration: 0.8
   meleeReach: 12

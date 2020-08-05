@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00319b932a1e934428b556664d130c55, type: 3}
-  m_Name: SpeedDownAilment
+  m_Name: +20%PhysPersistent
   m_EditorClassIdentifier: 
-  name: Speed Down
-  icon: {fileID: 21300000, guid: 356084b0c16febb43850a82915e21e42, type: 3}
+  name: Physical Up
+  icon: {fileID: 21300000, guid: 2957028a0733ece4a806389b49f87155, type: 3}
   infiniteDuration: 0
-  duration: 3
+  duration: 20
   level: 1
   phase: 3
-  ailmentType: 1
-  stat: 6
+  ailmentType: 0
+  isDestroying: 0
+  stat: 2
   type: 0
-  modifier: -0.2
+  modifier: 0.2

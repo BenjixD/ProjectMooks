@@ -47,6 +47,6 @@ public class RallyingCryUI : MonoBehaviour {
     }
 
     public void UpdatePower(float power) {
-        _powerText.text = power.ToString();
+        _powerText.text = (Mathf.Ceil(power)).ToString();
     }
 }

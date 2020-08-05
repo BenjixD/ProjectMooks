@@ -3,8 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour {
-    [Tooltip("Event prefabs, ordered to match EventTypes.")]
+    [Tooltip("Array of event prefabs. Put into a dictionary on awake.")]
     [SerializeField] private EventStage[] _eventPrefabs = null;
+    private Dictionary<EventType, EventStage> _eventDict = new Dictionary<EventType, EventStage>();
+
+    private void Awake() {
+        // Populate event dict
+        foreach (EventStage eventStage in _eventPrefabs) {
+            _eventDict.Add(eventStage.eventType, eventStage);
+        }
+    }
 
     public void LoadEvent(EventType eventType) {
         GameObject eventPrefab = GetEvent(eventType).gameObject;
@@ -14,11 +22,10 @@ public class EventManager : MonoBehaviour {
     }
 
     public EventStage GetEvent(EventType eventType) {
-        int eventIndex = (int) eventType;
-        if (eventIndex >= _eventPrefabs.Length) {
+        if (!_eventDict.ContainsKey(eventType)) {
             Debug.Log("Requested event prefab is missing");
             return null;
         }
-        return _eventPrefabs[eventIndex];
+        return _eventDict[eventType];
     }
 }

@@ -420,11 +420,11 @@ public class PlayerStats: ICloneable {
     }
 
     // https://leagueoflegends.fandom.com/wiki/Armor
-    public float GetDamageMultiplierArmor() {
+    public float GetDamageMultiplierArmour() {
         return ((float)100 / (100 + this.defence.GetValue()));
     }
 
-    public float GetDamageMultiplierResistence() {
+    public float GetDamageMultiplierResistance() {
         return ((float)100 / (100 + this.resistance.GetValue()));
     }
 }

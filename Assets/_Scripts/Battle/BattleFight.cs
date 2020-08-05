@@ -116,8 +116,8 @@ public class BattleFight : IDisposable
         List<FightingEntity> focusedFighters = new List<FightingEntity>();
         focusedFighters.Add(fighter);
 
-
-        foreach (FightingEntity target in targets) {
+        List<FightingEntity> focusedTargets = action.GetFocusedTargets(this.fighter, attackerAction.GetTargetIds());
+        foreach (FightingEntity target in focusedTargets) {
             focusedFighters.Add(target);
         }
 

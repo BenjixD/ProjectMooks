@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 917a7179f30048843aea21e32cba23fa, type: 3}
+  m_Name: Prayer
+  m_EditorClassIdentifier: 
+  name: Prayer
+  actionType: 1
+  description: Calls for divine aid, which may take the form of blessing your allies
+    or smiting your enemies.
+  animation: {fileID: 0}
+  maxPP: 1
+  currPP: 1
+  actionCost:
+    HP: 0
+    mana: 0
+    PP: 1
+    stamina: 0
+  targetInfo:
+    targetTeam: 0
+    targetType: 2
+    randomTargets: 0
+  effects:
+    element: 0
+    physicalScaling: 0
+    specialScaling: 0
+    mhpPercentPhys: 0
+    mhpPercentSpec: 0
+    heals: 0
+    statusAilments: []
+  commandKeyword: prayer
+  commandArgs: 0
+  damagePopupCanvasPrefab: {fileID: 0}
+  _actions:
+  - {fileID: 11400000, guid: 97ad2f4d1e4fcfc419d908d36d0846aa, type: 2}
+  - {fileID: 11400000, guid: 743cb1180a8970b418f0e64c7986f0f1, type: 2}
+  - {fileID: 11400000, guid: f017d7b12b90b584b8eabc7da648baf8, type: 2}
+  - {fileID: 11400000, guid: 044cd8d7a770e9644aad0d00a79f6a06, type: 2}

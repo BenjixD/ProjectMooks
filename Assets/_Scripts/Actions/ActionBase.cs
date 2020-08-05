@@ -14,6 +14,7 @@ public enum TargetTeam{
 public enum TargetType {
     SINGLE,
     ALL,
+    RANDOM,
     NONE
 };
 
@@ -21,10 +22,12 @@ public enum TargetType {
 public class TargetInfo {
     public TargetTeam targetTeam;
     public TargetType targetType;
+    [Min(0)] public int randomTargets;
 
-    public TargetInfo(TargetTeam team, TargetType type) {
+    public TargetInfo(TargetTeam team, TargetType type, int randomTargets = 0) {
         this.targetTeam = team;
         this.targetType = type;
+        this.randomTargets = Mathf.Max(randomTargets, 0);
     }
 }
 
@@ -183,6 +186,12 @@ public class ActionBase : ScriptableObject {
         else if(targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
             res = true;
         }
+        else if(targetInfo.targetType == TargetType.RANDOM && splitCommand.Length == 1) {
+            res = true;
+        }
+        else if(targetInfo.targetType == TargetType.NONE && splitCommand.Length == 1) {
+            res = true;
+        }
 
         if(!res) {
             response.SetState(ActionChoiceResult.State.INVALID_TARGET);
@@ -219,7 +228,7 @@ public class ActionBase : ScriptableObject {
         return CheckCost(user, new ActionChoiceResult());
     }
 
-    private void PayCost(FightingEntity user) {
+    protected void PayCost(FightingEntity user) {
         PlayerStats stats = user.stats;
 
         stats.hp.ApplyDelta(-actionCost.HP);
@@ -229,6 +238,8 @@ public class ActionBase : ScriptableObject {
         if (user is Mook) {
             Mook mook = (Mook) user;
             mook.stamina.SetStamina(mook.stamina.GetStamina() - actionCost.stamina);
+        } else {
+            currPP = 0;
         }
     }
 
@@ -258,6 +269,10 @@ public class ActionBase : ScriptableObject {
         } else if (targetInfo.targetType == TargetType.ALL && splitCommand.Length == 1) {
             List<int> targetIds = GetAllPossibleActiveTargets(user).Map(target => target.targetId);
             user.SetQueuedAction(this, targetIds);
+        } else if (targetInfo.targetType == TargetType.RANDOM && splitCommand.Length == 1) {
+            user.SetQueuedAction(this, new List<int>{});
+        } else if (targetInfo.targetType == TargetType.NONE && splitCommand.Length == 1) {
+            user.SetQueuedAction(this, new List<int>{});
         }
 
         return true;
@@ -271,24 +286,23 @@ public class ActionBase : ScriptableObject {
 
         if (CheckCost(user)) {
             PayCost(user);
-            // Play Animation
-            if (animation != null) {
-                animationCor = GameManager.Instance.time.GetController().StartCoroutine(animation.Animate(user, targets));
-                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimWindup());
-            } else {
-                Debug.LogWarning("No animation set for " + user.name + "'s " + name);
-            }
+            targets = SetTargets(user, targets);
+            // Play animation
+            yield return GameManager.Instance.time.GetController().StartCoroutine(PlayAnimation(user, targets));
             result = ApplyEffect(user, targets);
             OnPostEffect(result);
+            _battleFight.EndFight(result, this);
+            if (animation != null) {
+                yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimCooldown());
+            }
         }
-        _battleFight.EndFight(result, this);
-        if (animation != null) {
-            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimCooldown());
-        }
+    }
 
-        if (animationCor != null) {
-            yield return animationCor;
+    protected List<FightingEntity> SetTargets(FightingEntity user, List<FightingEntity> targets) {
+        if (targetInfo.targetType == TargetType.RANDOM) {
+            return GetNewTargets(user);
         }
+        return targets;
     }
 
     public List<FightingEntity> GetAllPossibleActiveTargets(FightingEntity user) {
@@ -309,7 +323,6 @@ public class ActionBase : ScriptableObject {
         return targetIds;
     }
 
-
     public List<FightingEntity> GetTargets(FightingEntity user, List<int> targetIds){ 
         if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS) {
            return GetAllPossibleActiveTargets(user);
@@ -327,6 +340,38 @@ public class ActionBase : ScriptableObject {
 
     public List<FightingEntity> GetTargets(FightingEntity user, int targetId) {
         return this.GetTargets(user, new List<int>{targetId});
+    }
+
+    // Return targets that should be focused during this action
+    public List<FightingEntity> GetFocusedTargets(FightingEntity user, List<int> targetIds){ 
+        if (targetInfo.targetType == TargetType.RANDOM) {
+           return GetAllPossibleActiveTargets(user);
+        }
+        return GetTargets(user, targetIds);
+    }
+
+    // Returns a list of targets based on this move's target info. Do not use for single target actions.
+    public List<FightingEntity> GetNewTargets(FightingEntity user) {
+        if (targetInfo.targetType == TargetType.RANDOM) {
+            List<FightingEntity> potentialTargets = GetAllPossibleActiveTargets(user);
+            // Pare down targets until the quantity is as specified
+            while (potentialTargets.Count > targetInfo.randomTargets) {
+                potentialTargets.RemoveAt(Random.Range(0, potentialTargets.Count));
+            }
+            return potentialTargets;
+        }
+        if (targetInfo.targetTeam == TargetTeam.BOTH_TEAMS || targetInfo.targetType == TargetType.ALL) {
+           return GetAllPossibleActiveTargets(user);
+        }
+        Debug.LogWarning("WARNING: Shouldn't use this GetNewTargets() if target type is not all or random!");
+        return new List<FightingEntity>();
+    }
+
+    public bool TargetsDead(FightingEntity user, List<int> targetIds) {
+        if (targetInfo.targetType == TargetType.NONE || targetInfo.targetType == TargetType.RANDOM) {
+            return false;
+        }
+        return GetTargets(user, targetIds).Count == 0;
     }
 
     protected virtual void OnPostEffect(FightResult result) {
@@ -355,20 +400,27 @@ public class ActionBase : ScriptableObject {
         return inflicted;
     }
 
+    protected int GetDamageToTarget(FightingEntity user, FightingEntity target) {
+        float physDamage = user.stats.physical.GetValue() * effects.physicalScaling + effects.mhpPercentPhys * target.stats.maxHp.GetValue();
+        float specDamage = user.stats.special.GetValue() * effects.specialScaling + effects.mhpPercentSpec * target.stats.maxHp.GetValue();
+        float damage = physDamage + specDamage;
+        // If there is a healing effect, negate the damage and ignore damage mitigation
+        if (effects.heals) {
+            damage = -damage;
+        } else {
+            physDamage *= target.stats.GetDamageMultiplierArmour();
+            specDamage *= target.stats.GetDamageMultiplierResistance();
+            damage = physDamage + specDamage;
+        }
+        return (int) (damage);
+    }
+
     public virtual FightResult ApplyEffect(FightingEntity user, List<FightingEntity> targets) {
         PlayerStats before, after;
         List<DamageReceiver> receivers = new List<DamageReceiver>();
-        int attackDamage = (int) (user.stats.physical.GetValue() * effects.physicalScaling + user.stats.special.GetValue() * effects.specialScaling);
         
         foreach (FightingEntity target in targets) {
-            // Default damage mitigation: defense and resistance with half the scaling ratios
-            int damage = attackDamage;
-            // If there is a healing effect, negate the damage and ignore damage mitigation
-            if (effects.heals) {
-                damage = -attackDamage;
-            } else {
-                damage = (int)(damage + target.stats.GetDamageMultiplierArmor());
-            }
+            int damage = GetDamageToTarget(user, target);
             InstantiateDamagePopup(target, damage);
 
             before = (PlayerStats)target.stats.Clone();
@@ -387,14 +439,25 @@ public class ActionBase : ScriptableObject {
         return new FightResult(user, this, receivers);
     }
 
+    public IEnumerator PlayAnimation(FightingEntity user, List<FightingEntity> targets) {
+        if (animation != null) {
+            GameManager.Instance.time.GetController().StartCoroutine(animation.Animate(user, targets));
+            yield return GameManager.Instance.time.GetController().WaitForSeconds(animation.GetAnimWindup());
+        } else {
+            Debug.LogWarning("No animation set for " + user.name + "'s " + name);
+        }
+    }
+
     protected void InstantiateDamagePopup(FightingEntity target, int damage) {
         DamageType damageType = effects.heals ? DamageType.HEALING : DamageType.NORMAL;
         InstantiateDamagePopup(target, damage, damageType);
     }
 
     protected void InstantiateDamagePopup(FightingEntity target, int damage, DamageType damageType) {
-        DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
-        popup.Initialize(target, damage, damageType);
+        if (damagePopupCanvasPrefab != null) {
+            DamagePopup popup = Instantiate(damagePopupCanvasPrefab).GetComponent<DamagePopup>();
+            popup.Initialize(target, damage, damageType);
+        }
     }
 
     private string GetExampleCommandString() {
