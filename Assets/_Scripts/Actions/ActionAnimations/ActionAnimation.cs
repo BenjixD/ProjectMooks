@@ -97,12 +97,8 @@ public class ActionAnimation : ScriptableObject {
             yield return GameManager.Instance.time.GetController().WaitForSeconds(0.05f);
         }
 
-        // Perform hit visuals on target(s)
-        foreach(FightingEntity t in targets) {
-            user.PlaySound(effectSoundName);
-            t.PlaySound("hit");
-        }
-        AnimateTargetEffects(user, targets);
+        // Perform hit sounds and visuals on target(s)
+        PlayTargetEffects(user, targets);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeAfterEffect);
     }
 
@@ -115,14 +111,16 @@ public class ActionAnimation : ScriptableObject {
         }
     }
 
-    protected virtual void AnimateTargetEffects(FightingEntity user, List<FightingEntity> targets) {
+    protected virtual void PlayTargetEffects(FightingEntity user, List<FightingEntity> targets) {
         if (shakeStrength != ShakeStrength.NONE) {
             GameManager.Instance.battleComponents.GetCameraController().Shake(shakeStrength);
         }
+        user.PlaySound(effectSoundName);
         foreach (FightingEntity target in targets) {
             if (target != null) {
                 InstantiateHitEffect(target);
                 TargetFlash(target);
+                target.PlaySound("hit");
             }
         }
     }
