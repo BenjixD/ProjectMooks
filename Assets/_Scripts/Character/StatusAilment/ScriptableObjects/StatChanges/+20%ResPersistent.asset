@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Resistance Up
   icon: {fileID: 21300000, guid: 639ee1cd6680c3e45b6bcaf634174eb3, type: 3}
   infiniteDuration: 0
-  duration: 20
+  duration: 10
   level: 1
   phase: 3
   ailmentType: 0

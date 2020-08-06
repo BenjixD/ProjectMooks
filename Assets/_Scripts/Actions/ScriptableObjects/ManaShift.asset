@@ -30,7 +30,7 @@ MonoBehaviour:
   effects:
     element: 0
     physicalScaling: 0
-    specialScaling: 0.2
+    specialScaling: 0.05
     mhpPercentPhys: 0
     mhpPercentSpec: 0
     heals: 0

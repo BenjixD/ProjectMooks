@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Special Up
   icon: {fileID: 21300000, guid: ecfd024fa96ba93478966651ca58bf89, type: 3}
   infiniteDuration: 0
-  duration: 20
+  duration: 10
   level: 1
   phase: 3
   ailmentType: 0
