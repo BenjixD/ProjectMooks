@@ -16,6 +16,8 @@ public abstract class PlayerReward : ScriptableObject
     public RewardRarity rarity;
     public List<RewardAffinity> affinityTypes;
 
+    public bool isUnique = true;
+
     public abstract PlayerRewardType rewardType {get;}
 
 

@@ -681,6 +681,8 @@ MonoBehaviour:
       weight: 1
     - value: {fileID: 11400000, guid: 237e66bc1db951b41869e6be61f3e5d0, type: 2}
       weight: 1
+    - value: {fileID: 11400000, guid: cb6add5455fbd9345bfe2875da6f7415, type: 2}
+      weight: 1
   - value:
       rewardRarity: 2
     weight: 0.1

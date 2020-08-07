@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e36f52e929b8f0c4caffb6c06731eeba, type: 3}
-  m_Name: DoubleAttackReward
+  m_Name: EnkindleReward
   m_EditorClassIdentifier: 
-  name: Double Attack
-  description: Learn the Double Attack move
-  rarity: 2
+  name: Enkindle
+  description: Learn the Enkindle ability
+  rarity: 1
   affinityTypes: 0000000002000000
-  action: {fileID: 11400000, guid: 7eed6263c2dec534ab624968813bfa20, type: 2}
+  isUnique: 1
+  action: {fileID: 11400000, guid: e5d19536023246b4c8b49baab2244e4e, type: 2}

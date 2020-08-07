@@ -23,6 +23,8 @@ public class Fighter
 
     public AilmentController ailmentController;
 
+    public List<PlayerReward> playerRewards{get; set;}
+
 
     // Hero: Need to know that it is the hero (job)
     // Enemy: Need to know that it is the enemy (job). Need to generate stats on the fly
@@ -30,6 +32,7 @@ public class Fighter
 
     public void Initialize(JobActionsList jobList, string name) {
         this.playerCreationData = new PlayerCreationData(name, jobList.job);
+        this.playerRewards = new List<PlayerReward>();
     
         this.CommonInitialization(name);
     }

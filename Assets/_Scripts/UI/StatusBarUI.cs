@@ -70,7 +70,7 @@ public class StatusBarUI : MonoBehaviour
         }
 
         // Clean extraneous icons
-        for (int i = statusConditionIcons.Count - 1; i > iconsSet; i--) {
+        for (int i = statusConditionIcons.Count - 1; i >= iconsSet; i--) {
             Destroy(statusConditionIcons[i].gameObject);
             statusConditionIcons.RemoveAt(i);
         }
