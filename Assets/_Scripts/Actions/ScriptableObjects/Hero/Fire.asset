@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Fire
   actionType: 1
   description: Deals medium fire damage to a single target. May inflict burn.
-  animation: {fileID: 11400000, guid: 5e5e0d3adb798eb4caad75a0e229de76, type: 2}
+  animation: {fileID: 11400000, guid: b49489aa7d3ce904ab5b07ea17620ecd, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:

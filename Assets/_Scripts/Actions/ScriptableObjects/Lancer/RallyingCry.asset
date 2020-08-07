@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RallyingCry
   m_EditorClassIdentifier: 
   name: Rallying Cry
-  actionType: 0
+  actionType: 1
   description: Rile up all twitch chatters, increasing party's physical and special
     stats. Buff is stronger the more chat messages are sent.
   animation: {fileID: 11400000, guid: 1c4f061900265a549bdd84b7cde68340, type: 2}

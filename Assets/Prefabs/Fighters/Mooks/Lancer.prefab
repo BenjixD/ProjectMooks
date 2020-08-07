@@ -210,7 +210,7 @@ PrefabInstance:
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.maxHp.growth
-      value: 30
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
@@ -220,7 +220,7 @@ PrefabInstance:
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.special.growth
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
@@ -265,7 +265,7 @@ PrefabInstance:
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}
       propertyPath: stats.physical.growth
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8356248066131107559, guid: 35f01a16f79c8c94ba5771a613681882,
         type: 3}

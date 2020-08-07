@@ -137,8 +137,14 @@ public class RandomPool<T> where T : class
         foreach (ValueWeight<T> valueWeight in this.pool ) {
             action(valueWeight);
         }
+        
+        // this.NormalizeWeights();
+    }
 
-        this.NormalizeWeights();
+    public void PrintWeights() {
+        for (int i = 0; i < this.pool.Count; i++) {
+            Debug.Log(i + " " +this.pool[i].weight);
+        }
     }
 
     public int Count() {

@@ -47,6 +47,8 @@ public class BattlePhase : Phase {
 
     protected override void OnPhaseStart() {
         // Order Players
+
+        
         fighters = new List<FightingEntity>(this._field.GetAllFightingEntities());
 
         fighters = fighters.Filter(fighter => !fighter.HasModifier(ModifierAilment.MODIFIER_CANNOT_USE_ACTION));
