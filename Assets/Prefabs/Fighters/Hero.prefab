@@ -387,6 +387,18 @@ MonoBehaviour:
   - key: melee_attack
     name: melee_attack5
     source: {fileID: 8300000, guid: 57f16ed701b8e0e44bc599741551f435, type: 3}
+  - key: fire
+    name: fire1
+    source: {fileID: 8300000, guid: f3fe978e54766bd44a9ec7aff1f3ba3e, type: 3}
+  - key: ice
+    name: ice1
+    source: {fileID: 8300000, guid: 63352dca27d13584399d031b23d64785, type: 3}
+  - key: thunder
+    name: thunder1
+    source: {fileID: 8300000, guid: f3b6ca02f0093714cab2d506c36c2274, type: 3}
+  - key: heal
+    name: heal1
+    source: {fileID: 8300000, guid: 7d7aa18f2caa2c9418931562ac222133, type: 3}
   volume: 0.5
   audioSource: {fileID: 132250350970130990}
 --- !u!82 &132250350970130990

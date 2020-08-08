@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293d88c9cd81f2e438f7a182d5317226, type: 3}
   m_Name: MediumDamageThree
   m_EditorClassIdentifier: 
-  name: Smite Multiple
+  name: Smite
   actionType: 1
   description: Deals medium holy damage to three random enemies.
   animation: {fileID: 11400000, guid: e2a54a6b284e80e4aa2d54ed49a31c47, type: 2}

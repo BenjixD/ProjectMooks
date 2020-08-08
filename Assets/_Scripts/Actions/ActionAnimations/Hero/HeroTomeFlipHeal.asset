@@ -13,15 +13,17 @@ MonoBehaviour:
   m_Name: HeroTomeFlipHeal
   m_EditorClassIdentifier: 
   userAnimName: 
+  startSoundName: heal
+  effectSoundName: 
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
   targetFlash: 1
   shakeStrength: 0
   delayHitEffects: 0
+  _timeBeforeEffect: 2.5
+  _timeAfterEffect: 1
   slideType: 0
   slideDuration: 0.5
   meleeReach: 5
-  _timeBeforeEffect: 2.5
-  _timeAfterEffect: 1
   particleHitEffectPrefab: {fileID: 100006, guid: 2fdab942587233e42ad5de42efdc56af,
     type: 3}

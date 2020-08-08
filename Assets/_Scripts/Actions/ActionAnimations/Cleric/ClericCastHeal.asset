@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: ClericCastHeal
   m_EditorClassIdentifier: 
   userAnimName: 
+  startSoundName: heal
+  effectSoundName: 
   targetHitEffect: {fileID: 0}
   targetFlash: 0
   shakeStrength: 0
   delayHitEffects: 0
+  _timeBeforeEffect: 2.5
+  _timeAfterEffect: 1.25
   slideType: 0
   slideDuration: 0.5
   meleeReach: 5
-  _timeBeforeEffect: 2.5
-  _timeAfterEffect: 1.25
   particleHitEffectPrefab: {fileID: 100006, guid: 2fdab942587233e42ad5de42efdc56af,
     type: 3}

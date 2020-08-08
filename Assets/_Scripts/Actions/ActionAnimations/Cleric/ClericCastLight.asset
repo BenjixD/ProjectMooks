@@ -13,15 +13,17 @@ MonoBehaviour:
   m_Name: ClericCastLight
   m_EditorClassIdentifier: 
   userAnimName: 
+  startSoundName: light
+  effectSoundName: 
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
   targetFlash: 1
   shakeStrength: 0
   delayHitEffects: 0
+  _timeBeforeEffect: 2.5
+  _timeAfterEffect: 1.25
   slideType: 0
   slideDuration: 0.5
   meleeReach: 5
-  _timeBeforeEffect: 2.5
-  _timeAfterEffect: 1.25
   particleHitEffectPrefab: {fileID: 100006, guid: 8b940ede2c20ec44ba870a2cdd277051,
     type: 3}

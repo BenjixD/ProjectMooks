@@ -112,6 +112,12 @@ MonoBehaviour:
   - key: fire
     name: fire1
     source: {fileID: 8300000, guid: f3fe978e54766bd44a9ec7aff1f3ba3e, type: 3}
+  - key: heal
+    name: heal1
+    source: {fileID: 8300000, guid: 7d7aa18f2caa2c9418931562ac222133, type: 3}
+  - key: light
+    name: light
+    source: {fileID: 8300000, guid: 88d5daa9d28111645af6df9c92e4dad6, type: 3}
   volume: 0.5
   audioSource: {fileID: -5161190768198614078}
 --- !u!1001 &9084046624927854186

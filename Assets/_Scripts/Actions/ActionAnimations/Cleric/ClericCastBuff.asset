@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 148948ed54ea2e949b071988755ae756, type: 3}
-  m_Name: ClericCastFireSpell
+  m_Name: ClericCastBuff
   m_EditorClassIdentifier: 
   userAnimName: 
-  startSoundName: fire
+  startSoundName: heal
   effectSoundName: 
-  targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
+  targetHitEffect: {fileID: 7885482589527698955, guid: 1dd3f2ea3a5fb4e408f7e75448f1d55d,
     type: 3}
-  targetFlash: 1
+  targetFlash: 0
   shakeStrength: 0
   delayHitEffects: 0
   _timeBeforeEffect: 1.25
@@ -25,3 +25,4 @@ MonoBehaviour:
   slideType: 0
   slideDuration: 0.5
   meleeReach: 5
+  particleHitEffectPrefab: {fileID: 0}

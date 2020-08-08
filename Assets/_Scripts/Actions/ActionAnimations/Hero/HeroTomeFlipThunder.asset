@@ -13,15 +13,17 @@ MonoBehaviour:
   m_Name: HeroTomeFlipThunder
   m_EditorClassIdentifier: 
   userAnimName: 
+  startSoundName: thunder
+  effectSoundName: 
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
   targetFlash: 1
   shakeStrength: 0
   delayHitEffects: 0
+  _timeBeforeEffect: 2.5
+  _timeAfterEffect: 1
   slideType: 0
   slideDuration: 0.5
   meleeReach: 5
-  _timeBeforeEffect: 2.5
-  _timeAfterEffect: 1
   particleHitEffectPrefab: {fileID: 100000, guid: a4af0d82b00381c48bc30b65c57ba3f8,
     type: 3}
