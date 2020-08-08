@@ -238,6 +238,8 @@ public class ActionBase : ScriptableObject {
         if (user is Mook) {
             Mook mook = (Mook) user;
             mook.stamina.SetStamina(mook.stamina.GetStamina() - actionCost.stamina);
+        } else {
+            currPP = 0;
         }
     }
 
@@ -279,6 +281,9 @@ public class ActionBase : ScriptableObject {
     public virtual IEnumerator ExecuteAction(FightingEntity user, List<FightingEntity> targets, BattleFight battleFight) {
         _battleFight = battleFight;
         FightResult result = new FightResult(user, this);
+
+        Coroutine animationCor = null;
+
         if (CheckCost(user)) {
             PayCost(user);
             targets = SetTargets(user, targets);

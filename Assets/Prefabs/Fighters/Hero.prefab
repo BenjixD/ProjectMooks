@@ -161,14 +161,14 @@ MonoBehaviour:
       stat: 0
       currentValue: 1
       divisor: 45
-      growth: 50
+      growth: 40
       baseValue: 175
     maxMana:
       stat: 1
       currentValue: 1
       divisor: 20
-      growth: 20
-      baseValue: 40
+      growth: 2
+      baseValue: 5
     physical:
       stat: 2
       currentValue: 1
@@ -200,6 +200,7 @@ MonoBehaviour:
       growth: 1
       baseValue: 20
   fighterMessageBox: {fileID: 0}
+  sortingOrder: 0
 --- !u!114 &2080289099
 MonoBehaviour:
   m_ObjectHideFlags: 0

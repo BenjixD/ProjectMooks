@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36f52e929b8f0c4caffb6c06731eeba, type: 3}
+  m_Name: EnkindleReward
+  m_EditorClassIdentifier: 
+  name: Enkindle
+  description: Learn the Enkindle ability
+  rarity: 1
+  affinityTypes: 0000000002000000
+  isUnique: 1
+  action: {fileID: 11400000, guid: e5d19536023246b4c8b49baab2244e4e, type: 2}

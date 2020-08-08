@@ -56,6 +56,7 @@ public class RewardController : MonoBehaviour
 
     public void InitializeRewards() {
         this.currentRewards = new List<PlayerReward>();
+        Player hero = GameManager.Instance.gameState.playerParty.GetHeroFighter();
 
         RewardAffinity affinity = GameManager.Instance.gameState.progressData.affinity;
 
@@ -84,24 +85,45 @@ public class RewardController : MonoBehaviour
                 continue;
             }
 
+            Debug.Log("Number of weights in pool " + rarity.ToString() + " " + rewardWeightsCasted.Count());
+
             RandomPool<PlayerReward> rewardPool = new RandomPool<PlayerReward>(rewardWeightsCasted);
 
-            // Note: ForAll normalizes weights afterwards
             rewardPool.ForAll( (ValueWeight<PlayerReward> reward) => {
+
+
                 float normalWeight = 1/(float)rewardWeightsCasted.Count();
+
+                if (reward.value.isUnique && hero.playerRewards.Find((PlayerReward re) => re.name == reward.value.name ) != null) {
+                    reward.weight = 0;
+                    Debug.Log("Weight changed from: " + normalWeight + " to: " + reward.weight);
+                    return;
+                }
+
                 reward.weight = normalWeight;
                 if (affinity != RewardAffinity.DEFAULT && reward.value.affinityTypes.Contains(affinity)) {
                     reward.weight *= 2;
+                    Debug.Log("Weight changed from: " + normalWeight + " to: " + reward.weight);
                 }
             });
 
-            rewardPool.ForAll( reward => reward.weight *= rewardRarity.weight );
+            rewardPool.ForAll( reward =>  reward.weight *= rewardRarity.weight );
 
             allRewards.AddRange(rewardPool.GetPoolWeights());
         }
 
+
+        Debug.Log("Rewards:");
+        for (int i = 0; i < allRewards.Count; i++) {
+            Debug.Log(allRewards[i].value.name + " " + allRewards[i].weight);
+        }
+
+    
+
         finalRewardPool = new RandomPool<PlayerReward>(allRewards);
         
+        
+
         List<PlayerReward> rewards = finalRewardPool.PickN(numRewards);
 
         foreach (PlayerReward reward in rewards) {
@@ -123,10 +145,16 @@ public class RewardController : MonoBehaviour
     }
 
     public void ApplyReward(PlayerReward reward) {
+
+        Player hero = GameManager.Instance.gameState.playerParty.GetHeroFighter();
+        hero.playerRewards.Add(reward);
+
         switch (reward.rewardType) {
             case PlayerRewardType.AILMENT:
-                Player hero = GameManager.Instance.gameState.playerParty.GetHeroFighter();
                 hero.ailmentController.AddStatusAilment(((PlayerRewardAilment)reward).ailment);
+            break;
+            case PlayerRewardType.ACTION:
+                hero.actions.Add(((PlayerRewardAction)reward).action);
             break;
 
             default:

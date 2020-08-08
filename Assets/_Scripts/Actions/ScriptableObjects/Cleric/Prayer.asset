@@ -18,7 +18,7 @@ MonoBehaviour:
     or smiting your enemies.
   animation: {fileID: 0}
   maxPP: 1
-  currPP: 0
+  currPP: 1
   actionCost:
     HP: 0
     mana: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
     stamina: 0
   targetInfo:
     targetTeam: 0
-    targetType: 3
+    targetType: 2
     randomTargets: 0
   effects:
     element: 0

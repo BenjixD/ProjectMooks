@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 public enum PlayerRewardType {
     OTHER,
-    AILMENT // Note: Most rewards will most likely be ailment
+    AILMENT, // Note: Most rewards will most likely be ailment
+    ACTION
 }
 public abstract class PlayerReward : ScriptableObject
 {
@@ -14,6 +15,8 @@ public abstract class PlayerReward : ScriptableObject
     public string description;
     public RewardRarity rarity;
     public List<RewardAffinity> affinityTypes;
+
+    public bool isUnique = true;
 
     public abstract PlayerRewardType rewardType {get;}
 

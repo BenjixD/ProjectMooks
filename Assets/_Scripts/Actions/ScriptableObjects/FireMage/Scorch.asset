@@ -30,9 +30,7 @@ MonoBehaviour:
   effects:
     element: 1
     physicalScaling: 0
-    specialScaling: 1
-    mhpPercentPhys: 0
-    mhpPercentSpec: 0
+    specialScaling: 2
     heals: 0
     statusAilments:
     - statusAilment: {fileID: 11400000, guid: 4859a5e1b4883ac43b16090a253a5df4, type: 2}

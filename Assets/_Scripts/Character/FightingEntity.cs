@@ -30,10 +30,13 @@ public class FightingEntity : MonoBehaviour
     [Header("Nullable")]
     public FighterMessageBox fighterMessageBox;
 
+    public int sortingOrder = 0;
+
     protected QueuedAction _queuedAction;
     private AnimationController _animController;
     private SoundController _soundController;
     protected FightingEntityAI _ai;
+    
 
     
 
@@ -202,6 +205,11 @@ public class FightingEntity : MonoBehaviour
         if(clip != null) {
             _soundController.PlayClip(clip);
         }
+    }
+
+    public void SetSortingOrder(int i) {
+        this.sortingOrder = i;
+        this.GetComponent<MeshRenderer>().sortingOrder = i;
     }
 
     private void OnBattleEnd(BattleResult result) {

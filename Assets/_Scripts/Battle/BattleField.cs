@@ -157,7 +157,8 @@ public class BattleField : MonoBehaviour
             stats.ApplyStatsBasedOnLevel(level);
 
             // TODO: Some sort of entrance animation
-            instantiatedEnemy.GetComponent<MeshRenderer>().sortingOrder = i;
+
+            instantiatedEnemy.SetSortingOrder(i);
             FighterSlot slot = enemySlots[i];
             slot.InitializePosition(instantiatedEnemy);
 
