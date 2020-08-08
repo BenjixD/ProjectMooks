@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: HeroMeleeAttack
   m_EditorClassIdentifier: 
   userAnimName: melee attack
+  startSoundName: 
+  effectSoundName: melee_attack
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
   targetFlash: 1
+  shakeStrength: 0
+  delayHitEffects: 0
+  _timeBeforeEffect: 0.7
+  _timeAfterEffect: 0.3
   slideType: 1
   slideDuration: 0.5
   meleeReach: 8
-  _timeBeforeEffect: 0.7
-  _timeAfterEffect: 0.3

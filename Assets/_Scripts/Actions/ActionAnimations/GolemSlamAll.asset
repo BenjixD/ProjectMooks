@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: GolemSlamAll
   m_EditorClassIdentifier: 
   userAnimName: super slam
+  startSoundName: action
+  effectSoundName: big_attack_effect
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
-  effectSoundName: big_attack_effect
   targetFlash: 1
   shakeStrength: 2
   delayHitEffects: 0
+  _timeBeforeEffect: 3
+  _timeAfterEffect: 1.6
   slideType: 1
   slideDuration: 0.8
   meleeReach: 12
-  _timeBeforeEffect: 3
-  _timeAfterEffect: 1.6

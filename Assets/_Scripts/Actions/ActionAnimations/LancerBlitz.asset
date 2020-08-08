@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: LancerBlitz
   m_EditorClassIdentifier: 
   userAnimName: melee attack
+  startSoundName: 
+  effectSoundName: melee attack
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
   targetFlash: 1
   shakeStrength: 0
   delayHitEffects: 0
+  _timeBeforeEffect: 0.35
+  _timeAfterEffect: 0.5
   slideType: 1
   slideDuration: 0.5
   meleeReach: 18
-  _timeBeforeEffect: 0.35
-  _timeAfterEffect: 0.5

@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3077ad366cc905c449f186e7bac9834e, type: 3}
-  m_Name: GolemSlam
+  m_Script: {fileID: 11500000, guid: 148948ed54ea2e949b071988755ae756, type: 3}
+  m_Name: ClericCastFireSpell
   m_EditorClassIdentifier: 
-  userAnimName: super slam
-  startSoundName: action
-  effectSoundName: attack_effect
+  userAnimName: 
+  startSoundName: fire
+  effectSoundName: 
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
   targetFlash: 1
   shakeStrength: 0
   delayHitEffects: 0
-  _timeBeforeEffect: 3
-  _timeAfterEffect: 1.6
-  slideType: 1
-  slideDuration: 0.8
-  meleeReach: 12
+  _timeBeforeEffect: 1.25
+  _timeAfterEffect: 1.25
+  slideType: 0
+  slideDuration: 0.5
+  meleeReach: 5

@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Fireball
   actionType: 1
   description: Cast a fireball, dealing light fire damage to all enemies.
-  animation: {fileID: 11400000, guid: e2a54a6b284e80e4aa2d54ed49a31c47, type: 2}
+  animation: {fileID: 11400000, guid: 49351ced401676540b55c33eab102199, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:
@@ -26,10 +26,13 @@ MonoBehaviour:
   targetInfo:
     targetTeam: 1
     targetType: 1
+    randomTargets: 0
   effects:
     element: 1
     physicalScaling: 0
     specialScaling: 0.5
+    mhpPercentPhys: 0
+    mhpPercentSpec: 0
     heals: 0
     statusAilments: []
   commandKeyword: fireball

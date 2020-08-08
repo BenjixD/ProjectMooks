@@ -12,6 +12,8 @@ public enum SlideType {
 public class ActionAnimation : ScriptableObject {
     [Tooltip("The name of the default animation played for the user of this action. Alternatively, you can override Animate().")]
     public string userAnimName;
+    [Tooltip("The key for the user's sound that plays when the animation starts.")]
+    public string startSoundName;
 
     [Header("Impact Properties")]
     [Tooltip("The key for the user's sound that plays when the effect happens.")]
@@ -90,7 +92,7 @@ public class ActionAnimation : ScriptableObject {
 
     public IEnumerator AnimateAction(FightingEntity user, List<FightingEntity> targets) {
         // Perform user's animation
-        user.PlaySound("action");
+        user.PlaySound(startSoundName);
         AnimateUser(user);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeBeforeEffect);
         if (delayHitEffects) {

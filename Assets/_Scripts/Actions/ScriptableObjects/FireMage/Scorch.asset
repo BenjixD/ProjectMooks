@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Scorch
   actionType: 1
   description: Deals medium fire damage to a single enemy and inflicts a burn.
-  animation: {fileID: 11400000, guid: e2a54a6b284e80e4aa2d54ed49a31c47, type: 2}
+  animation: {fileID: 11400000, guid: 49351ced401676540b55c33eab102199, type: 2}
   maxPP: 0
   currPP: 0
   actionCost:
@@ -26,10 +26,13 @@ MonoBehaviour:
   targetInfo:
     targetTeam: 1
     targetType: 0
+    randomTargets: 0
   effects:
     element: 1
     physicalScaling: 0
     specialScaling: 1
+    mhpPercentPhys: 0
+    mhpPercentSpec: 0
     heals: 0
     statusAilments:
     - statusAilment: {fileID: 11400000, guid: 4859a5e1b4883ac43b16090a253a5df4, type: 2}

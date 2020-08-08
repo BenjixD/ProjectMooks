@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4051a964954ce6f459f8e834e9ee24d1, type: 3}
   m_Name: KnightShieldBash
   m_EditorClassIdentifier: 
-  userAnimName: 
+  userAnimName: melee attack
+  startSoundName: 
+  effectSoundName: 
   targetHitEffect: {fileID: 7885482589527698955, guid: 09ecf9f077acac54482e25fbc56d6a7f,
     type: 3}
   targetFlash: 1
   shakeStrength: 0
   delayHitEffects: 0
+  _timeBeforeEffect: 1
+  _timeAfterEffect: 1
   slideType: 1
   slideDuration: 0.5
   meleeReach: 10
-  _timeBeforeEffect: 1
-  _timeAfterEffect: 1

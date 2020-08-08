@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: KnightRaiseAndLowerShield
   m_EditorClassIdentifier: 
   userAnimName: 
+  startSoundName: 
+  effectSoundName: 
   targetHitEffect: {fileID: 7885482589527698955, guid: 1dd3f2ea3a5fb4e408f7e75448f1d55d,
     type: 3}
   targetFlash: 0
   shakeStrength: 0
   delayHitEffects: 0
+  _timeBeforeEffect: 1
+  _timeAfterEffect: 3
   slideType: 0
   slideDuration: 0.5
   meleeReach: 5
-  _timeBeforeEffect: 1
-  _timeAfterEffect: 3
-  _actionAnimRepeats: 1

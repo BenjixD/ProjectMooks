@@ -109,24 +109,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - key: action
-    name: action1
-    source: {fileID: 8300000, guid: 5f0e55700ee8b4d4585a8f41e5d2780c, type: 3}
-  - key: action
-    name: action2
-    source: {fileID: 8300000, guid: 013d99d030fc54f0c9c635db7bf4fded, type: 3}
-  - key: action
-    name: action3
-    source: {fileID: 8300000, guid: b483fbec2659643c3b0ec79c851222b0, type: 3}
-  - key: confirm
-    name: confirm1
-    source: {fileID: 8300000, guid: 616cd2ab1c190494bb1dc01c079dc952, type: 3}
-  - key: hit
-    name: hit1
-    source: {fileID: 8300000, guid: ba065f8a3717a4cc8991b40c7387e89a, type: 3}
-  - key: hit
-    name: hit2
-    source: {fileID: 8300000, guid: 584f6f0edaf2b4e34875351b1e7e0bf7, type: 3}
+  - key: melee_attack
+    name: melee_attack1
+    source: {fileID: 8300000, guid: 9924ebb7c34ce7b41b4f33eae09333dc, type: 3}
+  - key: melee_attack
+    name: melee_attack2
+    source: {fileID: 8300000, guid: 683b3e76ec944494aa10cb9e3278977a, type: 3}
+  - key: melee_attack
+    name: melee_attack3
+    source: {fileID: 8300000, guid: 396db85eccf876c419d48d779ee27987, type: 3}
+  - key: melee_attack
+    name: melee_attack4
+    source: {fileID: 8300000, guid: d389f0299ef8c7843bf61e86c6ab5b6c, type: 3}
+  - key: melee_attack
+    name: melee_attack5
+    source: {fileID: 8300000, guid: 57f16ed701b8e0e44bc599741551f435, type: 3}
   volume: 0.5
   audioSource: {fileID: -2741932194313111888}
 --- !u!1001 &6716321899853062079
