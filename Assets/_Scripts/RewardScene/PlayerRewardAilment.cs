@@ -17,8 +17,4 @@ public class PlayerRewardAilment : PlayerReward
         // Be sure to instantiate the scriptable object before you call this
         this.ailment = Instantiate(ailment);
     }
-
-    public virtual StatusAilment OnAttachBuff(FightingEntity player) {
-        return this.ailment;
-    }
 }

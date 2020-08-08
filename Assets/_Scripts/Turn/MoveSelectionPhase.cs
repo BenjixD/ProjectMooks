@@ -209,7 +209,7 @@ public class MoveSelectionPhase : Phase {
 
             this._ui.commandCardUI.SetConfirmed();
 
-            if (heroAction.targetInfo.targetTeam != TargetTeam.NONE) {
+            if (heroAction.targetInfo.targetTeam != TargetTeam.NONE && heroAction.targetInfo.targetType != TargetType.RANDOM) {
                 List<FightingEntity> possibleTargets = heroAction.GetAllPossibleActiveTargets(_field.GetHeroPlayer());
                 switch (heroAction.targetInfo.targetType) {
                     case TargetType.SINGLE:
@@ -222,17 +222,28 @@ public class MoveSelectionPhase : Phase {
                         break;
 
                     default:
+                        Debug.LogError("ERROR: Did not consider target type" );
                         break;
                 }
 
                 this._heroMenuActions.Push(new HeroMenuAction(MenuState.TARGET));
-            } else {
+            } else if (heroAction.targetInfo.targetTeam == TargetTeam.NONE) {
                 HeroActionConfirmed();
                 GetHeroMenuAction().onBackCallback = this.OnActionChooseBackCallback;
                 this._field.GetHeroPlayer().SetQueuedAction(heroAction, new List<int>());
                 CheckExecuteTurn();
                 this._field.GetHeroPlayer().PlaySound("confirm"); //TODO: Look towards consolidating use here
                 this._heroMenuActions.Push(new HeroMenuAction(MenuState.WAITING));
+
+            } else if (heroAction.targetInfo.targetType == TargetType.RANDOM) {
+                HeroActionConfirmed();
+                GetHeroMenuAction().onBackCallback = this.OnActionChooseBackCallback;
+                this._field.GetHeroPlayer().SetQueuedAction(heroAction, new List<int>{this._field.GetRandomEnemyObjectIndex()});
+                CheckExecuteTurn();
+                this._field.GetHeroPlayer().PlaySound("confirm"); //TODO: Look towards consolidating use here
+                this._heroMenuActions.Push(new HeroMenuAction(MenuState.WAITING));
+            } else {
+                Debug.LogError("ERROR: Unexpected target type");
             }
         }
     }

@@ -38,6 +38,9 @@ public class ActionAnimation : ScriptableObject {
     [Tooltip("The distance to stop away from the target(s) after a slide and before attacking.")]
     public float meleeReach = 10f;
 
+    [Tooltip("The on-hit particle system effect (If null, then no effect).")]
+    public GameObject particleHitEffectPrefab;
+
     public virtual IEnumerator Animate(FightingEntity user, List<FightingEntity> targets) {
         // Save the start position for the melee slide
         Vector3 userStartingPos = user.transform.position;
@@ -92,6 +95,7 @@ public class ActionAnimation : ScriptableObject {
         // Perform user's animation
         user.PlaySound("action");
         AnimateUser(user);
+        AnimateParticleEffects(user, targets);
         yield return GameManager.Instance.time.GetController().WaitForSeconds(_timeBeforeEffect);
         if (delayHitEffects) {
             yield return GameManager.Instance.time.GetController().WaitForSeconds(0.05f);
@@ -111,6 +115,18 @@ public class ActionAnimation : ScriptableObject {
         }
     }
 
+    protected virtual void AnimateParticleEffects(FightingEntity user, List<FightingEntity> targets) {
+        if (particleHitEffectPrefab == null) {
+            return;
+        }
+
+        foreach (FightingEntity target in targets) {
+            if (target != null) {
+                InstantiateParticleEffect(user, target);
+            }
+        }
+    }
+
     protected virtual void PlayTargetEffects(FightingEntity user, List<FightingEntity> targets) {
         if (shakeStrength != ShakeStrength.NONE) {
             GameManager.Instance.battleComponents.GetCameraController().Shake(shakeStrength);
@@ -122,6 +138,20 @@ public class ActionAnimation : ScriptableObject {
                 TargetFlash(target);
                 target.PlaySound("hit");
             }
+        }
+    }
+
+    protected virtual void InstantiateParticleEffect(FightingEntity user, FightingEntity target) {
+        FighterPositions userPositions = user.GetComponent<FighterPositions>();
+        FighterPositions targetPositions = target.GetComponent<FighterPositions>();
+        if (particleHitEffectPrefab != null && userPositions != null && targetPositions != null) {
+            GameObject hitEffect = Instantiate(particleHitEffectPrefab, targetPositions.damagePopup);
+            ParticleSystemsHelper psh = hitEffect.GetComponent<ParticleSystemsHelper>();
+            hitEffect.GetComponent<DestroyAfterSeconds>().duration = GetAnimWindup();
+            psh.SetDestroyDuration(GetAnimWindup());
+            psh.SetRenderOrder(target.sortingOrder + 1);
+            psh.PositionEffect(userPositions.damagePopup, targetPositions.damagePopup);
+            psh.Play();
         }
     }
 

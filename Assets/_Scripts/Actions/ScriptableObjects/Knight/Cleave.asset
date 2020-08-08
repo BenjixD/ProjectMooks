@@ -28,7 +28,7 @@ MonoBehaviour:
     targetType: 1
   effects:
     element: 0
-    physicalScaling: 0.5
+    physicalScaling: 0.6
     specialScaling: 0
     heals: 0
     statusAilments: []
